@@ -73,32 +73,6 @@
             border-bottom: 3px solid #14b8a6;
         }
         
-        .rivalry-players-section {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .player-with-color {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .player-name-inline {
-            font-size: 1.5em;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        
-        .color-badge {
-            font-size: 1.2em;
-        }
-        
-        .color-badge-white {
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
-        }
-        
         .rivalry-players {
             font-size: 1.5em;
             font-weight: 600;
@@ -176,58 +150,6 @@
             font-weight: bold;
         }
         
-        .form-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .form-box {
-            background: #f7fafc;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 2px solid #cbd5e0;
-        }
-        
-        .form-label {
-            font-size: 0.85em;
-            color: #718096;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        
-        .form-display {
-            display: flex;
-            gap: 3px;
-        }
-        
-        .form-letter {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            line-height: 28px;
-            text-align: center;
-            border-radius: 4px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .form-W {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .form-D {
-            background: #e2e8f0;
-            color: #475569;
-        }
-        
-        .form-L {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        
         .history-section {
             background: #f7fafc;
             padding: 20px;
@@ -248,66 +170,27 @@
             background: white;
             border-radius: 5px;
             display: grid;
-            grid-template-columns: 110px 1fr 80px auto;
+            grid-template-columns: 140px 1fr auto auto;
             gap: 15px;
             align-items: center;
         }
         
         .history-info {
             color: #718096;
-            font-size: 0.85em;
-        }
-        
-        .history-players {
-            font-weight: 500;
-            color: #2d3748;
             font-size: 0.9em;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .history-color-symbol {
-            font-size: 0.9em;
-        }
-        
-        .history-vs {
-            color: #0d9488;
-            font-weight: 600;
-            margin: 0 5px;
-        }
-        
-        .color-indicator {
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.8em;
-            padding: 4px 6px;
-            border-radius: 4px;
-        }
-        
-        .color-white {
-            color: #475569;
-            background: #f1f5f9;
-        }
-        
-        .color-black {
-            color: white;
-            background: #334155;
         }
         
         .history-matchup {
             font-weight: 500;
             color: #2d3748;
-            font-size: 0.9em;
         }
         
         .history-result {
-            padding: 4px 10px;
-            border-radius: 12px;
+            padding: 4px 12px;
+            border-radius: 15px;
             font-weight: 600;
-            font-size: 0.8em;
+            font-size: 0.85em;
             white-space: nowrap;
-            text-align: center;
         }
         
         .result-white {
@@ -328,9 +211,9 @@
         .game-link {
             color: #0d9488;
             text-decoration: none;
+            font-size: 0.85em;
             font-weight: 600;
             white-space: nowrap;
-            font-size: 0.85em;
         }
         
         .game-link:hover {
@@ -363,14 +246,28 @@
             font-size: 0.95em;
         }
         
+        .rank-badge {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            background: #14b8a6;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            text-align: center;
+            margin-right: 15px;
+            font-size: 0.9em;
+        }
+        
         @media (max-width: 768px) {
             .history-game {
                 grid-template-columns: 1fr;
                 gap: 8px;
             }
             
-            .form-section {
-                grid-template-columns: 1fr;
+            .history-info, .history-matchup, .history-result, .game-link {
+                text-align: left;
             }
         }
     </style>
@@ -385,16 +282,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">jose684</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">Lapastiere</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">1</span>
+                    <span class="rivalry-players">jose684<span class="vs">vs</span>Lapastiere</span>
                 </div>
                 <div class="games-badge">2 previous games</div>
             </div>
@@ -417,44 +307,21 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">jose684 recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-D">D</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">Lapastiere recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 42, R4</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> jose684
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> Lapastiere
-                    </span>
-                    <span class="history-result result-draw">½-½</span>
-                    <a href="https://lichess.org/l7YMlsqC" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">jose684 vs Lapastiere</span>
+                    <span class="history-result result-draw">Draw</span>
+                    <a href="https://lichess.org/l7YMlsqC" target="_blank" class="game-link">View Game →</a>
                 </div>
 
                 <div class="history-game">
                     <span class="history-info">Season 41, R6</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> jose684
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> Lapastiere
-                    </span>
-                    <span class="history-result result-black">0-1</span>
-                    <a href="https://lichess.org/o0v9KJwX" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">jose684 vs Lapastiere</span>
+                    <span class="history-result result-black">Lapastiere won</span>
+                    <a href="https://lichess.org/o0v9KJwX" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -462,16 +329,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">timothyha</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">sussasun</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">2</span>
+                    <span class="rivalry-players">timothyha<span class="vs">vs</span>sussasun</span>
                 </div>
                 <div class="games-badge">2 previous games</div>
             </div>
@@ -494,44 +354,21 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">timothyha recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">sussasun recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-D">D</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 39, R4</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> timothyha
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> sussasun
-                    </span>
-                    <span class="history-result result-black">0-1</span>
-                    <a href="https://lichess.org/DdyJBmyy" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">timothyha vs sussasun</span>
+                    <span class="history-result result-black">sussasun won</span>
+                    <a href="https://lichess.org/DdyJBmyy" target="_blank" class="game-link">View Game →</a>
                 </div>
 
                 <div class="history-game">
                     <span class="history-info">Season 36, R4</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬛</span> timothyha
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬜</span> sussasun
-                    </span>
-                    <span class="history-result result-draw">½-½</span>
-                    <a href="https://lichess.org/aRyGeSDX" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">sussasun vs timothyha</span>
+                    <span class="history-result result-draw">Draw</span>
+                    <a href="https://lichess.org/aRyGeSDX" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -539,16 +376,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">jpgmich</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">oOoSHONUFFoOo</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">3</span>
+                    <span class="rivalry-players">jpgmich<span class="vs">vs</span>oOoSHONUFFoOo</span>
                 </div>
                 <div class="games-badge">2 previous games</div>
             </div>
@@ -571,44 +401,21 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">jpgmich recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">oOoSHONUFFoOo recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 45, R1</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> jpgmich
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> oOoSHONUFFoOo
-                    </span>
-                    <span class="history-result result-black">0-1</span>
-                    <a href="https://lichess.org/7iuACjWF" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">jpgmich vs oOoSHONUFFoOo</span>
+                    <span class="history-result result-black">oOoSHONUFFoOo won</span>
+                    <a href="https://lichess.org/7iuACjWF" target="_blank" class="game-link">View Game →</a>
                 </div>
 
                 <div class="history-game">
                     <span class="history-info">Season 44, R4</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> jpgmich
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> oOoSHONUFFoOo
-                    </span>
-                    <span class="history-result result-black">0-1</span>
-                    <a href="https://lichess.org/6N30qpEl" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">jpgmich vs oOoSHONUFFoOo</span>
+                    <span class="history-result result-black">oOoSHONUFFoOo won</span>
+                    <a href="https://lichess.org/6N30qpEl" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -616,16 +423,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">a2c4</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">davegiltinan</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">4</span>
+                    <span class="rivalry-players">a2c4<span class="vs">vs</span>davegiltinan</span>
                 </div>
                 <div class="games-badge">2 previous games</div>
             </div>
@@ -648,44 +448,21 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">a2c4 recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-D">D</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-D">D</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">davegiltinan recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-D">D</span><span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-L">L</span><span class="form-letter form-D">D</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 46, R4</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬛</span> a2c4
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬜</span> davegiltinan
-                    </span>
-                    <span class="history-result result-black">0-1</span>
-                    <a href="https://lichess.org/6VY6GuRR" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">davegiltinan vs a2c4</span>
+                    <span class="history-result result-black">a2c4 won</span>
+                    <a href="https://lichess.org/6VY6GuRR" target="_blank" class="game-link">View Game →</a>
                 </div>
 
                 <div class="history-game">
                     <span class="history-info">Season 31, R7</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> a2c4
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> davegiltinan
-                    </span>
-                    <span class="history-result result-black">0-1</span>
-                    <a href="https://lichess.org/REN5GQ2R" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">a2c4 vs davegiltinan</span>
+                    <span class="history-result result-black">davegiltinan won</span>
+                    <a href="https://lichess.org/REN5GQ2R" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -693,16 +470,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">NameGoesInHere</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">Warvold</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">5</span>
+                    <span class="rivalry-players">NameGoesInHere<span class="vs">vs</span>Warvold</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -725,33 +495,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">NameGoesInHere recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">Warvold recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 46, R5</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬛</span> NameGoesInHere
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬜</span> Warvold
-                    </span>
-                    <span class="history-result result-white">1-0</span>
-                    <a href="https://lichess.org/KLB719Rc" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">Warvold vs NameGoesInHere</span>
+                    <span class="history-result result-white">Warvold won</span>
+                    <a href="https://lichess.org/KLB719Rc" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -759,16 +510,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">Kborman</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">JokicInator15</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">6</span>
+                    <span class="rivalry-players">Kborman<span class="vs">vs</span>JokicInator15</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -791,33 +535,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">Kborman recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-D">D</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">JokicInator15 recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 40, R2</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> Kborman
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> JokicInator15
-                    </span>
-                    <span class="history-result result-black">0-1</span>
-                    <a href="https://lichess.org/kqHgPXlb" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">Kborman vs JokicInator15</span>
+                    <span class="history-result result-black">JokicInator15 won</span>
+                    <a href="https://lichess.org/kqHgPXlb" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -825,16 +550,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">adande1</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">HamSamisch</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">7</span>
+                    <span class="rivalry-players">adande1<span class="vs">vs</span>HamSamisch</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -857,33 +575,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">adande1 recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">HamSamisch recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-D">D</span><span class="form-letter form-L">L</span><span class="form-letter form-D">D</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 44, R8</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> adande1
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> HamSamisch
-                    </span>
-                    <span class="history-result result-white">1-0</span>
-                    <a href="https://lichess.org/bi8e5et2" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">adande1 vs HamSamisch</span>
+                    <span class="history-result result-white">adande1 won</span>
+                    <a href="https://lichess.org/bi8e5et2" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -891,16 +590,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">iceonmars</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">Lexgrad</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">8</span>
+                    <span class="rivalry-players">iceonmars<span class="vs">vs</span>Lexgrad</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -923,33 +615,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">iceonmars recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">Lexgrad recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 39, R5</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬛</span> iceonmars
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬜</span> Lexgrad
-                    </span>
-                    <span class="history-result result-white">1-0</span>
-                    <a href="https://lichess.org/PU4NckvP" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">Lexgrad vs iceonmars</span>
+                    <span class="history-result result-white">Lexgrad won</span>
+                    <a href="https://lichess.org/PU4NckvP" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -957,16 +630,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">Teydin</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">fork2020</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">9</span>
+                    <span class="rivalry-players">Teydin<span class="vs">vs</span>fork2020</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -989,33 +655,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">Teydin recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">fork2020 recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 46, R3</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> Teydin
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> fork2020
-                    </span>
-                    <span class="history-result result-white">1-0</span>
-                    <a href="https://lichess.org/F2yQHt8G" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">Teydin vs fork2020</span>
+                    <span class="history-result result-white">Teydin won</span>
+                    <a href="https://lichess.org/F2yQHt8G" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -1023,16 +670,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">mongreltiger</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">rjhoro</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">10</span>
+                    <span class="rivalry-players">mongreltiger<span class="vs">vs</span>rjhoro</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -1055,33 +695,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">mongreltiger recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">rjhoro recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-D">D</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 46, R6</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> mongreltiger
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> rjhoro
-                    </span>
-                    <span class="history-result result-black">0-1</span>
-                    <a href="https://lichess.org/v4az9A6r" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">mongreltiger vs rjhoro</span>
+                    <span class="history-result result-black">rjhoro won</span>
+                    <a href="https://lichess.org/v4az9A6r" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -1089,16 +710,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">BLang316</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">ecoarrivazumashoomzo</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">11</span>
+                    <span class="rivalry-players">BLang316<span class="vs">vs</span>ecoarrivazumashoomzo</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -1121,33 +735,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">BLang316 recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-D">D</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">ecoarrivazumashoomzo recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 45, R5</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬛</span> BLang316
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬜</span> ecoarrivazumashoomzo
-                    </span>
-                    <span class="history-result result-white">1-0</span>
-                    <a href="https://lichess.org/5z3ub35x" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">ecoarrivazumashoomzo vs BLang316</span>
+                    <span class="history-result result-white">ecoarrivazumashoomzo won</span>
+                    <a href="https://lichess.org/5z3ub35x" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -1155,16 +750,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">AScannerDarkly</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">mrgiov</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">12</span>
+                    <span class="rivalry-players">AScannerDarkly<span class="vs">vs</span>mrgiov</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -1187,33 +775,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">AScannerDarkly recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-D">D</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">mrgiov recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-D">D</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 46, R8</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> AScannerDarkly
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> mrgiov
-                    </span>
-                    <span class="history-result result-white">1-0</span>
-                    <a href="https://lichess.org/LllOsaL5" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">AScannerDarkly vs mrgiov</span>
+                    <span class="history-result result-white">AScannerDarkly won</span>
+                    <a href="https://lichess.org/LllOsaL5" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -1221,16 +790,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">gercondon</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">ComputerUser2607</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">13</span>
+                    <span class="rivalry-players">gercondon<span class="vs">vs</span>ComputerUser2607</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -1253,33 +815,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">gercondon recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-D">D</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">ComputerUser2607 recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 39, R1</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬛</span> gercondon
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬜</span> ComputerUser2607
-                    </span>
-                    <span class="history-result result-white">1-0</span>
-                    <a href="https://lichess.org/VST9rjMo" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">ComputerUser2607 vs gercondon</span>
+                    <span class="history-result result-white">ComputerUser2607 won</span>
+                    <a href="https://lichess.org/VST9rjMo" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -1287,16 +830,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">yellorambo</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">LemuelGullible</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">14</span>
+                    <span class="rivalry-players">yellorambo<span class="vs">vs</span>LemuelGullible</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -1319,33 +855,14 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">yellorambo recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">LemuelGullible recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-D">D</span><span class="form-letter form-W">W</span><span class="form-letter form-W">W</span><span class="form-letter form-L">L</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 43, R4</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬜</span> yellorambo
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬛</span> LemuelGullible
-                    </span>
-                    <span class="history-result result-white">1-0</span>
-                    <a href="https://lichess.org/0JCQ2xz0" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">yellorambo vs LemuelGullible</span>
+                    <span class="history-result result-white">yellorambo won</span>
+                    <a href="https://lichess.org/0JCQ2xz0" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
@@ -1353,16 +870,9 @@
 
         <div class="rivalry-card">
             <div class="rivalry-header">
-                <div class="rivalry-players-section">
-                    <span class="player-with-color">
-                        <span class="player-name-inline">Silkthewanderer</span>
-                        <span class="color-badge color-badge-white">⬜</span>
-                    </span>
-                    <span class="vs">vs</span>
-                    <span class="player-with-color">
-                        <span class="player-name-inline">pavonine</span>
-                        <span class="color-badge color-badge-black">⬛</span>
-                    </span>
+                <div>
+                    <span class="rank-badge">15</span>
+                    <span class="rivalry-players">Silkthewanderer<span class="vs">vs</span>pavonine</span>
                 </div>
                 <div class="games-badge">1 previous game</div>
             </div>
@@ -1385,40 +895,21 @@
                 </div>
             </div>
             
-            <div class="form-section">
-                <div class="form-box">
-                    <div class="form-label">Silkthewanderer recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-L">L</span><span class="form-letter form-D">D</span><span class="form-letter form-W">W</span>
-                    </div>
-                </div>
-                <div class="form-box">
-                    <div class="form-label">pavonine recent form:</div>
-                    <div class="form-display">
-<span class="form-letter form-W">W</span><span class="form-letter form-D">D</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span><span class="form-letter form-L">L</span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="history-section">
                 <div class="history-title">📜 Previous Encounters</div>
 
                 <div class="history-game">
                     <span class="history-info">Season 45, R8</span>
-                    <span class="history-players">
-                        <span class="history-color-symbol">⬛</span> Silkthewanderer
-                        <span class="history-vs">vs</span>
-                        <span class="history-color-symbol">⬜</span> pavonine
-                    </span>
-                    <span class="history-result result-draw">½-½</span>
-                    <a href="https://lichess.org/7UhmOAxe" target="_blank" class="game-link">View →</a>
+                    <span class="history-matchup">pavonine vs Silkthewanderer</span>
+                    <span class="history-result result-draw">Draw</span>
+                    <a href="https://lichess.org/7UhmOAxe" target="_blank" class="game-link">View Game →</a>
                 </div>
 
             </div>
         </div>
 
         <div class="footer">
-            Generated on 2026-01-29 17:10:01 • Lichess 4545 Rivalry Tracker
+            Generated on 2026-01-29 17:21:48 • Lichess 4545 Rivalry Tracker
         </div>
     </div>
 </body>
