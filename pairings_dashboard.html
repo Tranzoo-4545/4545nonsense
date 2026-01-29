@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lichess 4545 - Season 47, Round 3 Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #718096;
+            font-size: 1.2em;
+        }
+        
+        .stats-bar {
+            background: rgba(255,255,255,0.95);
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 10px 20px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 0.9em;
+        }
+        
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .section-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        
+        .pairing {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .pairing:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .pairing-rank {
+            display: inline-block;
+            width: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .pairing-players {
+            font-size: 1.1em;
+            color: #2d3748;
+            font-weight: 500;
+        }
+        
+        .pairing-stats {
+            color: #718096;
+            font-size: 0.9em;
+            margin-top: 5px;
+            margin-left: 40px;
+        }
+        
+        .vs {
+            color: #667eea;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .badge-games {
+            background: #e6fffa;
+            color: #047857;
+        }
+        
+        .badge-milestone {
+            background: #fef3c7;
+            color: #92400e;
+            animation: pulse 2s infinite;
+        }
+        
+        .badge-debut {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .milestone-alert {
+            background: #fef3c7;
+            border-left-color: #f59e0b;
+            padding: 15px;
+            margin-top: 8px;
+            margin-left: 40px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: #92400e;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: #718096;
+            padding: 30px;
+            font-style: italic;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            opacity: 0.8;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .pairing:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>♟️ Lichess 4545 Pairings Dashboard</h1>
+            <div class="subtitle">Season 47 • Round 3</div>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value">192</div>
+                <div class="stat-label">Total Pairings</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">6</div>
+                <div class="stat-label">Debut Games</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Milestones</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">393</div>
+                <div class="stat-label">Most Combined</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🏆</div>
+                <div class="section-title">Top 5 Most Experienced Matchups</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥇</div>
+                <span class="pairing-players">scarff<span class="vs">vs</span>Grizzzly1000</span>
+                <span class="badge badge-games">393 combined</span>
+                <div class="pairing-stats">
+                    scarff: 295 games • Grizzzly1000: 98 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥈</div>
+                <span class="pairing-players">kygreek<span class="vs">vs</span>UpGoerFive</span>
+                <span class="badge badge-games">338 combined</span>
+                <div class="pairing-stats">
+                    kygreek: 99 games • UpGoerFive: 239 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥉</div>
+                <span class="pairing-players">chk12<span class="vs">vs</span>bufferunderrun</span>
+                <span class="badge badge-games">322 combined</span>
+                <div class="pairing-stats">
+                    chk12: 71 games • bufferunderrun: 251 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">4.</div>
+                <span class="pairing-players">timothyha<span class="vs">vs</span>sussasun</span>
+                <span class="badge badge-games">312 combined</span>
+                <div class="pairing-stats">
+                    timothyha: 243 games • sussasun: 69 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">5.</div>
+                <span class="pairing-players">Feet_Barbie<span class="vs">vs</span>jwwells42</span>
+                <span class="badge badge-games">296 combined</span>
+                <div class="pairing-stats">
+                    Feet_Barbie: 86 games • jwwells42: 210 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🎯</div>
+                <div class="section-title">Milestone Watch</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🎯</div>
+                <span class="pairing-players">kygreek<span class="vs">vs</span>UpGoerFive</span>
+                <span class="badge badge-milestone">MILESTONE!</span>
+
+                <div class="milestone-alert">
+                    🎉 kygreek is at 99 games - Next game is #100!
+                </div>
+
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🎯</div>
+                <span class="pairing-players">Sarahwynn<span class="vs">vs</span>nerja25390</span>
+                <span class="badge badge-milestone">MILESTONE!</span>
+
+                <div class="milestone-alert">
+                    🎉 Sarahwynn is at 99 games - Next game is #100!
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">⚔️</div>
+                <div class="section-title">Veterans Clash</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">1.</div>
+                <span class="pairing-players">Zubenelgenubi<span class="vs">vs</span>cvillian</span>
+                <span class="badge badge-games">Min: 128 games</span>
+                <div class="pairing-stats">
+                    Zubenelgenubi: 165 games • cvillian: 128 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">2.</div>
+                <span class="pairing-players">kygreek<span class="vs">vs</span>UpGoerFive</span>
+                <span class="badge badge-games">Min: 99 games</span>
+                <div class="pairing-stats">
+                    kygreek: 99 games • UpGoerFive: 239 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">3.</div>
+                <span class="pairing-players">scarff<span class="vs">vs</span>Grizzzly1000</span>
+                <span class="badge badge-games">Min: 98 games</span>
+                <div class="pairing-stats">
+                    scarff: 295 games • Grizzzly1000: 98 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">4.</div>
+                <span class="pairing-players">gary0892<span class="vs">vs</span>Gingersquirrelnuts</span>
+                <span class="badge badge-games">Min: 95 games</span>
+                <div class="pairing-stats">
+                    gary0892: 95 games • Gingersquirrelnuts: 135 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">5.</div>
+                <span class="pairing-players">Sarahwynn<span class="vs">vs</span>nerja25390</span>
+                <span class="badge badge-games">Min: 91 games</span>
+                <div class="pairing-stats">
+                    Sarahwynn: 99 games • nerja25390: 91 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">👴🆚🆕</div>
+                <div class="section-title">Vets Meet Newbie</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">1.</div>
+                <span class="pairing-players">LeopemV<span class="vs">vs</span>glbert</span>
+                <span class="badge badge-games">Gap: 281 games</span>
+                <div class="pairing-stats">
+                    LeopemV: 2 games • glbert: 283 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">2.</div>
+                <span class="pairing-players">KamagayaJiji<span class="vs">vs</span>Tranzoo</span>
+                <span class="badge badge-games">Gap: 223 games</span>
+                <div class="pairing-stats">
+                    KamagayaJiji: 17 games • Tranzoo: 240 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">3.</div>
+                <span class="pairing-players">val1313<span class="vs">vs</span>NaveenGeorge</span>
+                <span class="badge badge-games">Gap: 220 games</span>
+                <div class="pairing-stats">
+                    val1313: 245 games • NaveenGeorge: 25 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">4.</div>
+                <span class="pairing-players">adande1<span class="vs">vs</span>HamSamisch</span>
+                <span class="badge badge-games">Gap: 217 games</span>
+                <div class="pairing-stats">
+                    adande1: 239 games • HamSamisch: 22 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">5.</div>
+                <span class="pairing-players">NLance<span class="vs">vs</span>switchoffengine</span>
+                <span class="badge badge-games">Gap: 204 games</span>
+                <div class="pairing-stats">
+                    NLance: 221 games • switchoffengine: 17 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🆕</div>
+                <div class="section-title">Debutants Watch</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players"> seandcosta<span class="vs">vs</span>🆕 endubito</span>
+                <span class="badge badge-debut">DEBUT</span>
+                <div class="pairing-stats">
+                    seandcosta: 52 games • endubito: 0 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">🆕 ShadowOfSelf<span class="vs">vs</span> Mennonite</span>
+                <span class="badge badge-debut">DEBUT</span>
+                <div class="pairing-stats">
+                    ShadowOfSelf: 0 games • Mennonite: 80 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">🆕 Crazysiciliano<span class="vs">vs</span> jd0972</span>
+                <span class="badge badge-debut">DEBUT</span>
+                <div class="pairing-stats">
+                    Crazysiciliano: 0 games • jd0972: 2 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">🆕 ojedachessmaster<span class="vs">vs</span> Jbyrd11</span>
+                <span class="badge badge-debut">DEBUT</span>
+                <div class="pairing-stats">
+                    ojedachessmaster: 0 games • Jbyrd11: 31 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players"> ekopp2000<span class="vs">vs</span>🆕 aguayo</span>
+                <span class="badge badge-debut">DEBUT</span>
+                <div class="pairing-stats">
+                    ekopp2000: 161 games • aguayo: 0 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players"> Fischer_and_Chips88<span class="vs">vs</span>🆕 HanzoloE</span>
+                <span class="badge badge-debut">DEBUT</span>
+                <div class="pairing-stats">
+                    Fischer_and_Chips88: 17 games • HanzoloE: 0 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>Generated on 2026-01-29 20:10:24 • Lichess 4545 Pairings Analyzer</p>
+            <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
+                Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
