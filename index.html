@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lichess 4545 - Season 47, Round 3 Dashboard</title>
+    <title>The 4545 Chronicles</title>
     <style>
         * {
             margin: 0;
@@ -12,10 +12,28 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #1a3a45 30%, #2c5f6f 70%, #3d7a8a 100%);
             min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Alien UFO decoration */
+        body::before {
+            content: '🛸';
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 3em;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
         }
         
         .container {
@@ -23,473 +41,237 @@
             margin: 0 auto;
         }
         
-        .header {
+        header {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
+            border-radius: 20px;
+            padding: 50px 40px;
             text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            position: relative;
         }
         
-        .header h1 {
-            color: #2d3748;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        .header .subtitle {
-            color: #718096;
-            font-size: 1.2em;
-        }
-        
-        .stats-bar {
-            background: rgba(255,255,255,0.95);
-            padding: 15px 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
+        /* Alien eyes decoration */
+        .alien-eyes {
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 2.5em;
         }
         
-        .stat {
-            text-align: center;
-            padding: 10px 20px;
+        h1 {
+            font-size: 3.2em;
+            color: #2c5f6f;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(44, 95, 111, 0.1);
         }
         
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
+        .subtitle {
+            font-size: 1.2em;
+            color: #5a8a9a;
+            font-style: italic;
         }
         
-        .stat-label {
-            color: #718096;
-            font-size: 0.9em;
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
         
-        .section {
+        .report-section {
             background: white;
-            padding: 25px;
             border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .report-section:hover {
+            transform: translateY(-5px);
         }
         
         .section-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #2c5f6f;
         }
         
         .section-icon {
             font-size: 2em;
-            margin-right: 15px;
         }
         
         .section-title {
             font-size: 1.5em;
-            color: #2d3748;
+            color: #2c5f6f;
             font-weight: 600;
         }
         
-        .pairing {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            background: #f7fafc;
-            border-left: 4px solid #667eea;
+        .report-link {
+            display: block;
+            background: linear-gradient(135deg, #2c5f6f 0%, #3d7a8a 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-bottom: 12px;
             transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(44, 95, 111, 0.3);
         }
         
-        .pairing:hover {
-            background: #edf2f7;
+        .report-link:hover {
             transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(44, 95, 111, 0.5);
+            background: linear-gradient(135deg, #3d7a8a 0%, #2c5f6f 100%);
         }
         
-        .pairing-rank {
-            display: inline-block;
-            width: 40px;
-            font-weight: bold;
+        .report-link:last-child {
+            margin-bottom: 0;
+        }
+        
+        .link-text {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .link-arrow {
             font-size: 1.2em;
+            transition: transform 0.3s ease;
         }
         
-        .pairing-players {
-            font-size: 1.1em;
-            color: #2d3748;
-            font-weight: 500;
+        .report-link:hover .link-arrow {
+            transform: translateX(5px);
         }
         
-        .pairing-stats {
-            color: #718096;
-            font-size: 0.9em;
-            margin-top: 5px;
-            margin-left: 40px;
-        }
-        
-        .vs {
-            color: #667eea;
-            font-weight: bold;
-            margin: 0 10px;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .badge-games {
-            background: #e6fffa;
-            color: #047857;
-        }
-        
-        .badge-milestone {
-            background: #fef3c7;
-            color: #92400e;
-            animation: pulse 2s infinite;
-        }
-        
-        .badge-debut {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .milestone-alert {
-            background: #fef3c7;
-            border-left-color: #f59e0b;
-            padding: 15px;
-            margin-top: 8px;
-            margin-left: 40px;
-            border-radius: 5px;
-            font-weight: 500;
-            color: #92400e;
-        }
-        
-        .no-results {
-            text-align: center;
-            color: #718096;
-            padding: 30px;
-            font-style: italic;
-        }
-        
-        .footer {
+        footer {
             text-align: center;
             color: white;
-            margin-top: 30px;
-            opacity: 0.8;
+            margin-top: 60px;
+            padding: 20px;
+            font-size: 0.95em;
+            opacity: 0.9;
         }
         
-        @media print {
-            body {
-                background: white;
+        footer .alien-signature {
+            margin-top: 15px;
+            font-size: 1.5em;
+            opacity: 0.6;
+        }
+        
+        footer a {
+            color: #a8d5e2;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .reports-grid {
+                grid-template-columns: 1fr;
             }
-            .pairing:hover {
-                transform: none;
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+            }
+            
+            body::before {
+                font-size: 2em;
+                top: 10px;
+                right: 10px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>♟️ Lichess 4545 Pairings Dashboard</h1>
-            <div class="subtitle">Season 47 • Round 3</div>
+        <header>
+            <div class="alien-eyes">
+                <span>👽</span>
+            </div>
+            <h1>The 4545 Chronicles</h1>
+            <p class="subtitle">Intergalactic Intelligence Briefings</p>
+        </header>
+        
+        <div class="reports-grid">
+            <!-- Current Round Preview -->
+            <div class="report-section">
+                <div class="section-header">
+                    <span class="section-icon">🔮</span>
+                    <h2 class="section-title">Current Round Preview</h2>
+                </div>
+                
+                <a href="https://tranzoo-4545.github.io/4545nonsense/pairings_dashboard.html" class="report-link">
+                    <div class="link-text">
+                        <span>Notable Matchups</span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
+                
+                <a href="https://tranzoo-4545.github.io/4545nonsense/rivalry_tracker.html" class="report-link">
+                    <div class="link-text">
+                        <span>Rivalry Tracker</span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
+                
+                <a href="https://tranzoo-4545.github.io/4545nonsense/streaks_watch.html" class="report-link">
+                    <div class="link-text">
+                        <span>Streak Watch</span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Post-Round Report -->
+            <div class="report-section">
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <h2 class="section-title">Post-Round Report</h2>
+                </div>
+                
+                <a href="https://tranzoo-4545.github.io/4545nonsense/pairings_postround_report.html" class="report-link">
+                    <div class="link-text">
+                        <span>Notable Matchups</span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
+                
+                <a href="https://tranzoo-4545.github.io/4545nonsense/rivalry_tracker_postround.html" class="report-link">
+                    <div class="link-text">
+                        <span>Rivalry Tracker</span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
+                
+                <a href="https://tranzoo-4545.github.io/4545nonsense/streaks_watch_postround.html" class="report-link">
+                    <div class="link-text">
+                        <span>Streak Watch</span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
+            </div>
         </div>
         
-        <div class="stats-bar">
-            <div class="stat">
-                <div class="stat-value">192</div>
-                <div class="stat-label">Total Pairings</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">6</div>
-                <div class="stat-label">Debut Games</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">5</div>
-                <div class="stat-label">Milestones</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">393</div>
-                <div class="stat-label">Most Combined</div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🏆</div>
-                <div class="section-title">Top 5 Most Experienced Matchups</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥇</div>
-                <span class="pairing-players">scarff<span class="vs">vs</span>Grizzzly1000</span>
-                <span class="badge badge-games">393 combined</span>
-                <div class="pairing-stats">
-                    scarff: 295 games • Grizzzly1000: 98 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥈</div>
-                <span class="pairing-players">kygreek<span class="vs">vs</span>UpGoerFive</span>
-                <span class="badge badge-games">338 combined</span>
-                <div class="pairing-stats">
-                    kygreek: 99 games • UpGoerFive: 239 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥉</div>
-                <span class="pairing-players">chk12<span class="vs">vs</span>bufferunderrun</span>
-                <span class="badge badge-games">322 combined</span>
-                <div class="pairing-stats">
-                    chk12: 71 games • bufferunderrun: 251 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">timothyha<span class="vs">vs</span>sussasun</span>
-                <span class="badge badge-games">312 combined</span>
-                <div class="pairing-stats">
-                    timothyha: 243 games • sussasun: 69 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">Feet_Barbie<span class="vs">vs</span>jwwells42</span>
-                <span class="badge badge-games">296 combined</span>
-                <div class="pairing-stats">
-                    Feet_Barbie: 86 games • jwwells42: 210 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🎯</div>
-                <div class="section-title">Milestone Watch</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">kygreek<span class="vs">vs</span>UpGoerFive</span>
-
-                <div class="milestone-alert">
-                    🎉 kygreek is at 99 games - Next game is #100!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">Sarahwynn<span class="vs">vs</span>nerja25390</span>
-
-                <div class="milestone-alert">
-                    🎉 Sarahwynn is at 99 games - Next game is #100!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">Rcyx<span class="vs">vs</span>sivakumarr</span>
-
-                <div class="milestone-alert">
-                    🎉 Rcyx is at 44 games - Next game is #45!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">Logansglasses<span class="vs">vs</span>Jarolos</span>
-
-                <div class="milestone-alert">
-                    🎉 Jarolos is at 44 games - Next game is #45!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">matthewhuber<span class="vs">vs</span>mekumcu</span>
-
-                <div class="milestone-alert">
-                    🎉 matthewhuber is at 44 games - Next game is #45!
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">⚔️</div>
-                <div class="section-title">Veterans Clash</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">1.</div>
-                <span class="pairing-players">Zubenelgenubi<span class="vs">vs</span>cvillian</span>
-                <span class="badge badge-games">Min: 128 games</span>
-                <div class="pairing-stats">
-                    Zubenelgenubi: 165 games • cvillian: 128 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">2.</div>
-                <span class="pairing-players">kygreek<span class="vs">vs</span>UpGoerFive</span>
-                <span class="badge badge-games">Min: 99 games</span>
-                <div class="pairing-stats">
-                    kygreek: 99 games • UpGoerFive: 239 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">3.</div>
-                <span class="pairing-players">scarff<span class="vs">vs</span>Grizzzly1000</span>
-                <span class="badge badge-games">Min: 98 games</span>
-                <div class="pairing-stats">
-                    scarff: 295 games • Grizzzly1000: 98 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">gary0892<span class="vs">vs</span>Gingersquirrelnuts</span>
-                <span class="badge badge-games">Min: 95 games</span>
-                <div class="pairing-stats">
-                    gary0892: 95 games • Gingersquirrelnuts: 135 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">Sarahwynn<span class="vs">vs</span>nerja25390</span>
-                <span class="badge badge-games">Min: 91 games</span>
-                <div class="pairing-stats">
-                    Sarahwynn: 99 games • nerja25390: 91 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">👴🆚🆕</div>
-                <div class="section-title">Vets Meet Newbie</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">1.</div>
-                <span class="pairing-players">LeopemV<span class="vs">vs</span>glbert</span>
-                <span class="badge badge-games">Gap: 281 games</span>
-                <div class="pairing-stats">
-                    LeopemV: 2 games • glbert: 283 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">2.</div>
-                <span class="pairing-players">KamagayaJiji<span class="vs">vs</span>Tranzoo</span>
-                <span class="badge badge-games">Gap: 223 games</span>
-                <div class="pairing-stats">
-                    KamagayaJiji: 17 games • Tranzoo: 240 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">3.</div>
-                <span class="pairing-players">val1313<span class="vs">vs</span>NaveenGeorge</span>
-                <span class="badge badge-games">Gap: 220 games</span>
-                <div class="pairing-stats">
-                    val1313: 245 games • NaveenGeorge: 25 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">adande1<span class="vs">vs</span>HamSamisch</span>
-                <span class="badge badge-games">Gap: 217 games</span>
-                <div class="pairing-stats">
-                    adande1: 239 games • HamSamisch: 22 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">NLance<span class="vs">vs</span>switchoffengine</span>
-                <span class="badge badge-games">Gap: 204 games</span>
-                <div class="pairing-stats">
-                    NLance: 221 games • switchoffengine: 17 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🆕</div>
-                <div class="section-title">Debutants Watch</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">seandcosta<span class="vs">vs</span><strong>endubito</strong></span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>ShadowOfSelf</strong><span class="vs">vs</span>Mennonite</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>Crazysiciliano</strong><span class="vs">vs</span>jd0972</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>ojedachessmaster</strong><span class="vs">vs</span>Jbyrd11</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">ekopp2000<span class="vs">vs</span><strong>aguayo</strong></span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">Fischer_and_Chips88<span class="vs">vs</span><strong>HanzoloE</strong></span>
-            </div>
-
-        </div>
-
-        <div class="footer">
-            <p>Generated on 2026-01-30 08:43:11 • Lichess 4545 Pairings Analyzer</p>
-            <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
-                Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
+        <footer>
+            <p>Lichess 4545 Team League</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                <a href="https://www.lichess4545.com" target="_blank">Visit League Website</a>
             </p>
-        </div>
+            <div class="alien-signature">🛸</div>
+        </footer>
     </div>
 </body>
 </html>
