@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lichess 4545 POST-ROUND - Season 47, Round 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #718096;
+            font-size: 1.2em;
+        }
+        
+        .stats-bar {
+            background: rgba(255,255,255,0.95);
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 10px 20px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 0.9em;
+        }
+        
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .section-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        
+        .pairing {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .pairing:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .pairing-rank {
+            display: inline-block;
+            width: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .pairing-players {
+            font-size: 1.1em;
+            color: #2d3748;
+            font-weight: 500;
+        }
+        
+        .pairing-result {
+            font-size: 1em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-left: 15px;
+        }
+        
+        .game-link-inline {
+            margin-left: 10px;
+            color: #7c3aed;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .game-link-inline:hover {
+            text-decoration: underline;
+        }
+        
+        .pairing-stats {
+            color: #718096;
+            font-size: 0.9em;
+            margin-top: 5px;
+            margin-left: 40px;
+        }
+        
+        .vs {
+            color: #667eea;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .badge-games {
+            background: #e6fffa;
+            color: #047857;
+        }
+        
+        .badge-milestone {
+            background: #fef3c7;
+            color: #92400e;
+            animation: pulse 2s infinite;
+        }
+        
+        .badge-debut {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .debutant-win-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .milestone-alert {
+            background: #fef3c7;
+            border-left-color: #f59e0b;
+            padding: 15px;
+            margin-top: 8px;
+            margin-left: 40px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: #92400e;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: #718096;
+            padding: 30px;
+            font-style: italic;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            opacity: 0.8;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .pairing:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>♟️ Lichess 4545 Pairings Dashboard</h1>
+            <div class="subtitle">Season 47 • Round 2</div>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value">192</div>
+                <div class="stat-label">Total Pairings</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">16</div>
+                <div class="stat-label">Debut Games</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4</div>
+                <div class="stat-label">Milestones</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">411</div>
+                <div class="stat-label">Most Combined</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🏆</div>
+                <div class="section-title">Top 5 Most Experienced Matchups</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥇</div>
+                <span class="pairing-players">glbert<span class="vs">vs</span>chesshavoc</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/SY4odJ94" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">411 combined</span>
+                <div class="pairing-stats">
+                    glbert: 282 games • chesshavoc: 129 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥈</div>
+                <span class="pairing-players">patk74<span class="vs">vs</span>UpGoerFive</span>
+                <span class="pairing-result">½-½</span><a href="https://lichess.org/gJwZscTo" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">374 combined</span>
+                <div class="pairing-stats">
+                    patk74: 136 games • UpGoerFive: 238 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥉</div>
+                <span class="pairing-players">TheChessPhoenix<span class="vs">vs</span>scarff</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/nU0g35Y9" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">303 combined</span>
+                <div class="pairing-stats">
+                    TheChessPhoenix: 9 games • scarff: 294 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">4.</div>
+                <span class="pairing-players">ysgwydd<span class="vs">vs</span>val1313</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/87kb6lDg" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">294 combined</span>
+                <div class="pairing-stats">
+                    ysgwydd: 50 games • val1313: 244 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">5.</div>
+                <span class="pairing-players">M0r1<span class="vs">vs</span>Joonaf</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/NunBRcol" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">277 combined</span>
+                <div class="pairing-stats">
+                    M0r1: 182 games • Joonaf: 95 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🎯</div>
+                <div class="section-title">Milestones Reached</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🎯</div>
+                <span class="pairing-players">tyforceone<span class="vs">vs</span>lonelyghost06</span>
+                <span class="pairing-result">0-1</span>
+                <a href="https://lichess.org/fueDVZuT" target="_blank" class="game-link-inline">View →</a>
+
+                <div class="milestone-alert">
+                    🎉 lonelyghost06 reached 45 games!
+                </div>
+
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🎯</div>
+                <span class="pairing-players">Alvaro64<span class="vs">vs</span>Qudit</span>
+                <span class="pairing-result">0-1</span>
+                <a href="https://lichess.org/Z8S9nmaW" target="_blank" class="game-link-inline">View →</a>
+
+                <div class="milestone-alert">
+                    🎉 Alvaro64 reached 45 games!
+                </div>
+
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🎯</div>
+                <span class="pairing-players">sylvlondon<span class="vs">vs</span>chessyesmen</span>
+                <span class="pairing-result">½-½</span>
+                <a href="https://lichess.org/p97pZKTj" target="_blank" class="game-link-inline">View →</a>
+
+                <div class="milestone-alert">
+                    🎉 sylvlondon reached 45 games!
+                </div>
+
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🎯</div>
+                <span class="pairing-players">Lutin23<span class="vs">vs</span>surprisetactics</span>
+                <span class="pairing-result">½-½</span>
+                <a href="https://lichess.org/C4cuQzvD" target="_blank" class="game-link-inline">View →</a>
+
+                <div class="milestone-alert">
+                    🎉 Lutin23 reached 45 games!
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">⚔️</div>
+                <div class="section-title">Veterans Clash</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">1.</div>
+                <span class="pairing-players">patk74<span class="vs">vs</span>UpGoerFive</span>
+                <span class="pairing-result">½-½</span><a href="https://lichess.org/gJwZscTo" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Min: 136 games</span>
+                <div class="pairing-stats">
+                    patk74: 136 games • UpGoerFive: 238 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">2.</div>
+                <span class="pairing-players">glbert<span class="vs">vs</span>chesshavoc</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/SY4odJ94" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Min: 129 games</span>
+                <div class="pairing-stats">
+                    glbert: 282 games • chesshavoc: 129 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">3.</div>
+                <span class="pairing-players">rjhoro<span class="vs">vs</span>keeto</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/V9OAXkg0" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Min: 102 games</span>
+                <div class="pairing-stats">
+                    rjhoro: 102 games • keeto: 135 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">4.</div>
+                <span class="pairing-players">M0r1<span class="vs">vs</span>Joonaf</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/NunBRcol" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Min: 95 games</span>
+                <div class="pairing-stats">
+                    M0r1: 182 games • Joonaf: 95 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">5.</div>
+                <span class="pairing-players">KS_Legion_Legionowo<span class="vs">vs</span>nerja25390</span>
+                <span class="pairing-result">½-½</span><a href="https://lichess.org/pUgwHYqy" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Min: 89 games</span>
+                <div class="pairing-stats">
+                    KS_Legion_Legionowo: 165 games • nerja25390: 89 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">👴🆚🆕</div>
+                <div class="section-title">Vets Meet Newbie</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">1.</div>
+                <span class="pairing-players">TheChessPhoenix<span class="vs">vs</span>scarff</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/nU0g35Y9" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Gap: 285 games</span>
+                <div class="pairing-stats">
+                    TheChessPhoenix: 9 games • scarff: 294 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">2.</div>
+                <span class="pairing-players">bufferunderrun<span class="vs">vs</span>Hekkta</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/G2xEQeDk" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Gap: 249 games</span>
+                <div class="pairing-stats">
+                    bufferunderrun: 250 games • Hekkta: 1 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">3.</div>
+                <span class="pairing-players">timothyha<span class="vs">vs</span>JEEprep2374</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/AaZ1tTgn" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Gap: 241 games</span>
+                <div class="pairing-stats">
+                    timothyha: 242 games • JEEprep2374: 1 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">4.</div>
+                <span class="pairing-players">Tranzoo<span class="vs">vs</span>Emadbakry1980</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/NdE9dXQc" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Gap: 235 games</span>
+                <div class="pairing-stats">
+                    Tranzoo: 239 games • Emadbakry1980: 4 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">5.</div>
+                <span class="pairing-players">che55m45ter<span class="vs">vs</span>adande1</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/fXG1hv4W" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">Gap: 230 games</span>
+                <div class="pairing-stats">
+                    che55m45ter: 8 games • adande1: 238 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🆕</div>
+                <div class="section-title">Debutants Watch</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">Chrishyzz<span class="vs">vs</span><strong>reallynotgoodeither</strong></span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/DzSelSgL" target="_blank" class="game-link-inline">View →</a>
+                <span class="debutant-win-badge">🎉 Debutant wins!</span>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">tomb85<span class="vs">vs</span><strong>jamesnyman</strong></span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/qE1UQVw4" target="_blank" class="game-link-inline">View →</a>
+                <span class="debutant-win-badge">🎉 Debutant wins!</span>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players"><strong>Hallokayjansen</strong><span class="vs">vs</span>TTotr</span>
+                <span class="pairing-result">½-½</span><a href="https://lichess.org/5bJt8XGv" target="_blank" class="game-link-inline">View →</a>
+                
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players"><strong>Nbaf91</strong><span class="vs">vs</span>NLance</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/GrdfqjtS" target="_blank" class="game-link-inline">View →</a>
+                <span class="debutant-win-badge">🎉 Debutant wins!</span>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">mongreltiger<span class="vs">vs</span><strong>mimrolls</strong></span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/Fe0JAs6s" target="_blank" class="game-link-inline">View →</a>
+                
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">danbock<span class="vs">vs</span><strong>ChemEngineeer</strong></span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/FnJediRz" target="_blank" class="game-link-inline">View →</a>
+                
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">Nestor3690<span class="vs">vs</span><strong>waterlorda7890</strong></span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/VUryVA5L" target="_blank" class="game-link-inline">View →</a>
+                
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">Thugnastysloth<span class="vs">vs</span><strong>Bennol</strong></span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/RJz2GtMD" target="_blank" class="game-link-inline">View →</a>
+                
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">okady<span class="vs">vs</span><strong>zal667</strong></span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/wqJdn1od" target="_blank" class="game-link-inline">View →</a>
+                
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players"><strong>mmkgtc</strong><span class="vs">vs</span>DavidSifre</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/ACyDmMid" target="_blank" class="game-link-inline">View →</a>
+                
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">MemeTeam2016<span class="vs">vs</span><strong>syous780</strong></span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/b9Hd6J5p" target="_blank" class="game-link-inline">View →</a>
+                <span class="debutant-win-badge">🎉 Debutant wins!</span>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">gpetris<span class="vs">vs</span><strong>Vere000</strong></span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/fmvdGTLG" target="_blank" class="game-link-inline">View →</a>
+                <span class="debutant-win-badge">🎉 Debutant wins!</span>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">ComputerUser2607<span class="vs">vs</span><strong>playedby1</strong></span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/aNbbtBVM" target="_blank" class="game-link-inline">View →</a>
+                
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">Paulze2000<span class="vs">vs</span><strong>bgryz</strong></span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/xO7nD0yH" target="_blank" class="game-link-inline">View →</a>
+                <span class="debutant-win-badge">🎉 Debutant wins!</span>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players">osumarko<span class="vs">vs</span><strong>r45neils</strong></span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/Azl6ETz5" target="_blank" class="game-link-inline">View →</a>
+                <span class="debutant-win-badge">🎉 Debutant wins!</span>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🆕</div>
+                <span class="pairing-players"><strong>Clayboard</strong><span class="vs">vs</span><strong>sir_bongcloud</strong></span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/U8Sy4cvm" target="_blank" class="game-link-inline">View →</a>
+                <span class="debutant-win-badge">🎉 Debutant wins!</span>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>Generated on 2026-01-30 09:07:03 • Lichess 4545 Pairings Analyzer</p>
+            <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
+                Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
