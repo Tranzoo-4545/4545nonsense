@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storylines - Season 47 Round 3</title>
+    <style>
+        :root {
+            --bg-primary: #2d5266;
+            --bg-dark: #234250;
+            --bg-darker: #1a323d;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #f0f6f6;
+            --text-secondary: rgba(240, 246, 246, 0.7);
+            --text-muted: rgba(240, 246, 246, 0.4);
+            --border: rgba(255, 255, 255, 0.12);
+            --gold: #d4b856;
+            --accent: #4a9ebb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 50%, var(--bg-primary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        header .stats {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .pairing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .pairing-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+        
+        .pairing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .rank {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold);
+            min-width: 50px;
+        }
+        
+        .rank.top-3 {
+            font-size: 1.8rem;
+        }
+        
+        .matchup {
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        .players {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .players a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .players a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        .vs {
+            color: var(--text-muted);
+            margin: 0 0.5rem;
+        }
+        
+        .teams {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .score-badge {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            min-width: 70px;
+        }
+        
+        .score-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+        
+        .score-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        
+        .reasons {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .reason {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            margin: 0.2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .pairing-header {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .rank {
+                order: -1;
+            }
+            
+            .players {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📺 Storylines of the Week</h1>
+            <div class="subtitle">Season 47 &middot; Round 3</div>
+            <div class="stats">Top 10 of 192 pairings</div>
+        </header>
+        
+        <div class="pairings">
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank top-3">#1</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/sterpfi" target="_blank">sterpfi</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/betolini" target="_blank">betolini</a>
+                        </div>
+                        <div class="teams">47 is not prime number vs Botvinnik prepared, we forgot.</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">6.0</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔥 Both on win streaks (2W vs 2W)</span>
+                    <span class="reason">🏆 Top team battle!</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank top-3">#2</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/Logansglasses" target="_blank">Logansglasses</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/Jarolos" target="_blank">Jarolos</a>
+                        </div>
+                        <div class="teams">Botvinnik prepared, we forgot. vs 47 is not prime number</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">6.0</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🎯 jarolos's 45th game!</span>
+                    <span class="reason">🏆 Top team battle!</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank top-3">#3</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/kygreek" target="_blank">kygreek</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/UpGoerFive" target="_blank">UpGoerFive</a>
+                        </div>
+                        <div class="teams">Think Like a Grandpatzer vs Charge of the Suggestion Brigade</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">6.0</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">💯 kygreek's 100th game!</span>
+                    <span class="reason">🎖️ Veterans (99+239 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#4</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/HandKnit" target="_blank">HandKnit</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/axp156" target="_blank">axp156</a>
+                        </div>
+                        <div class="teams">Swindlers, patzers, and pawn pushers vs Panic! At The Chess Board</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">5.7</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔥 Both on win streaks (2W vs 2W)</span>
+                    <span class="reason">🥉 3rd biggest team clash</span>
+                    <span class="reason">🎖️ Experience (24+150 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#5</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/j3084" target="_blank">j3084</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/TheChessPhoenix" target="_blank">TheChessPhoenix</a>
+                        </div>
+                        <div class="teams">Botvinnik prepared, we forgot. vs 47 is not prime number</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">5.2</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🏆 Top team battle!</span>
+                    <span class="reason">🎖️ Experience (115+10 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#6</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/NameGoesInHere" target="_blank">NameGoesInHere</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/Warvold" target="_blank">Warvold</a>
+                        </div>
+                        <div class="teams">Hanging Pieces of Babylon vs Knight Terrors</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">5.0</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch (0-1-0)</span>
+                    <span class="reason">🥈 2nd biggest team clash</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#7</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/Sarahwynn" target="_blank">Sarahwynn</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/nerja25390" target="_blank">nerja25390</a>
+                        </div>
+                        <div class="teams">Dommaraju, I've come to bargain vs headbangingparrot</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">4.9</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">💯 sarahwynn's 100th game!</span>
+                    <span class="reason">🎖️ Experience (99+91 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#8</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/timothyha" target="_blank">timothyha</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/sussasun" target="_blank">sussasun</a>
+                        </div>
+                        <div class="teams">Proof by Checkmate vs Rook Takes Pawnshop</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">4.7</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch (0-1-1)</span>
+                    <span class="reason">🎖️ Veterans (243+69 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#9</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/gary0892" target="_blank">gary0892</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/Gingersquirrelnuts" target="_blank">Gingersquirrelnuts</a>
+                        </div>
+                        <div class="teams">Hello to all! Good old faces! vs We are the Cham's peons</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">4.3</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">❄️ Both struggling (2L vs 2L)</span>
+                    <span class="reason">🎖️ Veterans (95+135 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#10</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://lichess.org/@/adande1" target="_blank">adande1</a>
+                            <span class="vs">vs</span>
+                            <a href="https://lichess.org/@/HamSamisch" target="_blank">HamSamisch</a>
+                        </div>
+                        <div class="teams">Blunder? I hardly know her vs I literally don't Keres</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">4.2</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch (1-0-0)</span>
+                    <span class="reason">🎖️ Veterans (239+22 games)</span>
+                </div>
+            </div>
+
+        </div>
+        
+        <footer>
+            Generated for <a href="https://www.lichess4545.com" target="_blank">Lichess4545</a> League
+        </footer>
+    </div>
+</body>
+</html>
