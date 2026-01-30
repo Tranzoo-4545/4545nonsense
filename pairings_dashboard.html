@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a3a45 0%, #2c5f6f 50%, #3d7a8a 100%);
             padding: 20px;
             min-height: 100vh;
         }
@@ -62,7 +62,7 @@
         .stat-value {
             font-size: 2em;
             font-weight: bold;
-            color: #667eea;
+            color: #2c5f6f;
         }
         
         .stat-label {
@@ -83,7 +83,7 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #2c5f6f;
         }
         
         .section-icon {
@@ -102,7 +102,7 @@
             margin-bottom: 10px;
             border-radius: 8px;
             background: #f7fafc;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #2c5f6f;
             transition: all 0.3s ease;
         }
         
@@ -133,7 +133,7 @@
         }
         
         .vs {
-            color: #667eea;
+            color: #2c5f6f;
             font-weight: bold;
             margin: 0 10px;
         }
@@ -206,7 +206,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>♟️ Lichess 4545 Pairings Dashboard</h1>
+            <h1>♟️ Notable Matchups - Round Preview</h1>
             <div class="subtitle">Season 47 • Round 3</div>
         </div>
         
@@ -216,10 +216,6 @@
                 <div class="stat-label">Total Pairings</div>
             </div>
             <div class="stat">
-                <div class="stat-value">6</div>
-                <div class="stat-label">Debut Games</div>
-            </div>
-            <div class="stat">
                 <div class="stat-value">5</div>
                 <div class="stat-label">Milestones</div>
             </div>
@@ -227,59 +223,6 @@
                 <div class="stat-value">393</div>
                 <div class="stat-label">Most Combined</div>
             </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🏆</div>
-                <div class="section-title">Top 5 Most Experienced Matchups</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥇</div>
-                <span class="pairing-players">scarff<span class="vs">vs</span>Grizzzly1000</span>
-                <span class="badge badge-games">393 combined</span>
-                <div class="pairing-stats">
-                    scarff: 295 games • Grizzzly1000: 98 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥈</div>
-                <span class="pairing-players">kygreek<span class="vs">vs</span>UpGoerFive</span>
-                <span class="badge badge-games">338 combined</span>
-                <div class="pairing-stats">
-                    kygreek: 99 games • UpGoerFive: 239 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥉</div>
-                <span class="pairing-players">chk12<span class="vs">vs</span>bufferunderrun</span>
-                <span class="badge badge-games">322 combined</span>
-                <div class="pairing-stats">
-                    chk12: 71 games • bufferunderrun: 251 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">timothyha<span class="vs">vs</span>sussasun</span>
-                <span class="badge badge-games">312 combined</span>
-                <div class="pairing-stats">
-                    timothyha: 243 games • sussasun: 69 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">Feet_Barbie<span class="vs">vs</span>jwwells42</span>
-                <span class="badge badge-games">296 combined</span>
-                <div class="pairing-stats">
-                    Feet_Barbie: 86 games • jwwells42: 210 games
-                </div>
-            </div>
-
         </div>
 
         <div class="section">
@@ -395,8 +338,61 @@
 
         <div class="section">
             <div class="section-header">
+                <div class="section-icon">🏆</div>
+                <div class="section-title">Top 5 Most Experienced Matchups</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥇</div>
+                <span class="pairing-players">scarff<span class="vs">vs</span>Grizzzly1000</span>
+                <span class="badge badge-games">393 combined</span>
+                <div class="pairing-stats">
+                    scarff: 295 games • Grizzzly1000: 98 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥈</div>
+                <span class="pairing-players">kygreek<span class="vs">vs</span>UpGoerFive</span>
+                <span class="badge badge-games">338 combined</span>
+                <div class="pairing-stats">
+                    kygreek: 99 games • UpGoerFive: 239 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥉</div>
+                <span class="pairing-players">chk12<span class="vs">vs</span>bufferunderrun</span>
+                <span class="badge badge-games">322 combined</span>
+                <div class="pairing-stats">
+                    chk12: 71 games • bufferunderrun: 251 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">4.</div>
+                <span class="pairing-players">timothyha<span class="vs">vs</span>sussasun</span>
+                <span class="badge badge-games">312 combined</span>
+                <div class="pairing-stats">
+                    timothyha: 243 games • sussasun: 69 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">5.</div>
+                <span class="pairing-players">Feet_Barbie<span class="vs">vs</span>jwwells42</span>
+                <span class="badge badge-games">296 combined</span>
+                <div class="pairing-stats">
+                    Feet_Barbie: 86 games • jwwells42: 210 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
                 <div class="section-icon">👴🆚🆕</div>
-                <div class="section-title">Vets Meet Newbie</div>
+                <div class="section-title">Vet Meets Newbie</div>
             </div>
 
             <div class="pairing">
@@ -485,7 +481,7 @@
         </div>
 
         <div class="footer">
-            <p>Generated on 2026-01-30 09:39:56 • Lichess 4545 Pairings Analyzer</p>
+            <p>Generated on 2026-01-30 11:43:47 • Lichess 4545 Pairings Analyzer</p>
             <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
                 Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
             </p>

@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a3a45 0%, #2c5f6f 50%, #3d7a8a 100%);
             padding: 20px;
             min-height: 100vh;
         }
@@ -62,7 +62,7 @@
         .stat-value {
             font-size: 2em;
             font-weight: bold;
-            color: #667eea;
+            color: #2c5f6f;
         }
         
         .stat-label {
@@ -83,7 +83,7 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #2c5f6f;
         }
         
         .section-icon {
@@ -102,7 +102,7 @@
             margin-bottom: 10px;
             border-radius: 8px;
             background: #f7fafc;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #2c5f6f;
             transition: all 0.3s ease;
         }
         
@@ -152,7 +152,7 @@
         }
         
         .vs {
-            color: #667eea;
+            color: #2c5f6f;
             font-weight: bold;
             margin: 0 10px;
         }
@@ -209,6 +209,16 @@
             color: #92400e;
         }
         
+        .score-summary {
+            background: #e0f2fe;
+            border-left: 4px solid #2c5f6f;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            color: #1e3a4f;
+        }
+        
         .no-results {
             text-align: center;
             color: #718096;
@@ -236,7 +246,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>♟️ Lichess 4545 Pairings Dashboard</h1>
+            <h1>♟️ Notable Matchups - Post-Round Report</h1>
             <div class="subtitle">Season 47 • Round 2</div>
         </div>
         
@@ -257,64 +267,6 @@
                 <div class="stat-value">411</div>
                 <div class="stat-label">Most Combined</div>
             </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🏆</div>
-                <div class="section-title">Top 5 Most Experienced Matchups</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥇</div>
-                <span class="pairing-players">glbert<span class="vs">vs</span>chesshavoc</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/SY4odJ94" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">411 combined</span>
-                <div class="pairing-stats">
-                    glbert: 282 games • chesshavoc: 129 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥈</div>
-                <span class="pairing-players">patk74<span class="vs">vs</span>UpGoerFive</span>
-                <span class="pairing-result">½-½</span><a href="https://lichess.org/gJwZscTo" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">374 combined</span>
-                <div class="pairing-stats">
-                    patk74: 136 games • UpGoerFive: 238 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥉</div>
-                <span class="pairing-players">TheChessPhoenix<span class="vs">vs</span>scarff</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/nU0g35Y9" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">303 combined</span>
-                <div class="pairing-stats">
-                    TheChessPhoenix: 9 games • scarff: 294 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">ysgwydd<span class="vs">vs</span>val1313</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/87kb6lDg" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">294 combined</span>
-                <div class="pairing-stats">
-                    ysgwydd: 50 games • val1313: 244 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">M0r1<span class="vs">vs</span>Joonaf</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/NunBRcol" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">277 combined</span>
-                <div class="pairing-stats">
-                    M0r1: 182 games • Joonaf: 95 games
-                </div>
-            </div>
-
         </div>
 
         <div class="section">
@@ -433,8 +385,71 @@
 
         <div class="section">
             <div class="section-header">
+                <div class="section-icon">🏆</div>
+                <div class="section-title">Top 5 Most Experienced Matchups</div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥇</div>
+                <span class="pairing-players">glbert<span class="vs">vs</span>chesshavoc</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/SY4odJ94" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">411 combined</span>
+                <div class="pairing-stats">
+                    glbert: 282 games • chesshavoc: 129 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥈</div>
+                <span class="pairing-players">patk74<span class="vs">vs</span>UpGoerFive</span>
+                <span class="pairing-result">½-½</span><a href="https://lichess.org/gJwZscTo" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">374 combined</span>
+                <div class="pairing-stats">
+                    patk74: 136 games • UpGoerFive: 238 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">🥉</div>
+                <span class="pairing-players">TheChessPhoenix<span class="vs">vs</span>scarff</span>
+                <span class="pairing-result">1-0</span><a href="https://lichess.org/nU0g35Y9" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">303 combined</span>
+                <div class="pairing-stats">
+                    TheChessPhoenix: 9 games • scarff: 294 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">4.</div>
+                <span class="pairing-players">ysgwydd<span class="vs">vs</span>val1313</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/87kb6lDg" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">294 combined</span>
+                <div class="pairing-stats">
+                    ysgwydd: 50 games • val1313: 244 games
+                </div>
+            </div>
+
+            <div class="pairing">
+                <div class="pairing-rank">5.</div>
+                <span class="pairing-players">M0r1<span class="vs">vs</span>Joonaf</span>
+                <span class="pairing-result">0-1</span><a href="https://lichess.org/NunBRcol" target="_blank" class="game-link-inline">View →</a>
+                <span class="badge badge-games">277 combined</span>
+                <div class="pairing-stats">
+                    M0r1: 182 games • Joonaf: 95 games
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <div class="section-header">
                 <div class="section-icon">👴🆚🆕</div>
-                <div class="section-title">Vets Meet Newbie</div>
+                <div class="section-title">Vet Meets Newbie</div>
+            </div>
+
+            <div class="score-summary">
+                <strong>Top 5 Score:</strong> Vets 2 - 3 Newbies
+                
             </div>
 
             <div class="pairing">
@@ -493,6 +508,11 @@
             <div class="section-header">
                 <div class="section-icon">🆕</div>
                 <div class="section-title">Debutants Watch</div>
+            </div>
+
+            <div class="score-summary">
+                <strong>Debutants Score:</strong> 8.5/16 points 
+                (16 games played)
             </div>
 
             <div class="pairing">
@@ -610,7 +630,7 @@
         </div>
 
         <div class="footer">
-            <p>Generated on 2026-01-30 09:07:03 • Lichess 4545 Pairings Analyzer</p>
+            <p>Generated on 2026-01-30 11:53:19 • Lichess 4545 Pairings Analyzer</p>
             <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
                 Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
             </p>
