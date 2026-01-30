@@ -19,7 +19,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1000px;
             margin: 0 auto;
         }
         
@@ -96,6 +96,56 @@
         
         .section-header.losing {
             border-bottom-color: #0284c7;
+        }
+        
+        .section-label-epic {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            color: white;
+            font-size: 0.9em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 14px 24px;
+            margin-bottom: 0;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-label-epic::before {
+            content: "⚡";
+            font-size: 1.1em;
+        }
+        
+        .section-label-cold {
+            background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
+            color: white;
+            font-size: 0.9em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 14px 24px;
+            margin-bottom: 0;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 4px 15px rgba(3, 105, 161, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-label-cold::before {
+            content: "🧊";
+            font-size: 1.1em;
+        }
+        
+        .epic-section {
+            margin-bottom: 40px;
+        }
+        
+        .epic-section .matchup-card:first-of-type {
+            border-radius: 0 0 10px 10px;
         }
         
         .section-icon {
@@ -219,10 +269,17 @@
         }
         
         .game-link {
-            color: #7c3aed;
             text-decoration: none;
             font-weight: 600;
             white-space: nowrap;
+        }
+        
+        .streak-card.winning .game-link {
+            color: #059669;
+        }
+        
+        .streak-card.losing .game-link {
+            color: #0284c7;
         }
         
         .game-link:hover {
@@ -268,49 +325,56 @@
         }
         
         .matchup-vs {
-            color: #7c3aed;
+            color: #94a3b8;
             margin: 0 10px;
         }
         
         .matchup-streaks {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr auto 1fr;
             gap: 15px;
+            align-items: center;
+        }
+        
+        .matchup-divider {
+            font-size: 1.5em;
+            color: #94a3b8;
         }
         
         .matchup-streak-box {
-            padding: 12px;
+            padding: 16px;
             border-radius: 8px;
             text-align: center;
         }
         
         .matchup-streak-box.hot {
-            background: #ecfdf5;
-            border: 2px solid #059669;
+            background: #fffbeb;
+            border: 2px solid #d97706;
         }
         
         .matchup-streak-box.cold {
             background: #f0f9ff;
-            border: 2px solid #0284c7;
+            border: 2px solid #0ea5e9;
         }
         
         .matchup-player-name {
             font-weight: 600;
             margin-bottom: 8px;
-            color: #2d3748;
+            color: #1a202c;
+            font-size: 1em;
         }
         
         .matchup-streak-info {
             font-size: 1.1em;
-            font-weight: bold;
+            font-weight: 700;
         }
         
         .matchup-streak-info.hot {
-            color: #059669;
+            color: #b45309;
         }
         
         .matchup-streak-info.cold {
-            color: #dc2626;
+            color: #0284c7;
         }
         
         @media (max-width: 768px) {
@@ -348,7 +412,87 @@
             </div>
         </div>
         
-        <!-- Winning Streaks Section -->
+        <!-- Something's Gotta Give Section (HOT VS HOT) - FIRST -->
+        <div class="epic-section">
+            <div class="section-label-epic">Something's Gotta Give</div>
+
+            <div class="matchup-card">
+                <div class="matchup-header">
+                    <div class="matchup-players">Rcyx<span class="matchup-vs">vs</span>sivakumarr</div>
+                </div>
+                <div class="matchup-streaks">
+                    <div class="matchup-streak-box hot">
+                        <div class="matchup-player-name">Rcyx</div>
+                        <div class="matchup-streak-info hot">6 wins</div>
+                    </div>
+                    <div class="matchup-divider">⚔</div>
+                    <div class="matchup-streak-box hot">
+                        <div class="matchup-player-name">sivakumarr</div>
+                        <div class="matchup-streak-info hot">5 wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="matchup-card">
+                <div class="matchup-header">
+                    <div class="matchup-players">classicalprac<span class="matchup-vs">vs</span>okady</div>
+                </div>
+                <div class="matchup-streaks">
+                    <div class="matchup-streak-box hot">
+                        <div class="matchup-player-name">classicalprac</div>
+                        <div class="matchup-streak-info hot">4 wins</div>
+                    </div>
+                    <div class="matchup-divider">⚔</div>
+                    <div class="matchup-streak-box hot">
+                        <div class="matchup-player-name">okady</div>
+                        <div class="matchup-streak-info hot">5 wins</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="matchup-card">
+                <div class="matchup-header">
+                    <div class="matchup-players">mqll<span class="matchup-vs">vs</span>MarekW78</div>
+                </div>
+                <div class="matchup-streaks">
+                    <div class="matchup-streak-box hot">
+                        <div class="matchup-player-name">mqll</div>
+                        <div class="matchup-streak-info hot">3 wins</div>
+                    </div>
+                    <div class="matchup-divider">⚔</div>
+                    <div class="matchup-streak-box hot">
+                        <div class="matchup-player-name">MarekW78</div>
+                        <div class="matchup-streak-info hot">4 wins</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Cold War Section (COLD VS COLD) - SECOND -->
+        <div class="epic-section">
+            <div class="section-label-cold">Cold War</div>
+
+            <div class="matchup-card">
+                <div class="matchup-header">
+                    <div class="matchup-players">Feet_Barbie<span class="matchup-vs">vs</span>jwwells42</div>
+                </div>
+                <div class="matchup-streaks">
+                    <div class="matchup-streak-box cold">
+                        <div class="matchup-player-name">Feet_Barbie</div>
+                        <div class="matchup-streak-info cold">5 losses</div>
+                    </div>
+                    <div class="matchup-divider">⚔</div>
+                    <div class="matchup-streak-box cold">
+                        <div class="matchup-player-name">jwwells42</div>
+                        <div class="matchup-streak-info cold">3 losses</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Hot Streaks Section - THIRD -->
         <div class="section">
             <div class="section-header winning">
                 <div class="section-icon">🔥</div>
@@ -370,39 +514,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 45, R4</span>
-                        <span class="game-opponent">vs lyqst</span>
-                        <a href="https://lichess.org/1xpq8Gnj" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R5</span>
-                        <span class="game-opponent">vs Grizzzly1000</span>
-                        <a href="https://lichess.org/tybrnlqP" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R6</span>
-                        <span class="game-opponent">vs FunnyAnimatorJimTV</span>
-                        <a href="https://lichess.org/bihy1N6e" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R7</span>
-                        <span class="game-opponent">vs Astronominoff</span>
-                        <a href="https://lichess.org/iCJqmT4N" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R3</span>
-                        <span class="game-opponent">vs Lohthar</span>
-                        <a href="https://lichess.org/D1LDlDtE" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs noisyocean</span>
-                        <a href="https://lichess.org/644CfMcA" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs chatakkuma</span>
+                        <a href="https://lichess.org/3mEXfKzi" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -412,9 +526,39 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs chatakkuma</span>
-                        <a href="https://lichess.org/3mEXfKzi" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs noisyocean</span>
+                        <a href="https://lichess.org/644CfMcA" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R3</span>
+                        <span class="game-opponent">vs Lohthar</span>
+                        <a href="https://lichess.org/D1LDlDtE" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R7</span>
+                        <span class="game-opponent">vs Astronominoff</span>
+                        <a href="https://lichess.org/iCJqmT4N" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R6</span>
+                        <span class="game-opponent">vs FunnyAnimatorJimTV</span>
+                        <a href="https://lichess.org/bihy1N6e" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R5</span>
+                        <span class="game-opponent">vs Grizzzly1000</span>
+                        <a href="https://lichess.org/tybrnlqP" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R4</span>
+                        <span class="game-opponent">vs lyqst</span>
+                        <a href="https://lichess.org/1xpq8Gnj" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -435,33 +579,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 36, R5</span>
-                        <span class="game-opponent">vs rojazu</span>
-                        <a href="https://lichess.org/nqjxJ985" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 36, R6</span>
-                        <span class="game-opponent">vs Chesstrix01</span>
-                        <a href="https://lichess.org/v627aj5F" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 38, R1</span>
-                        <span class="game-opponent">vs Wadim_Sergeevich</span>
-                        <a href="https://lichess.org/SXtTSFCt" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 38, R5</span>
-                        <span class="game-opponent">vs Silkthewanderer</span>
-                        <a href="https://lichess.org/9jLb43PO" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 38, R7</span>
-                        <span class="game-opponent">vs delusion47</span>
-                        <a href="https://lichess.org/B8hBrRuh" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs Zugged57</span>
+                        <a href="https://lichess.org/ZS8ur6wb" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -471,9 +591,33 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs Zugged57</span>
-                        <a href="https://lichess.org/ZS8ur6wb" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 38, R7</span>
+                        <span class="game-opponent">vs delusion47</span>
+                        <a href="https://lichess.org/B8hBrRuh" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 38, R5</span>
+                        <span class="game-opponent">vs Silkthewanderer</span>
+                        <a href="https://lichess.org/9jLb43PO" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 38, R1</span>
+                        <span class="game-opponent">vs Wadim_Sergeevich</span>
+                        <a href="https://lichess.org/SXtTSFCt" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 36, R6</span>
+                        <span class="game-opponent">vs Chesstrix01</span>
+                        <a href="https://lichess.org/v627aj5F" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 36, R5</span>
+                        <span class="game-opponent">vs rojazu</span>
+                        <a href="https://lichess.org/nqjxJ985" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -494,33 +638,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R2</span>
-                        <span class="game-opponent">vs Jg777</span>
-                        <a href="https://lichess.org/CtKGSgx7" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R3</span>
-                        <span class="game-opponent">vs bobsouzabr</span>
-                        <a href="https://lichess.org/908OUeyA" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs che55m45ter</span>
-                        <a href="https://lichess.org/FasCVFpk" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs Zubenelgenubi</span>
-                        <a href="https://lichess.org/kbYDStK3" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs mekumcu</span>
-                        <a href="https://lichess.org/bqTPRyZl" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R1</span>
+                        <span class="game-opponent">vs rohitraj_iit</span>
+                        <a href="https://lichess.org/rPiV9pIr" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -530,9 +650,33 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R1</span>
-                        <span class="game-opponent">vs rohitraj_iit</span>
-                        <a href="https://lichess.org/rPiV9pIr" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs mekumcu</span>
+                        <a href="https://lichess.org/bqTPRyZl" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs Zubenelgenubi</span>
+                        <a href="https://lichess.org/kbYDStK3" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs che55m45ter</span>
+                        <a href="https://lichess.org/FasCVFpk" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R3</span>
+                        <span class="game-opponent">vs bobsouzabr</span>
+                        <a href="https://lichess.org/908OUeyA" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R2</span>
+                        <span class="game-opponent">vs Jg777</span>
+                        <a href="https://lichess.org/CtKGSgx7" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -553,27 +697,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 36, R8</span>
-                        <span class="game-opponent">vs Leverkuhn</span>
-                        <a href="https://lichess.org/FSmMhVtY" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R1</span>
-                        <span class="game-opponent">vs Checkmate_Insurance</span>
-                        <a href="https://lichess.org/R5cfXh65" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R3</span>
-                        <span class="game-opponent">vs Not_Any_More</span>
-                        <a href="https://lichess.org/jSPDsk6g" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs somerapidplayer</span>
-                        <a href="https://lichess.org/AQdJQnTK" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R8</span>
+                        <span class="game-opponent">vs eXoF1343</span>
+                        <a href="https://lichess.org/8JJXiZIo" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -583,9 +709,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R8</span>
-                        <span class="game-opponent">vs eXoF1343</span>
-                        <a href="https://lichess.org/8JJXiZIo" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs somerapidplayer</span>
+                        <a href="https://lichess.org/AQdJQnTK" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R3</span>
+                        <span class="game-opponent">vs Not_Any_More</span>
+                        <a href="https://lichess.org/jSPDsk6g" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R1</span>
+                        <span class="game-opponent">vs Checkmate_Insurance</span>
+                        <a href="https://lichess.org/R5cfXh65" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 36, R8</span>
+                        <span class="game-opponent">vs Leverkuhn</span>
+                        <a href="https://lichess.org/FSmMhVtY" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -606,27 +750,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs terrormt</span>
-                        <a href="https://lichess.org/djnSOKj9" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs jwwells42</span>
-                        <a href="https://lichess.org/Gp8HUKA6" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs drchessdad</span>
-                        <a href="https://lichess.org/KHwfeesa" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R8</span>
-                        <span class="game-opponent">vs tommeketoch</span>
-                        <a href="https://lichess.org/OAxa7tR8" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs switchoffengine</span>
+                        <a href="https://lichess.org/IQc4030v" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -636,9 +762,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs switchoffengine</span>
-                        <a href="https://lichess.org/IQc4030v" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R8</span>
+                        <span class="game-opponent">vs tommeketoch</span>
+                        <a href="https://lichess.org/OAxa7tR8" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs drchessdad</span>
+                        <a href="https://lichess.org/KHwfeesa" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs jwwells42</span>
+                        <a href="https://lichess.org/Gp8HUKA6" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs terrormt</span>
+                        <a href="https://lichess.org/djnSOKj9" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -659,27 +803,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 45, R5</span>
-                        <span class="game-opponent">vs michielvdg</span>
-                        <a href="https://lichess.org/EXHfZX0t" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R7</span>
-                        <span class="game-opponent">vs somerapidplayer</span>
-                        <a href="https://lichess.org/67XXNOpZ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R2</span>
-                        <span class="game-opponent">vs quirked</span>
-                        <a href="https://lichess.org/MjyULO2g" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R3</span>
-                        <span class="game-opponent">vs passedknight</span>
-                        <a href="https://lichess.org/r9hZBaYz" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs eXoF1343</span>
+                        <a href="https://lichess.org/f1ewsIma" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -689,9 +815,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs eXoF1343</span>
-                        <a href="https://lichess.org/f1ewsIma" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R3</span>
+                        <span class="game-opponent">vs passedknight</span>
+                        <a href="https://lichess.org/r9hZBaYz" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R2</span>
+                        <span class="game-opponent">vs quirked</span>
+                        <a href="https://lichess.org/MjyULO2g" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R7</span>
+                        <span class="game-opponent">vs somerapidplayer</span>
+                        <a href="https://lichess.org/67XXNOpZ" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R5</span>
+                        <span class="game-opponent">vs michielvdg</span>
+                        <a href="https://lichess.org/EXHfZX0t" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -712,21 +856,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R1</span>
-                        <span class="game-opponent">vs Shadawe</span>
-                        <a href="https://lichess.org/86WlqVCE" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs XX-121</span>
-                        <a href="https://lichess.org/VWWKnZVQ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs bigboss12345</span>
-                        <a href="https://lichess.org/pZyEf5aL" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R1</span>
+                        <span class="game-opponent">vs chatakkuma</span>
+                        <a href="https://lichess.org/TW23iw9k" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -736,9 +868,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R1</span>
-                        <span class="game-opponent">vs chatakkuma</span>
-                        <a href="https://lichess.org/TW23iw9k" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs bigboss12345</span>
+                        <a href="https://lichess.org/pZyEf5aL" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs XX-121</span>
+                        <a href="https://lichess.org/VWWKnZVQ" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R1</span>
+                        <span class="game-opponent">vs Shadawe</span>
+                        <a href="https://lichess.org/86WlqVCE" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -759,21 +903,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 45, R7</span>
-                        <span class="game-opponent">vs ppxo</span>
-                        <a href="https://lichess.org/BTHuuj1z" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R8</span>
-                        <span class="game-opponent">vs betolini</span>
-                        <a href="https://lichess.org/JepdAhgC" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R3</span>
-                        <span class="game-opponent">vs XX-121</span>
-                        <a href="https://lichess.org/YTyrXdzT" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs kyousoo</span>
+                        <a href="https://lichess.org/TsCBhff6" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -783,9 +915,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs kyousoo</span>
-                        <a href="https://lichess.org/TsCBhff6" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R3</span>
+                        <span class="game-opponent">vs XX-121</span>
+                        <a href="https://lichess.org/YTyrXdzT" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R8</span>
+                        <span class="game-opponent">vs betolini</span>
+                        <a href="https://lichess.org/JepdAhgC" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R7</span>
+                        <span class="game-opponent">vs ppxo</span>
+                        <a href="https://lichess.org/BTHuuj1z" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -806,21 +950,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs BigPig93</span>
-                        <a href="https://lichess.org/UVFDKpgI" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs mkubecek</span>
-                        <a href="https://lichess.org/oVeh4PO2" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R8</span>
-                        <span class="game-opponent">vs TheRealDivider</span>
-                        <a href="https://lichess.org/8W5jyLPA" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs zal667</span>
+                        <a href="https://lichess.org/wqJdn1od" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -830,9 +962,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs zal667</span>
-                        <a href="https://lichess.org/wqJdn1od" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R8</span>
+                        <span class="game-opponent">vs TheRealDivider</span>
+                        <a href="https://lichess.org/8W5jyLPA" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs mkubecek</span>
+                        <a href="https://lichess.org/oVeh4PO2" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs BigPig93</span>
+                        <a href="https://lichess.org/UVFDKpgI" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -853,21 +997,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs Subhraneil24</span>
-                        <a href="https://lichess.org/jnijPoQz" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs timemp</span>
-                        <a href="https://lichess.org/ebHpK3qw" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs M0r1</span>
-                        <a href="https://lichess.org/rjVLxhFQ" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs JollificationOnYT</span>
+                        <a href="https://lichess.org/rWwuD5ay" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -877,9 +1009,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs JollificationOnYT</span>
-                        <a href="https://lichess.org/rWwuD5ay" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs M0r1</span>
+                        <a href="https://lichess.org/rjVLxhFQ" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs timemp</span>
+                        <a href="https://lichess.org/ebHpK3qw" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs Subhraneil24</span>
+                        <a href="https://lichess.org/jnijPoQz" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -900,21 +1044,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs alex11star</span>
-                        <a href="https://lichess.org/OJZjX2yV" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs jdannan</span>
-                        <a href="https://lichess.org/Xqp3yKqS" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs ComputerUser2607</span>
-                        <a href="https://lichess.org/kUAewh4y" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs nermin_dedovic</span>
+                        <a href="https://lichess.org/zqXOvCO5" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -924,9 +1056,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs nermin_dedovic</span>
-                        <a href="https://lichess.org/zqXOvCO5" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs ComputerUser2607</span>
+                        <a href="https://lichess.org/kUAewh4y" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs jdannan</span>
+                        <a href="https://lichess.org/Xqp3yKqS" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs alex11star</span>
+                        <a href="https://lichess.org/OJZjX2yV" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -947,21 +1091,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs snehulCZ</span>
-                        <a href="https://lichess.org/ppu8pooz" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs Vib_spec</span>
-                        <a href="https://lichess.org/PsWf0ASJ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs capturingbravo</span>
-                        <a href="https://lichess.org/sxfQLLHZ" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs KaiiMate</span>
+                        <a href="https://lichess.org/SpVnSfrh" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -971,9 +1103,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs KaiiMate</span>
-                        <a href="https://lichess.org/SpVnSfrh" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs capturingbravo</span>
+                        <a href="https://lichess.org/sxfQLLHZ" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs Vib_spec</span>
+                        <a href="https://lichess.org/PsWf0ASJ" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs snehulCZ</span>
+                        <a href="https://lichess.org/ppu8pooz" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -981,7 +1125,7 @@
 
         </div>
         
-        <!-- Losing Streaks Section -->
+        <!-- Cold Streaks Section - FOURTH -->
         <div class="section">
             <div class="section-header losing">
                 <div class="section-icon">❄️</div>
@@ -1003,33 +1147,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R3</span>
-                        <span class="game-opponent">vs pezzo17</span>
-                        <a href="https://lichess.org/vhCXf1wK" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs FrozenXylem</span>
-                        <a href="https://lichess.org/kCKhK5ij" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs HighonPotnuse</span>
-                        <a href="https://lichess.org/1Qu54rnb" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs supernoob619</span>
-                        <a href="https://lichess.org/0MU8xMZC" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs AceRb95</span>
-                        <a href="https://lichess.org/iBwU5osl" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs casiserio</span>
+                        <a href="https://lichess.org/Agqj0h8U" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1039,9 +1159,33 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs casiserio</span>
-                        <a href="https://lichess.org/Agqj0h8U" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs AceRb95</span>
+                        <a href="https://lichess.org/iBwU5osl" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs supernoob619</span>
+                        <a href="https://lichess.org/0MU8xMZC" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs HighonPotnuse</span>
+                        <a href="https://lichess.org/1Qu54rnb" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs FrozenXylem</span>
+                        <a href="https://lichess.org/kCKhK5ij" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R3</span>
+                        <span class="game-opponent">vs pezzo17</span>
+                        <a href="https://lichess.org/vhCXf1wK" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1062,27 +1206,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 45, R1</span>
-                        <span class="game-opponent">vs Fishmoro</span>
-                        <a href="https://lichess.org/q4eiIDH0" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R3</span>
-                        <span class="game-opponent">vs chatakkuma</span>
-                        <a href="https://lichess.org/5xSe0XbG" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R5</span>
-                        <span class="game-opponent">vs yakamashii</span>
-                        <a href="https://lichess.org/1QouFxP0" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R6</span>
-                        <span class="game-opponent">vs faznaz83</span>
-                        <a href="https://lichess.org/0yuMPEST" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs Qudit</span>
+                        <a href="https://lichess.org/Z8S9nmaW" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1092,9 +1218,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs Qudit</span>
-                        <a href="https://lichess.org/Z8S9nmaW" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 45, R6</span>
+                        <span class="game-opponent">vs faznaz83</span>
+                        <a href="https://lichess.org/0yuMPEST" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R5</span>
+                        <span class="game-opponent">vs yakamashii</span>
+                        <a href="https://lichess.org/1QouFxP0" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R3</span>
+                        <span class="game-opponent">vs chatakkuma</span>
+                        <a href="https://lichess.org/5xSe0XbG" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R1</span>
+                        <span class="game-opponent">vs Fishmoro</span>
+                        <a href="https://lichess.org/q4eiIDH0" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1115,27 +1259,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R2</span>
-                        <span class="game-opponent">vs jdannan</span>
-                        <a href="https://lichess.org/lKsxil4Q" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R3</span>
-                        <span class="game-opponent">vs Subhraneil24</span>
-                        <a href="https://lichess.org/wgsItMAT" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs mekumcu</span>
-                        <a href="https://lichess.org/KItpVBTw" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs ysgwydd</span>
-                        <a href="https://lichess.org/igNTfgrR" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R1</span>
+                        <span class="game-opponent">vs che55m45ter</span>
+                        <a href="https://lichess.org/le1tu5bl" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1145,9 +1271,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R1</span>
-                        <span class="game-opponent">vs che55m45ter</span>
-                        <a href="https://lichess.org/le1tu5bl" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs ysgwydd</span>
+                        <a href="https://lichess.org/igNTfgrR" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs mekumcu</span>
+                        <a href="https://lichess.org/KItpVBTw" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R3</span>
+                        <span class="game-opponent">vs Subhraneil24</span>
+                        <a href="https://lichess.org/wgsItMAT" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R2</span>
+                        <span class="game-opponent">vs jdannan</span>
+                        <a href="https://lichess.org/lKsxil4Q" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1168,27 +1312,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R2</span>
-                        <span class="game-opponent">vs FunnyLikeAClown</span>
-                        <a href="https://lichess.org/ppa9not3" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs M_H_R</span>
-                        <a href="https://lichess.org/HZXtOHTo" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs jcuriel85</span>
-                        <a href="https://lichess.org/PAyS0N1A" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs isaypotato</span>
-                        <a href="https://lichess.org/HjkI0qvK" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs cesaralexanderchess</span>
+                        <a href="https://lichess.org/a5XeeiXb" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1198,9 +1324,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs cesaralexanderchess</span>
-                        <a href="https://lichess.org/a5XeeiXb" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs isaypotato</span>
+                        <a href="https://lichess.org/HjkI0qvK" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs jcuriel85</span>
+                        <a href="https://lichess.org/PAyS0N1A" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs M_H_R</span>
+                        <a href="https://lichess.org/HZXtOHTo" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R2</span>
+                        <span class="game-opponent">vs FunnyLikeAClown</span>
+                        <a href="https://lichess.org/ppa9not3" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1221,27 +1365,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 41, R7</span>
-                        <span class="game-opponent">vs shortyadamshardwick</span>
-                        <a href="https://lichess.org/A3WW3O1e" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 44, R1</span>
-                        <span class="game-opponent">vs Cardigans</span>
-                        <a href="https://lichess.org/c3g16Xwd" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 44, R6</span>
-                        <span class="game-opponent">vs kamekura</span>
-                        <a href="https://lichess.org/tOFa30wN" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 44, R7</span>
-                        <span class="game-opponent">vs gpetris</span>
-                        <a href="https://lichess.org/OSLIcn1s" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs a2c4</span>
+                        <a href="https://lichess.org/6VY6GuRR" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1251,9 +1377,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs a2c4</span>
-                        <a href="https://lichess.org/6VY6GuRR" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 44, R7</span>
+                        <span class="game-opponent">vs gpetris</span>
+                        <a href="https://lichess.org/OSLIcn1s" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 44, R6</span>
+                        <span class="game-opponent">vs kamekura</span>
+                        <a href="https://lichess.org/tOFa30wN" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 44, R1</span>
+                        <span class="game-opponent">vs Cardigans</span>
+                        <a href="https://lichess.org/c3g16Xwd" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 41, R7</span>
+                        <span class="game-opponent">vs shortyadamshardwick</span>
+                        <a href="https://lichess.org/A3WW3O1e" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1274,27 +1418,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 35, R6</span>
-                        <span class="game-opponent">vs Idekae</span>
-                        <a href="https://lichess.org/GztmmSjA" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 35, R8</span>
-                        <span class="game-opponent">vs d1mitar</span>
-                        <a href="https://lichess.org/snFYm2u5" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 36, R3</span>
-                        <span class="game-opponent">vs DrVonGoosewing</span>
-                        <a href="https://lichess.org/rZ6D44A2" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 36, R5</span>
-                        <span class="game-opponent">vs AumarMustafa</span>
-                        <a href="https://lichess.org/9tSzQxkD" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs Stefan_Milutin</span>
+                        <a href="https://lichess.org/WpiViOye" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1304,9 +1430,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs Stefan_Milutin</span>
-                        <a href="https://lichess.org/WpiViOye" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 36, R5</span>
+                        <span class="game-opponent">vs AumarMustafa</span>
+                        <a href="https://lichess.org/9tSzQxkD" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 36, R3</span>
+                        <span class="game-opponent">vs DrVonGoosewing</span>
+                        <a href="https://lichess.org/rZ6D44A2" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 35, R8</span>
+                        <span class="game-opponent">vs d1mitar</span>
+                        <a href="https://lichess.org/snFYm2u5" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 35, R6</span>
+                        <span class="game-opponent">vs Idekae</span>
+                        <a href="https://lichess.org/GztmmSjA" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1327,27 +1471,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 45, R1</span>
-                        <span class="game-opponent">vs somerapidplayer</span>
-                        <a href="https://lichess.org/wVbpQ9Xw" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R2</span>
-                        <span class="game-opponent">vs Charles_Westmoreland</span>
-                        <a href="https://lichess.org/MCqmGhW2" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R3</span>
-                        <span class="game-opponent">vs Classical_Chess_only</span>
-                        <a href="https://lichess.org/D4go5kmO" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R6</span>
-                        <span class="game-opponent">vs MagnusFischer4</span>
-                        <a href="https://lichess.org/LBGgAwbZ" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs rufusson_dufus</span>
+                        <a href="https://lichess.org/SkcPwS2M" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1357,9 +1483,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs rufusson_dufus</span>
-                        <a href="https://lichess.org/SkcPwS2M" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 45, R6</span>
+                        <span class="game-opponent">vs MagnusFischer4</span>
+                        <a href="https://lichess.org/LBGgAwbZ" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R3</span>
+                        <span class="game-opponent">vs Classical_Chess_only</span>
+                        <a href="https://lichess.org/D4go5kmO" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R2</span>
+                        <span class="game-opponent">vs Charles_Westmoreland</span>
+                        <a href="https://lichess.org/MCqmGhW2" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R1</span>
+                        <span class="game-opponent">vs somerapidplayer</span>
+                        <a href="https://lichess.org/wVbpQ9Xw" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1380,27 +1524,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 43, R1</span>
-                        <span class="game-opponent">vs KirkD</span>
-                        <a href="https://lichess.org/QrWLYyxN" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 43, R3</span>
-                        <span class="game-opponent">vs WhiteRiceMatters</span>
-                        <a href="https://lichess.org/ocBchmjC" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 43, R4</span>
-                        <span class="game-opponent">vs fwcj68</span>
-                        <a href="https://lichess.org/wL6po7ML" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 43, R5</span>
-                        <span class="game-opponent">vs RMNL</span>
-                        <a href="https://lichess.org/uQa0BF5P" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R1</span>
+                        <span class="game-opponent">vs STCLion</span>
+                        <a href="https://lichess.org/p311do6s" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1410,9 +1536,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R1</span>
-                        <span class="game-opponent">vs STCLion</span>
-                        <a href="https://lichess.org/p311do6s" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 43, R5</span>
+                        <span class="game-opponent">vs RMNL</span>
+                        <a href="https://lichess.org/uQa0BF5P" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 43, R4</span>
+                        <span class="game-opponent">vs fwcj68</span>
+                        <a href="https://lichess.org/wL6po7ML" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 43, R3</span>
+                        <span class="game-opponent">vs WhiteRiceMatters</span>
+                        <a href="https://lichess.org/ocBchmjC" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 43, R1</span>
+                        <span class="game-opponent">vs KirkD</span>
+                        <a href="https://lichess.org/QrWLYyxN" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1433,27 +1577,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R3</span>
-                        <span class="game-opponent">vs holgit70</span>
-                        <a href="https://lichess.org/5VSehF6n" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs Galfrid</span>
-                        <a href="https://lichess.org/xcHOFRBn" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs azazel498</span>
-                        <a href="https://lichess.org/MFRSNIme" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs keeto</span>
-                        <a href="https://lichess.org/WiKv6vPC" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs super3mr</span>
+                        <a href="https://lichess.org/NS1ZP0AT" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1463,9 +1589,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs super3mr</span>
-                        <a href="https://lichess.org/NS1ZP0AT" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs keeto</span>
+                        <a href="https://lichess.org/WiKv6vPC" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs azazel498</span>
+                        <a href="https://lichess.org/MFRSNIme" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs Galfrid</span>
+                        <a href="https://lichess.org/xcHOFRBn" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R3</span>
+                        <span class="game-opponent">vs holgit70</span>
+                        <a href="https://lichess.org/5VSehF6n" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1486,27 +1630,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 45, R5</span>
-                        <span class="game-opponent">vs electricfalcon</span>
-                        <a href="https://lichess.org/rETtJWQD" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R6</span>
-                        <span class="game-opponent">vs DrRickinCT</span>
-                        <a href="https://lichess.org/tOAG2Bra" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R7</span>
-                        <span class="game-opponent">vs scoobysnack19</span>
-                        <a href="https://lichess.org/EZllqhk3" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R8</span>
-                        <span class="game-opponent">vs Asturc0n</span>
-                        <a href="https://lichess.org/NAvNRhX1" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs laughingoctopus</span>
+                        <a href="https://lichess.org/MZo6cYRQ" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1516,9 +1642,27 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs laughingoctopus</span>
-                        <a href="https://lichess.org/MZo6cYRQ" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 45, R8</span>
+                        <span class="game-opponent">vs Asturc0n</span>
+                        <a href="https://lichess.org/NAvNRhX1" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R7</span>
+                        <span class="game-opponent">vs scoobysnack19</span>
+                        <a href="https://lichess.org/EZllqhk3" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R6</span>
+                        <span class="game-opponent">vs DrRickinCT</span>
+                        <a href="https://lichess.org/tOAG2Bra" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R5</span>
+                        <span class="game-opponent">vs electricfalcon</span>
+                        <a href="https://lichess.org/rETtJWQD" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1539,21 +1683,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 45, R6</span>
-                        <span class="game-opponent">vs AScannerDarkly</span>
-                        <a href="https://lichess.org/MpCeyBaM" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R7</span>
-                        <span class="game-opponent">vs KamagayaJiji</span>
-                        <a href="https://lichess.org/tvK6snCD" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R8</span>
-                        <span class="game-opponent">vs goirish</span>
-                        <a href="https://lichess.org/9V4EIkeR" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs fireball100</span>
+                        <a href="https://lichess.org/KiX4azEj" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1563,9 +1695,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs fireball100</span>
-                        <a href="https://lichess.org/KiX4azEj" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 45, R8</span>
+                        <span class="game-opponent">vs goirish</span>
+                        <a href="https://lichess.org/9V4EIkeR" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R7</span>
+                        <span class="game-opponent">vs KamagayaJiji</span>
+                        <a href="https://lichess.org/tvK6snCD" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 45, R6</span>
+                        <span class="game-opponent">vs AScannerDarkly</span>
+                        <a href="https://lichess.org/MpCeyBaM" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1586,21 +1730,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs caodanny</span>
-                        <a href="https://lichess.org/58mP79GJ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs Kborman</span>
-                        <a href="https://lichess.org/wnzZo4ob" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R8</span>
-                        <span class="game-opponent">vs RBorja1980</span>
-                        <a href="https://lichess.org/uznyS7VT" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs regrettablebeet</span>
+                        <a href="https://lichess.org/zvcKT6eV" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1610,9 +1742,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs regrettablebeet</span>
-                        <a href="https://lichess.org/zvcKT6eV" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R8</span>
+                        <span class="game-opponent">vs RBorja1980</span>
+                        <a href="https://lichess.org/uznyS7VT" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs Kborman</span>
+                        <a href="https://lichess.org/wnzZo4ob" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs caodanny</span>
+                        <a href="https://lichess.org/58mP79GJ" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1633,21 +1777,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 29, R8</span>
-                        <span class="game-opponent">vs scarff</span>
-                        <a href="https://lichess.org/vlezdqLk" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 30, R1</span>
-                        <span class="game-opponent">vs ButterPecan</span>
-                        <a href="https://lichess.org/aBvXcIEi" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 30, R2</span>
-                        <span class="game-opponent">vs jarm123</span>
-                        <a href="https://lichess.org/KQGnRSOB" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 30, R5</span>
+                        <span class="game-opponent">vs AACtrl</span>
+                        <a href="https://lichess.org/ZYSIZhRR" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1657,9 +1789,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 30, R5</span>
-                        <span class="game-opponent">vs AACtrl</span>
-                        <a href="https://lichess.org/ZYSIZhRR" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 30, R2</span>
+                        <span class="game-opponent">vs jarm123</span>
+                        <a href="https://lichess.org/KQGnRSOB" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 30, R1</span>
+                        <span class="game-opponent">vs ButterPecan</span>
+                        <a href="https://lichess.org/aBvXcIEi" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 29, R8</span>
+                        <span class="game-opponent">vs scarff</span>
+                        <a href="https://lichess.org/vlezdqLk" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1680,21 +1824,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs yellorambo</span>
-                        <a href="https://lichess.org/ucmWNG0m" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs matman</span>
-                        <a href="https://lichess.org/5kD7iNPC" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R8</span>
-                        <span class="game-opponent">vs yotambienjuego</span>
-                        <a href="https://lichess.org/JTDNO1Xa" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs wolfsblut</span>
+                        <a href="https://lichess.org/N7nrnpv0" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1704,9 +1836,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs wolfsblut</span>
-                        <a href="https://lichess.org/N7nrnpv0" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R8</span>
+                        <span class="game-opponent">vs yotambienjuego</span>
+                        <a href="https://lichess.org/JTDNO1Xa" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs matman</span>
+                        <a href="https://lichess.org/5kD7iNPC" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs yellorambo</span>
+                        <a href="https://lichess.org/ucmWNG0m" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1727,21 +1871,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R4</span>
-                        <span class="game-opponent">vs rufusson_dufus</span>
-                        <a href="https://lichess.org/IZJkdS71" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs far1108</span>
-                        <a href="https://lichess.org/uGEtunhe" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs Razorneck</span>
-                        <a href="https://lichess.org/zIgbeXC6" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R1</span>
+                        <span class="game-opponent">vs RajjSinghh</span>
+                        <a href="https://lichess.org/CxzKJCZq" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1751,9 +1883,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R1</span>
-                        <span class="game-opponent">vs RajjSinghh</span>
-                        <a href="https://lichess.org/CxzKJCZq" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs Razorneck</span>
+                        <a href="https://lichess.org/zIgbeXC6" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs far1108</span>
+                        <a href="https://lichess.org/uGEtunhe" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R4</span>
+                        <span class="game-opponent">vs rufusson_dufus</span>
+                        <a href="https://lichess.org/IZJkdS71" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1774,21 +1918,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs jcuriel85</span>
-                        <a href="https://lichess.org/7i6nTabe" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R7</span>
-                        <span class="game-opponent">vs Checkmate_Insurance</span>
-                        <a href="https://lichess.org/ke58GnaI" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R8</span>
-                        <span class="game-opponent">vs greysensei</span>
-                        <a href="https://lichess.org/THrorjlG" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs val1313</span>
+                        <a href="https://lichess.org/87kb6lDg" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1798,9 +1930,21 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs val1313</span>
-                        <a href="https://lichess.org/87kb6lDg" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R8</span>
+                        <span class="game-opponent">vs greysensei</span>
+                        <a href="https://lichess.org/THrorjlG" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs Checkmate_Insurance</span>
+                        <a href="https://lichess.org/ke58GnaI" target="_blank" class="game-link">View →</a>
+                    </div>
+
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R7</span>
+                        <span class="game-opponent">vs jcuriel85</span>
+                        <a href="https://lichess.org/7i6nTabe" target="_blank" class="game-link">View →</a>
                     </div>
 
                 </div>
@@ -1821,21 +1965,9 @@
                     <div class="games-title">All Games in Streak:</div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 46, R5</span>
-                        <span class="game-opponent">vs pawneater2020</span>
-                        <a href="https://lichess.org/9vhB7nZV" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R6</span>
-                        <span class="game-opponent">vs IckyDemon</span>
-                        <a href="https://lichess.org/jcWvArh1" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 46, R8</span>
-                        <span class="game-opponent">vs williewipeout</span>
-                        <a href="https://lichess.org/uvWQbv6k" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 47, R2</span>
+                        <span class="game-opponent">vs Vere000</span>
+                        <a href="https://lichess.org/fmvdGTLG" target="_blank" class="game-link">View →</a>
                     </div>
 
                     <div class="game-item">
@@ -1845,98 +1977,30 @@
                     </div>
 
                     <div class="game-item">
-                        <span class="game-info">Season 47, R2</span>
-                        <span class="game-opponent">vs Vere000</span>
-                        <a href="https://lichess.org/fmvdGTLG" target="_blank" class="game-link">View →</a>
+                        <span class="game-info">Season 46, R8</span>
+                        <span class="game-opponent">vs williewipeout</span>
+                        <a href="https://lichess.org/uvWQbv6k" target="_blank" class="game-link">View →</a>
                     </div>
 
-                </div>
-            </div>
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R6</span>
+                        <span class="game-opponent">vs IckyDemon</span>
+                        <a href="https://lichess.org/jcWvArh1" target="_blank" class="game-link">View →</a>
+                    </div>
 
-        </div>
-        
-        <div class="section">
-            <div class="section-header" style="border-bottom-color: #f59e0b;">
-                <div class="section-icon">⚡</div>
-                <div class="section-title">Something's Gotta Give (Both 3+ Wins)</div>
-            </div>
+                    <div class="game-item">
+                        <span class="game-info">Season 46, R5</span>
+                        <span class="game-opponent">vs pawneater2020</span>
+                        <a href="https://lichess.org/9vhB7nZV" target="_blank" class="game-link">View →</a>
+                    </div>
 
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">Rcyx<span class="matchup-vs">vs</span>sivakumarr</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Rcyx</div>
-                        <div class="matchup-streak-info hot">🔥 6 wins</div>
-                    </div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">sivakumarr</div>
-                        <div class="matchup-streak-info hot">🔥 5 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">classicalprac<span class="matchup-vs">vs</span>okady</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">classicalprac</div>
-                        <div class="matchup-streak-info hot">🔥 4 wins</div>
-                    </div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">okady</div>
-                        <div class="matchup-streak-info hot">🔥 5 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">mqll<span class="matchup-vs">vs</span>MarekW78</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">mqll</div>
-                        <div class="matchup-streak-info hot">🔥 3 wins</div>
-                    </div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">MarekW78</div>
-                        <div class="matchup-streak-info hot">🔥 4 wins</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <div class="section">
-            <div class="section-header" style="border-bottom-color: #3b82f6;">
-                <div class="section-icon">🧊</div>
-                <div class="section-title">Cold War (Both 3+ Losses)</div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">Feet_Barbie<span class="matchup-vs">vs</span>jwwells42</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">Feet_Barbie</div>
-                        <div class="matchup-streak-info cold">❄️ 5 losses</div>
-                    </div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">jwwells42</div>
-                        <div class="matchup-streak-info cold">❄️ 3 losses</div>
-                    </div>
                 </div>
             </div>
 
         </div>
         
         <div class="footer">
-            <p>Generated on 2026-01-30 13:13:32 • Lichess 4545 Streak Watch</p>
+            <p>Generated on 2026-01-30 15:54:13 • Lichess 4545 Streak Watch</p>
             <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
                 Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
             </p>
