@@ -135,6 +135,16 @@
             margin-bottom: 0;
         }
         
+        /* Featured/Storylines link - subtle highlight */
+        .report-link.featured {
+            background: linear-gradient(135deg, #1a4a5c 0%, #2c5f6f 100%);
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .report-link.featured:hover {
+            background: linear-gradient(135deg, #2c5f6f 0%, #1a4a5c 100%);
+        }
+        
         .link-text {
             display: flex;
             align-items: center;
@@ -148,6 +158,50 @@
         
         .report-link:hover .link-arrow {
             transform: translateX(5px);
+        }
+        
+        /* Achievements section - full width */
+        .achievements-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .achievements-section .section-header {
+            justify-content: center;
+            border-bottom-color: #2c5f6f;
+        }
+        
+        .achievements-section .section-title {
+            color: #2c5f6f;
+        }
+        
+        .achievements-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #2c5f6f 0%, #3d7a8a 100%);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(44, 95, 111, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .achievements-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(44, 95, 111, 0.5);
+            background: linear-gradient(135deg, #3d7a8a 0%, #2c5f6f 100%);
+        }
+        
+        .achievements-description {
+            color: #718096;
+            margin-bottom: 20px;
+            font-size: 0.95em;
         }
         
         footer {
@@ -213,6 +267,13 @@
                     <h2 class="section-title">Current Round Preview</h2>
                 </div>
                 
+                <a href="https://tranzoo-4545.github.io/4545nonsense/top_storylines.html" class="report-link featured">
+                    <div class="link-text">
+                        <span>⭐ Top Storylines</span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
+                
                 <a href="https://tranzoo-4545.github.io/4545nonsense/pairings_dashboard.html" class="report-link">
                     <div class="link-text">
                         <span>Notable Matchups</span>
@@ -242,6 +303,13 @@
                     <h2 class="section-title">Post-Round Report</h2>
                 </div>
                 
+                <a href="https://tranzoo-4545.github.io/4545nonsense/storylines_roundup.html" class="report-link featured">
+                    <div class="link-text">
+                        <span>⭐ Top Storylines</span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
+                
                 <a href="https://tranzoo-4545.github.io/4545nonsense/pairings_postround_report.html" class="report-link">
                     <div class="link-text">
                         <span>Notable Matchups</span>
@@ -263,6 +331,18 @@
                     </div>
                 </a>
             </div>
+        </div>
+        
+        <!-- Achievements Section -->
+        <div class="achievements-section">
+            <div class="section-header">
+                <span class="section-icon">🏆</span>
+                <h2 class="section-title">League Achievements</h2>
+            </div>
+            <p class="achievements-description">Milestones and accomplishments across all 4545 league history</p>
+            <a href="https://tranzoo-4545.github.io/4545nonsense/achievements.html" class="achievements-link">
+                View All Achievements →
+            </a>
         </div>
         
         <footer>
