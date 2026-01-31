@@ -176,6 +176,77 @@
             text-decoration: none;
         }
         
+        .guide-toggle {
+            background: var(--accent);
+            color: var(--text-primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            transition: background 0.2s;
+        }
+        
+        .guide-toggle:hover {
+            background: #5ab0cc;
+        }
+        
+        .guide {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .guide.show {
+            display: block;
+        }
+        
+        .guide h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+        
+        .guide h3 {
+            font-size: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .guide table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.5rem 0;
+        }
+        
+        .guide th, .guide td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .guide th {
+            color: var(--text-secondary);
+            font-weight: normal;
+            font-size: 0.85rem;
+        }
+        
+        .guide td {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .guide .points {
+            color: var(--gold);
+            font-weight: bold;
+        }
+        
         @media (max-width: 600px) {
             body {
                 padding: 1rem;
@@ -203,7 +274,77 @@
             <h1>📺 Storylines of the Week</h1>
             <div class="subtitle">Season 47 &middot; Round 3</div>
             <div class="stats">Top 10 of 192 pairings</div>
+            <button class="guide-toggle" onclick="document.getElementById('guide').classList.toggle('show')">
+                📊 How is Hype Score calculated?
+            </button>
         </header>
+        
+        <div id="guide" class="guide">
+            <h2>📊 Hype Score Calculation</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Each pairing is scored based on several factors that make a matchup compelling:
+            </p>
+            
+            <h3>🎯 Milestone Games (0-6 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Player's 45th career game</td><td class="points">+2</td></tr>
+                <tr><td>Player's 100th career game</td><td class="points">+3</td></tr>
+                <tr><td>Player's 200th career game</td><td class="points">+3</td></tr>
+            </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Can stack if both players have milestones</p>
+            
+            <h3>⚔️ Head-to-Head History (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Played once before</td><td class="points">+2</td></tr>
+                <tr><td>Played twice before</td><td class="points">+3</td></tr>
+                <tr><td>Played 3+ times (Rivals!)</td><td class="points">+4</td></tr>
+            </table>
+            
+            <h3>🔥 Form Clash (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both on 2+ win streak</td><td class="points">+2</td></tr>
+                <tr><td>Both on 3+ win streak</td><td class="points">+3</td></tr>
+                <tr><td>Both on 2+ loss streak</td><td class="points">+2</td></tr>
+                <tr><td>Both on 3+ loss streak</td><td class="points">+3</td></tr>
+            </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Streaks are career-wide, not just current season</p>
+            
+            <h3>🏆 Team Standings Impact (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>#1 team matchup (by avg placement)</td><td class="points">+4</td></tr>
+                <tr><td>#2 team matchup</td><td class="points">+3</td></tr>
+                <tr><td>#3 team matchup</td><td class="points">+2</td></tr>
+            </table>
+            
+            <h3>🎖️ Veteran Experience (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Career games / 100 (per player, max 2 each)</td><td class="points">0-4</td></tr>
+            </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">e.g., 150 games = 1.5 pts, 200+ games = 2 pts (capped)</p>
+            
+            <h3>🪃 Return Match (0-2 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Player's first game back after 5+ season absence</td><td class="points">+2</td></tr>
+            </table>
+            
+            <h3>🤝 Former Teammates (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both played 4+ games on 1 shared team</td><td class="points">+2</td></tr>
+                <tr><td>Both played 4+ games on 2 shared teams</td><td class="points">+3</td></tr>
+                <tr><td>Both played 4+ games on 3+ shared teams</td><td class="points">+4</td></tr>
+            </table>
+            
+            <p style="color: var(--text-secondary); margin-top: 1.5rem;">
+                <strong>Maximum possible score: ~27 points</strong>
+            </p>
+        </div>
         
         <div class="pairings">
 
