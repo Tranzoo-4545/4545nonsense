@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Storylines - Season 47 Round 3</title>
+    <title>Storylines - Season 47 Round 4</title>
     <style>
         :root {
             --bg-primary: #2d5266;
@@ -179,31 +179,38 @@
         .guide-toggle {
             background: var(--accent);
             color: var(--text-primary);
-            border: none;
             padding: 0.5rem 1rem;
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.9rem;
             margin-top: 1rem;
             transition: background 0.2s;
+            display: inline-block;
+            list-style: none;
+        }
+        
+        .guide-toggle::-webkit-details-marker {
+            display: none;
         }
         
         .guide-toggle:hover {
             background: #5ab0cc;
         }
         
+        .guide-wrapper {
+            margin-bottom: 2rem;
+        }
+        
+        .guide-wrapper[open] .guide-toggle {
+            margin-bottom: 1rem;
+        }
+        
         .guide {
-            display: none;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 1.5rem;
-            margin-bottom: 2rem;
             text-align: left;
-        }
-        
-        .guide.show {
-            display: block;
         }
         
         .guide h2 {
@@ -272,14 +279,13 @@
     <div class="container">
         <header>
             <h1>📺 Storylines of the Week</h1>
-            <div class="subtitle">Season 47 &middot; Round 3</div>
+            <div class="subtitle">Season 47 &middot; Round 4</div>
             <div class="stats">Top 10 of 192 pairings</div>
-            <button class="guide-toggle" onclick="document.getElementById('guide').classList.toggle('show')">
-                📊 How is Hype Score calculated?
-            </button>
         </header>
         
-        <div id="guide" class="guide">
+        <details class="guide-wrapper">
+            <summary class="guide-toggle">📊 How is Hype Score calculated?</summary>
+            <div class="guide">
             <h2>📊 Hype Score Calculation</h2>
             <p style="color: var(--text-secondary); margin-bottom: 1rem;">
                 Each pairing is scored based on several factors that make a matchup compelling:
@@ -341,10 +347,18 @@
                 <tr><td>Both played 4+ games on 3+ shared teams</td><td class="points">+4</td></tr>
             </table>
             
+            <h3>👀 Vets First Meeting (0-1.5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both 80+ games, never faced each other</td><td class="points">+0.75</td></tr>
+                <tr><td>Both 100+ games, never faced each other</td><td class="points">+1.5</td></tr>
+            </table>
+            
             <p style="color: var(--text-secondary); margin-top: 1.5rem;">
-                <strong>Maximum possible score: ~27 points</strong>
+                <strong>Maximum possible score: ~28 points</strong>
             </p>
-        </div>
+            </div>
+        </details>
         
         <div class="pairings">
 
@@ -353,22 +367,21 @@
                     <div class="rank top-3">#1</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/HandKnit/" target="_blank">HandKnit</a>
+                            <a href="https://www.lichess4545.com/team4545/player/scarff/" target="_blank">scarff</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/axp156/" target="_blank">axp156</a>
+                            <a href="https://www.lichess4545.com/team4545/player/timothyha/" target="_blank">timothyha</a>
                         </div>
-                        <div class="teams">Swindlers, patzers, and pawn pushers vs Panic! At The Chess Board</div>
+                        <div class="teams">The Chess vs Proof by Checkmate</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">9.7</div>
+                        <div class="score-value">9.5</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔥 Both on win streaks (4W vs 2W)</span>
-                    <span class="reason">🏆 Huge for team standings!</span>
-                    <span class="reason">🎖️ Experience (24+150 games)</span>
-                    <span class="reason">🤝 Former teammates on The Stonewall Defenders</span>
+                    <span class="reason">🎖️ Veterans (296+244 games)</span>
+                    <span class="reason">🤝 Old pals! (14x teammates)</span>
+                    <span class="reason">👀 Vets first meeting! (296+244 games, never faced)</span>
                 </div>
             </div>
 
@@ -377,20 +390,22 @@
                     <div class="rank top-3">#2</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/kygreek/" target="_blank">kygreek</a>
+                            <a href="https://www.lichess4545.com/team4545/player/robertjackson/" target="_blank">robertjackson</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/UpGoerFive/" target="_blank">UpGoerFive</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Rolihlahla/" target="_blank">Rolihlahla</a>
                         </div>
-                        <div class="teams">Think Like a Grandpatzer vs Charge of the Suggestion Brigade</div>
+                        <div class="teams">The Chess vs Proof by Checkmate</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">6.0</div>
+                        <div class="score-value">9.0</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">💯 kygreek's 100th game!</span>
-                    <span class="reason">🎖️ Veterans (99+239 games)</span>
+                    <span class="reason">🔄 Rematch (0-1-0)</span>
+                    <span class="reason">❄️ Both struggling (2L vs 4L)</span>
+                    <span class="reason">🎖️ Veterans (102+203 games)</span>
+                    <span class="reason">🤝 Former teammates on Zug Zug Zwang</span>
                 </div>
             </div>
 
@@ -399,20 +414,21 @@
                     <div class="rank top-3">#3</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Darktigr/" target="_blank">Darktigr</a>
+                            <a href="https://www.lichess4545.com/team4545/player/flyingfred/" target="_blank">flyingfred</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/KS_Legion_Legionowo/" target="_blank">KS_Legion_Legionowo</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Zanderqfb/" target="_blank">Zanderqfb</a>
                         </div>
-                        <div class="teams">Panic! At The Chess Board vs Swindlers, patzers, and pawn pushers</div>
+                        <div class="teams">47 is not prime number vs Blunder? I hardly know her</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.9</div>
+                        <div class="score-value">8.0</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🏆 Huge for team standings!</span>
-                    <span class="reason">🎖️ Experience (26+166 games)</span>
+                    <span class="reason">🔄 Rematch (0-1-0)</span>
+                    <span class="reason">❄️ Desperation match! (4L vs 4L)</span>
+                    <span class="reason">🥈 Big for team standings!</span>
                 </div>
             </div>
 
@@ -421,20 +437,21 @@
                     <div class="rank ">#4</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/timothyha/" target="_blank">timothyha</a>
+                            <a href="https://www.lichess4545.com/team4545/player/tommeketoch/" target="_blank">tommeketoch</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/sussasun/" target="_blank">sussasun</a>
+                            <a href="https://www.lichess4545.com/team4545/player/NameGoesInHere/" target="_blank">NameGoesInHere</a>
                         </div>
-                        <div class="teams">Proof by Checkmate vs Rook Takes Pawnshop</div>
+                        <div class="teams">Essence of Sahkal and the Fragrances of the 7 vs Hanging Pieces of Babylon</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.7</div>
+                        <div class="score-value">7.4</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔄 Rematch #3 (0-1-1)</span>
-                    <span class="reason">🎖️ Veterans (243+69 games)</span>
+                    <span class="reason">🎯 namegoesinhere's 45th game!</span>
+                    <span class="reason">🏆 Huge for team standings!</span>
+                    <span class="reason">🎖️ Experience (94+44 games)</span>
                 </div>
             </div>
 
@@ -443,20 +460,22 @@
                     <div class="rank ">#5</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/freeloon2/" target="_blank">freeloon2</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Mennonite/" target="_blank">Mennonite</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/Meeklydim/" target="_blank">Meeklydim</a>
+                            <a href="https://www.lichess4545.com/team4545/player/NxN/" target="_blank">NxN</a>
                         </div>
-                        <div class="teams">Swindlers, patzers, and pawn pushers vs Panic! At The Chess Board</div>
+                        <div class="teams">The Old Man and the C-file vs Too lazy to accept the Morra</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.5</div>
+                        <div class="score-value">7.3</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🏆 Huge for team standings!</span>
-                    <span class="reason">🎖️ Experience (2+152 games)</span>
+                    <span class="reason">🔄 Rematch (0-0-1)</span>
+                    <span class="reason">❄️ Both struggling (2L vs 4L)</span>
+                    <span class="reason">🎖️ Experience (81+52 games)</span>
+                    <span class="reason">🤝 Former teammates on Capablancalypse Now</span>
                 </div>
             </div>
 
@@ -465,21 +484,21 @@
                     <div class="rank ">#6</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/yellorambo/" target="_blank">yellorambo</a>
+                            <a href="https://www.lichess4545.com/team4545/player/andrewrimmer/" target="_blank">andrewrimmer</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/LemuelGullible/" target="_blank">LemuelGullible</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Bpack/" target="_blank">Bpack</a>
                         </div>
-                        <div class="teams">The Old Man and the C-file vs Elo from the other side</div>
+                        <div class="teams">Hanging Pieces of Babylon vs Essence of Sahkal and the Fragrances of the 7</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.4</div>
+                        <div class="score-value">7.3</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔄 Rematch (1-0-0)</span>
-                    <span class="reason">🎖️ Experience (53+90 games)</span>
-                    <span class="reason">🤝 Former teammates on Hey, you sass that hoopy Ding Liren?</span>
+                    <span class="reason">❄️ Both struggling (2L vs 5L)</span>
+                    <span class="reason">🏆 Huge for team standings!</span>
+                    <span class="reason">🎖️ Experience (75+55 games)</span>
                 </div>
             </div>
 
@@ -488,20 +507,21 @@
                     <div class="rank ">#7</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/PuntCatcher/" target="_blank">PuntCatcher</a>
+                            <a href="https://www.lichess4545.com/team4545/player/alex11star/" target="_blank">alex11star</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/osumarko/" target="_blank">osumarko</a>
+                            <a href="https://www.lichess4545.com/team4545/player/morganbp/" target="_blank">morganbp</a>
                         </div>
-                        <div class="teams">Panic! At The Chess Board vs Swindlers, patzers, and pawn pushers</div>
+                        <div class="teams">Essence of Sahkal and the Fragrances of the 7 vs Hanging Pieces of Babylon</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.2</div>
+                        <div class="score-value">7.1</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
+                    <span class="reason">🔥 Both on win streaks (3W vs 2W)</span>
                     <span class="reason">🏆 Huge for team standings!</span>
-                    <span class="reason">🎖️ Experience (2+120 games)</span>
+                    <span class="reason">🎖️ Experience (102+12 games)</span>
                 </div>
             </div>
 
@@ -510,20 +530,20 @@
                     <div class="rank ">#8</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/sterpfi/" target="_blank">sterpfi</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Kjar/" target="_blank">Kjar</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/betolini/" target="_blank">betolini</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Silkthewanderer/" target="_blank">Silkthewanderer</a>
                         </div>
-                        <div class="teams">47 is not prime number vs Botvinnik prepared, we forgot.</div>
+                        <div class="teams">Slow and curious vs We are the Cham's peons</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.0</div>
+                        <div class="score-value">7.1</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔥 Both on win streaks (2W vs 6W)</span>
-                    <span class="reason">🥈 Big for team standings!</span>
+                    <span class="reason">⚔️ Rivals! Met 4x before (0-2-2)</span>
+                    <span class="reason">🎖️ Veterans (116+195 games)</span>
                 </div>
             </div>
 
@@ -532,20 +552,21 @@
                     <div class="rank ">#9</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Logansglasses/" target="_blank">Logansglasses</a>
+                            <a href="https://www.lichess4545.com/team4545/player/osumarko/" target="_blank">osumarko</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/Jarolos/" target="_blank">Jarolos</a>
+                            <a href="https://www.lichess4545.com/team4545/player/chess131969/" target="_blank">chess131969</a>
                         </div>
-                        <div class="teams">Botvinnik prepared, we forgot. vs 47 is not prime number</div>
+                        <div class="teams">Swindlers, patzers, and pawn pushers vs Better Call Tal</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.0</div>
+                        <div class="score-value">7.0</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🎯 jarolos's 45th game!</span>
-                    <span class="reason">🥈 Big for team standings!</span>
+                    <span class="reason">🔄 Rematch #3 (0-2-0)</span>
+                    <span class="reason">🥉 Important for team standings!</span>
+                    <span class="reason">🎖️ Veterans (121+80 games)</span>
                 </div>
             </div>
 
@@ -554,20 +575,21 @@
                     <div class="rank ">#10</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Sarahwynn/" target="_blank">Sarahwynn</a>
+                            <a href="https://www.lichess4545.com/team4545/player/jwwells42/" target="_blank">jwwells42</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/nerja25390/" target="_blank">nerja25390</a>
+                            <a href="https://www.lichess4545.com/team4545/player/chk12/" target="_blank">chk12</a>
                         </div>
-                        <div class="teams">Dommaraju, I've come to bargain vs headbangingparrot</div>
+                        <div class="teams">We are the Cham's peons vs Slow and curious</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">4.9</div>
+                        <div class="score-value">6.7</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">💯 sarahwynn's 100th game!</span>
-                    <span class="reason">🎖️ Experience (99+91 games)</span>
+                    <span class="reason">🔄 Rematch (1-0-0)</span>
+                    <span class="reason">🎖️ Veterans (211+72 games)</span>
+                    <span class="reason">🤝 Former teammates on Fork vs. Soup</span>
                 </div>
             </div>
 
