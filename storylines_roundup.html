@@ -66,31 +66,38 @@
         .guide-toggle {
             background: var(--accent);
             color: var(--text-primary);
-            border: none;
             padding: 0.5rem 1rem;
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.9rem;
             margin-top: 1rem;
             transition: background 0.2s;
+            display: inline-block;
+            list-style: none;
+        }
+        
+        .guide-toggle::-webkit-details-marker {
+            display: none;
         }
         
         .guide-toggle:hover {
             background: #5ab0cc;
         }
         
+        .guide-wrapper {
+            margin-bottom: 2rem;
+        }
+        
+        .guide-wrapper[open] .guide-toggle {
+            margin-bottom: 1rem;
+        }
+        
         .guide {
-            display: none;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 1.5rem;
-            margin-bottom: 2rem;
             text-align: left;
-        }
-        
-        .guide.show {
-            display: block;
         }
         
         .guide h2 {
@@ -334,10 +341,167 @@
             <h1>🎬 Round Recap</h1>
             <div class="subtitle">Season 47 &middot; Round 3</div>
             <div class="stats">Top 15 of 175 games by Drama Score</div>
-            <button class="guide-toggle" onclick="document.getElementById('guide').classList.toggle('show')">
-                📊 How is Drama Score calculated?
-            </button>
         </header>
+        
+        <details class="guide-wrapper">
+            <summary class="guide-toggle">📊 How is Drama Score calculated?</summary>
+            <div class="guide">
+            <h2>📊 Drama Score Calculation</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Each game is scored based on context (pre-game narrative) and drama (what happened in the game):
+            </p>
+            
+            <h3>Context Factors (before the game)</h3>
+            
+            <h3>🎯 Milestone Games (0-6 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Player's 45th career game</td><td class="points">+2</td></tr>
+                <tr><td>Player's 100th career game</td><td class="points">+3</td></tr>
+                <tr><td>Player's 200th career game</td><td class="points">+3</td></tr>
+            </table>
+            
+            <h3>🤝 Head-to-Head History (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>1 previous meeting</td><td class="points">+2</td></tr>
+                <tr><td>2 previous meetings</td><td class="points">+3</td></tr>
+                <tr><td>3+ previous meetings</td><td class="points">+4</td></tr>
+            </table>
+            
+            <h3>⚔️ Team Battle (0-2 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>#1 ranked matchup of the round</td><td class="points">+2</td></tr>
+                <tr><td>#2 ranked matchup</td><td class="points">+1</td></tr>
+                <tr><td>#3 ranked matchup</td><td class="points">+1</td></tr>
+            </table>
+            
+            <h3>🏆 Veteran Status (0-2 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Career games / 100 (per player, max 1 each)</td><td class="points">+0-2</td></tr>
+            </table>
+            
+            <h3>🪃 Return Match (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>First game back after 5-9 seasons</td><td class="points">+2</td></tr>
+                <tr><td>First game back after 10-19 seasons</td><td class="points">+3</td></tr>
+                <tr><td>First game back after 20+ seasons</td><td class="points">+4</td></tr>
+            </table>
+            
+            <h3>👥 Former Teammates (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>1 shared team in history</td><td class="points">+2</td></tr>
+                <tr><td>2 shared teams</td><td class="points">+3</td></tr>
+                <tr><td>3+ shared teams</td><td class="points">+4</td></tr>
+            </table>
+            
+            <h3>🎖️ Vets First Meeting (0-1.5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both 80+ career games, never faced</td><td class="points">+0.75</td></tr>
+                <tr><td>Both 100+ career games, never faced</td><td class="points">+1.5</td></tr>
+            </table>
+            
+            <h3 style="margin-top: 1.5rem;">Drama Factors (game outcome)</h3>
+            
+            <h3>🎯 Upset! (0-5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Won despite 100-149 rating deficit</td><td class="points">+2</td></tr>
+                <tr><td>Won despite 150-199 rating deficit</td><td class="points">+3.5</td></tr>
+                <tr><td>Won despite 200+ rating deficit</td><td class="points">+5</td></tr>
+            </table>
+            
+            <h3>🌟 Debutant Wins (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Won first ever league game</td><td class="points">+3</td></tr>
+            </table>
+            
+            <h3>🔥 Hot Streak Stopper (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Stopped 3-4 game win streak (win or draw)</td><td class="points">+1.5</td></tr>
+                <tr><td>Stopped 5-6 game win streak</td><td class="points">+2</td></tr>
+                <tr><td>Stopped 7+ game win streak</td><td class="points">+3</td></tr>
+            </table>
+            
+            <h3>❄️ Cold Streak Breaker (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Broke own 3-4 game loss streak (win or draw)</td><td class="points">+1.5</td></tr>
+                <tr><td>Broke own 5-6 game loss streak</td><td class="points">+2</td></tr>
+                <tr><td>Broke own 7+ game loss streak</td><td class="points">+3</td></tr>
+            </table>
+            
+            <h3>📈 Streak Extended (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Extended win streak to 5-6 games</td><td class="points">+2</td></tr>
+                <tr><td>Extended win streak to 7+ games</td><td class="points">+3</td></tr>
+            </table>
+            
+            <h3>🏃 Marathon Game (0-5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>80-99 moves</td><td class="points">+2</td></tr>
+                <tr><td>100-119 moves</td><td class="points">+3</td></tr>
+                <tr><td>120+ moves</td><td class="points">+4</td></tr>
+                <tr><td>Bonus if decisive (not a draw)</td><td class="points">+1</td></tr>
+            </table>
+            
+            <h3>⚡ Miniature (0-2 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Decisive game in ≤15 moves</td><td class="points">+2</td></tr>
+                <tr><td>Decisive game in 16-25 moves</td><td class="points">+1</td></tr>
+            </table>
+            
+            <h3>🔥 Sharp Opening (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Spicy gambit (King's Gambit, Evans, etc.)</td><td class="points">+3</td></tr>
+                <tr><td>Sharp system (Najdorf, Dragon, KID, etc.)</td><td class="points">+2</td></tr>
+            </table>
+            
+            <h3 style="margin-top: 1.5rem;">Eval-Based Factors (requires Lichess analysis)</h3>
+            
+            <h3>🔄 Comeback (0-2.5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Was losing by 3-4 pawns, won</td><td class="points">+1.5</td></tr>
+                <tr><td>Was losing by 5+ pawns, won</td><td class="points">+2.5</td></tr>
+            </table>
+            
+            <h3>💀 Back from Mate (0-1 pt)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Had mate against, won or drew</td><td class="points">+1</td></tr>
+            </table>
+            
+            <h3>🎢 Rollercoaster (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Lead changed 3+ times at ±1.5 pawn threshold</td><td class="points">+3</td></tr>
+            </table>
+            
+            <h3 style="margin-top: 1.5rem;">Time-Based Factors</h3>
+            
+            <h3>⏱️ Time Scramble (0-1.5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both players under 2 minutes at end</td><td class="points">+1.5</td></tr>
+            </table>
+            
+            <p style="color: var(--text-secondary); margin-top: 1.5rem;">
+                <strong>Maximum possible score: ~55 points</strong>
+            </p>
+            </div>
+        </details>
 
         <div class="round-context">
             <h2>📊 Round in Context</h2>
@@ -367,162 +531,6 @@
             </div>
         </div>
 
-        <div id="guide" class="guide">
-            <h2>📊 Drama Score Calculation</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                Each game is scored based on context (pre-game narrative) and drama (what happened in the game):
-            </p>
-            
-            <h3>Context Factors (before the game)</h3>
-            
-            <h3>🎯 Milestone Games (0-6 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Player's 45th career game</td><td class="points">+2</td></tr>
-                <tr><td>Player's 100th career game</td><td class="points">+3</td></tr>
-                <tr><td>Player's 200th career game</td><td class="points">+3</td></tr>
-            </table>
-            
-            <h3>⚔️ Head-to-Head History (0-4 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Played once before</td><td class="points">+2</td></tr>
-                <tr><td>Played twice before</td><td class="points">+3</td></tr>
-                <tr><td>Played 3+ times (Rivals!)</td><td class="points">+4</td></tr>
-            </table>
-            
-            <h3>🏆 Team Standings Impact (0-2 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>#1 team matchup</td><td class="points">+2</td></tr>
-                <tr><td>#2 team matchup</td><td class="points">+1</td></tr>
-                <tr><td>#3 team matchup</td><td class="points">+1</td></tr>
-            </table>
-            
-            <h3>🎖️ Veteran Experience (0-2 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Career games / 100 (per player, max 1 each)</td><td class="points">0-2</td></tr>
-            </table>
-            
-            <h3>🪃 Return Match (0-4 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>First game back after 5-9 seasons</td><td class="points">+2</td></tr>
-                <tr><td>First game back after 10-19 seasons</td><td class="points">+3</td></tr>
-                <tr><td>First game back after 20+ seasons</td><td class="points">+4</td></tr>
-            </table>
-            
-            <h3>🤝 Former Teammates (0-4 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>1 shared team (4+ games each)</td><td class="points">+2</td></tr>
-                <tr><td>2 shared teams</td><td class="points">+3</td></tr>
-                <tr><td>3+ shared teams</td><td class="points">+4</td></tr>
-            </table>
-            
-            <h3>👀 Vets First Meeting (0-1.5 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Both 80+ games, never faced each other</td><td class="points">+0.75</td></tr>
-                <tr><td>Both 100+ games, never faced each other</td><td class="points">+1.5</td></tr>
-            </table>
-            
-            <h3 style="margin-top: 1.5rem;">Drama Factors (from the game)</h3>
-            
-            <h3>🎯 Upset! (0-5 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Won despite 100-149 rating deficit</td><td class="points">+2</td></tr>
-                <tr><td>Won despite 150-199 rating deficit</td><td class="points">+3.5</td></tr>
-                <tr><td>Won despite 200+ rating deficit</td><td class="points">+5</td></tr>
-            </table>
-            
-            <h3>🌟 Debutant Wins (0-3 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Player wins their very first league game</td><td class="points">+3</td></tr>
-            </table>
-            
-            <h3>🛑 Hot Streak Stopper (0-3 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Stopped opponent's 3-4 game win streak</td><td class="points">+1.5</td></tr>
-                <tr><td>Stopped opponent's 5-6 game win streak</td><td class="points">+2</td></tr>
-                <tr><td>Stopped opponent's 7+ game win streak</td><td class="points">+3</td></tr>
-            </table>
-            
-            <h3>💪 Cold Streak Breaker (0-3 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Broke own 3-4 game losing streak</td><td class="points">+1.5</td></tr>
-                <tr><td>Broke own 5-6 game losing streak</td><td class="points">+2</td></tr>
-                <tr><td>Broke own 7+ game losing streak</td><td class="points">+3</td></tr>
-            </table>
-            
-            <h3>🔥 Streak Extended (0-3 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Winner now on 5-6 game streak</td><td class="points">+2</td></tr>
-                <tr><td>Winner now on 7+ game streak</td><td class="points">+3</td></tr>
-            </table>
-            
-            <h3>🐢 Marathon (0-5 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>80-99 moves</td><td class="points">+2 (+1 if decisive)</td></tr>
-                <tr><td>100-119 moves</td><td class="points">+3 (+1 if decisive)</td></tr>
-                <tr><td>120+ moves</td><td class="points">+4 (+1 if decisive)</td></tr>
-            </table>
-            
-            <h3>⚡ Miniature (0-2 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Decisive game in ≤15 moves</td><td class="points">+2</td></tr>
-                <tr><td>Decisive game in 16-25 moves</td><td class="points">+1</td></tr>
-            </table>
-            
-            <h3>🔥 Sharp Opening (0-3 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Spicy gambit (King's Gambit, Evans, Smith-Morra, etc.)</td><td class="points">+3</td></tr>
-                <tr><td>Sharp system (Yugoslav Attack, English Attack, etc.)</td><td class="points">+2</td></tr>
-            </table>
-            
-            <h3 style="margin-top: 1.5rem;">Eval-Based Factors (requires Lichess analysis)</h3>
-            
-            <h3>🧙 Comeback (0-2.5 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Was losing by 3-4 pawns, won</td><td class="points">+1.5</td></tr>
-                <tr><td>Was losing by 5+ pawns, won (Epic!)</td><td class="points">+2.5</td></tr>
-            </table>
-            
-            <h3>💀 Back from Mate (+1 pt)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Had forced mate against them, still won or drew</td><td class="points">+1</td></tr>
-            </table>
-            
-            <h3>🎢 Rollercoaster (0-3 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Lead changed (±1.5 pawn threshold) 3+ times</td><td class="points">+3</td></tr>
-            </table>
-            
-            <h3 style="margin-top: 1.5rem;">Time-Based Factors</h3>
-            
-            <h3>⏱️ Time Scramble (0-1.5 pts)</h3>
-            <table>
-                <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Both players under 2 minutes at end</td><td class="points">+1.5</td></tr>
-            </table>
-            
-            <p style="color: var(--text-secondary); margin-top: 1.5rem;">
-                <strong>Maximum possible score: ~55 points</strong>
-            </p>
-        </div>
-        
         <div class="games">
 
             <div class="game-card">
