@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leonův Obchůdek – Starožitnosti z celého světa</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8d48b;
+    --gold-dark: #8a6d2b;
+    --cream: #f5f0e1;
+    --cream-dark: #e8dcc4;
+    --brown: #3d2b1f;
+    --brown-light: #5c3d2e;
+    --brown-dark: #2a1a10;
+    --red-velvet: #6b1d1d;
+    --green-felt: #2d4a2d;
+    --parchment: #f0e6d0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--brown-dark);
+    color: var(--cream);
+    font-family: 'EB Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== INTRO SCREEN ===== */
+  #intro-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(107,29,29,0.1) 0%, transparent 50%),
+      linear-gradient(180deg, #1a0f08 0%, #2a1a10 40%, #3d2b1f 100%);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+
+  #intro-screen.hidden {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+  }
+
+  .intro-ornament {
+    color: var(--gold);
+    font-size: 2rem;
+    letter-spacing: 1em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .intro-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    color: var(--gold);
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 20px rgba(201,168,76,0.3);
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+
+  .intro-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream-dark);
+    text-align: center;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+
+  .intro-address {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--gold-dark);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 1.1s forwards;
+  }
+
+  .enter-btn {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: transparent;
+    border: 1px solid var(--gold);
+    padding: 1rem 3rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    opacity: 0;
+    animation: fadeUp 1s 1.4s forwards;
+  }
+
+  .enter-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+    z-index: -1;
+  }
+
+  .enter-btn:hover {
+    color: var(--brown-dark);
+  }
+
+  .enter-btn:hover::before {
+    transform: translateY(0);
+  }
+
+  /* ===== SHOP SCREEN ===== */
+  #shop-screen {
+    display: none;
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(201,168,76,0.05) 0%, transparent 40%),
+      radial-gradient(ellipse at 80% 90%, rgba(107,29,29,0.06) 0%, transparent 40%),
+      linear-gradient(180deg, #2a1a10 0%, #3d2b1f 100%);
+  }
+
+  #shop-screen.active {
+    display: block;
+    animation: shopFadeIn 1.2s ease;
+  }
+
+  .shop-header {
+    text-align: center;
+    padding: 2rem 1rem 1rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .shop-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+
+  .shop-header p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    color: var(--gold-dark);
+    font-style: italic;
+    margin-top: 0.3rem;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 1rem;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold-dark);
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gold-light);
+  }
+
+  /* Main content area */
+  .shop-content {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Leon's quote bubble */
+  .leon-quote {
+    background:
+      linear-gradient(135deg, rgba(107,29,29,0.3) 0%, rgba(45,74,45,0.15) 100%);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    animation: quoteAppear 0.8s ease;
+  }
+
+  .leon-quote::before {
+    content: '„';
+    position: absolute;
+    top: -0.2rem;
+    left: 0.8rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--gold);
+    opacity: 0.4;
+    line-height: 1;
+  }
+
+  .leon-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .leon-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.6;
+  }
+
+  /* Item card */
+  .item-card {
+    background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.3) 100%);
+    border: 1px solid rgba(201,168,76,0.25);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    animation: cardAppear 0.8s 0.3s both;
+  }
+
+  .item-card::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    border: 1px solid rgba(201,168,76,0.08);
+    pointer-events: none;
+  }
+
+  .item-emoji {
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 12px rgba(201,168,76,0.2));
+  }
+
+  .item-origin {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--gold-dark);
+    text-align: center;
+    margin-bottom: 0.3rem;
+  }
+
+  .item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    text-align: center;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .item-description {
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    color: var(--cream-dark);
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .item-price-tag {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.15);
+    margin-bottom: 1.5rem;
+  }
+
+  .price-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold-dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .price-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--gold);
+  }
+
+  .price-currency {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--gold-dark);
+  }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn {
+    flex: 1;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-buy {
+    background: var(--gold);
+    color: var(--brown-dark);
+  }
+
+  .btn-buy:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201,168,76,0.3);
+  }
+
+  .btn-skip {
+    background: transparent;
+    color: var(--cream-dark);
+    border: 1px solid rgba(201,168,76,0.25);
+  }
+
+  .btn-skip:hover {
+    background: rgba(201,168,76,0.08);
+    color: var(--cream);
+  }
+
+  /* Feedback message */
+  .feedback {
+    text-align: center;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    animation: feedbackPop 0.5s ease;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .feedback.bought {
+    background: rgba(45,74,45,0.3);
+  }
+
+  .feedback.skipped {
+    background: rgba(107,29,29,0.2);
+  }
+
+  .feedback-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.5;
+  }
+
+  .next-btn {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: transparent;
+    border: 1px solid var(--gold);
+    padding: 0.8rem 2.5rem;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    transition: all 0.3s ease;
+  }
+
+  .next-btn:hover {
+    background: var(--gold);
+    color: var(--brown-dark);
+  }
+
+  /* Collection */
+  .collection {
+    margin-top: 2rem;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding-top: 1.5rem;
+  }
+
+  .collection-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--gold-dark);
+    text-align: center;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .collection-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .collection-chip {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--cream-dark);
+    animation: chipIn 0.4s ease;
+  }
+
+  /* Bell */
+  .bell-icon {
+    display: inline-block;
+    animation: bellSwing 0.6s ease;
+    font-size: 1.5rem;
+    margin-right: 0.3rem;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes shopFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes quoteAppear {
+    from { opacity: 0; transform: translateX(-15px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes cardAppear {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes feedbackPop {
+    0% { opacity: 0; transform: scale(0.95); }
+    50% { transform: scale(1.02); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes chipIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes bellSwing {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(15deg); }
+    50% { transform: rotate(-10deg); }
+    75% { transform: rotate(5deg); }
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    .shop-content { padding: 1.5rem 1rem; }
+    .btn-row { flex-direction: column; }
+    .stats-bar { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro-screen">
+  <div class="intro-ornament">✦ ✦ ✦</div>
+  <h1 class="intro-title">Leonův<br>Obchůdek</h1>
+  <p class="intro-subtitle">Starožitnosti z celého světa · Praha–Dejvice, od 1993</p>
+  <p class="intro-address">Otevřeno denně · Vstup pouze pro znalce a dobrodruhy</p>
+  <button class="enter-btn" onclick="enterShop()">
+    <span class="bell-icon">🔔</span> Vstoupit do obchodu
+  </button>
+</div>
+
+<!-- SHOP -->
+<div id="shop-screen">
+  <div class="shop-header">
+    <h1>✦ Leonův Obchůdek ✦</h1>
+    <p>Starožitnosti · Umění · Kuriozity</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-label">Peněženka</div>
+      <div class="stat-value" id="wallet">50 000 Kč</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Sbírka</div>
+      <div class="stat-value" id="item-count">0 ks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Utraceno</div>
+      <div class="stat-value" id="spent">0 Kč</div>
+    </div>
+  </div>
+
+  <div class="shop-content" id="shop-content">
+    <!-- Dynamic content goes here -->
+  </div>
+</div>
+
+<script>
+const quotes = [
+  "Peníze mi štěstí nepřinesly, ale zážitky ano.",
+  "Peníze byly a budou, nemají pro mě cenu. Mojí vášní je umění.",
+  "Mé životní krédo je pozitivita, v čemkoli. Když prší, tak říkám, že bude zelená tráva. Když je sníh, je krásný, bílý nevinný.",
+  "Žádný byznys jsem nedělal kvůli penězům. Ani casino na Rozvadově jsem nepostavil kvůli penězům.",
+  "Kasino je jako divadlo. Má to být showbyznys.",
+  "Pokud jdete do kasina vyhrát, neměl byste tam chodit. Měl byste se tam jít pobavit, a to někdy stojí peníze.",
+  "Vždycky hraji na výhru, nehraju na výdrž.",
+  "Neberu to jako ztrátu prohrát nějakou částku. Ztrácíš snad, když jdeš hrát tenis a musíš platit za kurt?",
+  "V garážovém výprodeji koupíš talíř, vyleštíš ho a pak prodáš za větší peníze. Zvládne to každý.",
+  "Pro mě je poker výzvou. Rád bych hrál proti těm nejlepším na světě.",
+  "Já jsem byl vždycky šťastný. Mě udělají šťastným maličkosti.",
+  "Znovu jsem se narodil.",
+  "Od této příhody krásně spím a dívám se na krásný svět a život.",
+  "Dokonce se mi vrátily vzpomínky na věci, které už jsem dávno zapomněl.",
+  "Tito skvělí lidé mi dali druhý život."
+];
+
+const items = [
+  { name: "Biedermeierovská komoda z třešňového dřeva", emoji: "🪵", desc: "Nádherný kus s jemnou dýhou, typický biedermeier v nejčistší formě." },
+  { name: "Stříbrný čajový servis z přelomu století", emoji: "🫖", desc: "Kompletní sada pro šest osob, cejchované stříbro nejvyšší ryzosti." },
+  { name: "Olejomalba krajiny v pozlaceném rámu", emoji: "🖼️", desc: "Romantická krajina s řekou, originální pozlacený rám z období." },
+  { name: "Secesní stolní lampa s opálovým stínítkem", emoji: "🪔", desc: "Elegantní secesní tvar, stínítko z foukaného opálového skla." },
+  { name: "Porcelánová váza z míšeňské manufaktury", emoji: "🏺", desc: "Ručně malovaný květinový dekor, značka zkřížených mečů na dně." },
+  { name: "Empírové nástěnné zrcadlo s andílky", emoji: "🪞", desc: "Masivní zlacený rám s putti, originální rtuťové sklo." },
+  { name: "Sada stříbrných příborů s monogramem", emoji: "🍴", desc: "24 dílů v originální kazetě, vyražený šlechtický monogram." },
+  { name: "Biedermeierovský sekretář s intarzií", emoji: "📜", desc: "Sklopná deska s tajnými přihrádkami, intarzie z javorového dřeva." },
+  { name: "Bronzová soška koně na mramorovém podstavci", emoji: "🐴", desc: "Detailní anatomická práce, patinovaný bronz, černý mramor." },
+  { name: "Starožitné kapesní hodinky se zlatým řetízkem", emoji: "⌚", desc: "Švýcarský strojek, tepaný zlatý kryt s florálním motivem." },
+  { name: "Art deco karafka z broušeného křišťálu", emoji: "🍷", desc: "Geometrický brus typický pro meziválečné období, křišťálová zátka." },
+  { name: "Perský koberec z konce 19. století", emoji: "🧶", desc: "Ručně vázaný, přes milion uzlů na metr čtvereční, rostlinné barvy." },
+  { name: "Biedermeierovské křeslo s čalouněním", emoji: "💺", desc: "Elegantní tvar z ořechového dřeva, původní čalounění v zelené." },
+  { name: "Miniaturní portrét šlechtičny v oválu ze slonoviny", emoji: "👩‍🎨", desc: "Precizní miniatura, akvarelová technika na slonovině v zlatém rámu." },
+  { name: "Stříbrná tabatěrka s emailovým víčkem", emoji: "✨", desc: "Kapesní skvost s ručně malovaným medailonkem na víčku." }
+];
+
+const countries = [
+  "Rakouska", "Německa", "Francie", "Čech", "Anglie",
+  "Ruska", "Itálie", "Maďarska", "Nizozemska", "Švýcarska",
+  "Polska", "Dánska", "Persie", "Turecka", "Švédska"
+];
+
+const buyResponses = [
+  "Výborná volba! Tohle byste jinde nenašli.",
+  "Máte oko! Tohle je kousek pro znalce.",
+  "Parádní! Vyleštit a prodat dráž – ale to už je na vás.",
+  "Vidím, že rozumíte kráse. Gratuluju!",
+  "Tohle je investice do krásy, a krása nepomíjí."
+];
+
+const skipResponses = [
+  "Nevadí, příště možná. Další kousek už čeká!",
+  "Škoda… ale nenutím. Tady se máte bavit!",
+  "Tak příště! Každý den mám něco nového.",
+  "Dobrá, dobrá. Ale tenhle kousek dlouho nezůstane.",
+  "Jak říkám – mě udělají šťastným maličkosti. A vás?"
+];
+
+let wallet = 50000;
+let spent = 0;
+let collection = [];
+let currentItem = null;
+let currentPrice = 0;
+let usedQuoteIndices = [];
+
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+function getUniqueQuote() {
+  if (usedQuoteIndices.length >= quotes.length) usedQuoteIndices = [];
+  let idx;
+  do { idx = Math.floor(Math.random() * quotes.length); }
+  while (usedQuoteIndices.includes(idx));
+  usedQuoteIndices.push(idx);
+  return quotes[idx];
+}
+
+function generatePrice() {
+  const tiers = [
+    { min: 800, max: 3000 },
+    { min: 3000, max: 8000 },
+    { min: 8000, max: 18000 },
+    { min: 18000, max: 35000 }
+  ];
+  const tier = rand(tiers);
+  let price = randInt(tier.min, tier.max);
+  price = Math.round(price / 100) * 100;
+  return price;
+}
+
+function formatPrice(n) {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+function updateStats() {
+  document.getElementById('wallet').textContent = formatPrice(wallet) + ' Kč';
+  document.getElementById('item-count').textContent = collection.length + ' ks';
+  document.getElementById('spent').textContent = formatPrice(spent) + ' Kč';
+}
+
+function showOffer() {
+  const quote = getUniqueQuote();
+  const item = rand(items);
+  const country = rand(countries);
+  const price = generatePrice();
+
+  currentItem = item;
+  currentPrice = price;
+
+  const canAfford = wallet >= price;
+
+  let html = `
+    <div class="leon-quote" key="${Math.random()}">
+      <div class="leon-name">Leon Tsoukernik praví:</div>
+      <div class="leon-text">${quote}</div>
+    </div>
+
+    <div class="item-card" key="${Math.random()}">
+      <div class="item-emoji">${item.emoji}</div>
+      <div class="item-origin">Původ: ${country}</div>
+      <div class="item-name">${item.name}</div>
+      <div class="item-description">${item.desc}</div>
+      <div class="item-price-tag">
+        <div class="price-label">Cena</div>
+        <div class="price-value">${formatPrice(price)} <span class="price-currency">Kč</span></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-buy" onclick="buyItem()" ${!canAfford ? 'disabled style="opacity:0.4;cursor:not-allowed"' : ''}>
+          ${canAfford ? '💰 Kupuji!' : '😔 Nemám dost'}
+        </button>
+        <button class="btn btn-skip" onclick="skipItem()">👋 Děkuji, ne</button>
+      </div>
+    </div>
+  `;
+
+  if (collection.length > 0) {
+    html += `
+      <div class="collection">
+        <div class="collection-title">Vaše sbírka</div>
+        <div class="collection-items">
+          ${collection.map(c => `<div class="collection-chip">${c.emoji} ${c.short}</div>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('shop-content').innerHTML = html;
+}
+
+function buyItem() {
+  wallet -= currentPrice;
+  spent += currentPrice;
+  const shortName = currentItem.name.length > 25 ? currentItem.name.substring(0, 25) + '…' : currentItem.name;
+  collection.push({ emoji: currentItem.emoji, short: shortName });
+  updateStats();
+
+  const resp = rand(buyResponses);
+  showFeedback('bought', `${currentItem.emoji} ${resp}`, true);
+}
+
+function skipItem() {
+  const resp = rand(skipResponses);
+  showFeedback('skipped', resp, true);
+}
+
+function showFeedback(type, text, showNext) {
+  let html = `
+    <div class="feedback ${type}">
+      <div class="feedback-text">${text}</div>
+      ${showNext ? '<button class="next-btn" onclick="showOffer()">🔔 Další předmět</button>' : ''}
+    </div>
+  `;
+
+  if (collection.length > 0) {
+    html += `
+      <div class="collection">
+        <div class="collection-title">Vaše sbírka</div>
+        <div class="collection-items">
+          ${collection.map(c => `<div class="collection-chip">${c.emoji} ${c.short}</div>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (wallet <= 0) {
+    html = `
+      <div class="feedback skipped">
+        <div class="feedback-text">
+          ${type === 'bought' ? currentItem.emoji + ' ' + rand(buyResponses) + '<br><br>' : ''}
+          Leon se usměje: „Vidím, že jste utratili všechno. To se mi líbí – peníze byly a budou, nemají pro mě cenu!"<br><br>
+          Vaše sbírka: <strong>${collection.length} předmětů</strong> za <strong>${formatPrice(spent)} Kč</strong>.
+        </div>
+        <button class="next-btn" onclick="resetShop()">🔄 Hrát znovu</button>
+      </div>
+      ${collection.length > 0 ? `
+        <div class="collection">
+          <div class="collection-title">Vaše sbírka</div>
+          <div class="collection-items">
+            ${collection.map(c => `<div class="collection-chip">${c.emoji} ${c.short}</div>`).join('')}
+          </div>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  document.getElementById('shop-content').innerHTML = html;
+}
+
+function resetShop() {
+  wallet = 50000;
+  spent = 0;
+  collection = [];
+  usedQuoteIndices = [];
+  updateStats();
+  showOffer();
+}
+
+function enterShop() {
+  document.getElementById('intro-screen').classList.add('hidden');
+  setTimeout(() => {
+    document.getElementById('shop-screen').classList.add('active');
+    updateStats();
+    showOffer();
+  }, 600);
+}
+</script>
+</body>
+</html>
