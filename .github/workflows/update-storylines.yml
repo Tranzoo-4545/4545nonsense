@@ -1,0 +1,66 @@
+name: Update Storylines with Schedule
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+    - cron: '0 20 * * *'
+  
+  workflow_dispatch:
+    inputs:
+      season:
+        description: 'Season number'
+        required: true
+        default: '48'
+      round:
+        description: 'Round number'
+        required: true
+        default: '1'
+
+jobs:
+  update-storylines:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install requests openpyxl
+      
+      - name: Read config
+        id: config
+        run: |
+          if [ -f "config.txt" ]; then
+            source config.txt
+            echo "season=$SEASON" >> $GITHUB_OUTPUT
+            echo "round=$ROUND" >> $GITHUB_OUTPUT
+          else
+            echo "season=${{ github.event.inputs.season || '48' }}" >> $GITHUB_OUTPUT
+            echo "round=${{ github.event.inputs.round || '1' }}" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Download ICS calendar
+        run: curl -o calendar.ics "https://www.lichess4545.com/team4545/season/${{ steps.config.outputs.season }}/pairings/calendar.ics"
+      
+      - name: Generate storylines
+        run: |
+          python scripts/storylines_v4.py \
+            --season ${{ steps.config.outputs.season }} \
+            --round ${{ steps.config.outputs.round }} \
+            --ics calendar.ics \
+            --output top_storylines.html
+      
+      - name: Commit if changed
+        run: |
+          git diff --quiet top_storylines.html || {
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git config user.name "github-actions[bot]"
+            git add top_storylines.html
+            git commit -m "Update storylines with latest schedule times"
+            git push
+          }
