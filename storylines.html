@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storylines - Season 48 Round 1</title>
+    <style>
+        :root {
+            --bg-primary: #2d5266;
+            --bg-dark: #234250;
+            --bg-darker: #1a323d;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #f0f6f6;
+            --text-secondary: rgba(240, 246, 246, 0.7);
+            --text-muted: rgba(240, 246, 246, 0.4);
+            --border: rgba(255, 255, 255, 0.12);
+            --gold: #d4b856;
+            --accent: #4a9ebb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 50%, var(--bg-primary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        header .stats {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .pairing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .pairing-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+        
+        .pairing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .rank {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold);
+            min-width: 50px;
+        }
+        
+        .rank.top-3 {
+            font-size: 1.8rem;
+        }
+        
+        .matchup {
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        .players {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .players a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .players a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        .vs {
+            color: var(--text-muted);
+            margin: 0 0.5rem;
+        }
+        
+        .teams {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .schedule-time {
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .schedule-time.scheduled {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+        
+        .schedule-time.tbd {
+            color: var(--text-muted);
+        }
+        
+        .schedule-time.played {
+            color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+        }
+        
+        .score-badge {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            min-width: 70px;
+        }
+        
+        .score-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+        
+        .score-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        
+        .reasons {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .reason {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            margin: 0.2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .guide-toggle {
+            background: var(--accent);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            transition: background 0.2s;
+            display: inline-block;
+            list-style: none;
+        }
+        
+        .guide-toggle::-webkit-details-marker {
+            display: none;
+        }
+        
+        .guide-toggle:hover {
+            background: #5ab0cc;
+        }
+        
+        .guide-wrapper {
+            margin-bottom: 2rem;
+        }
+        
+        .guide-wrapper[open] .guide-toggle {
+            margin-bottom: 1rem;
+        }
+        
+        .guide {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+        }
+        
+        .guide h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+        
+        .guide h3 {
+            font-size: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .guide table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.5rem 0;
+        }
+        
+        .guide th, .guide td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .guide th {
+            color: var(--text-secondary);
+            font-weight: normal;
+            font-size: 0.85rem;
+        }
+        
+        .guide td {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .guide .points {
+            color: var(--gold);
+            font-weight: bold;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .pairing-header {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .rank {
+                order: -1;
+            }
+            
+            .players {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📺 Storylines of the Week</h1>
+            <div class="subtitle">Season 48 &middot; Round 1</div>
+            <div class="stats">Top 10 of 168 pairings</div>
+        </header>
+        
+        <details class="guide-wrapper">
+            <summary class="guide-toggle">📊 How is Hype Score calculated?</summary>
+            <div class="guide">
+            <h2>📊 Hype Score Calculation</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Each pairing is scored based on several factors that make a matchup compelling:
+            </p>
+            
+            <h3>👑 Titled Player (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>One titled player (FM, IM, GM, etc.)</td><td class="points">+1.5</td></tr>
+                <tr><td>Both players titled</td><td class="points">+3</td></tr>
+            </table>
+            
+            <h3>🎯 Milestone Games (0-6 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Player's 45th career game</td><td class="points">+2</td></tr>
+                <tr><td>Player's 100th career game</td><td class="points">+3</td></tr>
+                <tr><td>Player's 200th/300th career game</td><td class="points">+3</td></tr>
+            </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Can stack if both players have milestones</p>
+            
+            <h3>🏆 100th Win (0-2.5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Player at 99 wins (going for 100th)</td><td class="points">+2.5</td></tr>
+            </table>
+            
+            <h3>⚔️ Head-to-Head History (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Played once before</td><td class="points">+2</td></tr>
+                <tr><td>Played twice before</td><td class="points">+3</td></tr>
+                <tr><td>Played 3+ times (Rivals!)</td><td class="points">+4</td></tr>
+            </table>
+            
+            <h3>🔥 Form Clash (0-3 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both on 2+ win streak</td><td class="points">+2</td></tr>
+                <tr><td>Both on 3+ win streak</td><td class="points">+3</td></tr>
+                <tr><td>Both on 2+ loss streak</td><td class="points">+2</td></tr>
+                <tr><td>Both on 3+ loss streak</td><td class="points">+3</td></tr>
+            </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Streaks are career-wide, not just current season</p>
+            
+            <h3>🏆 Team Standings Impact (0-6 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Base Points</th></tr>
+                <tr><td>#1 team matchup (by avg placement)</td><td class="points">+4</td></tr>
+                <tr><td>#2 team matchup</td><td class="points">+3</td></tr>
+                <tr><td>#3 team matchup</td><td class="points">+2</td></tr>
+            </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+                <strong>Round multiplier:</strong> R1: 0x, R2: 0.25x, R3: 0.5x, R4: 0.75x, R5-6: 1x, R7-8: 1.5x
+            </p>
+            
+            <h3>🎖️ Veteran Experience (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Career games / 100 (per player, max 2 each)</td><td class="points">0-4</td></tr>
+            </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">e.g., 150 games = 1.5 pts, 200+ games = 2 pts (capped)</p>
+            
+            <h3>🪃 Return Match (0-4 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>First game back after 5-9 seasons</td><td class="points">+2</td></tr>
+                <tr><td>First game back after 10-19 seasons</td><td class="points">+3</td></tr>
+                <tr><td>First game back after 20+ seasons</td><td class="points">+4</td></tr>
+            </table>
+            
+            <h3>🤝 Former Teammates (0-5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both played 4+ games on 1 shared team</td><td class="points">+2</td></tr>
+                <tr><td>Both played 4+ games on 2 shared teams</td><td class="points">+3</td></tr>
+                <tr><td>Both played 4+ games on 3+ shared teams</td><td class="points">+4</td></tr>
+                <tr><td>Bonus: Won league together</td><td class="points">+1</td></tr>
+            </table>
+            
+            <h3>👀 Vets First Meeting (0-1.5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both 80+ games, never faced each other</td><td class="points">+0.75</td></tr>
+                <tr><td>Both 100+ games, never faced each other</td><td class="points">+1.5</td></tr>
+            </table>
+            
+            <h3>🌱 Debutants' Duel (1.5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Both players making their league debut</td><td class="points">+1.5</td></tr>
+            </table>
+            
+            <p style="color: var(--text-secondary); margin-top: 1.5rem;">
+                <strong>Maximum possible score: ~38.5 points</strong>
+            </p>
+            </div>
+        </details>
+        
+        <div class="pairings">
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank top-3">#1</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/val1313/" target="_blank">val1313</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/AACtrl/" target="_blank">AACtrl</a>
+                        </div>
+                        <div class="teams">The Giraffe Huggers vs Team chicken face of a monkey</div>
+                        <div class="schedule-time scheduled">🕐 Sat Apr 11, 10:00 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">13.5</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🏆 val1313 going for 100th win!</span>
+                    <span class="reason">🔄 Rematch #3 (0-2-0)</span>
+                    <span class="reason">❄️ Both struggling (2L vs 2L)</span>
+                    <span class="reason">🎖️ Veterans (251+211 games)</span>
+                    <span class="reason">🤝 Former teammates on You can call us Susan if it makes you happy</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank top-3">#2</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/Lelouch_Vi_Brittania/" target="_blank">Lelouch_Vi_Brittania</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/Qudit/" target="_blank">Qudit</a>
+                        </div>
+                        <div class="teams">Immer diese billigen Patzertricks vs The Sicilian Sea Dogs</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">9.2</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🎖️ CM lelouch_vi_brittania in the mix</span>
+                    <span class="reason">🔄 Rematch (1-0-0)</span>
+                    <span class="reason">🎖️ Veterans (107+160 games)</span>
+                    <span class="reason">🪃 lelouch_vi_brittania's big return after 12 seasons!</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank top-3">#3</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/Tranzoo/" target="_blank">Tranzoo</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/ztraynor/" target="_blank">ztraynor</a>
+                        </div>
+                        <div class="teams">The Candidudes vs Scarffy Scarff and the Funky Bunch</div>
+                        <div class="schedule-time scheduled">🕐 Wed Apr 08, 15:00 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">6.7</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">⚔️ Rivals! Met 3x before (0-1-2)</span>
+                    <span class="reason">🎖️ Veterans (245+65 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#4</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/KS_Legion_Legionowo/" target="_blank">KS_Legion_Legionowo</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/mronemore/" target="_blank">mronemore</a>
+                        </div>
+                        <div class="teams">Big 'n' Tal vs Lord of the Files</div>
+                        <div class="schedule-time scheduled">🕐 Sat Apr 11, 14:00 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">5.6</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch (1-0-0)</span>
+                    <span class="reason">🎖️ Veterans (171+186 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#5</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/Constant1n/" target="_blank">Constant1n</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/ButterPecan/" target="_blank">ButterPecan</a>
+                        </div>
+                        <div class="teams">We'll wipe the Flohr with y'all vs Better Call Sindarov</div>
+                        <div class="schedule-time scheduled">🕐 Sun Apr 12, 12:30 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">5.5</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🎖️ Veterans (78+172 games)</span>
+                    <span class="reason">🪃 constant1n's big return after 11 seasons!</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#6</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/mixxanber/" target="_blank">mixxanber</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/ecoarrivazumashoomzo/" target="_blank">ecoarrivazumashoomzo</a>
+                        </div>
+                        <div class="teams">Big 'n' Tal vs Lord of the Files</div>
+                        <div class="schedule-time scheduled">🕐 Sun Apr 12, 14:00 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">5.2</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🎖️ Experience (100+24 games)</span>
+                    <span class="reason">🪃 mixxanber's epic return after 20 seasons!</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#7</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/patk74/" target="_blank">patk74</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/JohnJPershing/" target="_blank">JohnJPershing</a>
+                        </div>
+                        <div class="teams">Blübaum's Blämeless Blöomers vs release the chraken</div>
+                        <div class="schedule-time scheduled">🕐 Sun Apr 12, 22:00 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">4.8</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch (0-1-0)</span>
+                    <span class="reason">🎖️ Veterans (143+133 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#8</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/DrRickinCT/" target="_blank">DrRickinCT</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/dama_x_rey/" target="_blank">dama_x_rey</a>
+                        </div>
+                        <div class="teams">Team chicken face of a monkey vs The Giraffe Huggers</div>
+                        <div class="schedule-time scheduled">🕐 Wed Apr 08, 12:30 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">4.7</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch #3 (1-1-0)</span>
+                    <span class="reason">🎖️ Experience (52+118 games)</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#9</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/glbert/" target="_blank">glbert</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/jpgmich/" target="_blank">jpgmich</a>
+                        </div>
+                        <div class="teams">release the chraken vs Blübaum's Blämeless Blöomers</div>
+                        <div class="schedule-time scheduled">🕐 Sat Apr 11, 13:00 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">4.7</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🎖️ Veterans (289+65 games)</span>
+                    <span class="reason">🤝 Former teammates on We are the Cham's peons</span>
+                </div>
+            </div>
+
+            <div class="pairing-card">
+                <div class="pairing-header">
+                    <div class="rank ">#10</div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/faznaz83/" target="_blank">faznaz83</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/Kayrosas/" target="_blank">Kayrosas</a>
+                        </div>
+                        <div class="teams">The Bishop Lebowski vs Eine Kleine Knightmusic</div>
+                        <div class="schedule-time scheduled">🕐 Wed Apr 08, 16:00 UTC</div>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">4.5</div>
+                        <div class="score-label">hype</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🎖️ NM faznaz83 in the mix</span>
+                    <span class="reason">🪃 kayrosas's big return after 19 seasons!</span>
+                </div>
+            </div>
+
+        </div>
+        
+        <footer>
+            Generated for <a href="https://www.lichess4545.com" target="_blank">Lichess4545</a> League
+        </footer>
+    </div>
+</body>
+</html>
