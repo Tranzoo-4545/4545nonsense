@@ -29,30 +29,17 @@ jobs:
           python-version: '3.11'
       
       - name: Install dependencies
-        run: |
-          pip install requests openpyxl
+        run: pip install requests openpyxl
       
       - name: Read current season/round from config
         id: config
         run: |
-          if [ -f "config.txt" ]; then
-            source config.txt
-            echo "season=${SEASON}" >> $GITHUB_OUTPUT
-            echo "round=${ROUND}" >> $GITHUB_OUTPUT
-          fi
-          # Override with manual inputs if provided
-          if [ -n "${{ github.event.inputs.season }}" ]; then
-            echo "season=${{ github.event.inputs.season }}" >> $GITHUB_OUTPUT
-          fi
-          if [ -n "${{ github.event.inputs.round }}" ]; then
-            echo "round=${{ github.event.inputs.round }}" >> $GITHUB_OUTPUT
-          fi
+          source config.txt
+          echo "season=${SEASON}" >> $GITHUB_OUTPUT
+          echo "round=${ROUND}" >> $GITHUB_OUTPUT
       
       - name: Download ICS calendar
-        run: |
-          curl -o calendar.ics "https://www.lichess4545.com/team4545/season/${{ steps.config.outputs.season }}/pairings/calendar.ics"
-          echo "Downloaded ICS file:"
-          head -20 calendar.ics
+        run: curl -o calendar.ics "https://www.lichess4545.com/team4545/season/${{ steps.config.outputs.season }}/pairings/calendar.ics"
       
       - name: Generate storylines HTML
         run: |
@@ -73,13 +60,7 @@ jobs:
       
       - name: Commit and push if changed
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
           git add top_storylines.html daily_games.html
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update storylines for S${{ steps.config.outputs.season }} R${{ steps.config.outputs.round }}"
-            git push
-          fi
-          }
+          git diff --staged --quiet || (git commit -m "Update storylines" && git push)
