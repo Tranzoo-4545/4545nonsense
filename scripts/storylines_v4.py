@@ -1321,7 +1321,506 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
     print(f"\n✓ HTML output saved to: {output_file}")
 
 
-def generate_storylines(season, target_round=None, output_html=None, output_excel=None, no_refresh=False, ics_path=None):
+def generate_daily_html_output(scored_pairings, season, round_num, output_file):
+    """Generate HTML output grouped by day showing only top games per day."""
+    from collections import defaultdict
+    
+    # Check if it's Monday or Tuesday - show placeholder instead
+    today = datetime.now()
+    day_of_week = today.weekday()  # 0=Monday, 1=Tuesday, ...
+    
+    if day_of_week in (0, 1):  # Monday or Tuesday
+        html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Games of the Day - Season {season} Round {round_num}</title>
+    <style>
+        :root {{
+            --bg-primary: #2d5266;
+            --bg-dark: #234250;
+            --bg-darker: #1a323d;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #f0f6f6;
+            --text-secondary: rgba(240, 246, 246, 0.7);
+            --text-muted: rgba(240, 246, 246, 0.4);
+            --border: rgba(255, 255, 255, 0.12);
+            --gold: #d4b856;
+            --accent: #4a9ebb;
+        }}
+        
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+        
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 50%, var(--bg-primary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }}
+        
+        .container {{
+            max-width: 600px;
+            text-align: center;
+        }}
+        
+        .card {{
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+        }}
+        
+        h1 {{
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }}
+        
+        .message {{
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }}
+        
+        .hint {{
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }}
+        
+        footer {{
+            margin-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }}
+        
+        footer a {{
+            color: var(--accent);
+            text-decoration: none;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>📅 Coming Soon!</h1>
+            <div class="message">
+                Top Games of the Day for Season {season} Round {round_num} will be available on Wednesday.
+            </div>
+            <div class="hint">
+                Players are still scheduling their games. Check back Wednesday morning for the daily highlights!
+            </div>
+        </div>
+        <footer>
+            Generated for <a href="https://www.lichess4545.com" target="_blank">Lichess4545</a> League
+        </footer>
+    </div>
+</body>
+</html>
+"""
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(html)
+        
+        day_name = "Monday" if day_of_week == 0 else "Tuesday"
+        print(f"\n✓ Daily HTML placeholder saved (it's {day_name}, full schedule available Wednesday)")
+        return
+    
+    # Filter to only scheduled games (exclude TBD and played)
+    scheduled_games = [p for p in scored_pairings if p.get('scheduled_time') and not p.get('played')]
+    
+    if not scheduled_games:
+        print("No scheduled games found for daily output")
+        return
+    
+    # Group by date
+    games_by_day = defaultdict(list)
+    for game in scheduled_games:
+        day_key = game['scheduled_time'].strftime('%Y-%m-%d')
+        games_by_day[day_key].append(game)
+    
+    # Sort days chronologically
+    sorted_days = sorted(games_by_day.keys())
+    
+    # Process each day: sort by hype score and pick top N
+    top_games_by_day = {}
+    for day_key in sorted_days:
+        games = games_by_day[day_key]
+        total_games = len(games)
+        
+        # Determine how many to show based on total games that day
+        if total_games <= 5:
+            show_count = 1
+        elif total_games <= 10:
+            show_count = 2
+        else:
+            show_count = 3
+        
+        # Sort by hype score (descending), then by time
+        games.sort(key=lambda g: (-g['score'], g['scheduled_time']))
+        
+        # Take top N (but include ties for the last spot), excluding 0 score games
+        top_games = []
+        cutoff_score = None
+        for i, g in enumerate(games):
+            # Skip games with 0 hype score
+            if g['score'] <= 0:
+                continue
+            
+            if len(top_games) < show_count:
+                top_games.append(g)
+                cutoff_score = g['score']
+            elif g['score'] == cutoff_score:
+                # Include ties
+                top_games.append(g)
+            else:
+                break
+        
+        # Mark the #1 game(s) as Game of the Day
+        if top_games:
+            max_score = top_games[0]['score']
+            for g in top_games:
+                g['is_gotd'] = (g['score'] == max_score and max_score > 0)
+                g['rank'] = next(i for i, tg in enumerate(top_games, 1) if tg is g)
+        
+        top_games_by_day[day_key] = {
+            'games': top_games,
+            'total': total_games
+        }
+    
+    # Generate HTML
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Games of the Day - Season {season} Round {round_num}</title>
+    <style>
+        :root {{
+            --bg-primary: #2d5266;
+            --bg-dark: #234250;
+            --bg-darker: #1a323d;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #f0f6f6;
+            --text-secondary: rgba(240, 246, 246, 0.7);
+            --text-muted: rgba(240, 246, 246, 0.4);
+            --border: rgba(255, 255, 255, 0.12);
+            --gold: #d4b856;
+            --accent: #4a9ebb;
+        }}
+        
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+        
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 50%, var(--bg-primary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }}
+        
+        .container {{
+            max-width: 900px;
+            margin: 0 auto;
+        }}
+        
+        header {{
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }}
+        
+        header h1 {{
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }}
+        
+        header .subtitle {{
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }}
+        
+        .day-section {{
+            margin-bottom: 2rem;
+        }}
+        
+        .day-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }}
+        
+        .day-count {{
+            font-size: 0.9rem;
+            font-weight: normal;
+            color: var(--text-muted);
+        }}
+        
+        .game-card {{
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }}
+        
+        .game-card.gotd {{
+            border: 2px solid var(--gold);
+            background: rgba(212, 184, 86, 0.08);
+        }}
+        
+        .game-top-row {{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }}
+        
+        .game-rank {{
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--gold);
+            min-width: 35px;
+        }}
+        
+        .game-main {{
+            flex-grow: 1;
+            text-align: center;
+        }}
+        
+        .game-players {{
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }}
+        
+        .game-players a {{
+            color: var(--text-primary);
+            text-decoration: none;
+        }}
+        
+        .game-players a:hover {{
+            color: var(--accent);
+            text-decoration: underline;
+        }}
+        
+        .vs {{
+            color: var(--text-muted);
+            margin: 0 0.4rem;
+        }}
+        
+        .game-teams {{
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }}
+        
+        .game-time {{
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-top: 0.3rem;
+        }}
+        
+        .game-score {{
+            text-align: right;
+        }}
+        
+        .gotd-badge {{
+            background: var(--gold);
+            color: var(--bg-darker);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 0.4rem;
+        }}
+        
+        .hype-score {{
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.4rem 0.7rem;
+            text-align: center;
+            min-width: 55px;
+        }}
+        
+        .hype-value {{
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--gold);
+        }}
+        
+        .hype-label {{
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }}
+        
+        .reasons {{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }}
+        
+        .reason {{
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }}
+        
+        footer {{
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }}
+        
+        footer a {{
+            color: var(--accent);
+            text-decoration: none;
+        }}
+        
+        @media (max-width: 600px) {{
+            .game-top-row {{
+                flex-direction: column;
+                gap: 0.75rem;
+            }}
+            
+            .game-rank {{
+                display: none;
+            }}
+            
+            .game-score {{
+                text-align: center;
+            }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 Top Games of the Day</h1>
+            <div class="subtitle">Season {season} Round {round_num}</div>
+        </header>
+"""
+    
+    for day_key in sorted_days:
+        day_data = top_games_by_day[day_key]
+        top_games = day_data['games']
+        total_games = day_data['total']
+        
+        # Skip days with no top games (all games had 0 hype)
+        if not top_games:
+            continue
+        
+        # Format day header
+        day_date = datetime.strptime(day_key, '%Y-%m-%d')
+        day_str = day_date.strftime('%A, %B %d')
+        
+        html += f"""
+        <div class="day-section">
+            <div class="day-header">
+                <span>{day_str}</span>
+                <span class="day-count">{total_games} games scheduled</span>
+            </div>
+"""
+        
+        for game in top_games:
+            gotd_class = "gotd" if game.get('is_gotd') else ""
+            time_str = game['scheduled_time'].strftime('%H:%M UTC')
+            rank = game.get('rank', 1)
+            
+            white_link = f"https://www.lichess4545.com/team4545/player/{game['white']}/"
+            black_link = f"https://www.lichess4545.com/team4545/player/{game['black']}/"
+            
+            gotd_badge_html = '<div class="gotd-badge">🏆 Game of the Day</div>' if game.get('is_gotd') else ""
+            
+            html += f"""
+            <div class="game-card {gotd_class}">
+                <div class="game-top-row">
+                    <div class="game-rank">#{rank}</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="{white_link}" target="_blank">{game['white']}</a>
+                            <span class="vs">vs</span>
+                            <a href="{black_link}" target="_blank">{game['black']}</a>
+                        </div>
+                        <div class="game-teams">{game['white_team']} vs {game['black_team']}</div>
+                        <div class="game-time">🕐 {time_str}</div>
+                    </div>
+                    <div class="game-score">
+                        {gotd_badge_html}
+                        <div class="hype-score">
+                            <div class="hype-value">{game['score']:.1f}</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+"""
+            
+            # Show ALL reasons for these top games
+            if game.get('reasons'):
+                html += '                <div class="reasons">\n'
+                for reason in game['reasons']:
+                    html += f'                    <span class="reason">{reason}</span>\n'
+                html += '                </div>\n'
+            
+            html += '            </div>\n'
+        
+        html += "        </div>\n"
+    
+    # Summary stats
+    total_scheduled = len(scheduled_games)
+    total_days = len(sorted_days)
+    total_featured = sum(len(d['games']) for d in top_games_by_day.values())
+    
+    html += f"""
+        <footer>
+            Featuring {total_featured} top games from {total_scheduled} scheduled across {total_days} days<br>
+            Generated for <a href="https://www.lichess4545.com" target="_blank">Lichess4545</a> League
+        </footer>
+    </div>
+</body>
+</html>
+"""
+    
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(html)
+    
+    print(f"\n✓ Daily HTML output saved to: {output_file}")
+    print(f"  Featuring {total_featured} top games from {total_scheduled} scheduled across {total_days} days")
+
+
+def generate_storylines(season, target_round=None, output_html=None, output_excel=None, no_refresh=False, ics_path=None, daily_output=False):
     """Generate storylines for upcoming round."""
     
     # Auto-refresh current season data (unless --no-refresh)
@@ -1442,7 +1941,10 @@ def generate_storylines(season, target_round=None, output_html=None, output_exce
     
     # Generate HTML if requested
     if output_html:
-        generate_html_output(scored_pairings, season, round_num, output_html)
+        if daily_output:
+            generate_daily_html_output(scored_pairings, season, round_num, output_html)
+        else:
+            generate_html_output(scored_pairings, season, round_num, output_html)
     
     # Generate Excel if requested
     if output_excel:
@@ -1687,6 +2189,8 @@ def main():
                         help='Output Excel file with detailed breakdown (e.g., storylines.xlsx)')
     parser.add_argument('--ics', type=str, default=None,
                         help='ICS calendar file for scheduled game times')
+    parser.add_argument('--daily', action='store_true',
+                        help='Output grouped by day with Game of the Day highlighting')
     parser.add_argument('--no-refresh', action='store_true',
                         help='Skip auto-refresh of season data (use cached data)')
     parser.add_argument('--json', action='store_true',
@@ -1694,7 +2198,7 @@ def main():
     
     args = parser.parse_args()
     
-    result = generate_storylines(args.season, args.round, args.output, args.excel, args.no_refresh, args.ics)
+    result = generate_storylines(args.season, args.round, args.output, args.excel, args.no_refresh, args.ics, args.daily)
     
     if args.json and result:
         print(json.dumps(result, indent=2, default=str))
