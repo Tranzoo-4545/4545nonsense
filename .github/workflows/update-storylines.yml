@@ -1,20 +1,19 @@
-name: Update Storylines with Schedule
+name: Update Storylines
 
 on:
   schedule:
-    - cron: '27 8 * * *'
-    - cron: '27 20 * * *'
+    # Run once daily at 0:01 UTC
+    - cron: '1 0 * * *'
   
+  # Allow manual trigger from GitHub UI
   workflow_dispatch:
     inputs:
       season:
         description: 'Season number'
-        required: true
-        default: '48'
+        required: false
       round:
         description: 'Round number'
-        required: true
-        default: '1'
+        required: false
 
 jobs:
   update-storylines:
@@ -30,24 +29,32 @@ jobs:
           python-version: '3.11'
       
       - name: Install dependencies
-        run: pip install requests openpyxl
+        run: |
+          pip install requests openpyxl
       
-      - name: Read config
+      - name: Read current season/round from config
         id: config
         run: |
           if [ -f "config.txt" ]; then
             source config.txt
-            echo "season=$SEASON" >> $GITHUB_OUTPUT
-            echo "round=$ROUND" >> $GITHUB_OUTPUT
-          else
-            echo "season=${{ github.event.inputs.season || '48' }}" >> $GITHUB_OUTPUT
-            echo "round=${{ github.event.inputs.round || '1' }}" >> $GITHUB_OUTPUT
+            echo "season=${SEASON}" >> $GITHUB_OUTPUT
+            echo "round=${ROUND}" >> $GITHUB_OUTPUT
+          fi
+          # Override with manual inputs if provided
+          if [ -n "${{ github.event.inputs.season }}" ]; then
+            echo "season=${{ github.event.inputs.season }}" >> $GITHUB_OUTPUT
+          fi
+          if [ -n "${{ github.event.inputs.round }}" ]; then
+            echo "round=${{ github.event.inputs.round }}" >> $GITHUB_OUTPUT
           fi
       
       - name: Download ICS calendar
-        run: curl -o calendar.ics "https://www.lichess4545.com/team4545/season/${{ steps.config.outputs.season }}/pairings/calendar.ics"
+        run: |
+          curl -o calendar.ics "https://www.lichess4545.com/team4545/season/${{ steps.config.outputs.season }}/pairings/calendar.ics"
+          echo "Downloaded ICS file:"
+          head -20 calendar.ics
       
-      - name: Generate storylines
+      - name: Generate storylines HTML
         run: |
           python scripts/storylines_v4.py \
             --season ${{ steps.config.outputs.season }} \
@@ -55,12 +62,24 @@ jobs:
             --ics calendar.ics \
             --output top_storylines.html
       
-      - name: Commit if changed
+      - name: Generate daily games HTML
         run: |
-          git diff --quiet top_storylines.html || {
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git config user.name "github-actions[bot]"
-            git add top_storylines.html
-            git commit -m "Update storylines with latest schedule times"
+          python scripts/storylines_v4.py \
+            --season ${{ steps.config.outputs.season }} \
+            --round ${{ steps.config.outputs.round }} \
+            --ics calendar.ics \
+            --daily \
+            --output daily_games.html
+      
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add top_storylines.html daily_games.html
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update storylines for S${{ steps.config.outputs.season }} R${{ steps.config.outputs.round }}"
             git push
+          fi
           }
