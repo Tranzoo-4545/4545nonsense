@@ -1435,7 +1435,7 @@ def generate_daily_html_output(scored_pairings, season, round_num, output_file):
         return
     
     # Filter to only scheduled games (exclude TBD and played)
-    scheduled_games = [p for p in scored_pairings if p.get('scheduled_time') and not p.get('played')]
+    scheduled_games = [p for p in scored_pairings if p.get('scheduled_time') and not p.get('played') and not p.get('result')]
     
     if not scheduled_games:
         print("No scheduled games found for daily output")
@@ -1447,8 +1447,13 @@ def generate_daily_html_output(scored_pairings, season, round_num, output_file):
         day_key = game['scheduled_time'].strftime('%Y-%m-%d')
         games_by_day[day_key].append(game)
     
-    # Sort days chronologically
-    sorted_days = sorted(games_by_day.keys())
+    # Filter out past days (only show today and future)
+    today_str = datetime.utcnow().strftime('%Y-%m-%d')
+    sorted_days = sorted([d for d in games_by_day.keys() if d >= today_str])
+    
+    if not sorted_days:
+        print("No upcoming days with scheduled games")
+        return
     
     # Process each day: sort by hype score and pick top N
     top_games_by_day = {}
@@ -1798,8 +1803,8 @@ def generate_daily_html_output(scored_pairings, season, round_num, output_file):
         
         html += "        </div>\n"
     
-    # Summary stats
-    total_scheduled = len(scheduled_games)
+    # Summary stats - count only games from days we're showing
+    total_scheduled = sum(len(games_by_day[d]) for d in sorted_days)
     total_days = len(sorted_days)
     total_featured = sum(len(d['games']) for d in top_games_by_day.values())
     
