@@ -588,6 +588,18 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
     h2h = white_data['opponents'].get(black, {'games': 0})
     h2h_games = h2h.get('games', 0)
     
+    # Helper for chess-style points formatting
+    def fmt_h2h_score(wins, losses, draws):
+        """Format H2H as chess-style points (e.g., '1½-2' instead of '1-2-1')"""
+        w_pts = wins + 0.5 * draws
+        b_pts = losses + 0.5 * draws
+        def fmt(p):
+            if p == int(p):
+                return str(int(p))
+            whole = int(p)
+            return '½' if whole == 0 else f"{whole}½"
+        return f"{fmt(w_pts)}-{fmt(b_pts)}"
+    
     if h2h_games >= 3:
         pts = 4
         score += pts
@@ -595,7 +607,7 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
         w_wins = h2h.get('wins', 0)
         w_losses = h2h.get('losses', 0)
         w_draws = h2h.get('draws', 0)
-        reasons.append(f"⚔️ Rivals! Met {h2h_games}x before ({w_wins}-{w_losses}-{w_draws})")
+        reasons.append(f"⚔️ Rivals! Met {h2h_games}x before ({fmt_h2h_score(w_wins, w_losses, w_draws)})")
     elif h2h_games == 2:
         pts = 3
         score += pts
@@ -603,7 +615,7 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
         w_wins = h2h.get('wins', 0)
         w_losses = h2h.get('losses', 0)
         w_draws = h2h.get('draws', 0)
-        reasons.append(f"🔄 Rematch #{h2h_games + 1} ({w_wins}-{w_losses}-{w_draws})")
+        reasons.append(f"🔄 Rematch #{h2h_games + 1} ({fmt_h2h_score(w_wins, w_losses, w_draws)})")
     elif h2h_games == 1:
         pts = 2
         score += pts
@@ -611,7 +623,7 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
         w_wins = h2h.get('wins', 0)
         w_losses = h2h.get('losses', 0)
         w_draws = h2h.get('draws', 0)
-        reasons.append(f"🔄 Rematch ({w_wins}-{w_losses}-{w_draws})")
+        reasons.append(f"🔄 Rematch ({fmt_h2h_score(w_wins, w_losses, w_draws)})")
     
     # FORM CLASH (0-3 points)
     white_streak = streaks.get(white, {'type': None, 'length': 0})
