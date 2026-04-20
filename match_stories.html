@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Matchups - Season 48 Round 2</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --bg-hover: #2d333b;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --team-a-color: #58a6ff;
+            --team-b-color: #f78166;
+            --accent-draw: #d29922;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.4;
+            padding: 1rem;
+            font-size: 14px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 0.5rem 0 1.5rem;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .matchups-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .matchup {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        .matchup.team-a-wins { border-color: var(--team-a-color); }
+        .matchup.team-b-wins { border-color: var(--team-b-color); }
+        .matchup.draw-match { border-color: var(--accent-draw); }
+        
+        /* Matchup Story Badge */
+        .matchup-story {
+            text-align: center;
+            padding: 0.4rem 1rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+        
+        .story-emoji {
+            font-size: 1rem;
+        }
+        
+        .story-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0.03em;
+        }
+        
+        .matchup-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.6rem 1rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            gap: 1rem;
+        }
+        
+        .team {
+            font-weight: 600;
+            font-size: 0.9rem;
+            max-width: 280px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .team-a { text-align: right; color: var(--team-a-color); }
+        .team-b { text-align: left; color: var(--team-b-color); }
+        
+        .final-score {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            padding: 0 0.5rem;
+            white-space: nowrap;
+        }
+        
+        .graph-row {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .story-svg-h {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .cards-row {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 0.4rem;
+            padding: 0.75rem;
+        }
+        
+        .game-card {
+            background: var(--bg-card);
+            border-radius: 6px;
+            padding: 0.5rem;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            transition: background 0.1s;
+        }
+        
+        a.game-card:hover { background: var(--bg-hover); }
+        .game-card.forfeit { opacity: 0.55; }
+        
+        .card-time {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        
+        .board-num {
+            display: block;
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.1rem;
+        }
+        
+        .card-player {
+            font-size: 0.75rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-player.player-a { color: var(--team-a-color); }
+        .card-player.player-b { color: var(--team-b-color); text-align: right; }
+        .card-player.winner { font-weight: 600; }
+        .card-player.loser { opacity: 0.5; }
+        
+        .card-result {
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.1rem 0;
+        }
+        
+        .card-factors {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            margin-top: 0.2rem;
+        }
+        
+        .factor {
+            font-size: 0.6rem;
+            background: var(--bg-primary);
+            padding: 0.12rem 0.3rem;
+            border-radius: 3px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .piece { opacity: 0.6; font-size: 0.8em; }
+        
+        @media (max-width: 900px) {
+            .cards-row { grid-template-columns: repeat(4, 1fr); }
+        }
+        
+        @media (max-width: 600px) {
+            .matchup-header { flex-direction: column; gap: 0.25rem; text-align: center; }
+            .team { text-align: center; max-width: none; }
+            .cards-row { grid-template-columns: repeat(2, 1fr); }
+            .card-factors { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Team Matchups — Season 48 Round 2</h1>
+    <div class="matchups-container">
+
+    <div class="matchup team-b-wins">
+        <div class="matchup-story"><span class="story-emoji">📸</span> <span class="story-label">Photo Finish</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Our Captain better hope we win this season or else!</span>
+            <span class="final-score">3½ - 4½</span>
+            <span class="team team-b">Pawns of Mass Destruction</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Our Captain better h</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Pawns of Mass Destru</text>
+  <line x1="76.25" y1="50.0" x2="168.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="62.5" x2="261.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="62.5" x2="353.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="50.0" x2="446.25" y2="50.0" stroke="#d29922" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="50.0" x2="538.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="62.5" x2="631.25" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="50.0" x2="723.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">½-½</text>
+  <circle cx="168.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">½-1½</text>
+  <circle cx="261.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">1-2</text>
+  <circle cx="353.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2-2</text>
+  <circle cx="446.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2½-2½</text>
+  <circle cx="538.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2½-3½</text>
+  <circle cx="631.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">3½-3½</text>
+  <circle cx="723.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">3½-4½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/EOsf4bW3" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Tue 17:45</div>
+                <div class="card-player player-a "><span class="piece">○</span> LloydRet</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">ChemEngineeer <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (1-0)</span></div>
+            </a>
+
+            <a href="https://lichess.org/F7nOUHZ4" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Tue 21:31</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> alp_arslan92</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">karasso <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🎯 Upset (+159)</span><span class="factor">⏳ Long battle (75 moves)</span><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/zVO0441Z" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Thu 00:56</div>
+                <div class="card-player player-a "><span class="piece">●</span> BLang316</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">cvillian <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (0-1)</span></div>
+            </a>
+
+            <a href="https://lichess.org/pJVfKvcV" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sat 17:54</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> ysgwydd</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Rylai_CrystalMaiden <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/hYCgvT7R" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sat 19:38</div>
+                <div class="card-player player-a "><span class="piece">○</span> R0B-W</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">JayHamburglar <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/e8zgFzvj" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sun 18:12</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Jg777</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">AnXiou <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (17 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/oDngljom" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sun 20:03</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> pawneater2020</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">tjcanavan <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/Eg3ufpFa" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 23:10</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> fork2020</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">TTotr <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⏳ Marathon (90 moves)</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup draw-match">
+        <div class="matchup-story"><span class="story-emoji">🥊</span> <span class="story-label">Slugfest</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Chuck Norris mates in move one... As Black</span>
+            <span class="final-score">4 - 4</span>
+            <span class="team team-b">Lord of the Files</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Chuck Norris mates i</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Lord of the Files</text>
+  <line x1="76.25" y1="62.5" x2="168.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="75.0" x2="261.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="62.5" x2="353.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="75.0" x2="446.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="62.5" x2="538.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="50.0" x2="631.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="62.5" x2="723.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">0-2</text>
+  <circle cx="261.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">1-2</text>
+  <circle cx="353.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">1-3</text>
+  <circle cx="446.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2-3</text>
+  <circle cx="538.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">3-3</text>
+  <circle cx="631.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">3-4</text>
+  <circle cx="723.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">4-4</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/dktnVwML" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Tue 10:59</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> FranconianChess</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">strider547 <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🪃 Back after 5 seasons</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/ATb1jz9C" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Tue 19:51</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> Moccy</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">rapiplay <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Scotch Gambit</span></div>
+            </a>
+
+            <a href="https://lichess.org/rJU9aUsd" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Thu 21:08</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> KirkD</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">ecoarrivazumashoomzo <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (1-0)</span><span class="factor">🔥 Win streak now 4!</span></div>
+            </a>
+
+            <a href="https://lichess.org/3GFgo9gE" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Fri 15:12</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Fierolocchio</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">mronemore <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">👀 Vets first meeting!</span><span class="factor">📈 Comeback from -3!</span></div>
+            </a>
+
+            <a href="https://lichess.org/xX9XvNVK" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sat 09:51</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> ssyx</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">IroncladUnicorn <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (14 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/3Cc2xF0T" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 01:25</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> jose684</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">TSSCFTTSOS <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🎯 Upset (+176)</span><span class="factor">⚡ Miniature (25 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/h9MEUcQN" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 10:39</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Laval18</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">IroncladUnicorn <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🎯 Upset (+103)</span><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/INNCEaU6" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sun 20:35</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Fierolocchio</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">fwg2 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🎯 Upset (+158)</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-b-wins">
+        <div class="matchup-story"><span class="story-emoji">🏃</span> <span class="story-label">Wire to Wire</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Team chicken face of a monkey</span>
+            <span class="final-score">2½ - 5½</span>
+            <span class="team team-b">With FENs like these, who needs enemies?</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Team chicken face of</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ With FENs like these</text>
+  <line x1="76.25" y1="58.33333333333333" x2="168.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="50.0" x2="261.25" y2="58.33333333333333" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="58.33333333333333" x2="353.75" y2="66.66666666666666" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="66.66666666666666" x2="446.25" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="75.0" x2="538.75" y2="66.66666666666666" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="66.66666666666666" x2="631.25" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="75.0" x2="723.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="58.33333333333333" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="76.33333333333333" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1-1</text>
+  <circle cx="261.25" cy="58.33333333333333" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="76.33333333333333" text-anchor="middle" font-size="9" fill="#8b949e">1-2</text>
+  <circle cx="353.75" cy="66.66666666666666" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="84.66666666666666" text-anchor="middle" font-size="9" fill="#8b949e">1-3</text>
+  <circle cx="446.25" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">1-4</text>
+  <circle cx="538.75" cy="66.66666666666666" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="84.66666666666666" text-anchor="middle" font-size="9" fill="#8b949e">2-4</text>
+  <circle cx="631.25" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">2-5</text>
+  <circle cx="723.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">2½-5½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/u3jwDxZe" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Tue 11:11</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> DrRickinCT</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">jcarmody <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔥 Win streak now 5!</span></div>
+            </a>
+
+            <div class="game-card forfeit">
+                <div class="card-time"><span class="board-num">Bd 6</span>Fri 00:00</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> Thugnastysloth</div>
+                <div class="card-result">1F-0</div>
+                <div class="card-player player-b loser">Marco_Chess13 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </div>
+
+            <a href="https://lichess.org/6jarPWBg" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Fri 17:37</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> CapeStGeorge</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Silkthewanderer <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">💪 Broke 3-loss streak</span></div>
+            </a>
+
+            <a href="https://lichess.org/9jhCKH3a" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Fri 21:16</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> Rufelos</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">MrScribbles <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🛑 Stopped 3-game win streak</span><span class="factor">⏳ Long battle (77 moves)</span><span class="factor">🗡️ Sharp Dutch</span><span class="factor">📈 Comeback from -6!</span></div>
+            </a>
+
+            <a href="https://lichess.org/7KOQZq5U" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sat 19:58</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> AACtrl</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Pope123 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🔄 3rd meeting (1½-½)</span><span class="factor">🗡️ Sharp Blackmar-Diemer</span><span class="factor">📈 Comeback from -3!</span></div>
+            </a>
+
+            <a href="https://lichess.org/nsfrobbE" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sat 21:23</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> speeder1987</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">stevenlongs <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">📈 Comeback from -3!</span></div>
+            </a>
+
+            <a href="https://lichess.org/G6PkvcNy" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sun 11:55</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> sivakumarr</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">compact-hausdorff <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🌟 Debut win for compact-hausdorff!</span><span class="factor">⚡ Miniature (25 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/PVq2xcx2" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sun 21:36</div>
+                <div class="card-player player-a "><span class="piece">●</span> matman</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Zubenelgenubi <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (0-1)</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup draw-match">
+        <div class="matchup-story"><span class="story-emoji">🥊</span> <span class="story-label">Slugfest</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">8 Mighty Pawns</span>
+            <span class="final-score">4 - 4</span>
+            <span class="team team-b">Immer diese billigen Patzertricks</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ 8 Mighty Pawns</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Immer diese billigen</text>
+  <line x1="76.25" y1="37.5" x2="168.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="37.5" x2="261.25" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="50.0" x2="353.75" y2="50.0" stroke="#d29922" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="50.0" x2="446.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="62.5" x2="538.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="50.0" x2="631.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="62.5" x2="723.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">1½-½</text>
+  <circle cx="261.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1½-1½</text>
+  <circle cx="353.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2-2</text>
+  <circle cx="446.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2-3</text>
+  <circle cx="538.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">3-3</text>
+  <circle cx="631.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">3-4</text>
+  <circle cx="723.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">4-4</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/WDc3bQUk" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Wed 02:26</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> Squidgang</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">K5KGC <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Gibbins-Weidenhagen</span><span class="factor">📈 Comeback from -5!</span><span class="factor">🎢 Rollercoaster!</span></div>
+            </a>
+
+            <a href="https://lichess.org/DOXPVqX9" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Thu 08:21</div>
+                <div class="card-player player-a "><span class="piece">○</span> Sacrificed-knight</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Dajrokan <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp King's Indian</span></div>
+            </a>
+
+            <a href="https://lichess.org/hs8D6H1C" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Fri 18:32</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> Twas-A-Trap</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Lelouch_Vi_Brittania <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">👑 NM vs CM</span><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/2AQ43ur7" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sat 17:57</div>
+                <div class="card-player player-a "><span class="piece">●</span> GR618</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Jarolos <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/Z9xY2BxN" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sat 22:52</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> gercondon</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">GoneNowhere <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/vEyltYEu" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 15:47</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Jbyrd11</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">MarekW78 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (22 moves)</span><span class="factor">🗡️ Sharp King's Indian</span></div>
+            </a>
+
+            <a href="https://lichess.org/BdejsbyT" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sun 21:51</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> rajib_r_c</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Rskyoz <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/q5z2H75q" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 23:20</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> TrueblueLi</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Gingersquirrelnuts <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">📈 Comeback from -6!</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-a-wins">
+        <div class="matchup-story"><span class="story-emoji">⚔️</span> <span class="story-label">Tactical Blitz</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">45th Variant</span>
+            <span class="final-score">6 - 2</span>
+            <span class="team team-b">Best by Test</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ 45th Variant</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Best by Test</text>
+  <line x1="76.25" y1="43.75" x2="168.75" y2="43.75" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="43.75" x2="261.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="37.5" x2="353.75" y2="31.25" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="31.25" x2="446.25" y2="31.25" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="31.25" x2="538.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="25.0" x2="631.25" y2="31.25" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="31.25" x2="723.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="43.75" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="31.75" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="43.75" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="31.75" text-anchor="middle" font-size="9" fill="#8b949e">1½-½</text>
+  <circle cx="261.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">2½-½</text>
+  <circle cx="353.75" cy="31.25" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="19.25" text-anchor="middle" font-size="9" fill="#8b949e">3½-½</text>
+  <circle cx="446.25" cy="31.25" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="19.25" text-anchor="middle" font-size="9" fill="#8b949e">4-1</text>
+  <circle cx="538.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">5-1</text>
+  <circle cx="631.25" cy="31.25" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="19.25" text-anchor="middle" font-size="9" fill="#8b949e">5-2</text>
+  <circle cx="723.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">6-2</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/s1ZRvZrH" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Mon 19:43</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> luwasserman</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">RPCX <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/BMg4vu1i" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Wed 11:10</div>
+                <div class="card-player player-a "><span class="piece">○</span> Nestor3690</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Minot <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/KZwIk0vg" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Thu 02:03</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> Reelrunner</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">PonderInSilence <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/bh7b6ZIH" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Thu 18:19</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> whitetpo1son</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">GenTurgidson <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (0-1)</span><span class="factor">💪 Broke 4-loss streak</span><span class="factor">📈 Comeback from -4!</span></div>
+            </a>
+
+            <a href="https://lichess.org/wMtGo1QW" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sat 10:19</div>
+                <div class="card-player player-a "><span class="piece">○</span> NLance</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">switchoffengine <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (0-1)</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/ZN7Z7jBy" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sat 12:11</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> kauberdi</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">DikiyDrozd <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/gTgL8Voc" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sat 15:01</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> klavier88</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">bufferunderrun <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (0-1)</span><span class="factor">🛑 Stopped 3-game win streak</span><span class="factor">🗡️ Sharp Sicilian</span><span class="factor">📈 Comeback from -3!</span></div>
+            </a>
+
+            <a href="https://lichess.org/pEc3NHtj" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sun 15:40</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> mmorrisohio</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">gpetris <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-b-wins">
+        <div class="matchup-story"><span class="story-emoji">📸</span> <span class="story-label">Photo Finish</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Lex Grad Party</span>
+            <span class="final-score">3½ - 4½</span>
+            <span class="team team-b">Slay Queen</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Lex Grad Party</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Slay Queen</text>
+  <line x1="76.25" y1="62.5" x2="168.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="50.0" x2="261.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="62.5" x2="353.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="75.0" x2="446.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="62.5" x2="538.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="62.5" x2="631.25" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="75.0" x2="723.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1-1</text>
+  <circle cx="261.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">1-2</text>
+  <circle cx="353.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">1-3</text>
+  <circle cx="446.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2-3</text>
+  <circle cx="538.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2½-3½</text>
+  <circle cx="631.25" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">2½-4½</text>
+  <circle cx="723.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">3½-4½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/63v1XgGE" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Wed 18:20</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> ScotchWhisky</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Bennol <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/ytaZIY0T" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Wed 19:04</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Lexgrad</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">PatrickVrielink <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🛑 Stopped 3-game win streak</span><span class="factor">🔥 Win streak now 9!</span></div>
+            </a>
+
+            <a href="https://lichess.org/pE91BTFn" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Thu 16:00</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Skulm93</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">ivanhomeless <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <div class="game-card forfeit">
+                <div class="card-time"><span class="board-num">Bd 2</span>Thu 20:00</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Buki9</div>
+                <div class="card-result">0-1F</div>
+                <div class="card-player player-b winner">AAlvaroB <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </div>
+
+            <a href="https://lichess.org/RXJMqKKy" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Thu 22:07</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> FunnyLikeAClown</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">titusalone91 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">📈 Comeback from -5!</span></div>
+            </a>
+
+            <a href="https://lichess.org/wb8Y6qWc" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sat 20:06</div>
+                <div class="card-player player-a "><span class="piece">○</span> AScannerDarkly</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">waterlorda7890 <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/UM13pcTG" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 16:13</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> kostasvl</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Lutin23 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/uH7cbj0Z" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sun 23:54</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Leverkuhn</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">KonrDer <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-a-wins">
+        <div class="matchup-story"><span class="story-emoji">📸</span> <span class="story-label">Photo Finish</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Blübaum's Blämeless Blöomers</span>
+            <span class="final-score">4½ - 3½</span>
+            <span class="team team-b">Caro-Kann Conjecture</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Blübaum's Blämeless </text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Caro-Kann Conjecture</text>
+  <line x1="76.25" y1="37.5" x2="168.75" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="50.0" x2="261.25" y2="50.0" stroke="#d29922" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="50.0" x2="353.75" y2="50.0" stroke="#d29922" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="50.0" x2="446.25" y2="50.0" stroke="#d29922" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="50.0" x2="538.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="37.5" x2="631.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="37.5" x2="723.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1-1</text>
+  <circle cx="261.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1½-1½</text>
+  <circle cx="353.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2-2</text>
+  <circle cx="446.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2½-2½</text>
+  <circle cx="538.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">3½-2½</text>
+  <circle cx="631.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">4-3</text>
+  <circle cx="723.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">4½-3½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/XcQxCd91" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Wed 03:53</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> McStudly</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">kyriakos1301 <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🎢 Rollercoaster!</span></div>
+            </a>
+
+            <a href="https://lichess.org/fktsRTcL" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Thu 17:42</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> Astronominoff</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">aldric123 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/1cNfGrT3" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Thu 18:54</div>
+                <div class="card-player player-a "><span class="piece">●</span> Scrooge</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">bronasberger <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/XH7Lhwlh" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sat 10:30</div>
+                <div class="card-player player-a "><span class="piece">●</span> omertil</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">oOoSHONUFFoOo <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/ixdluQZy" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sat 14:32</div>
+                <div class="card-player player-a "><span class="piece">○</span> jpgmich</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">thestormingeagle <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/5ZVjKj7A" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sat 19:56</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> nightsub</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">gavillacres <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🔥 Win streak now 5!</span></div>
+            </a>
+
+            <a href="https://lichess.org/kLJ8gNyR" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sat 21:51</div>
+                <div class="card-player player-a "><span class="piece">●</span> lewinberg</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">cristoper <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🌟 lewinberg's league debut</span><span class="factor">🗡️ Sharp King's Indian</span></div>
+            </a>
+
+            <a href="https://lichess.org/YenBBqNy" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 11:38</div>
+                <div class="card-player player-a "><span class="piece">○</span> patk74</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">shravan0414 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🌟 shravan0414's league debut</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-b-wins">
+        <div class="matchup-story"><span class="story-emoji">✅</span> <span class="story-label">Comfortable Win</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Obi-Wan Benoni</span>
+            <span class="final-score">3 - 5</span>
+            <span class="team team-b">Stranger Pawns</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Obi-Wan Benoni</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Stranger Pawns</text>
+  <line x1="76.25" y1="50.0" x2="168.75" y2="41.66666666666667" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="41.66666666666667" x2="261.25" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="50.0" x2="353.75" y2="58.33333333333333" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="58.33333333333333" x2="446.25" y2="58.33333333333333" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="58.33333333333333" x2="538.75" y2="66.66666666666666" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="66.66666666666666" x2="631.25" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="75.0" x2="723.75" y2="66.66666666666666" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">½-½</text>
+  <circle cx="168.75" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">1½-½</text>
+  <circle cx="261.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1½-1½</text>
+  <circle cx="353.75" cy="58.33333333333333" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="76.33333333333333" text-anchor="middle" font-size="9" fill="#8b949e">1½-2½</text>
+  <circle cx="446.25" cy="58.33333333333333" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="76.33333333333333" text-anchor="middle" font-size="9" fill="#8b949e">2-3</text>
+  <circle cx="538.75" cy="66.66666666666666" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="84.66666666666666" text-anchor="middle" font-size="9" fill="#8b949e">2-4</text>
+  <circle cx="631.25" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">2-5</text>
+  <circle cx="723.75" cy="66.66666666666666" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="84.66666666666666" text-anchor="middle" font-size="9" fill="#8b949e">3-5</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/zbL4a0hT" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Wed 20:36</div>
+                <div class="card-player player-a "><span class="piece">○</span> tommeketoch</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">xvx_Amanda_xvx <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/m9DYdm0s" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Thu 19:30</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> HighonPotnuse</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">a2c4 <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/zhnbYCFm" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Thu 19:38</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> mongreltiger</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">time_lord19 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/tuIk1mck" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sat 16:06</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> cinemashow</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">villain1973uk <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/4XqIjHpl" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sat 21:53</div>
+                <div class="card-player player-a "><span class="piece">●</span> OneKindKing</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">CarlosMagnussen <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🎯 onekindking's 45th!</span><span class="factor">⏳ Epic marathon (112 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/yKH9muNL" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sun 15:06</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> Oachkatzerlschwoaf</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">ananimalstolemypants <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/Jw1U8yF6" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 18:12</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> ekopp2000</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Cxb451 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Blackmar-Diemer</span><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/fNovLwr9" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sun 19:22</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> Inter-temporal</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">gmat20020 <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (1-0)</span><span class="factor">🗡️ Sharp Scotch Gambit</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup draw-match">
+        <div class="matchup-story"><span class="story-emoji">🥊</span> <span class="story-label">Slugfest</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">The Shatranj Society</span>
+            <span class="final-score">4 - 4</span>
+            <span class="team team-b">We'll wipe the Flohr with y'all</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ The Shatranj Society</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ We'll wipe the Flohr</text>
+  <line x1="76.25" y1="37.5" x2="168.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="25.0" x2="261.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="37.5" x2="353.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="37.5" x2="446.25" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="25.0" x2="538.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="37.5" x2="631.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="37.5" x2="723.75" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">2-0</text>
+  <circle cx="261.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">2-1</text>
+  <circle cx="353.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">2½-1½</text>
+  <circle cx="446.25" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">3½-1½</text>
+  <circle cx="538.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">3½-2½</text>
+  <circle cx="631.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">4-3</text>
+  <circle cx="723.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">4-4</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/JiB2JTkW" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Wed 14:01</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> Pineapplechiffoncake</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Sidewinder1648 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/OsVH5kuT" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Thu 09:29</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> berndwind</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Constant1n <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔥 Win streak now 4!</span><span class="factor">🗡️ Sharp Scotch Gambit</span><span class="factor">📈 Comeback from -3!</span></div>
+            </a>
+
+            <a href="https://lichess.org/Sjr0hyVA" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Thu 21:19</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> macha1313</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">ttsgosadow <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/2PcLcPnd" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sun 01:41</div>
+                <div class="card-player player-a "><span class="piece">○</span> akristjansson</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Planincline_DB_Press <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🌟 planincline_db_press's league debut</span></div>
+            </a>
+
+            <a href="https://lichess.org/PSHYjGLt" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 04:20</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> parziwal08</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Acebulf <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/fLZUXJIL" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sun 15:37</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> TristanBrown17</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Subhraneil24 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (22 moves)</span><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/SMZDN1d7" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 16:41</div>
+                <div class="card-player player-a "><span class="piece">○</span> SedNomini</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">YouCheckMeICheckYou <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⏳ Long battle (74 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/IjaqTJDy" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sun 19:45</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Jelle1</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">betolini <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Dutch</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup draw-match">
+        <div class="matchup-story"><span class="story-emoji">🥊</span> <span class="story-label">Slugfest</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Scarffy Scarff and the Funky Bunch</span>
+            <span class="final-score">4 - 4</span>
+            <span class="team team-b">The Bishop Lebowski</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Scarffy Scarff and t</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ The Bishop Lebowski</text>
+  <line x1="76.25" y1="62.5" x2="168.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="50.0" x2="261.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="37.5" x2="353.75" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="50.0" x2="446.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="62.5" x2="538.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="50.0" x2="631.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="62.5" x2="723.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1-1</text>
+  <circle cx="261.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">2-1</text>
+  <circle cx="353.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2-2</text>
+  <circle cx="446.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2-3</text>
+  <circle cx="538.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">3-3</text>
+  <circle cx="631.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">3-4</text>
+  <circle cx="723.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">4-4</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/qzvrjGHx" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Wed 10:45</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> kinG_Hunter-1</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">bXVrc2lh <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🌟 Debut win for bxvrc2lh!</span></div>
+            </a>
+
+            <a href="https://lichess.org/9korA1E1" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Wed 16:26</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> boinetnicolas</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">markommbrzi <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/zMD2Gdx6" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Wed 16:42</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> jfiras</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">jd0972 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🛑 Stopped 3-game win streak</span><span class="factor">⏳ Epic marathon (109 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/CLhwvtUQ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Fri 14:53</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> scarff</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">jdannan <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/UknkpbT7" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sat 09:47</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> badplayer886</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">sussasun <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Gibbins-Weidenhagen</span></div>
+            </a>
+
+            <a href="https://lichess.org/eqH0TGtz" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sun 11:13</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> obaut</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Rincepinned <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/C3pyIy4n" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 18:59</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> ztraynor</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">New_26 <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <div class="game-card forfeit">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sun 23:59</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> mynameismund</div>
+                <div class="card-result">1F-0</div>
+                <div class="card-player player-b loser">nerja25390 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="matchup draw-match">
+        <div class="matchup-story"><span class="story-emoji">🥊</span> <span class="story-label">Slugfest</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Eine Kleine Knightmusic</span>
+            <span class="final-score">4 - 4</span>
+            <span class="team team-b">Red, Dead, No Compensation</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Eine Kleine Knightmu</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Red, Dead, No Compen</text>
+  <line x1="76.25" y1="56.25" x2="168.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="62.5" x2="261.25" y2="68.75" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="68.75" x2="353.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="75.0" x2="446.25" y2="68.75" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="68.75" x2="538.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="62.5" x2="631.25" y2="56.25" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="56.25" x2="723.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="56.25" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="74.25" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">0-2</text>
+  <circle cx="261.25" cy="68.75" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="86.75" text-anchor="middle" font-size="9" fill="#8b949e">0-3</text>
+  <circle cx="353.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">0-4</text>
+  <circle cx="446.25" cy="68.75" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="86.75" text-anchor="middle" font-size="9" fill="#8b949e">1-4</text>
+  <circle cx="538.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2-4</text>
+  <circle cx="631.25" cy="56.25" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="74.25" text-anchor="middle" font-size="9" fill="#8b949e">3-4</text>
+  <circle cx="723.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">4-4</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/Rt6QpwTD" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Mon 20:36</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> Catholicity</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Shurbz <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/G2aNCJuZ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Wed 20:27</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> NirakuHakamura</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">markmarkedymarkmark <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (16 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/vtKeDW34" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Wed 20:38</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Mennonite</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Le_Merovingien <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/jjKxZZRn" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Fri 19:20</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> M0r1</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">ow4121 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/G0jm4DCm" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sat 02:29</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> fulmarsky</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">GLAYGHOST <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (1-0)</span><span class="factor">📈 Comeback from -3!</span><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/0WFzVf9U" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 16:06</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> tomshko</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">serenemoose <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔥 Win streak now 5!</span><span class="factor">📈 Comeback from -3!</span></div>
+            </a>
+
+            <a href="https://lichess.org/KvggF7it" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sun 16:53</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Kayrosas</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">NameGoesInHere <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/id6ISaSD" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 20:37</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Littleoak12</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">STCLion <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-b-wins">
+        <div class="matchup-story"><span class="story-emoji">⚡</span> <span class="story-label">Quick Work</span></div>
+        <div class="matchup-header">
+            <span class="team team-a"># Q.E.D.</span>
+            <span class="final-score">2 - 6</span>
+            <span class="team team-b">The Candidudes</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ # Q.E.D.</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ The Candidudes</text>
+  <line x1="76.25" y1="56.25" x2="168.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="62.5" x2="261.25" y2="68.75" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="68.75" x2="353.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="75.0" x2="446.25" y2="68.75" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="68.75" x2="538.75" y2="68.75" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="68.75" x2="631.25" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="75.0" x2="723.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="56.25" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="74.25" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">0-2</text>
+  <circle cx="261.25" cy="68.75" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="86.75" text-anchor="middle" font-size="9" fill="#8b949e">0-3</text>
+  <circle cx="353.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">0-4</text>
+  <circle cx="446.25" cy="68.75" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="86.75" text-anchor="middle" font-size="9" fill="#8b949e">1-4</text>
+  <circle cx="538.75" cy="68.75" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="86.75" text-anchor="middle" font-size="9" fill="#8b949e">1½-4½</text>
+  <circle cx="631.25" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">1½-5½</text>
+  <circle cx="723.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">2-6</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/lTLUgcR7" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Tue 07:43</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> IvanMM93</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">JEEprep2374 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/9cfNhMcE" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Thu 21:36</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> ribrubrib</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">its_ck <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (24 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/o0qqXoBl" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Fri 10:44</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> hpors</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Bortvinik <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (20 moves)</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/aReOmgOr" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Fri 19:05</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> AlexGaul</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Emadbakry1980 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🎯 Upset (+133)</span><span class="factor">⚡ Miniature (9 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/SAUYyfn6" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sat 00:37</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> asimovfoundation</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">cjsailer <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/Cb20qLGD" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sat 17:54</div>
+                <div class="card-player player-a "><span class="piece">○</span> eXoF1343</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Parmon <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/VXB8rE1K" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sat 19:50</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> robertjackson</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">TheImpairedTortoise <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⏳ Long battle (80 moves)</span><span class="factor">📈 Comeback from -4!</span></div>
+            </a>
+
+            <a href="https://lichess.org/eriKbTWg" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 16:04</div>
+                <div class="card-player player-a "><span class="piece">○</span> Rolihlahla</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Tranzoo <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚔️ 5th meeting (2-2)</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-a-wins">
+        <div class="matchup-story"><span class="story-emoji">🏃</span> <span class="story-label">Wire to Wire</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Blunder 2: Still Don’t Know Her</span>
+            <span class="final-score">5½ - 2½</span>
+            <span class="team team-b">The Sleepy Pawns</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Blunder 2: Still Don</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ The Sleepy Pawns</text>
+  <line x1="76.25" y1="41.66666666666667" x2="168.75" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="50.0" x2="261.25" y2="41.66666666666667" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="41.66666666666667" x2="353.75" y2="41.66666666666667" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="41.66666666666667" x2="446.25" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="50.0" x2="538.75" y2="41.66666666666667" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="41.66666666666667" x2="631.25" y2="33.333333333333336" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="33.333333333333336" x2="723.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1-1</text>
+  <circle cx="261.25" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">2-1</text>
+  <circle cx="353.75" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">2½-1½</text>
+  <circle cx="446.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2½-2½</text>
+  <circle cx="538.75" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">3½-2½</text>
+  <circle cx="631.25" cy="33.333333333333336" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="21.333333333333336" text-anchor="middle" font-size="9" fill="#8b949e">4½-2½</text>
+  <circle cx="723.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">5½-2½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/5ywybhvJ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Tue 15:39</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> IckyDemon</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">tastypotatohead <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (24 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/AawMGhxM" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Wed 19:15</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> seandcosta</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">DavidT2465 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/1IKvcUHs" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Thu 23:50</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> yaminejamal1</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">DiegoAlatriste <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/3ZVbshhx" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sat 11:59</div>
+                <div class="card-player player-a "><span class="piece">●</span> GroneN</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">jc123987 <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/ckfEcvq9" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sat 17:28</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> PhilippBrandenbrett</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">PVGibson <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">📈 Comeback from -5!</span></div>
+            </a>
+
+            <a href="https://lichess.org/2OdUQubD" target="_blank" class="game-card forfeit">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sat 18:34</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> LosingIsTheBest</div>
+                <div class="card-result">1F-0</div>
+                <div class="card-player player-b loser">wachini <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/uvomT58e" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sun 16:23</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> shamdi</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Safaero <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/GcMUOBsL" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Mon 04:02</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> adande1</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Meyer_Lahat <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-a-wins">
+        <div class="matchup-story"><span class="story-emoji">🏃</span> <span class="story-label">Wire to Wire</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Caruana Matata</span>
+            <span class="final-score">5½ - 2½</span>
+            <span class="team team-b">The eight who declined the candidates</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Caruana Matata</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ The eight who declin</text>
+  <line x1="76.25" y1="41.66666666666667" x2="168.75" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="50.0" x2="261.25" y2="41.66666666666667" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="41.66666666666667" x2="353.75" y2="33.333333333333336" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="33.333333333333336" x2="446.25" y2="41.66666666666667" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="41.66666666666667" x2="538.75" y2="33.333333333333336" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="33.333333333333336" x2="631.25" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="25.0" x2="723.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1-1</text>
+  <circle cx="261.25" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">2-1</text>
+  <circle cx="353.75" cy="33.333333333333336" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="21.333333333333336" text-anchor="middle" font-size="9" fill="#8b949e">3-1</text>
+  <circle cx="446.25" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">3-2</text>
+  <circle cx="538.75" cy="33.333333333333336" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="21.333333333333336" text-anchor="middle" font-size="9" fill="#8b949e">4-2</text>
+  <circle cx="631.25" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">5-2</text>
+  <circle cx="723.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">5½-2½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/rCVWouu5" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Tue 16:56</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> fritsj</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Grizzzly1000 <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/32FfIMLd" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Wed 16:42</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> precisionplay28</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">okady <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (24 moves)</span><span class="factor">🗡️ Sharp King's Indian</span></div>
+            </a>
+
+            <a href="https://lichess.org/85unDUDW" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Wed 20:20</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Micomps</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">DrGarras <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/trYc4AKM" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Thu 09:47</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Tigermoth1</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">KamagayaJiji <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Grünfeld</span></div>
+            </a>
+
+            <a href="https://lichess.org/v3FJIbgO" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Thu 13:49</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> mimrolls</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">electricfalcon <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (20 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/EldhpuSb" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Thu 21:22</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> morganbp</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Paulze2000 <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (20 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/OEgmTKPX" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sat 13:37</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Kry1001</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">TheRealDivider <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (18 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/dQTOlUVM" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sat 14:13</div>
+                <div class="card-player player-a "><span class="piece">○</span> ComputerUser2607</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Angels_Demons <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (0-1)</span><span class="factor">🗡️ Sharp King's Indian</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-a-wins">
+        <div class="matchup-story"><span class="story-emoji">✅</span> <span class="story-label">Comfortable Win</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">The IM-GM Inequality</span>
+            <span class="final-score">5 - 3</span>
+            <span class="team team-b">release the chraken</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ The IM-GM Inequality</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ release the chraken</text>
+  <line x1="76.25" y1="62.5" x2="168.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="50.0" x2="261.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="62.5" x2="353.75" y2="50.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="50.0" x2="446.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="37.5" x2="538.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="37.5" x2="631.25" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="25.0" x2="723.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1-1</text>
+  <circle cx="261.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">1-2</text>
+  <circle cx="353.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2-2</text>
+  <circle cx="446.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">3-2</text>
+  <circle cx="538.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">3½-2½</text>
+  <circle cx="631.25" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">4½-2½</text>
+  <circle cx="723.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">5-3</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/UmHZyx6W" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Thu 19:37</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> irongalaxy</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Shampanjasosialisti <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (1-0)</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/cUAri81s" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Thu 19:50</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> FinErik</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">JohnJPershing <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⏳ Long battle (84 moves)</span><span class="factor">📈 Comeback from -6!</span></div>
+            </a>
+
+            <a href="https://lichess.org/uX727aAZ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Fri 19:23</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> bryanr45w</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">cham <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔥 Win streak now 5!</span><span class="factor">⚡ Miniature (14 moves)</span><span class="factor">🗡️ Sharp Sicilian</span><span class="factor">📈 Comeback from -3!</span></div>
+            </a>
+
+            <a href="https://lichess.org/7eQj31YC" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sat 20:29</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> eldotore</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">chraki <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">💪 Broke 5-loss streak</span></div>
+            </a>
+
+            <a href="https://lichess.org/nAQRE1AL" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sun 14:54</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> Logansglasses</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">jwwells42 <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (25 moves)</span><span class="factor">🗡️ Sharp King's Indian</span></div>
+            </a>
+
+            <a href="https://lichess.org/V72alGo3" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sun 15:36</div>
+                <div class="card-player player-a "><span class="piece">●</span> King12-life</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">alex_makarets <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/MpkoED0d" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 17:43</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> jamgrass741</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">regrettablebeet <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/D27mnmJ9" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sun 19:23</div>
+                <div class="card-player player-a "><span class="piece">○</span> jcuriel85</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">glbert <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-b-wins">
+        <div class="matchup-story"><span class="story-emoji">⚡</span> <span class="story-label">Efficient Victory</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Better Call Sindarov</span>
+            <span class="final-score">3 - 5</span>
+            <span class="team team-b">I Still Like my Suggestion</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Better Call Sindarov</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ I Still Like my Sugg</text>
+  <line x1="76.25" y1="62.5" x2="168.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="75.0" x2="261.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="62.5" x2="353.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="75.0" x2="446.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="62.5" x2="538.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="62.5" x2="631.25" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="75.0" x2="723.75" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">0-2</text>
+  <circle cx="261.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">1-2</text>
+  <circle cx="353.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">1-3</text>
+  <circle cx="446.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2-3</text>
+  <circle cx="538.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2½-3½</text>
+  <circle cx="631.25" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">2½-4½</text>
+  <circle cx="723.75" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">3-5</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/LeH1bs3Q" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Mon 20:21</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Ezze_13</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">SpacebarIsTaken <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🎬 Round opener!</span></div>
+            </a>
+
+            <a href="https://lichess.org/wSTC0KJc" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Thu 13:26</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> mqll</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">bncl <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (25 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/uQDTdzUC" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sat 09:23</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> aguayo</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">cowtone <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/w7fLSNrJ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 03:21</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> PharmacistGambit</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">UpGoerFive <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (22 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/cJLuQ9UX" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sun 14:33</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> ButterPecan</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Ciraid <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp King's Indian</span></div>
+            </a>
+
+            <a href="https://lichess.org/wi5ymFTI" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sun 14:50</div>
+                <div class="card-player player-a "><span class="piece">○</span> Superfighter</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">sylvlondon <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/wU6f6a1h" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 17:10</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> Lotus_62</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Joonaf <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">💪 Broke 4-loss streak</span><span class="factor">⚡ Miniature (15 moves)</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/2ZoOght6" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sun 18:20</div>
+                <div class="card-player player-a "><span class="piece">●</span> M_H_R</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">matthewhuber <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Gibbins-Weidenhagen</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-b-wins">
+        <div class="matchup-story"><span class="story-emoji">🔥</span> <span class="story-label">Storming Back</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Just my two centipawns</span>
+            <span class="final-score">3½ - 4½</span>
+            <span class="team team-b">We Calculated This in Another Timeline</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Just my two centipaw</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ We Calculated This i</text>
+  <line x1="76.25" y1="37.5" x2="168.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="25.0" x2="261.25" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="25.0" x2="353.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="37.5" x2="446.25" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="50.0" x2="538.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="37.5" x2="631.25" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="50.0" x2="723.75" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">2-0</text>
+  <circle cx="261.25" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">2½-½</text>
+  <circle cx="353.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">2½-1½</text>
+  <circle cx="446.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2½-2½</text>
+  <circle cx="538.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">3½-2½</text>
+  <circle cx="631.25" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">3½-3½</text>
+  <circle cx="723.75" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">3½-4½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/L7NzTxYP" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Thu 18:51</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> RajjSinghh</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">wolfsblut <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (19 moves)</span><span class="factor">🗡️ Sharp King's Gambit</span><span class="factor">📈 Comeback from -7!</span></div>
+            </a>
+
+            <a href="https://lichess.org/ehBbyMYO" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Thu 19:59</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Ekors55</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Cody13 <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/GWbNxnwI" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Fri 19:16</div>
+                <div class="card-player player-a "><span class="piece">●</span> Krzysztof1995</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">lorb <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⏳ Long battle (82 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/fAjWVGx1" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sat 15:03</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> kamekura</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">GoldenRetrieverChess <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <div class="game-card forfeit">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sat 23:00</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> abliviax</div>
+                <div class="card-result">0-1F</div>
+                <div class="card-player player-b winner">chatakkuma <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </div>
+
+            <a href="https://lichess.org/jexWpQzW" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sat 23:43</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> ChessisHard101</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">rjhoro <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (25 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/98q37OH4" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 03:21</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> SrinivasBharathNK</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Bpack <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⏳ Long battle (70 moves)</span><span class="factor">🗡️ Sharp Sicilian</span><span class="factor">📈 Comeback from -4!</span></div>
+            </a>
+
+            <a href="https://lichess.org/g7rpkKxr" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Mon 03:32</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> nemo628</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">pepepibote <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (25 moves)</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-b-wins">
+        <div class="matchup-story"><span class="story-emoji">🏃</span> <span class="story-label">Wire to Wire</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Going for the Great Blübaum  Sweep</span>
+            <span class="final-score">2½ - 5½</span>
+            <span class="team team-b">The Sicilian Sea Dogs</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Going for the Great </text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ The Sicilian Sea Dog</text>
+  <line x1="76.25" y1="56.25" x2="168.75" y2="56.25" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="56.25" x2="261.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="62.5" x2="353.75" y2="68.75" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="68.75" x2="446.25" y2="75.0" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="75.0" x2="538.75" y2="68.75" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="68.75" x2="631.25" y2="62.5" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="62.5" x2="723.75" y2="68.75" stroke="#f78166" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="56.25" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="74.25" text-anchor="middle" font-size="9" fill="#8b949e">0-1</text>
+  <circle cx="168.75" cy="56.25" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="74.25" text-anchor="middle" font-size="9" fill="#8b949e">½-1½</text>
+  <circle cx="261.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">½-2½</text>
+  <circle cx="353.75" cy="68.75" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="86.75" text-anchor="middle" font-size="9" fill="#8b949e">½-3½</text>
+  <circle cx="446.25" cy="75.0" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="93.0" text-anchor="middle" font-size="9" fill="#8b949e">½-4½</text>
+  <circle cx="538.75" cy="68.75" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="86.75" text-anchor="middle" font-size="9" fill="#8b949e">1½-4½</text>
+  <circle cx="631.25" cy="62.5" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="80.5" text-anchor="middle" font-size="9" fill="#8b949e">2½-4½</text>
+  <circle cx="723.75" cy="68.75" r="6" fill="#f78166" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="86.75" text-anchor="middle" font-size="9" fill="#8b949e">2½-5½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/rXOEtJoC" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Wed 17:12</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> LeporEd</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">SerenityPigeon <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⏳ Long battle (72 moves)</span><span class="factor">🗡️ Sharp Two Knights</span></div>
+            </a>
+
+            <a href="https://lichess.org/AIYGuI5U" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Thu 11:43</div>
+                <div class="card-player player-a "><span class="piece">○</span> gary0892</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">echo3s <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/HYj4ATvu" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Thu 23:16</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> Harald1309</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">gorytnych <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🌟 Debut win for gorytnych!</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/Y7I8FNS2" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Fri 20:50</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> ameyer</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">laughingoctopus <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🔄 2nd meeting (0-1)</span><span class="factor">🎯 Upset (+108)</span></div>
+            </a>
+
+            <a href="https://lichess.org/tSKISTMg" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Fri 21:57</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> sterpfi</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Qudit <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">👑 FM playing</span><span class="factor">🎯 Upset (+181)</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/I8kTAhl9" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Sat 10:06</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> MilsBees</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Neothehero <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Dutch</span><span class="factor">📈 Comeback from -4!</span><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/Zt3cceKh" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Sun 02:20</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> RBorja1980</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Sarahwynn <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/5D1bmWcR" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sun 16:49</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Dan-Jon</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">ribette <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🔥 Win streak now 6!</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-a-wins">
+        <div class="matchup-story"><span class="story-emoji">🏃</span> <span class="story-label">Wire to Wire</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Doncha Wish Your Bishop Was On d3</span>
+            <span class="final-score">5 - 3</span>
+            <span class="team team-b">Rise of the Doomsday Hedgehogs</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Doncha Wish Your Bis</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Rise of the Doomsday</text>
+  <line x1="76.25" y1="37.5" x2="168.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="37.5" x2="261.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="37.5" x2="353.75" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="50.0" x2="446.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="37.5" x2="538.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="25.0" x2="631.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="37.5" x2="723.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">1½-½</text>
+  <circle cx="261.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">2-1</text>
+  <circle cx="353.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2-2</text>
+  <circle cx="446.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">3-2</text>
+  <circle cx="538.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">4-2</text>
+  <circle cx="631.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">4-3</text>
+  <circle cx="723.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">5-3</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/Zr89cd9y" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Tue 21:52</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> AugiasStal</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Hesperian <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/T5CoROHh" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Wed 17:37</div>
+                <div class="card-player player-a "><span class="piece">○</span> EnPriseWithEase</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">fireball100 <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/z5L2WQtb" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Fri 15:41</div>
+                <div class="card-player player-a "><span class="piece">●</span> classicalprac</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">Abdulrahman_Sayed <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/pd3mnhdu" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Fri 17:44</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> samisasleep</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Darktigr <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Benoni</span></div>
+            </a>
+
+            <a href="https://lichess.org/iRvr4Cg3" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Fri 21:48</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> che55m45ter</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Warvold <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp King's Indian</span><span class="factor">📈 Comeback from -4!</span></div>
+            </a>
+
+            <a href="https://lichess.org/gfXrTlLM" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sat 16:56</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> mekumcu</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">simonWasHere <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/7w77f9nA" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sat 18:13</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> Galfrid</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Mizrab <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (13 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/me6jo3dI" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sun 00:57</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> jdw10</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">DavidSifre <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🔥 Win streak now 4!</span></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-a-wins">
+        <div class="matchup-story"><span class="story-emoji">📸</span> <span class="story-label">Photo Finish</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Sindarov’s Sweepers</span>
+            <span class="final-score">4½ - 3½</span>
+            <span class="team team-b">The Giraffe Huggers</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Sindarov’s Sweepers</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ The Giraffe Huggers</text>
+  <line x1="76.25" y1="41.66666666666667" x2="168.75" y2="33.333333333333336" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="33.333333333333336" x2="261.25" y2="41.66666666666667" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="41.66666666666667" x2="353.75" y2="33.333333333333336" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="33.333333333333336" x2="446.25" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="25.0" x2="538.75" y2="33.333333333333336" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="33.333333333333336" x2="631.25" y2="33.333333333333336" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="33.333333333333336" x2="723.75" y2="41.66666666666667" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="33.333333333333336" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="21.333333333333336" text-anchor="middle" font-size="9" fill="#8b949e">2-0</text>
+  <circle cx="261.25" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">2-1</text>
+  <circle cx="353.75" cy="33.333333333333336" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="21.333333333333336" text-anchor="middle" font-size="9" fill="#8b949e">3-1</text>
+  <circle cx="446.25" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">4-1</text>
+  <circle cx="538.75" cy="33.333333333333336" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="21.333333333333336" text-anchor="middle" font-size="9" fill="#8b949e">4-2</text>
+  <circle cx="631.25" cy="33.333333333333336" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="21.333333333333336" text-anchor="middle" font-size="9" fill="#8b949e">4½-2½</text>
+  <circle cx="723.75" cy="41.66666666666667" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="29.66666666666667" text-anchor="middle" font-size="9" fill="#8b949e">4½-3½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/hu45gtB0" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Wed 21:14</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> KlausZA</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">prostidude <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">🤝 Ex-teammates</span><span class="factor">📈 Comeback from -4!</span><span class="factor">🎢 Rollercoaster!</span></div>
+            </a>
+
+            <a href="https://lichess.org/v8eu2utO" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Thu 17:01</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> markoni99</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">yotambienjuego <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/Fyox844e" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Fri 18:30</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> NKaydIn</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Feet_Barbie <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (25 moves)</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/tunIZOrs" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Sat 09:33</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> Fischer_and_Chips88</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">val1313 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⏱️ Time pressure</span></div>
+            </a>
+
+            <a href="https://lichess.org/7D2MZDKL" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Sat 13:24</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> scoobysnack19</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">dama_x_rey <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/LVrO7kfM" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Sat 15:38</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> AceRb95</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">avemanyeg <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (24 moves)</span><span class="factor">🗡️ Sharp Sicilian</span></div>
+            </a>
+
+            <a href="https://lichess.org/9Qgf4zM4" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Sat 22:21</div>
+                <div class="card-player player-a "><span class="piece">○</span> flyingbishop97</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">ItsASecret2000 <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/UhIguPiX" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sun 19:34</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> jlanceho</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">RMNL <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="matchup team-a-wins">
+        <div class="matchup-story"><span class="story-emoji">📸</span> <span class="story-label">Photo Finish</span></div>
+        <div class="matchup-header">
+            <span class="team team-a">Big 'n' Tal</span>
+            <span class="final-score">4½ - 3½</span>
+            <span class="team team-b">Where there's a will, there's a Wei</span>
+        </div>
+        <div class="graph-row">
+            <svg viewBox="0 0 800 100" class="story-svg-h">
+  <rect x="0" y="0" width="800" height="50.0" fill="#58a6ff" fill-opacity="0.05"/>
+  <rect x="0" y="50.0" width="800" height="50.0" fill="#f78166" fill-opacity="0.05"/>
+  <line x1="0" y1="50.0" x2="800" y2="50.0" stroke="#30363d" stroke-width="1"/>
+  <text x="8" y="15" font-size="10" fill="#58a6ff" opacity="0.7">▲ Big 'n' Tal</text>
+  <text x="8" y="92" font-size="10" fill="#f78166" opacity="0.7">▼ Where there's a will</text>
+  <line x1="76.25" y1="37.5" x2="168.75" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168.75" y1="50.0" x2="261.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="261.25" y1="37.5" x2="353.75" y2="50.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="353.75" y1="50.0" x2="446.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="446.25" y1="37.5" x2="538.75" y2="25.0" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="538.75" y1="25.0" x2="631.25" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <line x1="631.25" y1="37.5" x2="723.75" y2="37.5" stroke="#58a6ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="76.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="76.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">1-0</text>
+  <circle cx="168.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="168.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">1-1</text>
+  <circle cx="261.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="261.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">2-1</text>
+  <circle cx="353.75" cy="50.0" r="6" fill="#d29922" stroke="#161b22" stroke-width="2"/>
+  <text x="353.75" y="38.0" text-anchor="middle" font-size="9" fill="#8b949e">2-2</text>
+  <circle cx="446.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="446.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">3-2</text>
+  <circle cx="538.75" cy="25.0" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="538.75" y="13.0" text-anchor="middle" font-size="9" fill="#8b949e">4-2</text>
+  <circle cx="631.25" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="631.25" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">4-3</text>
+  <circle cx="723.75" cy="37.5" r="6" fill="#58a6ff" stroke="#161b22" stroke-width="2"/>
+  <text x="723.75" y="25.5" text-anchor="middle" font-size="9" fill="#8b949e">4½-3½</text>
+</svg>
+        </div>
+        <div class="cards-row">
+            
+            <a href="https://lichess.org/0NjTQlYb" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 7</span>Wed 18:08</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> flyingfred</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">benezra011 <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">💪 Broke 5-loss streak</span><span class="factor">⚡ Miniature (18 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/oCe6ZbJZ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 1</span>Thu 15:30</div>
+                <div class="card-player player-a loser"><span class="piece">○</span> yakamashii</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Razorneck <span class="piece">●</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/ltXbxyZZ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 3</span>Thu 15:50</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> debrx</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">PaulWithAnS <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">📈 Comeback from -4!</span></div>
+            </a>
+
+            <a href="https://lichess.org/muWvV1ZG" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 2</span>Thu 18:25</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> MorphyMaster</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">SirNyquist <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Gibbins-Weidenhagen</span></div>
+            </a>
+
+            <a href="https://lichess.org/nKSaJryQ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 8</span>Fri 01:06</div>
+                <div class="card-player player-a winner"><span class="piece">●</span> BLuesiDE617</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">osumarko <span class="piece">○</span></div>
+                <div class="card-factors"><span class="factor">🗡️ Sharp Dutch</span></div>
+            </a>
+
+            <a href="https://lichess.org/RdgdiMnw" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 5</span>Fri 16:21</div>
+                <div class="card-player player-a winner"><span class="piece">○</span> surprisetactics</div>
+                <div class="card-result">1-0</div>
+                <div class="card-player player-b loser">Versaumnisgrund <span class="piece">●</span></div>
+                <div class="card-factors"><span class="factor">⚡ Miniature (17 moves)</span></div>
+            </a>
+
+            <a href="https://lichess.org/HB5w0ASd" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 6</span>Sat 16:38</div>
+                <div class="card-player player-a loser"><span class="piece">●</span> hudja</div>
+                <div class="card-result">0-1</div>
+                <div class="card-player player-b winner">Teydin <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+            <a href="https://lichess.org/BIPys1XJ" target="_blank" class="game-card">
+                <div class="card-time"><span class="board-num">Bd 4</span>Sat 17:12</div>
+                <div class="card-player player-a "><span class="piece">●</span> mixxanber</div>
+                <div class="card-result">½-½</div>
+                <div class="card-player player-b ">MasterSRV <span class="piece">○</span></div>
+                <div class="card-factors"></div>
+            </a>
+
+        </div>
+    </div>
+
+    </div>
+</body>
+</html>
