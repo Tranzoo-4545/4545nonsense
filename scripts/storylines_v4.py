@@ -21,6 +21,7 @@ Usage:
     py storylines_v4.py --season 47              # Auto-detect next round
     py storylines_v4.py --season 47 --ics calendar.ics  # Include scheduled times
     py storylines_v4.py --season 47 --excel storylines.xlsx
+    py storylines_v4.py --season 47 --force-refresh  # Force refresh (e.g., after alternate sub)
 """
 
 import argparse
@@ -242,7 +243,7 @@ def build_player_history(all_season_data, current_season=None, before_round=None
         'total_games': 0,
         'total_wins': 0,
         'opponents': defaultdict(lambda: {'games': 0, 'wins': 0, 'losses': 0, 'draws': 0}),
-        'teams': defaultdict(int),  # team_name -> games played
+        'teams': defaultdict(int),  # (team_name, season) -> games played
         'championship_teams': set(),  # teams they won the league with (4+ games)
         'seasons_played': set(),  # set of season numbers
         'games_per_season': defaultdict(int),  # season -> game count
@@ -273,11 +274,11 @@ def build_player_history(all_season_data, current_season=None, before_round=None
             players[white]['total_games'] += 1
             players[black]['total_games'] += 1
             
-            # Track teams played for
+            # Track teams played for - use (team_name, season) to distinguish same-name teams
             if white_team:
-                players[white]['teams'][white_team] += 1
+                players[white]['teams'][(white_team, season_num)] += 1
             if black_team:
-                players[black]['teams'][black_team] += 1
+                players[black]['teams'][(black_team, season_num)] += 1
             
             # Track seasons played
             players[white]['seasons_played'].add(season_num)
@@ -303,14 +304,12 @@ def build_player_history(all_season_data, current_season=None, before_round=None
     
     # Now calculate championship teams for each player
     for player, data in players.items():
-        for team, games in data['teams'].items():
+        for team_key, games in data['teams'].items():
+            team_name, team_season = team_key  # Unpack composite key
             if games >= 4:  # Only count if played 4+ games for team
-                # Check if this team won any season
-                for season, champ_team in championship_teams.items():
-                    if team == champ_team and season in data['seasons_played']:
-                        # Verify they played for this team in this season
-                        # (this is approximate - checks if they played for the team ever)
-                        data['championship_teams'].add(team)
+                # Check if this team won that season
+                if championship_teams.get(team_season) == team_name:
+                    data['championship_teams'].add(team_key)
     
     return players
 
@@ -739,19 +738,23 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
     
     # FORMER TEAMMATES (0-5 points) - both played 4+ games on same team(s)
     # +1 bonus if they won the league together
+    # Teams are now keyed by (team_name, season) to distinguish same-name teams
     white_teams = white_data.get('teams', {})
     black_teams = black_data.get('teams', {})
     white_champs = white_data.get('championship_teams', set())
     black_champs = black_data.get('championship_teams', set())
     
-    # Find teams where BOTH played 4+ games
+    # Find teams where BOTH played 4+ games (same team in same season)
     shared_teams = []
-    for team, white_games in white_teams.items():
-        if white_games >= 4 and black_teams.get(team, 0) >= 4:
-            shared_teams.append(team)
+    for team_key, white_games in white_teams.items():
+        if white_games >= 4 and black_teams.get(team_key, 0) >= 4:
+            shared_teams.append(team_key)
     
     # Check if any shared team is a championship team for both
-    shared_championship = any(team in white_champs and team in black_champs for team in shared_teams)
+    shared_championship = any(team_key in white_champs and team_key in black_champs for team_key in shared_teams)
+    
+    # Extract team names for display (team_key is (team_name, season))
+    shared_team_names = [team_key[0] for team_key in shared_teams]
     
     if len(shared_teams) >= 3:
         pts = 4
@@ -774,7 +777,7 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
             breakdown['former_teammates'] += pts_bonus
             reasons.append(f"🤝🏆 Twice teammates & league champs!")
         else:
-            reasons.append(f"🤝 Twice teammates! ({shared_teams[0]}, {shared_teams[1]})")
+            reasons.append(f"🤝 Twice teammates! ({shared_team_names[0]}, {shared_team_names[1]})")
     elif len(shared_teams) == 1:
         pts = 2
         score += pts
@@ -783,9 +786,9 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
             pts_bonus = 1
             score += pts_bonus
             breakdown['former_teammates'] += pts_bonus
-            reasons.append(f"🤝🏆 Former teammates & league champs on {shared_teams[0]}")
+            reasons.append(f"🤝🏆 Former teammates & league champs on {shared_team_names[0]}")
         else:
-            reasons.append(f"🤝 Former teammates on {shared_teams[0]}")
+            reasons.append(f"🤝 Former teammates on {shared_team_names[0]}")
     
     # VETS FIRST MEETING (0-1.5 points) - experienced players who never faced each other
     white_games = white_data.get('total_games', 0)
@@ -1837,12 +1840,12 @@ def generate_daily_html_output(scored_pairings, season, round_num, output_file):
     print(f"  Featuring {total_featured} top games from {total_scheduled} scheduled across {total_days} days")
 
 
-def generate_storylines(season, target_round=None, output_html=None, output_excel=None, no_refresh=False, ics_path=None, daily_output=False):
+def generate_storylines(season, target_round=None, output_html=None, output_excel=None, no_refresh=False, ics_path=None, daily_output=False, force_refresh=False):
     """Generate storylines for upcoming round."""
     
     # Auto-refresh current season data (unless --no-refresh)
     if not no_refresh:
-        refresh_season_cache(season, force=False)
+        refresh_season_cache(season, force=force_refresh)
     
     print(f"Loading season {season} data...")
     season_data = load_season(season)
@@ -2210,12 +2213,14 @@ def main():
                         help='Output grouped by day with Game of the Day highlighting')
     parser.add_argument('--no-refresh', action='store_true',
                         help='Skip auto-refresh of season data (use cached data)')
+    parser.add_argument('--force-refresh', action='store_true',
+                        help='Force refresh of season data (use when alternates subbed in)')
     parser.add_argument('--json', action='store_true',
                         help='Output as JSON')
     
     args = parser.parse_args()
     
-    result = generate_storylines(args.season, args.round, args.output, args.excel, args.no_refresh, args.ics, args.daily)
+    result = generate_storylines(args.season, args.round, args.output, args.excel, args.no_refresh, args.ics, args.daily, args.force_refresh)
     
     if args.json and result:
         print(json.dumps(result, indent=2, default=str))
