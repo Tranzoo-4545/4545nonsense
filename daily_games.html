@@ -30,43 +30,177 @@
             color: var(--text-primary);
             min-height: 100vh;
             padding: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
         .container {
-            max-width: 600px;
-            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
         }
         
-        .card {
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 3rem 2rem;
         }
         
-        h1 {
+        header h1 {
             font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--gold);
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
         
-        .message {
-            font-size: 1.2rem;
+        header .subtitle {
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+            font-size: 1.1rem;
         }
         
-        .hint {
-            font-size: 0.95rem;
+        .day-section {
+            margin-bottom: 2rem;
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .day-count {
+            font-size: 0.9rem;
+            font-weight: normal;
             color: var(--text-muted);
         }
         
+        .game-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .game-card.gotd {
+            border: 2px solid var(--gold);
+            background: rgba(212, 184, 86, 0.08);
+        }
+        
+        .game-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .game-rank {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--gold);
+            min-width: 35px;
+        }
+        
+        .game-main {
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        .game-players {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .game-players a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .game-players a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        .vs {
+            color: var(--text-muted);
+            margin: 0 0.4rem;
+        }
+        
+        .game-teams {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .game-time {
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-top: 0.3rem;
+        }
+        
+        .game-score {
+            text-align: right;
+        }
+        
+        .gotd-badge {
+            background: var(--gold);
+            color: var(--bg-darker);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 0.4rem;
+        }
+        
+        .hype-score {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.4rem 0.7rem;
+            text-align: center;
+            min-width: 55px;
+        }
+        
+        .hype-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+        
+        .hype-label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        
+        .reasons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            justify-content: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .reason {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
         footer {
+            text-align: center;
             margin-top: 2rem;
+            padding: 1rem;
             color: var(--text-muted);
             font-size: 0.85rem;
         }
@@ -75,20 +209,466 @@
             color: var(--accent);
             text-decoration: none;
         }
+        
+        @media (max-width: 600px) {
+            .game-top-row {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .game-rank {
+                display: none;
+            }
+            
+            .game-score {
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <h1>📅 Coming Soon!</h1>
-            <div class="message">
-                Top Games of the Day for Season 48 Round 5 will be available on Wednesday.
+        <header>
+            <h1>🏆 Top Games of the Day</h1>
+            <div class="subtitle">Season 48 Round 5</div>
+        </header>
+
+        <div class="day-section">
+            <div class="day-header">
+                <span>Wednesday, May 06</span>
+                <span class="day-count">19 games scheduled</span>
             </div>
-            <div class="hint">
-                Players are still scheduling their games. Check back Wednesday morning for the daily highlights!
+
+            <div class="game-card gotd">
+                <div class="game-top-row">
+                    <div class="game-rank">#1</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/SrinivasBharathNK/" target="_blank">SrinivasBharathNK</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/JohnJPershing/" target="_blank">JohnJPershing</a>
+                        </div>
+                        <div class="game-teams">Just my two centipawns vs release the chraken</div>
+                        <div class="game-time">🕐 13:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        <div class="gotd-badge">🏆 Game of the Day</div>
+                        <div class="hype-score">
+                            <div class="hype-value">7.3</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">❄️ Desperation match! (5L vs 3L)</span>
+                    <span class="reason">🎖️ Veterans (145+137 games)</span>
+                    <span class="reason">👀 Vets first meeting! (145+137 games, never faced)</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#2</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/IroncladUnicorn/" target="_blank">IroncladUnicorn</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/Catholicity/" target="_blank">Catholicity</a>
+                        </div>
+                        <div class="game-teams">Lord of the Files vs Eine Kleine Knightmusic</div>
+                        <div class="game-time">🕐 16:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">5.0</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🎯 catholicity's 45th game!</span>
+                    <span class="reason">🎖️ Experience (57+44 games)</span>
+                    <span class="reason">🤝 Former teammates on GladItsKnights </span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#3</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/PsyMar2/" target="_blank">PsyMar2</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/STCLion/" target="_blank">STCLion</a>
+                        </div>
+                        <div class="game-teams">Caro-Kann Conjecture vs Red, Dead, No Compensation</div>
+                        <div class="game-time">🕐 20:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">4.3</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🥉 Important for team standings!</span>
+                    <span class="reason">🎖️ Veterans (40+188 games)</span>
+                </div>
             </div>
         </div>
+
+        <div class="day-section">
+            <div class="day-header">
+                <span>Thursday, May 07</span>
+                <span class="day-count">22 games scheduled</span>
+            </div>
+
+            <div class="game-card gotd">
+                <div class="game-top-row">
+                    <div class="game-rank">#1</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/DavidSifre/" target="_blank">DavidSifre</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/electricfalcon/" target="_blank">electricfalcon</a>
+                        </div>
+                        <div class="game-teams">Rise of the Doomsday Hedgehogs vs The eight who declined the candidates</div>
+                        <div class="game-time">🕐 12:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        <div class="gotd-badge">🏆 Game of the Day</div>
+                        <div class="hype-score">
+                            <div class="hype-value">4.2</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch (1-0)</span>
+                    <span class="reason">🎖️ Veterans (29+196 games)</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#2</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/Reelrunner/" target="_blank">Reelrunner</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/Catatafish/" target="_blank">Catatafish</a>
+                        </div>
+                        <div class="game-teams">45th Variant vs Immer diese billigen Patzertricks</div>
+                        <div class="game-time">🕐 12:30 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">4.0</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🏆 Huge for team standings!</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#3</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/DrOdnat/" target="_blank">DrOdnat</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/whitetpo1son/" target="_blank">whitetpo1son</a>
+                        </div>
+                        <div class="game-teams">Immer diese billigen Patzertricks vs 45th Variant</div>
+                        <div class="game-time">🕐 21:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">4.0</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🏆 Huge for team standings!</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-section">
+            <div class="day-header">
+                <span>Friday, May 08</span>
+                <span class="day-count">24 games scheduled</span>
+            </div>
+
+            <div class="game-card gotd">
+                <div class="game-top-row">
+                    <div class="game-rank">#1</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/Rskyoz/" target="_blank">Rskyoz</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/kauberdi/" target="_blank">kauberdi</a>
+                        </div>
+                        <div class="game-teams">Immer diese billigen Patzertricks vs 45th Variant</div>
+                        <div class="game-time">🕐 20:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        <div class="gotd-badge">🏆 Game of the Day</div>
+                        <div class="hype-score">
+                            <div class="hype-value">11.4</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔥 Hot streak clash! (4W vs 4W)</span>
+                    <span class="reason">🏆 Huge for team standings!</span>
+                    <span class="reason">🎖️ Veterans (172+69 games)</span>
+                    <span class="reason">🤝 Former teammates on 100 Endgames You Will Blow</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#2</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/Dajrokan/" target="_blank">Dajrokan</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/Nestor3690/" target="_blank">Nestor3690</a>
+                        </div>
+                        <div class="game-teams">Immer diese billigen Patzertricks vs 45th Variant</div>
+                        <div class="game-time">🕐 14:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">7.1</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔥 Both on win streaks (2W vs 2W)</span>
+                    <span class="reason">🏆 Huge for team standings!</span>
+                    <span class="reason">🎖️ Experience (33+73 games)</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#3</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/mmorrisohio/" target="_blank">mmorrisohio</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/K5KGC/" target="_blank">K5KGC</a>
+                        </div>
+                        <div class="game-teams">45th Variant vs Immer diese billigen Patzertricks</div>
+                        <div class="game-time">🕐 01:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">4.0</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🏆 Huge for team standings!</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-section">
+            <div class="day-header">
+                <span>Saturday, May 09</span>
+                <span class="day-count">40 games scheduled</span>
+            </div>
+
+            <div class="game-card gotd">
+                <div class="game-top-row">
+                    <div class="game-rank">#1</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/val1313/" target="_blank">val1313</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/scarff/" target="_blank">scarff</a>
+                        </div>
+                        <div class="game-teams">The Giraffe Huggers vs Scarffy Scarff and the Funky Bunch</div>
+                        <div class="game-time">🕐 09:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        <div class="gotd-badge">🏆 Game of the Day</div>
+                        <div class="hype-score">
+                            <div class="hype-value">10.0</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">⚔️ Rivals! Met 6x before (2½-3½)</span>
+                    <span class="reason">🎖️ Veterans (255+304 games)</span>
+                    <span class="reason">🤝 Former teammates on The Old Man and the C-File</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#2</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/Jg777/" target="_blank">Jg777</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/Pope123/" target="_blank">Pope123</a>
+                        </div>
+                        <div class="game-teams">Our Captain better hope we win this season or else! vs With FENs like these, who needs enemies?</div>
+                        <div class="game-time">🕐 16:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">9.7</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch (0-1)</span>
+                    <span class="reason">🥈 Big for team standings!</span>
+                    <span class="reason">🎖️ Veterans (178+95 games)</span>
+                    <span class="reason">🤝 Former teammates on Pope, King, and plebs in between</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#3</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/ButterPecan/" target="_blank">ButterPecan</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/adande1/" target="_blank">adande1</a>
+                        </div>
+                        <div class="game-teams">Better Call Sindarov vs Blunder 2: Still Don’t Know Her</div>
+                        <div class="game-time">🕐 01:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">8.8</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch #3 (2-0)</span>
+                    <span class="reason">🎖️ Veterans (176+249 games)</span>
+                    <span class="reason">🤝 Former teammates on Pawn of the Dead</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-section">
+            <div class="day-header">
+                <span>Sunday, May 10</span>
+                <span class="day-count">31 games scheduled</span>
+            </div>
+
+            <div class="game-card gotd">
+                <div class="game-top-row">
+                    <div class="game-rank">#1</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/alp_arslan92/" target="_blank">alp_arslan92</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/Silkthewanderer/" target="_blank">Silkthewanderer</a>
+                        </div>
+                        <div class="game-teams">Our Captain better hope we win this season or else! vs With FENs like these, who needs enemies?</div>
+                        <div class="game-time">🕐 19:30 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        <div class="gotd-badge">🏆 Game of the Day</div>
+                        <div class="hype-score">
+                            <div class="hype-value">8.8</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🔄 Rematch #3 (1½-½)</span>
+                    <span class="reason">🥈 Big for team standings!</span>
+                    <span class="reason">🎖️ Veterans (77+204 games)</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#2</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/PatchyThePirate/" target="_blank">PatchyThePirate</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/fork2020/" target="_blank">fork2020</a>
+                        </div>
+                        <div class="game-teams">With FENs like these, who needs enemies? vs Our Captain better hope we win this season or else!</div>
+                        <div class="game-time">🕐 22:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">7.6</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">💯 patchythepirate's 100th game!</span>
+                    <span class="reason">🥈 Big for team standings!</span>
+                    <span class="reason">🎖️ Experience (99+57 games)</span>
+                </div>
+            </div>
+
+            <div class="game-card ">
+                <div class="game-top-row">
+                    <div class="game-rank">#3</div>
+                    <div class="game-main">
+                        <div class="game-players">
+                            <a href="https://www.lichess4545.com/team4545/player/robertjackson/" target="_blank">robertjackson</a>
+                            <span class="vs">vs</span>
+                            <a href="https://www.lichess4545.com/team4545/player/gmat20020/" target="_blank">gmat20020</a>
+                        </div>
+                        <div class="game-teams"># Q.E.D. vs Stranger Pawns</div>
+                        <div class="game-time">🕐 16:00 UTC</div>
+                    </div>
+                    <div class="game-score">
+                        
+                        <div class="hype-score">
+                            <div class="hype-value">6.9</div>
+                            <div class="hype-label">hype</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🎖️ Veterans (111+131 games)</span>
+                    <span class="reason">🤝 Twice teammates! (So Long and Thanks for All the Pawns, Petron Petroff)</span>
+                    <span class="reason">👀 Vets first meeting! (111+131 games, never faced)</span>
+                </div>
+            </div>
+        </div>
+
         <footer>
+            Featuring 15 top games from 136 scheduled across 5 days<br>
             Generated for <a href="https://www.lichess4545.com" target="_blank">Lichess4545</a> League
         </footer>
     </div>
