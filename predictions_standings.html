@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Predicted Standings - Season 48 Round 7</title>
+    <style>
+        
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --border-color: #30363d;
+            --team-a-color: #58a6ff;
+            --team-b-color: #f78166;
+            --win-color: #3fb950;
+            --draw-color: #d29922;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2rem;
+            line-height: 1.5;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>📊 Predicted Standings After Round 7</h1>
+    <p class="subtitle">Season 48 • Monte Carlo Simulation</p>
+    
+    <div style="max-width: 800px; margin: 1.5rem auto; background: var(--bg-secondary); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+                <tr style="background: var(--bg-card); color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">
+                    <th style="padding: 0.75rem; text-align: center; width: 40px;">#</th>
+                    <th style="padding: 0.75rem; text-align: left;">Team</th>
+                    <th style="padding: 0.75rem; text-align: center;">Now</th>
+                    <th style="padding: 0.75rem; text-align: center;">1st</th>
+                    <th style="padding: 0.75rem; text-align: center;">Top 3</th>
+                    <th style="padding: 0.75rem; text-align: center;">MP</th>
+                    <th style="padding: 0.75rem; text-align: center;">GP</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">1</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">With FENs like these, who needs enemies?</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">1</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">53%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color);">80%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">11.9</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">32.9</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">2</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Immer diese billigen Patzertricks</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">27%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color);">76%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">10.7</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">34.0</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">3</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Slay Queen</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">12%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">47%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">10.1</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">32.6</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">4</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">45th Variant</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">4%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">42%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">10.0</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">32.4</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">5</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Doncha Wish Your Bishop Was On d3</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">10.3</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">28.4</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">6</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Caro-Kann Conjecture</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">4%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">14%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9.3</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">32.5</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">7</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The IM-GM Inequality</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">14%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9.7</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">30.1</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">8</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Lord of the Files</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">8</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9.0</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">32.9</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">9</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Sindarov’s Sweepers</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9.0</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">31.6</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">10</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Red, Dead, No Compensation</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">11</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9.2</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">30.8</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">11</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Obi-Wan Benoni</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">10</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9.0</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">30.6</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">12</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Caruana Matata</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">12</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">8.8</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">29.7</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">13</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Bishop Lebowski</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">13</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">8.2</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">31.8</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">14</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">We Calculated This in Another Timeline</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">14</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">8.4</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">29.6</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">15</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Our Captain better hope we win this season or else!</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">18</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.3</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">32.9</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">16</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Sicilian Sea Dogs</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">15</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.8</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">28.2</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">17</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Stranger Pawns</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">16</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.9</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">27.9</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">18</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Candidudes</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.2</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">29.8</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">19</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Lex Grad Party</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.9</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">27.6</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">20</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Big 'n' Tal</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">17</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.6</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">26.9</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">21</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">8 Mighty Pawns</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">23</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.4</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">28.0</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">22</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Blunder 2: Still Don’t Know Her</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">19</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.8</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">30.2</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">23</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">We'll wipe the Flohr with y'all</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.1</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">28.6</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">24</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Team chicken face of a monkey</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">21</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.7</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">28.1</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">25</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Pawns of Mass Destruction</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">24</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.6</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">26.0</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">26</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Blübaum's Blämeless Blöomers</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">29</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.3</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25.0</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">27</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;"># Q.E.D.</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">27</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.9</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25.9</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">28</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Going for the Great Blübaum  Sweep</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">28</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.7</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25.0</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">29</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">release the chraken</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">32</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.1</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">27.1</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">30</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Best by Test</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">36</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.5</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25.2</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">31</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">I Still Like my Suggestion</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">38</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.9</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">24.1</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">32</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The eight who declined the candidates</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">34</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.2</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25.8</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">33</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Scarffy Scarff and the Funky Bunch</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">31</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.8</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">26.7</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">34</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Better Call Sindarov</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">37</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.3</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">24.6</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">35</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Eine Kleine Knightmusic</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">26</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.1</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25.9</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">36</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Rise of the Doomsday Hedgehogs</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">30</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.7</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">26.4</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">37</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Where there's a will, there's a Wei</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">39</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.3</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">26.0</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">38</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Shatranj Society</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">33</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.5</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">24.8</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">39</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Chuck Norris mates in move one... As Black</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">35</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.1</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">23.4</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">40</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Sleepy Pawns</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">40</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.7</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">23.5</td>
+                </tr>
+
+                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">41</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Giraffe Huggers</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">41</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.9</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.8</td>
+                </tr>
+
+                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">42</td>
+                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Just my two centipawns</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">42</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.1</td>
+                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">21.7</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
