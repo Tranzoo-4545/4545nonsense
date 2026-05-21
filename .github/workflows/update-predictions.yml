@@ -40,7 +40,7 @@ jobs:
             exit 1
           fi
       
-      - name: Generate match predictions
+      - name: Generate match predictions (current round)
         run: |
           python scripts/match_predictor.py \
             --season ${{ steps.config.outputs.season }} \
@@ -48,11 +48,21 @@ jobs:
             --output predictions \
             --no-cache
       
+      - name: Generate full season projection
+        run: |
+          python scripts/match_predictor.py \
+            --season ${{ steps.config.outputs.season }} \
+            --round ${{ steps.config.outputs.round }} \
+            --output predictions \
+            --full-season \
+            --no-cache
+      
       - name: Check if files changed
         id: changes
         run: |
           # Add files to staging to detect both new and modified files
-          git add predictions_matches.html predictions_standings.html predictions_distribution.html 2>/dev/null || true
+          git add predictions_matches.html predictions_standings.html predictions_distribution.html \
+                  predictions_season_standings.html predictions_season_distribution.html 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
@@ -64,5 +74,5 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Update match predictions ($(date -u '+%Y-%m-%d %H:%M UTC'))"
+          git commit -m "Update match predictions & season projection ($(date -u '+%Y-%m-%d %H:%M UTC'))"
           git push
