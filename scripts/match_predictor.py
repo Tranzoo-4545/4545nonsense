@@ -908,6 +908,39 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int) 
             font-size: 0.7rem;
         }}
         
+        .color-indicator {{
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            margin-right: 0.35rem;
+            vertical-align: middle;
+        }}
+        
+        .color-white {{
+            background: #fff;
+            border: 1px solid #888;
+        }}
+        
+        .color-black {{
+            background: #333;
+            border: 1px solid #333;
+        }}
+        
+        .score-result {{
+            font-weight: 700;
+            font-size: 0.85rem;
+            min-width: 1.5rem;
+            text-align: center;
+        }}
+        
+        .score-prediction {{
+            font-size: 0.7rem;
+            min-width: 2rem;
+            text-align: center;
+            opacity: 0.8;
+        }}
+        
         .win-prob {{
             font-weight: 600;
             font-size: 0.7rem;
@@ -989,40 +1022,51 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int) 
             white_exp = expected_score(white_boosted, black) * 100
             black_exp = 100 - white_exp
             
+            # Determine individual scores/display for each player
             if pairing.is_played:
-                if pairing.result == 1:
-                    result_text = "1-0"
-                elif pairing.result == 0:
-                    result_text = "0-1"
-                else:
-                    result_text = "½-½"
-                result_class = "result-played"
+                if pairing.result == 1:  # White won
+                    white_score, black_score = "1", "0"
+                elif pairing.result == 0:  # Black won
+                    white_score, black_score = "0", "1"
+                else:  # Draw
+                    white_score, black_score = "½", "½"
+                show_result = True
             else:
-                result_text = "—"
-                result_class = "result-pending"
+                white_score = f"{white_exp:.0f}%"
+                black_score = f"{black_exp:.0f}%"
+                show_result = False
             
-            # Determine which player is team A
+            # Determine which player is team A and their color indicator
             if pairing.white_team == team_a:
                 a_player, b_player = white, black
-                a_exp_board, b_exp_board = white_exp, black_exp
+                a_score, b_score = white_score, black_score
+                a_color_class = "color-white"
+                b_color_class = "color-black"
             else:
                 a_player, b_player = black, white
-                a_exp_board, b_exp_board = black_exp, white_exp
+                a_score, b_score = black_score, white_score
+                a_color_class = "color-black"
+                b_color_class = "color-white"
+            
+            # Style for scores
+            a_score_class = "score-result" if show_result else "score-prediction"
+            b_score_class = "score-result" if show_result else "score-prediction"
             
             html += f'''
                 <div class="board-card">
                     <div class="board-players">
                         <div class="board-player">
+                            <span class="color-indicator {a_color_class}"></span>
                             <span class="player-name" style="color: var(--team-a-color)">{a_player.username}</span>
+                            <span class="{a_score_class}" style="color: var(--team-a-color)">{a_score}</span>
                             <span class="player-rating">{a_player.rating}</span>
                         </div>
                         <div class="board-player">
+                            <span class="color-indicator {b_color_class}"></span>
                             <span class="player-name" style="color: var(--team-b-color)">{b_player.username}</span>
+                            <span class="{b_score_class}" style="color: var(--team-b-color)">{b_score}</span>
                             <span class="player-rating">{b_player.rating}</span>
                         </div>
-                    </div>
-                    <div class="board-result {result_class}">
-                        {result_text if pairing.is_played else f'<span class="win-prob" style="color: var(--team-a-color)">{a_exp_board:.0f}%</span> - <span class="win-prob" style="color: var(--team-b-color)">{b_exp_board:.0f}%</span>'}
                     </div>
                 </div>
 '''
