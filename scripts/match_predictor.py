@@ -768,6 +768,9 @@ def get_common_css() -> str:
 def generate_matches_html(predictions: list[dict], season: int, round_num: int) -> str:
     """Generate HTML report with match predictions."""
     
+    # Get current UTC time
+    utc_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+    
     # Sort by team A win probability (most uncertain matches first for drama)
     predictions.sort(key=lambda p: abs(p['team_a_win_prob'] - 0.5))
     
@@ -965,7 +968,7 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int) 
 </head>
 <body>
     <h1>🎯 Match Predictions</h1>
-    <p class="subtitle">Season {season} Round {round_num} • Monte Carlo Simulation</p>
+    <p class="subtitle">Season {season} Round {round_num} • Monte Carlo Simulation • Generated: {utc_now}</p>
     
     <div class="predictions-container">
 '''
@@ -1088,6 +1091,9 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int) 
 def generate_standings_html(standings_prediction: dict, season: int, round_num: int) -> str:
     """Generate HTML report with predicted standings table."""
     
+    # Get current UTC time
+    utc_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+    
     sorted_standings = sorted(
         standings_prediction.items(),
         key=lambda x: x[1]['expected_placement']
@@ -1104,7 +1110,7 @@ def generate_standings_html(standings_prediction: dict, season: int, round_num: 
 </head>
 <body>
     <h1>📊 Predicted Standings After Round {round_num}</h1>
-    <p class="subtitle">Season {season} • Monte Carlo Simulation</p>
+    <p class="subtitle">Season {season} • Monte Carlo Simulation • Generated: {utc_now}</p>
     
     <div style="max-width: 800px; margin: 1.5rem auto; background: var(--bg-secondary); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
@@ -1155,6 +1161,9 @@ def generate_standings_html(standings_prediction: dict, season: int, round_num: 
 
 def generate_distribution_html(standings_prediction: dict, season: int, round_num: int) -> str:
     """Generate HTML report with placement probability distribution for each team."""
+    
+    # Get current UTC time
+    utc_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
     
     sorted_standings = sorted(
         standings_prediction.items(),
@@ -1273,7 +1282,7 @@ def generate_distribution_html(standings_prediction: dict, season: int, round_nu
 </head>
 <body>
     <h1>📈 Placement Probability Distribution</h1>
-    <p class="subtitle">Season {season} Round {round_num} • Probability of finishing in each position</p>
+    <p class="subtitle">Season {season} Round {round_num} • Probability of finishing in each position • Generated: {utc_now}</p>
     
     <div class="distribution-container">
         <div class="heatmap">
