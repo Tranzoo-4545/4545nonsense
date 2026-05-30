@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+import functools
 import json
 import math
 import os
@@ -249,13 +250,15 @@ def simulate_match(pairings: list[BoardPairing], n_simulations: int = 10000) -> 
 def simulate_single_match(pairings: list[BoardPairing]) -> tuple:
     """
     Simulate a single match outcome once.
-    Returns (team_a, team_b, team_a_score, team_b_score).
+    Returns (team_a, team_b, team_a_score, team_b_score, team_a_wins, team_b_wins).
     """
     team_a = pairings[0].white_team
     team_b = pairings[0].black_team
     
     team_a_score = 0.0
     team_b_score = 0.0
+    team_a_wins = 0
+    team_b_wins = 0
     
     for p in pairings:
         if p.is_played:
@@ -263,9 +266,17 @@ def simulate_single_match(pairings: list[BoardPairing]) -> tuple:
             if p.white_team == team_a:
                 team_a_score += p.result
                 team_b_score += (1 - p.result)
+                if p.result == 1.0:
+                    team_a_wins += 1
+                elif p.result == 0.0:
+                    team_b_wins += 1
             else:
                 team_b_score += p.result
                 team_a_score += (1 - p.result)
+                if p.result == 1.0:
+                    team_b_wins += 1
+                elif p.result == 0.0:
+                    team_a_wins += 1
         else:
             # Simulate
             game_result = simulate_game(p.white, p.black)
@@ -273,24 +284,33 @@ def simulate_single_match(pairings: list[BoardPairing]) -> tuple:
             if p.white_team == team_a:
                 team_a_score += game_result
                 team_b_score += (1 - game_result)
+                if game_result == 1.0:
+                    team_a_wins += 1
+                elif game_result == 0.0:
+                    team_b_wins += 1
             else:
                 team_b_score += game_result
                 team_a_score += (1 - game_result)
+                if game_result == 1.0:
+                    team_b_wins += 1
+                elif game_result == 0.0:
+                    team_a_wins += 1
     
-    return (team_a, team_b, team_a_score, team_b_score)
+    return (team_a, team_b, team_a_score, team_b_score, team_a_wins, team_b_wins)
 
 
 def get_standings_before_round(season_data: dict, before_round: int) -> dict:
     """
     Calculate standings up to (but not including) a specific round.
-    Returns dict: team_name -> {'match_points': int, 'game_points': float, 'games_won': int, 'sonneborn_berger': float}
+    Returns dict: team_name -> {match_points, game_points, games_won, sonneborn_berger, opponents}
     
-    Uses same tiebreakers as standings.py:
+    Uses same tiebreakers as the league:
     1. Match Points (desc)
     2. Game Points (desc)
-    3. Games Won (desc)
-    4. Sonneborn-Berger (desc)
-    5. Team Name (alphabetical)
+    3. Head-to-head score (desc)
+    4. Games Won (desc)
+    5. Sonneborn-Berger (desc)
+    6. Team Name (alphabetical)
     """
     games = season_data.get('games', [])
     
@@ -309,7 +329,8 @@ def get_standings_before_round(season_data: dict, before_round: int) -> dict:
         'match_points': 0, 
         'game_points': 0.0, 
         'games_won': 0,
-        'matches': []  # List of (opponent, match_pts_earned) for SB calculation
+        'matches': [],  # List of (opponent, match_pts_earned) for SB calculation
+        'opponents': defaultdict(float)  # {opponent: game_points_scored} for H2H
     })
     
     for round_num in sorted(rounds.keys()):
@@ -353,11 +374,13 @@ def get_standings_before_round(season_data: dict, before_round: int) -> dict:
                     team_a_points += 0.5
                     team_b_points += 0.5
             
-            # Update game points and games won
+            # Update game points, games won, and head-to-head
             teams[team_a]['game_points'] += team_a_points
             teams[team_b]['game_points'] += team_b_points
             teams[team_a]['games_won'] += team_a_wins
             teams[team_b]['games_won'] += team_b_wins
+            teams[team_a]['opponents'][team_b] += team_a_points
+            teams[team_b]['opponents'][team_a] += team_b_points
             
             # Update match points and track for SB
             if team_a_points > team_b_points:
@@ -382,7 +405,7 @@ def get_standings_before_round(season_data: dict, before_round: int) -> dict:
             sb_score += match_pts * opponent_match_pts
         team_data['sonneborn_berger'] = sb_score
     
-    # Convert to simple dict (remove matches list)
+    # Convert to simple dict (convert opponents from defaultdict)
     result = {}
     for team_name, team_data in teams.items():
         result[team_name] = {
@@ -390,9 +413,63 @@ def get_standings_before_round(season_data: dict, before_round: int) -> dict:
             'game_points': team_data['game_points'],
             'games_won': team_data['games_won'],
             'sonneborn_berger': team_data['sonneborn_berger'],
+            'opponents': dict(team_data['opponents']),
         }
     
     return result
+
+
+def compare_teams(team_a_data: tuple, team_b_data: tuple) -> int:
+    """
+    Compare two teams for standings sorting.
+    
+    Args:
+        team_a_data: (team_name, stats_dict)
+        team_b_data: (team_name, stats_dict)
+    
+    Returns:
+        -1 if team_a is higher, 1 if team_b is higher, 0 if equal
+    
+    Tiebreakers (in order):
+    1. Match Points (desc)
+    2. Game Points (desc)
+    3. Head-to-head score (desc)
+    4. Games Won (desc)
+    5. Sonneborn-Berger (desc)
+    6. Team Name (alphabetical)
+    """
+    name_a, stats_a = team_a_data
+    name_b, stats_b = team_b_data
+    
+    # 1. Match Points (desc)
+    if stats_a.get('match_points', 0) != stats_b.get('match_points', 0):
+        return -1 if stats_a.get('match_points', 0) > stats_b.get('match_points', 0) else 1
+    
+    # 2. Game Points (desc)
+    if stats_a.get('game_points', 0) != stats_b.get('game_points', 0):
+        return -1 if stats_a.get('game_points', 0) > stats_b.get('game_points', 0) else 1
+    
+    # 3. Head-to-head (desc) - only if they've played each other
+    opponents_a = stats_a.get('opponents', {})
+    opponents_b = stats_b.get('opponents', {})
+    h2h_a = opponents_a.get(name_b, 0)
+    h2h_b = opponents_b.get(name_a, 0)
+    if h2h_a != h2h_b:
+        return -1 if h2h_a > h2h_b else 1
+    
+    # 4. Games Won (desc)
+    if stats_a.get('games_won', 0) != stats_b.get('games_won', 0):
+        return -1 if stats_a.get('games_won', 0) > stats_b.get('games_won', 0) else 1
+    
+    # 5. Sonneborn-Berger (desc)
+    if stats_a.get('sonneborn_berger', 0) != stats_b.get('sonneborn_berger', 0):
+        return -1 if stats_a.get('sonneborn_berger', 0) > stats_b.get('sonneborn_berger', 0) else 1
+    
+    # 6. Team Name (alphabetical)
+    if name_a != name_b:
+        return -1 if name_a < name_b else 1
+    
+    return 0
 
 
 def simulate_standings(all_matchups: list, standings_before: dict, n_simulations: int = 10000, capture_details: bool = False) -> tuple:
@@ -432,13 +509,17 @@ def simulate_standings(all_matchups: list, standings_before: dict, n_simulations
     detailed_sims = [] if capture_details else None
     
     for sim_idx in range(n_simulations):
-        # Start with standings before round
-        sim_standings = {team: dict(stats) for team, stats in standings_before.items()}
-        
-        # Ensure all teams exist
+        # Start with standings before round - include all tiebreaker fields
+        sim_standings = {}
         for team in all_teams:
-            if team not in sim_standings:
-                sim_standings[team] = {'match_points': 0, 'game_points': 0.0}
+            base = standings_before.get(team, {})
+            sim_standings[team] = {
+                'match_points': base.get('match_points', 0),
+                'game_points': base.get('game_points', 0.0),
+                'games_won': base.get('games_won', 0),
+                'matches': list(base.get('matches', [])),  # Copy list for SB tracking
+                'opponents': dict(base.get('opponents', {}))  # Copy dict for H2H tracking
+            }
         
         # Track match results for this simulation
         sim_match_results = [] if capture_details else None
@@ -448,20 +529,30 @@ def simulate_standings(all_matchups: list, standings_before: dict, n_simulations
             if not matchup:
                 continue
             
-            team_a, team_b, score_a, score_b = simulate_single_match(matchup)
+            team_a, team_b, score_a, score_b, wins_a, wins_b = simulate_single_match(matchup)
             
-            # Update game points
+            # Update game points, games won, and head-to-head
             sim_standings[team_a]['game_points'] += score_a
             sim_standings[team_b]['game_points'] += score_b
+            sim_standings[team_a]['games_won'] += wins_a
+            sim_standings[team_b]['games_won'] += wins_b
+            sim_standings[team_a]['opponents'][team_b] = sim_standings[team_a]['opponents'].get(team_b, 0) + score_a
+            sim_standings[team_b]['opponents'][team_a] = sim_standings[team_b]['opponents'].get(team_a, 0) + score_b
             
-            # Update match points
+            # Update match points and track for SB
             if score_a > score_b:
                 sim_standings[team_a]['match_points'] += 2
+                sim_standings[team_a]['matches'].append((team_b, 2))
+                sim_standings[team_b]['matches'].append((team_a, 0))
             elif score_b > score_a:
                 sim_standings[team_b]['match_points'] += 2
+                sim_standings[team_a]['matches'].append((team_b, 0))
+                sim_standings[team_b]['matches'].append((team_a, 2))
             else:
                 sim_standings[team_a]['match_points'] += 1
                 sim_standings[team_b]['match_points'] += 1
+                sim_standings[team_a]['matches'].append((team_b, 1))
+                sim_standings[team_b]['matches'].append((team_a, 1))
             
             if capture_details:
                 # Store with consistent team ordering
@@ -470,10 +561,18 @@ def simulate_standings(all_matchups: list, standings_before: dict, n_simulations
                 else:
                     sim_match_results.append((score_a, score_b))
         
-        # Sort to get placements
+        # Calculate Sonneborn-Berger for each team
+        for team in all_teams:
+            sb_score = 0.0
+            for opponent, match_pts in sim_standings[team]['matches']:
+                opponent_match_pts = sim_standings[opponent]['match_points']
+                sb_score += match_pts * opponent_match_pts
+            sim_standings[team]['sonneborn_berger'] = sb_score
+        
+        # Sort to get placements using full tiebreakers (including H2H)
         sorted_teams = sorted(
             sim_standings.items(),
-            key=lambda x: (-x[1]['match_points'], -x[1]['game_points'], x[0])
+            key=functools.cmp_to_key(compare_teams)
         )
         
         # Record placements and totals
@@ -488,22 +587,17 @@ def simulate_standings(all_matchups: list, standings_before: dict, n_simulations
             detailed_sims.append({
                 'match_results': sim_match_results,
                 'placements': sim_placements,
-                'standings': {t: dict(s) for t, s in sim_standings.items()}
+                'standings': {t: {'match_points': s['match_points'], 'game_points': s['game_points']} 
+                              for t, s in sim_standings.items()}
             })
     
     # Calculate current standings (before this round's games)
-    # Use full tiebreakers: MP, GP, Games Won, SB, Name
-    default_stats = {'match_points': 0, 'game_points': 0.0, 'games_won': 0, 'sonneborn_berger': 0.0}
+    # Use full tiebreakers including H2H
+    default_stats = {'match_points': 0, 'game_points': 0.0, 'games_won': 0, 'sonneborn_berger': 0.0, 'opponents': {}}
     current_sorted = sorted(
         [(team, {**default_stats, **standings_before.get(team, {})}) 
          for team in all_teams],
-        key=lambda x: (
-            -x[1]['match_points'], 
-            -x[1]['game_points'], 
-            -x[1]['games_won'],
-            -x[1]['sonneborn_berger'],
-            x[0]
-        )
+        key=functools.cmp_to_key(compare_teams)
     )
     current_placements = {team: i + 1 for i, (team, _) in enumerate(current_sorted)}
     
@@ -1734,18 +1828,12 @@ def simulate_full_season(
     total_game_points = {team: 0.0 for team in teams}
     
     # Calculate current standings for display
-    # Use full tiebreakers: MP, GP, Games Won, SB, Name
-    default_stats = {'match_points': 0, 'game_points': 0.0, 'games_won': 0, 'sonneborn_berger': 0.0}
+    # Use full tiebreakers including H2H
+    default_stats = {'match_points': 0, 'game_points': 0.0, 'games_won': 0, 'sonneborn_berger': 0.0, 'opponents': {}}
     current_sorted = sorted(
         [(team, {**default_stats, **standings_before.get(team, {})}) 
          for team in teams],
-        key=lambda x: (
-            -x[1]['match_points'], 
-            -x[1]['game_points'], 
-            -x[1]['games_won'],
-            -x[1]['sonneborn_berger'],
-            x[0]
-        )
+        key=functools.cmp_to_key(compare_teams)
     )
     current_placements = {team: i + 1 for i, (team, _) in enumerate(current_sorted)}
     
@@ -1766,14 +1854,17 @@ def simulate_full_season(
             sys.stdout.write(f"\r  Progress: [{bar}] {pct:5.1f}% ({sim+1:,}/{num_simulations:,})")
             sys.stdout.flush()
         
-        # Initialize simulation state
-        sim_standings = {
-            team: {
-                'match_points': standings_before.get(team, {'match_points': 0})['match_points'],
-                'game_points': standings_before.get(team, {'game_points': 0.0})['game_points']
-            } 
-            for team in teams
-        }
+        # Initialize simulation state with all tiebreaker fields
+        sim_standings = {}
+        for team in teams:
+            base = standings_before.get(team, {})
+            sim_standings[team] = {
+                'match_points': base.get('match_points', 0),
+                'game_points': base.get('game_points', 0.0),
+                'games_won': base.get('games_won', 0),
+                'matches': [],  # Track (opponent, match_pts) for SB calculation
+                'opponents': dict(base.get('opponents', {}))  # Track H2H scores
+            }
         sim_matchup_history = historical_matchups.copy()
         sim_color_history = {}  # Will be set after first simulated round
         
@@ -1811,6 +1902,8 @@ def simulate_full_season(
                 
                 team_a_score = 0.0
                 team_b_score = 0.0
+                team_a_wins = 0
+                team_b_wins = 0
                 
                 for pairing in matchup:
                     if pairing.is_played:
@@ -1824,21 +1917,42 @@ def simulate_full_season(
                     if pairing.white_team == team_a:
                         team_a_score += game_result
                         team_b_score += (1 - game_result)
+                        if game_result == 1.0:
+                            team_a_wins += 1
+                        elif game_result == 0.0:
+                            team_b_wins += 1
                     else:
                         team_b_score += game_result
                         team_a_score += (1 - game_result)
+                        if game_result == 1.0:
+                            team_b_wins += 1
+                        elif game_result == 0.0:
+                            team_a_wins += 1
                 
-                # Update standings
+                # Update game points and games won
+                sim_standings[team_a]['game_points'] += team_a_score
+                sim_standings[team_b]['game_points'] += team_b_score
+                sim_standings[team_a]['games_won'] += team_a_wins
+                sim_standings[team_b]['games_won'] += team_b_wins
+                
+                # Update head-to-head tracking
+                sim_standings[team_a]['opponents'][team_b] = sim_standings[team_a]['opponents'].get(team_b, 0) + team_a_score
+                sim_standings[team_b]['opponents'][team_a] = sim_standings[team_b]['opponents'].get(team_a, 0) + team_b_score
+                
+                # Update match points and track for SB
                 if team_a_score > team_b_score:
                     sim_standings[team_a]['match_points'] += 2
+                    sim_standings[team_a]['matches'].append((team_b, 2))
+                    sim_standings[team_b]['matches'].append((team_a, 0))
                 elif team_b_score > team_a_score:
                     sim_standings[team_b]['match_points'] += 2
+                    sim_standings[team_a]['matches'].append((team_b, 0))
+                    sim_standings[team_b]['matches'].append((team_a, 2))
                 else:
                     sim_standings[team_a]['match_points'] += 1
                     sim_standings[team_b]['match_points'] += 1
-                
-                sim_standings[team_a]['game_points'] += team_a_score
-                sim_standings[team_b]['game_points'] += team_b_score
+                    sim_standings[team_a]['matches'].append((team_b, 1))
+                    sim_standings[team_b]['matches'].append((team_a, 1))
                 
                 # Record matchup
                 matchup_key = tuple(sorted([team_a, team_b]))
@@ -1850,10 +1964,18 @@ def simulate_full_season(
                     sim_color_history[pairing.black_team] = 'black'
                     break  # Only need first board's colors
         
-        # Calculate final placements
+        # Calculate Sonneborn-Berger for each team
+        for team in teams:
+            sb_score = 0.0
+            for opponent, match_pts in sim_standings[team]['matches']:
+                opponent_match_pts = sim_standings[opponent]['match_points']
+                sb_score += match_pts * opponent_match_pts
+            sim_standings[team]['sonneborn_berger'] = sb_score
+        
+        # Calculate final placements using full tiebreakers (including H2H)
         final_standings = sorted(
             sim_standings.items(),
-            key=lambda x: (-x[1]['match_points'], -x[1]['game_points'], x[0])
+            key=functools.cmp_to_key(compare_teams)
         )
         
         for place, (team, stats) in enumerate(final_standings, 1):
