@@ -20,7 +20,7 @@ import random
 import time
 from collections import defaultdict
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 import requests
@@ -86,28 +86,24 @@ def calculate_draw_probability(white: Player, black: Player) -> float:
     """
     Calculate draw probability based on ratings.
     
-    Calibrated from Lichess4545 seasons 40-48 (10,851 games, 15.8% overall draw rate).
-    
-    Focused on well-sampled data:
-    - Rating 1600-2100 range (n > 900 per bucket)
-    - Rating diff 0-150 range (n > 1000 per bucket)
+    Calibrated from Lichess4545 seasons 40-48 backtest analysis.
+    V6 model - best performing in backtests (Brier: 0.5929, Log Loss: 0.9823).
     """
     avg_rating = (white.rating + black.rating) / 2
     rating_diff = abs(white.rating - black.rating)
     
-    # Base draw rate scales with average rating
-    # Fitted to: ~10% at 1600, ~15% at 1800, ~20% at 2000, ~25% at 2200
-    base_draw_rate = 0.10 + (avg_rating - 1600) * 0.00025
-    base_draw_rate = max(0.05, min(0.30, base_draw_rate))
+    # V6 calibrated parameters
+    BASE_DRAW_RATE = 0.14
+    DRAW_RATING_FACTOR = 0.00018
+    DRAW_DIFF_FACTOR = -0.0004
     
-    # Rating difference effect
-    # Data shows relatively flat ~16% for diff 0-150, then drops
-    # Using conservative slope to avoid overfitting to small samples at high diff
-    relative_draw_rate = 1.0 - (rating_diff * 0.002)
-    relative_draw_rate = max(0.20, min(1.0, relative_draw_rate))
+    # Draw rate scales with average rating
+    draw_prob = BASE_DRAW_RATE + DRAW_RATING_FACTOR * (avg_rating - 1600)
     
-    draw_prob = base_draw_rate * relative_draw_rate
-    return max(0.03, min(0.35, draw_prob))
+    # Larger rating differences reduce draw probability
+    draw_prob += DRAW_DIFF_FACTOR * rating_diff
+    
+    return max(0.02, min(0.25, draw_prob))
 
 
 def simulate_game(white: Player, black: Player) -> float:
@@ -116,13 +112,16 @@ def simulate_game(white: Player, black: Player) -> float:
     Returns 1 (white wins), 0.5 (draw), or 0 (black wins).
     
     Uses Glicko expected score and rating-based draw probability.
-    Includes ~25 Elo point advantage for White (first-move advantage).
+    V6 calibrated model from backtest analysis.
     """
+    # V6 calibrated parameters
+    WHITE_ADVANTAGE = 20  # Elo points for first-move advantage
+    MAX_WIN_PROB = 0.85   # Cap confidence to allow upsets
+    
     # Create virtual "boosted" white player for expected score calculation
-    # Research shows ~35 Elo advantage at GM level, ~20-30 at amateur level
     white_boosted = Player(
         username=white.username,
-        rating=white.rating + 25,
+        rating=white.rating + WHITE_ADVANTAGE,
         rd=white.rd
     )
     
@@ -132,15 +131,28 @@ def simulate_game(white: Player, black: Player) -> float:
     # Calculate draw probability based on actual ratings (not boosted)
     draw_prob = calculate_draw_probability(white, black)
     
-    # Adjust win probabilities accounting for draws
-    # Expected score = P(win) + 0.5 * P(draw)
-    # So: P(win) = expected_score - 0.5 * draw_prob (for white)
-    # And remaining probability goes to black win
-    white_win_prob = white_expected - 0.5 * draw_prob
-    white_win_prob = max(0.0, min(1.0 - draw_prob, white_win_prob))
+    # Distribute remaining probability between win/loss
+    remaining = 1 - draw_prob
+    white_win_prob = remaining * white_expected
+    black_win_prob = remaining * (1 - white_expected)
     
-    black_win_prob = 1.0 - draw_prob - white_win_prob
-    black_win_prob = max(0.0, black_win_prob)
+    # Apply confidence cap - redistribute excess to draw and underdog
+    if white_win_prob > MAX_WIN_PROB:
+        excess = white_win_prob - MAX_WIN_PROB
+        white_win_prob = MAX_WIN_PROB
+        draw_prob += excess * 0.4
+        black_win_prob += excess * 0.6
+    elif black_win_prob > MAX_WIN_PROB:
+        excess = black_win_prob - MAX_WIN_PROB
+        black_win_prob = MAX_WIN_PROB
+        draw_prob += excess * 0.4
+        white_win_prob += excess * 0.6
+    
+    # Normalize
+    total = white_win_prob + draw_prob + black_win_prob
+    white_win_prob /= total
+    draw_prob /= total
+    black_win_prob /= total
     
     roll = random.random()
     if roll < white_win_prob:
@@ -916,7 +928,7 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int) 
     """Generate HTML report with match predictions."""
     
     # Get current UTC time
-    utc_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+    utc_now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
     
     # Sort by team A win probability (most uncertain matches first for drama)
     predictions.sort(key=lambda p: abs(p['team_a_win_prob'] - 0.5))
@@ -1239,7 +1251,7 @@ def generate_standings_html(standings_prediction: dict, season: int, round_num: 
     """Generate HTML report with predicted standings table."""
     
     # Get current UTC time
-    utc_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+    utc_now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
     
     sorted_standings = sorted(
         standings_prediction.items(),
@@ -1310,7 +1322,7 @@ def generate_distribution_html(standings_prediction: dict, season: int, round_nu
     """Generate HTML report with placement probability distribution for each team."""
     
     # Get current UTC time
-    utc_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+    utc_now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
     
     sorted_standings = sorted(
         standings_prediction.items(),
