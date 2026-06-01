@@ -67,19 +67,15 @@ class BoardPairing:
         return self.result is not None
 
 
-def g(phi: float) -> float:
-    """Glicko-2 g function."""
-    return 1 / math.sqrt(1 + 3 * phi**2 / math.pi**2)
-
-
 def expected_score(player: Player, opponent: Player) -> float:
     """
-    Calculate expected score for player against opponent using Glicko-2 formula.
+    Calculate expected score for player against opponent using Elo formula.
     Returns probability of winning (0 to 1).
+    
+    Uses simple Elo formula (no RD) to match V6 backtest calibration.
     """
-    g_phi = g(opponent.phi)
-    exponent = -g_phi * (player.mu - opponent.mu)
-    return 1 / (1 + math.exp(exponent))
+    diff = player.rating - opponent.rating
+    return 1 / (1 + 10 ** (-diff / 400))
 
 
 def calculate_draw_probability(white: Player, black: Player) -> float:
@@ -1820,6 +1816,18 @@ def simulate_full_season(
     
     # Get standings before current round
     standings_before = get_standings_before_round(season_data, current_round)
+    
+    # Ensure all teams from current round are included (important for round 1)
+    for team in team_rosters.keys():
+        if team not in standings_before:
+            standings_before[team] = {
+                'match_points': 0,
+                'game_points': 0.0,
+                'games_won': 0,
+                'matches': [],
+                'opponents': {}
+            }
+    
     teams = list(standings_before.keys())
     
     # Build historical matchup set (rounds before current)
