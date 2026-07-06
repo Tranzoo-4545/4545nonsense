@@ -30,177 +30,43 @@
             color: var(--text-primary);
             min-height: 100vh;
             padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .container {
-            max-width: 900px;
-            margin: 0 auto;
+            max-width: 600px;
+            text-align: center;
         }
         
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 2rem;
+        .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
+            padding: 3rem 2rem;
         }
         
-        header h1 {
+        h1 {
             font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-        
-        header .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-        
-        .day-section {
-            margin-bottom: 2rem;
-        }
-        
-        .day-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--gold);
             margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--border);
-        }
-        
-        .day-count {
-            font-size: 0.9rem;
-            font-weight: normal;
-            color: var(--text-muted);
-        }
-        
-        .game-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .game-card.gotd {
-            border: 2px solid var(--gold);
-            background: rgba(212, 184, 86, 0.08);
-        }
-        
-        .game-top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 0.75rem;
-        }
-        
-        .game-rank {
-            font-size: 1.3rem;
-            font-weight: bold;
             color: var(--gold);
-            min-width: 35px;
         }
         
-        .game-main {
-            flex-grow: 1;
-            text-align: center;
-        }
-        
-        .game-players {
+        .message {
             font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .game-players a {
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-        
-        .game-players a:hover {
-            color: var(--accent);
-            text-decoration: underline;
-        }
-        
-        .vs {
-            color: var(--text-muted);
-            margin: 0 0.4rem;
-        }
-        
-        .game-teams {
-            font-size: 0.9rem;
             color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
         }
         
-        .game-time {
-            font-size: 0.85rem;
-            color: var(--accent);
-            margin-top: 0.3rem;
-        }
-        
-        .game-score {
-            text-align: right;
-        }
-        
-        .gotd-badge {
-            background: var(--gold);
-            color: var(--bg-darker);
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 0.4rem;
-        }
-        
-        .hype-score {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 0.4rem 0.7rem;
-            text-align: center;
-            min-width: 55px;
-        }
-        
-        .hype-value {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--gold);
-        }
-        
-        .hype-label {
-            font-size: 0.6rem;
+        .hint {
+            font-size: 0.95rem;
             color: var(--text-muted);
-            text-transform: uppercase;
-        }
-        
-        .reasons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            justify-content: center;
-            padding-top: 0.75rem;
-            border-top: 1px solid var(--border);
-        }
-        
-        .reason {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 6px;
-            padding: 0.35rem 0.7rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
         }
         
         footer {
-            text-align: center;
             margin-top: 2rem;
-            padding: 1rem;
             color: var(--text-muted);
             font-size: 0.85rem;
         }
@@ -209,153 +75,20 @@
             color: var(--accent);
             text-decoration: none;
         }
-        
-        @media (max-width: 600px) {
-            .game-top-row {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-            
-            .game-rank {
-                display: none;
-            }
-            
-            .game-score {
-                text-align: center;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🏆 Top Games of the Day</h1>
-            <div class="subtitle">Season 49 Round 1</div>
-        </header>
-
-        <div class="day-section">
-            <div class="day-header">
-                <span>Sunday, July 05</span>
-                <span class="day-count">41 games scheduled</span>
+        <div class="card">
+            <h1>📅 Coming Soon!</h1>
+            <div class="message">
+                Top Games of the Day for Season 49 Round 1 will be available on Wednesday.
             </div>
-
-            <div class="game-card gotd">
-                <div class="game-top-row">
-                    <div class="game-rank">#1</div>
-                    <div class="game-main">
-                        <div class="game-players">
-                            <a href="https://www.lichess4545.com/team4545/player/AScannerDarkly/" target="_blank">AScannerDarkly</a>
-                            <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/Rolihlahla/" target="_blank">Rolihlahla</a>
-                        </div>
-                        <div class="game-teams">Not So Funny Anymore vs Messi Mates</div>
-                        <div class="game-time">🕐 18:00 UTC</div>
-                    </div>
-                    <div class="game-score">
-                        <div class="gotd-badge">🏆 Game of the Day</div>
-                        <div class="hype-score">
-                            <div class="hype-value">6.8</div>
-                            <div class="hype-label">hype</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="reasons">
-                    <span class="reason">🔄 Rematch (1-0)</span>
-                    <span class="reason">🔥 Both on win streaks (2W vs 2W)</span>
-                    <span class="reason">🎖️ Veterans (81+216 games)</span>
-                </div>
-            </div>
-
-            <div class="game-card ">
-                <div class="game-top-row">
-                    <div class="game-rank">#2</div>
-                    <div class="game-main">
-                        <div class="game-players">
-                            <a href="https://www.lichess4545.com/team4545/player/gmat20020/" target="_blank">gmat20020</a>
-                            <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/rodeo/" target="_blank">rodeo</a>
-                        </div>
-                        <div class="game-teams">Cool-de-sac vs The Fork-Ty Niners</div>
-                        <div class="game-time">🕐 15:00 UTC</div>
-                    </div>
-                    <div class="game-score">
-                        
-                        <div class="hype-score">
-                            <div class="hype-value">6.2</div>
-                            <div class="hype-label">hype</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="reasons">
-                    <span class="reason">🎖️ Veterans (135+140 games)</span>
-                    <span class="reason">🪃 rodeo's return after 9 seasons!</span>
-                    <span class="reason">👀 Vets first meeting! (135+140 games, never faced)</span>
-                </div>
-            </div>
-
-            <div class="game-card ">
-                <div class="game-top-row">
-                    <div class="game-rank">#3</div>
-                    <div class="game-main">
-                        <div class="game-players">
-                            <a href="https://www.lichess4545.com/team4545/player/jkoch1/" target="_blank">jkoch1</a>
-                            <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/Bortvinik/" target="_blank">Bortvinik</a>
-                        </div>
-                        <div class="game-teams">Team 44 vs VAR is checking the en passant</div>
-                        <div class="game-time">🕐 10:15 UTC</div>
-                    </div>
-                    <div class="game-score">
-                        
-                        <div class="hype-score">
-                            <div class="hype-value">6.0</div>
-                            <div class="hype-label">hype</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="reasons">
-                    <span class="reason">🔥 Hot streak clash! (3W vs 5W)</span>
-                    <span class="reason">🪃 jkoch1's big return after 16 seasons!</span>
-                </div>
+            <div class="hint">
+                Players are still scheduling their games. Check back Wednesday morning for the daily highlights!
             </div>
         </div>
-
-        <div class="day-section">
-            <div class="day-header">
-                <span>Monday, July 06</span>
-                <span class="day-count">1 games scheduled</span>
-            </div>
-
-            <div class="game-card gotd">
-                <div class="game-top-row">
-                    <div class="game-rank">#1</div>
-                    <div class="game-main">
-                        <div class="game-players">
-                            <a href="https://www.lichess4545.com/team4545/player/Tranzoo/" target="_blank">Tranzoo</a>
-                            <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/Sbstyn/" target="_blank">Sbstyn</a>
-                        </div>
-                        <div class="game-teams">The Fork-Ty Niners vs Cool-de-sac</div>
-                        <div class="game-time">🕐 07:00 UTC</div>
-                    </div>
-                    <div class="game-score">
-                        <div class="gotd-badge">🏆 Game of the Day</div>
-                        <div class="hype-score">
-                            <div class="hype-value">6.2</div>
-                            <div class="hype-label">hype</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="reasons">
-                    <span class="reason">❄️ Both struggling (2L vs 3L)</span>
-                    <span class="reason">🎖️ Veterans (251+15 games)</span>
-                    <span class="reason">🪃 sbstyn's return after 6 seasons!</span>
-                </div>
-            </div>
-        </div>
-
         <footer>
-            Featuring 4 top games from 42 scheduled across 2 days<br>
             Generated for <a href="https://www.lichess4545.com" target="_blank">Lichess4545</a> League
         </footer>
     </div>
