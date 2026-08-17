@@ -1,3 +1,3 @@
 # Update these values each week
 SEASON=49
-ROUND=7
+ROUND=8
