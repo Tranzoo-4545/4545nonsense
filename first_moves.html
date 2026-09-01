@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Season 49 First-Move Consistency</title>
+<style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           background: #1a1a1a; color: #e0e0e0; margin: 0; padding: 2rem; }
+    h1 { color: #fff; margin-bottom: 0.25rem; }
+    .subtitle { color: #888; margin-bottom: 1.5rem; line-height: 1.6; }
+    .warn { color: #fbbf24; }
+    table { width: 100%; border-collapse: collapse; background: #2a2a2a; border-radius: 8px; overflow: hidden; }
+    th { text-align: left; padding: 0.75rem 0.7rem; color: #4a9eff; font-size: 0.85rem; background: #333; }
+    td { padding: 0.6rem 0.7rem; border-bottom: 1px solid #333; font-size: 0.92rem; vertical-align: middle; }
+    tr:hover td { background: #313131; }
+    tr.dim td { opacity: 0.45; }
+    .rank { color: #666; width: 30px; }
+    .team { font-weight: 500; white-space: nowrap; }
+    .num { text-align: center; white-space: nowrap; }
+    .move { font-weight: bold; font-family: ui-monospace, Consolas, monospace; }
+    .share { font-weight: bold; color: #4ade80; }
+    .bars { width: 45%; }
+    .bar { display: flex; height: 18px; border-radius: 4px; overflow: hidden; background: #1a1a1a; }
+    .seg { font-size: 0.7rem; line-height: 18px; color: #111; text-align: center; overflow: hidden;
+            white-space: nowrap; font-weight: 600; }
+    .txt { color: #999; font-size: 0.8rem; margin-top: 0.3rem; }
+    .txt b { color: #ddd; font-family: ui-monospace, Consolas, monospace; font-weight: 600; }
+    .legend { margin-top: 1rem; color: #666; font-size: 0.85rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+    <h1>Season 49 — First-Move Consistency (White)</h1>
+    <p class="subtitle">
+        Which first move each team reached for with the white pieces, ranked from most predictable to most varied.<br>
+        League-wide this season: <b>e4</b> 54% · <b>d4</b> 33% · <b>c4</b> 6% · <b>Nf3</b> 5% · <b>f4</b> 1% · <b>Nc3</b> 1%<br>
+        <span style="color:#666">1299/1299 played white games found in cache</span>
+    </p>
+    <table>
+        <thead><tr>
+            <th>#</th><th>Team</th><th>White games</th><th>Top move</th><th>Top %</th>
+            <th>Effective moves</th><th>Distinct</th><th>First-move breakdown</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+            <td class="rank">1</td>
+            <td class="team">The Fork-Ty Niners</td>
+            <td class="num">30</td>
+            <td class="num move">e4</td>
+            <td class="num share">83%</td>
+            <td class="num">1.57</td>
+            <td class="num">2</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:83.33%;background:#4a9eff" title="e4: 25 (83.3%)">e4 83%</div><div class="seg" style="width:16.67%;background:#4ade80" title="d4: 5 (16.7%)">d4 17%</div></div><div class="txt"><b>e4</b> 83% · <b>d4</b> 17%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">2</td>
+            <td class="team">Last But Not Least</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">79%</td>
+            <td class="num">1.83</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:79.31%;background:#4a9eff" title="e4: 23 (79.3%)">e4 79%</div><div class="seg" style="width:17.24%;background:#4ade80" title="c4: 5 (17.2%)">c4 17%</div><div class="seg" style="width:3.45%;background:#fbbf24" title="d4: 1 (3.4%)"></div></div><div class="txt"><b>e4</b> 79% · <b>c4</b> 17% · <b>d4</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">3</td>
+            <td class="team">Cool-de-sac</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">79%</td>
+            <td class="num">2.05</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:79.31%;background:#4a9eff" title="e4: 23 (79.3%)">e4 79%</div><div class="seg" style="width:10.34%;background:#4ade80" title="d4: 3 (10.3%)"></div><div class="seg" style="width:6.90%;background:#fbbf24" title="c4: 2 (6.9%)"></div><div class="seg" style="width:3.45%;background:#f87171" title="Nf3: 1 (3.4%)"></div></div><div class="txt"><b>e4</b> 79% · <b>d4</b> 10% · <b>c4</b> 7% · <b>Nf3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">4</td>
+            <td class="team">The Mieses' Meese</td>
+            <td class="num">30</td>
+            <td class="num move">e4</td>
+            <td class="num share">77%</td>
+            <td class="num">2.32</td>
+            <td class="num">5</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:76.67%;background:#4a9eff" title="e4: 23 (76.7%)">e4 77%</div><div class="seg" style="width:10.00%;background:#4ade80" title="d4: 3 (10.0%)"></div><div class="seg" style="width:6.67%;background:#fbbf24" title="Nf3: 2 (6.7%)"></div><div class="seg" style="width:3.33%;background:#f87171" title="f4: 1 (3.3%)"></div><div class="seg" style="width:3.33%;background:#a78bfa" title="g3: 1 (3.3%)"></div></div><div class="txt"><b>e4</b> 77% · <b>d4</b> 10% · <b>Nf3</b> 7% · <b>f4</b> 3% · <b>g3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">5</td>
+            <td class="team">My 60 memorable Suggestions</td>
+            <td class="num">32</td>
+            <td class="num move">e4</td>
+            <td class="num share">75%</td>
+            <td class="num">1.75</td>
+            <td class="num">2</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:75.00%;background:#4a9eff" title="e4: 24 (75.0%)">e4 75%</div><div class="seg" style="width:25.00%;background:#4ade80" title="d4: 8 (25.0%)">d4 25%</div></div><div class="txt"><b>e4</b> 75% · <b>d4</b> 25%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">6</td>
+            <td class="team">My 60 Memorable Sandwiches</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">72%</td>
+            <td class="num">2.10</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:72.41%;background:#4a9eff" title="e4: 21 (72.4%)">e4 72%</div><div class="seg" style="width:20.69%;background:#4ade80" title="Nf3: 6 (20.7%)">Nf3 21%</div><div class="seg" style="width:6.90%;background:#fbbf24" title="d4: 2 (6.9%)"></div></div><div class="txt"><b>e4</b> 72% · <b>Nf3</b> 21% · <b>d4</b> 7%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">7</td>
+            <td class="team">Sanity Check</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">72%</td>
+            <td class="num">2.10</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:72.41%;background:#4a9eff" title="e4: 21 (72.4%)">e4 72%</div><div class="seg" style="width:20.69%;background:#4ade80" title="d4: 6 (20.7%)">d4 21%</div><div class="seg" style="width:6.90%;background:#fbbf24" title="c4: 2 (6.9%)"></div></div><div class="txt"><b>e4</b> 72% · <b>d4</b> 21% · <b>c4</b> 7%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">8</td>
+            <td class="team">My Position is Just Messi Messi Messi!</td>
+            <td class="num">28</td>
+            <td class="num move">d4</td>
+            <td class="num share">71%</td>
+            <td class="num">2.03</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:71.43%;background:#4a9eff" title="d4: 20 (71.4%)">d4 71%</div><div class="seg" style="width:25.00%;background:#4ade80" title="e4: 7 (25.0%)">e4 25%</div><div class="seg" style="width:3.57%;background:#fbbf24" title="c4: 1 (3.6%)"></div></div><div class="txt"><b>d4</b> 71% · <b>e4</b> 25% · <b>c4</b> 4%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">9</td>
+            <td class="team">Amerifats and Europoors, cheap and salty on all the boards</td>
+            <td class="num">28</td>
+            <td class="num move">e4</td>
+            <td class="num share">71%</td>
+            <td class="num">2.20</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:71.43%;background:#4a9eff" title="e4: 20 (71.4%)">e4 71%</div><div class="seg" style="width:17.86%;background:#4ade80" title="Nc3: 5 (17.9%)">Nc3 18%</div><div class="seg" style="width:10.71%;background:#fbbf24" title="d4: 3 (10.7%)"></div></div><div class="txt"><b>e4</b> 71% · <b>Nc3</b> 18% · <b>d4</b> 11%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">10</td>
+            <td class="team">We probably don't want to telegraph our openings in our team name!</td>
+            <td class="num">31</td>
+            <td class="num move">e4</td>
+            <td class="num share">71%</td>
+            <td class="num">2.42</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:70.97%;background:#4a9eff" title="e4: 22 (71.0%)">e4 71%</div><div class="seg" style="width:12.90%;background:#4ade80" title="d4: 4 (12.9%)">d4 13%</div><div class="seg" style="width:12.90%;background:#fbbf24" title="c4: 4 (12.9%)">c4 13%</div><div class="seg" style="width:3.23%;background:#f87171" title="Nf3: 1 (3.2%)"></div></div><div class="txt"><b>e4</b> 71% · <b>d4</b> 13% · <b>c4</b> 13% · <b>Nf3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">11</td>
+            <td class="team">House of the Chilling Dragons</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">69%</td>
+            <td class="num">2.30</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:68.97%;background:#4a9eff" title="e4: 20 (69.0%)">e4 69%</div><div class="seg" style="width:17.24%;background:#4ade80" title="d4: 5 (17.2%)">d4 17%</div><div class="seg" style="width:13.79%;background:#fbbf24" title="Nf3: 4 (13.8%)">Nf3 14%</div></div><div class="txt"><b>e4</b> 69% · <b>d4</b> 17% · <b>Nf3</b> 14%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">12</td>
+            <td class="team">Good Knight, and Good Luck.</td>
+            <td class="num">28</td>
+            <td class="num move">e4</td>
+            <td class="num share">68%</td>
+            <td class="num">2.46</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:67.86%;background:#4a9eff" title="e4: 19 (67.9%)">e4 68%</div><div class="seg" style="width:21.43%;background:#4ade80" title="d4: 6 (21.4%)">d4 21%</div><div class="seg" style="width:7.14%;background:#fbbf24" title="c4: 2 (7.1%)"></div><div class="seg" style="width:3.57%;background:#f87171" title="Nc3: 1 (3.6%)"></div></div><div class="txt"><b>e4</b> 68% · <b>d4</b> 21% · <b>c4</b> 7% · <b>Nc3</b> 4%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">13</td>
+            <td class="team">Knights Chilling</td>
+            <td class="num">31</td>
+            <td class="num move">e4</td>
+            <td class="num share">68%</td>
+            <td class="num">1.88</td>
+            <td class="num">2</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:67.74%;background:#4a9eff" title="e4: 21 (67.7%)">e4 68%</div><div class="seg" style="width:32.26%;background:#4ade80" title="d4: 10 (32.3%)">d4 32%</div></div><div class="txt"><b>e4</b> 68% · <b>d4</b> 32%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">14</td>
+            <td class="team">Najdwarves: Tartakowering in Fear</td>
+            <td class="num">31</td>
+            <td class="num move">e4</td>
+            <td class="num share">68%</td>
+            <td class="num">1.88</td>
+            <td class="num">2</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:67.74%;background:#4a9eff" title="e4: 21 (67.7%)">e4 68%</div><div class="seg" style="width:32.26%;background:#4ade80" title="d4: 10 (32.3%)">d4 32%</div></div><div class="txt"><b>e4</b> 68% · <b>d4</b> 32%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">15</td>
+            <td class="team">Flock of Rooks (the bird)</td>
+            <td class="num">28</td>
+            <td class="num move">e4</td>
+            <td class="num share">64%</td>
+            <td class="num">1.92</td>
+            <td class="num">2</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:64.29%;background:#4a9eff" title="e4: 18 (64.3%)">e4 64%</div><div class="seg" style="width:35.71%;background:#4ade80" title="d4: 10 (35.7%)">d4 36%</div></div><div class="txt"><b>e4</b> 64% · <b>d4</b> 36%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">16</td>
+            <td class="team">The Hipopomaniacs</td>
+            <td class="num">31</td>
+            <td class="num move">e4</td>
+            <td class="num share">61%</td>
+            <td class="num">2.58</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:61.29%;background:#4a9eff" title="e4: 19 (61.3%)">e4 61%</div><div class="seg" style="width:29.03%;background:#4ade80" title="d4: 9 (29.0%)">d4 29%</div><div class="seg" style="width:6.45%;background:#fbbf24" title="c4: 2 (6.5%)"></div><div class="seg" style="width:3.23%;background:#f87171" title="Nf3: 1 (3.2%)"></div></div><div class="txt"><b>e4</b> 61% · <b>d4</b> 29% · <b>c4</b> 6% · <b>Nf3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">17</td>
+            <td class="team">Have fun storming the castle!</td>
+            <td class="num">31</td>
+            <td class="num move">e4</td>
+            <td class="num share">61%</td>
+            <td class="num">2.78</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:61.29%;background:#4a9eff" title="e4: 19 (61.3%)">e4 61%</div><div class="seg" style="width:19.35%;background:#4ade80" title="d4: 6 (19.4%)">d4 19%</div><div class="seg" style="width:16.13%;background:#fbbf24" title="Nf3: 5 (16.1%)">Nf3 16%</div><div class="seg" style="width:3.23%;background:#f87171" title="f4: 1 (3.2%)"></div></div><div class="txt"><b>e4</b> 61% · <b>d4</b> 19% · <b>Nf3</b> 16% · <b>f4</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">18</td>
+            <td class="team">1. d4??</td>
+            <td class="num">28</td>
+            <td class="num move">e4</td>
+            <td class="num share">61%</td>
+            <td class="num">2.20</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:60.71%;background:#4a9eff" title="e4: 17 (60.7%)">e4 61%</div><div class="seg" style="width:35.71%;background:#4ade80" title="d4: 10 (35.7%)">d4 36%</div><div class="seg" style="width:3.57%;background:#fbbf24" title="Nf3: 1 (3.6%)"></div></div><div class="txt"><b>e4</b> 61% · <b>d4</b> 36% · <b>Nf3</b> 4%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">19</td>
+            <td class="team">Not So Funny Anymore</td>
+            <td class="num">27</td>
+            <td class="num move">d4</td>
+            <td class="num share">59%</td>
+            <td class="num">1.97</td>
+            <td class="num">2</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:59.26%;background:#4a9eff" title="d4: 16 (59.3%)">d4 59%</div><div class="seg" style="width:40.74%;background:#4ade80" title="e4: 11 (40.7%)">e4 41%</div></div><div class="txt"><b>d4</b> 59% · <b>e4</b> 41%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">20</td>
+            <td class="team">The Cham-Kennedy Center For The Performing Arts</td>
+            <td class="num">27</td>
+            <td class="num move">e4</td>
+            <td class="num share">59%</td>
+            <td class="num">2.88</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:59.26%;background:#4a9eff" title="e4: 16 (59.3%)">e4 59%</div><div class="seg" style="width:18.52%;background:#4ade80" title="d4: 5 (18.5%)">d4 19%</div><div class="seg" style="width:18.52%;background:#fbbf24" title="c4: 5 (18.5%)">c4 19%</div><div class="seg" style="width:3.70%;background:#f87171" title="h4: 1 (3.7%)"></div></div><div class="txt"><b>e4</b> 59% · <b>d4</b> 19% · <b>c4</b> 19% · <b>h4</b> 4%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">21</td>
+            <td class="team">The Dark Side of the Board</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">59%</td>
+            <td class="num">2.22</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:58.62%;background:#4a9eff" title="e4: 17 (58.6%)">e4 59%</div><div class="seg" style="width:37.93%;background:#4ade80" title="d4: 11 (37.9%)">d4 38%</div><div class="seg" style="width:3.45%;background:#fbbf24" title="c4: 1 (3.4%)"></div></div><div class="txt"><b>e4</b> 59% · <b>d4</b> 38% · <b>c4</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">22</td>
+            <td class="team">French Fried Liver</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">59%</td>
+            <td class="num">2.49</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:58.62%;background:#4a9eff" title="e4: 17 (58.6%)">e4 59%</div><div class="seg" style="width:31.03%;background:#4ade80" title="d4: 9 (31.0%)">d4 31%</div><div class="seg" style="width:10.34%;background:#fbbf24" title="c4: 3 (10.3%)"></div></div><div class="txt"><b>e4</b> 59% · <b>d4</b> 31% · <b>c4</b> 10%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">23</td>
+            <td class="team">Baboona Matata</td>
+            <td class="num">31</td>
+            <td class="num move">d4</td>
+            <td class="num share">58%</td>
+            <td class="num">2.75</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:58.06%;background:#4a9eff" title="d4: 18 (58.1%)">d4 58%</div><div class="seg" style="width:29.03%;background:#4ade80" title="e4: 9 (29.0%)">e4 29%</div><div class="seg" style="width:9.68%;background:#fbbf24" title="c4: 3 (9.7%)"></div><div class="seg" style="width:3.23%;background:#f87171" title="f4: 1 (3.2%)"></div></div><div class="txt"><b>d4</b> 58% · <b>e4</b> 29% · <b>c4</b> 10% · <b>f4</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">24</td>
+            <td class="team">Another pawn bites the dust</td>
+            <td class="num">30</td>
+            <td class="num move">e4</td>
+            <td class="num share">57%</td>
+            <td class="num">2.80</td>
+            <td class="num">5</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:56.67%;background:#4a9eff" title="e4: 17 (56.7%)">e4 57%</div><div class="seg" style="width:33.33%;background:#4ade80" title="d4: 10 (33.3%)">d4 33%</div><div class="seg" style="width:3.33%;background:#fbbf24" title="c4: 1 (3.3%)"></div><div class="seg" style="width:3.33%;background:#f87171" title="Nf3: 1 (3.3%)"></div><div class="seg" style="width:3.33%;background:#a78bfa" title="b3: 1 (3.3%)"></div></div><div class="txt"><b>e4</b> 57% · <b>d4</b> 33% · <b>c4</b> 3% · <b>Nf3</b> 3% · <b>b3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">25</td>
+            <td class="team">Fellowship of the Isolated Queen’s Pawn</td>
+            <td class="num">30</td>
+            <td class="num move">e4</td>
+            <td class="num share">57%</td>
+            <td class="num">2.98</td>
+            <td class="num">5</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:56.67%;background:#4a9eff" title="e4: 17 (56.7%)">e4 57%</div><div class="seg" style="width:30.00%;background:#4ade80" title="d4: 9 (30.0%)">d4 30%</div><div class="seg" style="width:6.67%;background:#fbbf24" title="Nc3: 2 (6.7%)"></div><div class="seg" style="width:3.33%;background:#f87171" title="Nf3: 1 (3.3%)"></div><div class="seg" style="width:3.33%;background:#a78bfa" title="f4: 1 (3.3%)"></div></div><div class="txt"><b>e4</b> 57% · <b>d4</b> 30% · <b>Nc3</b> 7% · <b>Nf3</b> 3% · <b>f4</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">26</td>
+            <td class="team">Delivered Mate, Refund Not Accepted</td>
+            <td class="num">32</td>
+            <td class="num move">d4</td>
+            <td class="num share">56%</td>
+            <td class="num">2.68</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:56.25%;background:#4a9eff" title="d4: 18 (56.2%)">d4 56%</div><div class="seg" style="width:25.00%;background:#4ade80" title="e4: 8 (25.0%)">e4 25%</div><div class="seg" style="width:18.75%;background:#fbbf24" title="Nf3: 6 (18.8%)">Nf3 19%</div></div><div class="txt"><b>d4</b> 56% · <b>e4</b> 25% · <b>Nf3</b> 19%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">27</td>
+            <td class="team">That's Zungzwang</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">55%</td>
+            <td class="num">2.53</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:55.17%;background:#4a9eff" title="e4: 16 (55.2%)">e4 55%</div><div class="seg" style="width:37.93%;background:#4ade80" title="d4: 11 (37.9%)">d4 38%</div><div class="seg" style="width:3.45%;background:#fbbf24" title="c4: 1 (3.4%)"></div><div class="seg" style="width:3.45%;background:#f87171" title="Nf3: 1 (3.4%)"></div></div><div class="txt"><b>e4</b> 55% · <b>d4</b> 38% · <b>c4</b> 3% · <b>Nf3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">28</td>
+            <td class="team">We Are Tanking for a Better First Board Pick Next Season</td>
+            <td class="num">29</td>
+            <td class="num move">e4</td>
+            <td class="num share">55%</td>
+            <td class="num">2.71</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:55.17%;background:#4a9eff" title="e4: 16 (55.2%)">e4 55%</div><div class="seg" style="width:24.14%;background:#4ade80" title="Nf3: 7 (24.1%)">Nf3 24%</div><div class="seg" style="width:20.69%;background:#fbbf24" title="d4: 6 (20.7%)">d4 21%</div></div><div class="txt"><b>e4</b> 55% · <b>Nf3</b> 24% · <b>d4</b> 21%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">29</td>
+            <td class="team">Better mate than never</td>
+            <td class="num">31</td>
+            <td class="num move">e4</td>
+            <td class="num share">55%</td>
+            <td class="num">3.26</td>
+            <td class="num">5</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:54.84%;background:#4a9eff" title="e4: 17 (54.8%)">e4 55%</div><div class="seg" style="width:22.58%;background:#4ade80" title="d4: 7 (22.6%)">d4 23%</div><div class="seg" style="width:16.13%;background:#fbbf24" title="f4: 5 (16.1%)">f4 16%</div><div class="seg" style="width:3.23%;background:#f87171" title="c4: 1 (3.2%)"></div><div class="seg" style="width:3.23%;background:#a78bfa" title="Nc3: 1 (3.2%)"></div></div><div class="txt"><b>e4</b> 55% · <b>d4</b> 23% · <b>f4</b> 16% · <b>c4</b> 3% · <b>Nc3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">30</td>
+            <td class="team">VAR is checking the en passant</td>
+            <td class="num">26</td>
+            <td class="num move">e4</td>
+            <td class="num share">54%</td>
+            <td class="num">2.92</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:53.85%;background:#4a9eff" title="e4: 14 (53.8%)">e4 54%</div><div class="seg" style="width:30.77%;background:#4ade80" title="d4: 8 (30.8%)">d4 31%</div><div class="seg" style="width:11.54%;background:#fbbf24" title="Nf3: 3 (11.5%)"></div><div class="seg" style="width:3.85%;background:#f87171" title="d3: 1 (3.8%)"></div></div><div class="txt"><b>e4</b> 54% · <b>d4</b> 31% · <b>Nf3</b> 12% · <b>d3</b> 4%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">31</td>
+            <td class="team">LetsChooseAnUnreasonablyLongNameToDefyModeratorMilsWhoWasTheOnlyOneToVoteAgainstIt</td>
+            <td class="num">32</td>
+            <td class="num move">e4</td>
+            <td class="num share">53%</td>
+            <td class="num">2.24</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:53.12%;background:#4a9eff" title="e4: 17 (53.1%)">e4 53%</div><div class="seg" style="width:43.75%;background:#4ade80" title="d4: 14 (43.8%)">d4 44%</div><div class="seg" style="width:3.12%;background:#fbbf24" title="Nf3: 1 (3.1%)"></div></div><div class="txt"><b>e4</b> 53% · <b>d4</b> 44% · <b>Nf3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">32</td>
+            <td class="team">Hydration Pawn Break</td>
+            <td class="num">28</td>
+            <td class="num move">e4</td>
+            <td class="num share">50%</td>
+            <td class="num">2.27</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:50.00%;background:#4a9eff" title="e4: 14 (50.0%)">e4 50%</div><div class="seg" style="width:46.43%;background:#4ade80" title="d4: 13 (46.4%)">d4 46%</div><div class="seg" style="width:3.57%;background:#fbbf24" title="c4: 1 (3.6%)"></div></div><div class="txt"><b>e4</b> 50% · <b>d4</b> 46% · <b>c4</b> 4%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">33</td>
+            <td class="team">1.c4 is for cookie</td>
+            <td class="num">29</td>
+            <td class="num move">d4</td>
+            <td class="num share">48%</td>
+            <td class="num">3.11</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:48.28%;background:#4a9eff" title="d4: 14 (48.3%)">d4 48%</div><div class="seg" style="width:31.03%;background:#4ade80" title="e4: 9 (31.0%)">e4 31%</div><div class="seg" style="width:17.24%;background:#fbbf24" title="Nf3: 5 (17.2%)">Nf3 17%</div><div class="seg" style="width:3.45%;background:#f87171" title="c4: 1 (3.4%)"></div></div><div class="txt"><b>d4</b> 48% · <b>e4</b> 31% · <b>Nf3</b> 17% · <b>c4</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">34</td>
+            <td class="team">We will rook you</td>
+            <td class="num">30</td>
+            <td class="num move">d4</td>
+            <td class="num share">47%</td>
+            <td class="num">2.44</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:46.67%;background:#4a9eff" title="d4: 14 (46.7%)">d4 47%</div><div class="seg" style="width:46.67%;background:#4ade80" title="e4: 14 (46.7%)">e4 47%</div><div class="seg" style="width:6.67%;background:#fbbf24" title="c4: 2 (6.7%)"></div></div><div class="txt"><b>d4</b> 47% · <b>e4</b> 47% · <b>c4</b> 7%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">35</td>
+            <td class="team">Hedgehog Havoc</td>
+            <td class="num">30</td>
+            <td class="num move">d4</td>
+            <td class="num share">47%</td>
+            <td class="num">2.95</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:46.67%;background:#4a9eff" title="d4: 14 (46.7%)">d4 47%</div><div class="seg" style="width:40.00%;background:#4ade80" title="e4: 12 (40.0%)">e4 40%</div><div class="seg" style="width:6.67%;background:#fbbf24" title="Nf3: 2 (6.7%)"></div><div class="seg" style="width:6.67%;background:#f87171" title="b3: 2 (6.7%)"></div></div><div class="txt"><b>d4</b> 47% · <b>e4</b> 40% · <b>Nf3</b> 7% · <b>b3</b> 7%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">36</td>
+            <td class="team">Our Bishops moved to Diagon Alley</td>
+            <td class="num">30</td>
+            <td class="num move">d4</td>
+            <td class="num share">47%</td>
+            <td class="num">4.35</td>
+            <td class="num">6</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:46.67%;background:#4a9eff" title="d4: 14 (46.7%)">d4 47%</div><div class="seg" style="width:20.00%;background:#4ade80" title="e4: 6 (20.0%)">e4 20%</div><div class="seg" style="width:13.33%;background:#fbbf24" title="c4: 4 (13.3%)">c4 13%</div><div class="seg" style="width:10.00%;background:#f87171" title="Nf3: 3 (10.0%)"></div><div class="seg" style="width:6.67%;background:#a78bfa" title="g3: 2 (6.7%)"></div><div class="seg" style="width:3.33%;background:#f472b6" title="f4: 1 (3.3%)"></div></div><div class="txt"><b>d4</b> 47% · <b>e4</b> 20% · <b>c4</b> 13% · <b>Nf3</b> 10% · <b>g3</b> 7% · <b>f4</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">37</td>
+            <td class="team">Messi Middlegames</td>
+            <td class="num">28</td>
+            <td class="num move">e4</td>
+            <td class="num share">46%</td>
+            <td class="num">3.32</td>
+            <td class="num">5</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:46.43%;background:#4a9eff" title="e4: 13 (46.4%)">e4 46%</div><div class="seg" style="width:35.71%;background:#4ade80" title="d4: 10 (35.7%)">d4 36%</div><div class="seg" style="width:10.71%;background:#fbbf24" title="c4: 3 (10.7%)"></div><div class="seg" style="width:3.57%;background:#f87171" title="f4: 1 (3.6%)"></div><div class="seg" style="width:3.57%;background:#a78bfa" title="Nf3: 1 (3.6%)"></div></div><div class="txt"><b>e4</b> 46% · <b>d4</b> 36% · <b>c4</b> 11% · <b>f4</b> 4% · <b>Nf3</b> 4%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">38</td>
+            <td class="team">the chess pistols</td>
+            <td class="num">26</td>
+            <td class="num move">d4</td>
+            <td class="num share">46%</td>
+            <td class="num">2.64</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:46.15%;background:#4a9eff" title="d4: 12 (46.2%)">d4 46%</div><div class="seg" style="width:42.31%;background:#4ade80" title="e4: 11 (42.3%)">e4 42%</div><div class="seg" style="width:11.54%;background:#fbbf24" title="c4: 3 (11.5%)"></div></div><div class="txt"><b>d4</b> 46% · <b>e4</b> 42% · <b>c4</b> 12%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">39</td>
+            <td class="team">A Fish Called Blunder</td>
+            <td class="num">31</td>
+            <td class="num move">e4</td>
+            <td class="num share">45%</td>
+            <td class="num">2.68</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:45.16%;background:#4a9eff" title="e4: 14 (45.2%)">e4 45%</div><div class="seg" style="width:41.94%;background:#4ade80" title="d4: 13 (41.9%)">d4 42%</div><div class="seg" style="width:12.90%;background:#fbbf24" title="c4: 4 (12.9%)">c4 13%</div></div><div class="txt"><b>e4</b> 45% · <b>d4</b> 42% · <b>c4</b> 13%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">40</td>
+            <td class="team">We eat our pawns with a fork</td>
+            <td class="num">31</td>
+            <td class="num move">e4</td>
+            <td class="num share">45%</td>
+            <td class="num">3.29</td>
+            <td class="num">5</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:45.16%;background:#4a9eff" title="e4: 14 (45.2%)">e4 45%</div><div class="seg" style="width:38.71%;background:#4ade80" title="d4: 12 (38.7%)">d4 39%</div><div class="seg" style="width:6.45%;background:#fbbf24" title="f4: 2 (6.5%)"></div><div class="seg" style="width:6.45%;background:#f87171" title="Nf3: 2 (6.5%)"></div><div class="seg" style="width:3.23%;background:#a78bfa" title="a3: 1 (3.2%)"></div></div><div class="txt"><b>e4</b> 45% · <b>d4</b> 39% · <b>f4</b> 6% · <b>Nf3</b> 6% · <b>a3</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">41</td>
+            <td class="team">It Works On My Board</td>
+            <td class="num">29</td>
+            <td class="num move">d4</td>
+            <td class="num share">45%</td>
+            <td class="num">3.52</td>
+            <td class="num">5</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:44.83%;background:#4a9eff" title="d4: 13 (44.8%)">d4 45%</div><div class="seg" style="width:31.03%;background:#4ade80" title="e4: 9 (31.0%)">e4 31%</div><div class="seg" style="width:17.24%;background:#fbbf24" title="Nf3: 5 (17.2%)">Nf3 17%</div><div class="seg" style="width:3.45%;background:#f87171" title="c4: 1 (3.4%)"></div><div class="seg" style="width:3.45%;background:#a78bfa" title="f4: 1 (3.4%)"></div></div><div class="txt"><b>d4</b> 45% · <b>e4</b> 31% · <b>Nf3</b> 17% · <b>c4</b> 3% · <b>f4</b> 3%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">42</td>
+            <td class="team">Messi Mates</td>
+            <td class="num">32</td>
+            <td class="num move">e4</td>
+            <td class="num share">41%</td>
+            <td class="num">2.96</td>
+            <td class="num">3</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:40.62%;background:#4a9eff" title="e4: 13 (40.6%)">e4 41%</div><div class="seg" style="width:31.25%;background:#4ade80" title="c4: 10 (31.2%)">c4 31%</div><div class="seg" style="width:28.12%;background:#fbbf24" title="d4: 9 (28.1%)">d4 28%</div></div><div class="txt"><b>e4</b> 41% · <b>c4</b> 31% · <b>d4</b> 28%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">43</td>
+            <td class="team">Yasser, Tell Me a Story</td>
+            <td class="num">30</td>
+            <td class="num move">d4</td>
+            <td class="num share">40%</td>
+            <td class="num">3.37</td>
+            <td class="num">4</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:40.00%;background:#4a9eff" title="d4: 12 (40.0%)">d4 40%</div><div class="seg" style="width:36.67%;background:#4ade80" title="e4: 11 (36.7%)">e4 37%</div><div class="seg" style="width:16.67%;background:#fbbf24" title="c4: 5 (16.7%)">c4 17%</div><div class="seg" style="width:6.67%;background:#f87171" title="Nf3: 2 (6.7%)"></div></div><div class="txt"><b>d4</b> 40% · <b>e4</b> 37% · <b>c4</b> 17% · <b>Nf3</b> 7%</div></td>
+        </tr>
+        <tr>
+            <td class="rank">44</td>
+            <td class="team">Accelerated Dragons</td>
+            <td class="num">31</td>
+            <td class="num move">d4</td>
+            <td class="num share">39%</td>
+            <td class="num">4.43</td>
+            <td class="num">5</td>
+            <td class="bars"><div class="bar"><div class="seg" style="width:38.71%;background:#4a9eff" title="d4: 12 (38.7%)">d4 39%</div><div class="seg" style="width:22.58%;background:#4ade80" title="e4: 7 (22.6%)">e4 23%</div><div class="seg" style="width:16.13%;background:#fbbf24" title="c4: 5 (16.1%)">c4 16%</div><div class="seg" style="width:12.90%;background:#f87171" title="f4: 4 (12.9%)">f4 13%</div><div class="seg" style="width:9.68%;background:#a78bfa" title="Nf3: 3 (9.7%)"></div></div><div class="txt"><b>d4</b> 39% · <b>e4</b> 23% · <b>c4</b> 16% · <b>f4</b> 13% · <b>Nf3</b> 10%</div></td>
+        </tr></tbody>
+    </table>
+    <p class="legend">
+        <b>Top %</b> = share of white games opened with the team's most common first move (primary sort).<br>
+        <b>Effective moves</b> = exp(entropy) of the distribution — roughly how many first moves the team "really" uses.
+        1.00 means always the same move; higher means more spread. Used as tiebreak.<br>
+        Greyed rows have fewer than 8 white games in the cache.
+    </p>
+</body>
+</html>
