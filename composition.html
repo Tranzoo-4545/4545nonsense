@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Season Composition</title>
+<style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           background: #1a1a1a; color: #e0e0e0; margin: 0; padding: 2rem; }
+    h1 { color: #fff; margin-bottom: 0.25rem; }
+    .subtitle { color: #888; margin-bottom: 1.5rem; line-height: 1.6; }
+    .key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin: 0 0.3rem 0 0.8rem; }
+    table { width: 100%; border-collapse: collapse; background: #2a2a2a; border-radius: 8px; overflow: hidden; }
+    th { text-align: left; padding: 0.7rem; color: #4a9eff; font-size: 0.85rem; background: #333; }
+    td { padding: 0.4rem 0.7rem; border-bottom: 1px solid #333; font-size: 0.9rem; }
+    tr:hover td { background: #313131; }
+    .num { text-align: center; white-space: nowrap; }
+    .season { font-weight: bold; }
+    .pct { color: #777; font-size: 0.8rem; }
+    .dim { color: #777; }
+    .debut-t { color: #4ade80; }
+    .cont-t { color: #4a9eff; }
+    .ret-t { color: #fbbf24; }
+    .barcell { width: 38%; }
+    .bar { display: flex; height: 16px; border-radius: 3px; overflow: hidden; background: #222; }
+    .seg.debut { background: #4ade80; }
+    .seg.cont { background: #4a9eff; }
+    .seg.ret { background: #fbbf24; }
+</style>
+</head>
+<body>
+    <h1>Season Composition</h1>
+    <p class="subtitle">
+        Who makes up each season's player base. A player counts if they appear in any pairing.
+        <span class="key" style="background:#4ade80"></span>Debutants (first appearance)
+        <span class="key" style="background:#4a9eff"></span>Continuing (played previous season)
+        <span class="key" style="background:#fbbf24"></span>Returnees (came back after a gap).
+        Bar length is proportional to total player count.
+    </p>
+    <table>
+        <thead><tr>
+            <th>Season</th><th>Players</th><th>Debutants</th><th>Continuing</th><th>Returnees</th>
+            <th>Avg gap (seasons)</th><th></th>
+        </tr></thead>
+        <tbody>
+        <tr>
+            <td class="num season">S1</td>
+            <td class="num">55</td>
+            <td class="num debut-t">55 <span class="pct">(100%)</span></td>
+            <td class="num cont-t">0 <span class="pct">(0%)</span></td>
+            <td class="num ret-t">0 <span class="pct">(0%)</span></td>
+            <td class="num dim">–</td>
+            <td class="barcell"><div class="bar" style="width:8.6%"><div class="seg debut" style="width:100.00%" title="Debutants: 55 (100%)"></div><div class="seg cont" style="width:0.00%" title="Continuing: 0 (0%)"></div><div class="seg ret" style="width:0.00%" title="Returnees: 0 (0%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S2</td>
+            <td class="num">139</td>
+            <td class="num debut-t">113 <span class="pct">(81%)</span></td>
+            <td class="num cont-t">26 <span class="pct">(19%)</span></td>
+            <td class="num ret-t">0 <span class="pct">(0%)</span></td>
+            <td class="num dim">–</td>
+            <td class="barcell"><div class="bar" style="width:21.8%"><div class="seg debut" style="width:81.29%" title="Debutants: 113 (81%)"></div><div class="seg cont" style="width:18.71%" title="Continuing: 26 (19%)"></div><div class="seg ret" style="width:0.00%" title="Returnees: 0 (0%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S3</td>
+            <td class="num">190</td>
+            <td class="num debut-t">119 <span class="pct">(63%)</span></td>
+            <td class="num cont-t">71 <span class="pct">(37%)</span></td>
+            <td class="num ret-t">0 <span class="pct">(0%)</span></td>
+            <td class="num dim">–</td>
+            <td class="barcell"><div class="bar" style="width:29.8%"><div class="seg debut" style="width:62.63%" title="Debutants: 119 (63%)"></div><div class="seg cont" style="width:37.37%" title="Continuing: 71 (37%)"></div><div class="seg ret" style="width:0.00%" title="Returnees: 0 (0%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S4</td>
+            <td class="num">185</td>
+            <td class="num debut-t">80 <span class="pct">(43%)</span></td>
+            <td class="num cont-t">97 <span class="pct">(52%)</span></td>
+            <td class="num ret-t">8 <span class="pct">(4%)</span></td>
+            <td class="num dim">1.2</td>
+            <td class="barcell"><div class="bar" style="width:29.0%"><div class="seg debut" style="width:43.24%" title="Debutants: 80 (43%)"></div><div class="seg cont" style="width:52.43%" title="Continuing: 97 (52%)"></div><div class="seg ret" style="width:4.32%" title="Returnees: 8 (4%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S5</td>
+            <td class="num">179</td>
+            <td class="num debut-t">75 <span class="pct">(42%)</span></td>
+            <td class="num cont-t">91 <span class="pct">(51%)</span></td>
+            <td class="num ret-t">13 <span class="pct">(7%)</span></td>
+            <td class="num dim">1.6</td>
+            <td class="barcell"><div class="bar" style="width:28.1%"><div class="seg debut" style="width:41.90%" title="Debutants: 75 (42%)"></div><div class="seg cont" style="width:50.84%" title="Continuing: 91 (51%)"></div><div class="seg ret" style="width:7.26%" title="Returnees: 13 (7%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S6</td>
+            <td class="num">198</td>
+            <td class="num debut-t">86 <span class="pct">(43%)</span></td>
+            <td class="num cont-t">91 <span class="pct">(46%)</span></td>
+            <td class="num ret-t">21 <span class="pct">(11%)</span></td>
+            <td class="num dim">1.5</td>
+            <td class="barcell"><div class="bar" style="width:31.1%"><div class="seg debut" style="width:43.43%" title="Debutants: 86 (43%)"></div><div class="seg cont" style="width:45.96%" title="Continuing: 91 (46%)"></div><div class="seg ret" style="width:10.61%" title="Returnees: 21 (11%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S7</td>
+            <td class="num">237</td>
+            <td class="num debut-t">117 <span class="pct">(49%)</span></td>
+            <td class="num cont-t">106 <span class="pct">(45%)</span></td>
+            <td class="num ret-t">14 <span class="pct">(6%)</span></td>
+            <td class="num dim">1.7</td>
+            <td class="barcell"><div class="bar" style="width:37.2%"><div class="seg debut" style="width:49.37%" title="Debutants: 117 (49%)"></div><div class="seg cont" style="width:44.73%" title="Continuing: 106 (45%)"></div><div class="seg ret" style="width:5.91%" title="Returnees: 14 (6%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S8</td>
+            <td class="num">214</td>
+            <td class="num debut-t">88 <span class="pct">(41%)</span></td>
+            <td class="num cont-t">114 <span class="pct">(53%)</span></td>
+            <td class="num ret-t">12 <span class="pct">(6%)</span></td>
+            <td class="num dim">2.1</td>
+            <td class="barcell"><div class="bar" style="width:33.6%"><div class="seg debut" style="width:41.12%" title="Debutants: 88 (41%)"></div><div class="seg cont" style="width:53.27%" title="Continuing: 114 (53%)"></div><div class="seg ret" style="width:5.61%" title="Returnees: 12 (6%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S9</td>
+            <td class="num">227</td>
+            <td class="num debut-t">96 <span class="pct">(42%)</span></td>
+            <td class="num cont-t">114 <span class="pct">(50%)</span></td>
+            <td class="num ret-t">17 <span class="pct">(7%)</span></td>
+            <td class="num dim">1.8</td>
+            <td class="barcell"><div class="bar" style="width:35.6%"><div class="seg debut" style="width:42.29%" title="Debutants: 96 (42%)"></div><div class="seg cont" style="width:50.22%" title="Continuing: 114 (50%)"></div><div class="seg ret" style="width:7.49%" title="Returnees: 17 (7%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S10</td>
+            <td class="num">208</td>
+            <td class="num debut-t">84 <span class="pct">(40%)</span></td>
+            <td class="num cont-t">107 <span class="pct">(51%)</span></td>
+            <td class="num ret-t">17 <span class="pct">(8%)</span></td>
+            <td class="num dim">2.4</td>
+            <td class="barcell"><div class="bar" style="width:32.7%"><div class="seg debut" style="width:40.38%" title="Debutants: 84 (40%)"></div><div class="seg cont" style="width:51.44%" title="Continuing: 107 (51%)"></div><div class="seg ret" style="width:8.17%" title="Returnees: 17 (8%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S11</td>
+            <td class="num">244</td>
+            <td class="num debut-t">89 <span class="pct">(36%)</span></td>
+            <td class="num cont-t">115 <span class="pct">(47%)</span></td>
+            <td class="num ret-t">40 <span class="pct">(16%)</span></td>
+            <td class="num dim">2.7</td>
+            <td class="barcell"><div class="bar" style="width:38.3%"><div class="seg debut" style="width:36.48%" title="Debutants: 89 (36%)"></div><div class="seg cont" style="width:47.13%" title="Continuing: 115 (47%)"></div><div class="seg ret" style="width:16.39%" title="Returnees: 40 (16%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S12</td>
+            <td class="num">311</td>
+            <td class="num debut-t">128 <span class="pct">(41%)</span></td>
+            <td class="num cont-t">150 <span class="pct">(48%)</span></td>
+            <td class="num ret-t">33 <span class="pct">(11%)</span></td>
+            <td class="num dim">3.2</td>
+            <td class="barcell"><div class="bar" style="width:48.8%"><div class="seg debut" style="width:41.16%" title="Debutants: 128 (41%)"></div><div class="seg cont" style="width:48.23%" title="Continuing: 150 (48%)"></div><div class="seg ret" style="width:10.61%" title="Returnees: 33 (11%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S13</td>
+            <td class="num">228</td>
+            <td class="num debut-t">56 <span class="pct">(25%)</span></td>
+            <td class="num cont-t">154 <span class="pct">(68%)</span></td>
+            <td class="num ret-t">18 <span class="pct">(8%)</span></td>
+            <td class="num dim">2.8</td>
+            <td class="barcell"><div class="bar" style="width:35.8%"><div class="seg debut" style="width:24.56%" title="Debutants: 56 (25%)"></div><div class="seg cont" style="width:67.54%" title="Continuing: 154 (68%)"></div><div class="seg ret" style="width:7.89%" title="Returnees: 18 (8%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S14</td>
+            <td class="num">236</td>
+            <td class="num debut-t">84 <span class="pct">(36%)</span></td>
+            <td class="num cont-t">122 <span class="pct">(52%)</span></td>
+            <td class="num ret-t">30 <span class="pct">(13%)</span></td>
+            <td class="num dim">2.7</td>
+            <td class="barcell"><div class="bar" style="width:37.0%"><div class="seg debut" style="width:35.59%" title="Debutants: 84 (36%)"></div><div class="seg cont" style="width:51.69%" title="Continuing: 122 (52%)"></div><div class="seg ret" style="width:12.71%" title="Returnees: 30 (13%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S15</td>
+            <td class="num">247</td>
+            <td class="num debut-t">90 <span class="pct">(36%)</span></td>
+            <td class="num cont-t">122 <span class="pct">(49%)</span></td>
+            <td class="num ret-t">35 <span class="pct">(14%)</span></td>
+            <td class="num dim">3.2</td>
+            <td class="barcell"><div class="bar" style="width:38.8%"><div class="seg debut" style="width:36.44%" title="Debutants: 90 (36%)"></div><div class="seg cont" style="width:49.39%" title="Continuing: 122 (49%)"></div><div class="seg ret" style="width:14.17%" title="Returnees: 35 (14%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S16</td>
+            <td class="num">282</td>
+            <td class="num debut-t">107 <span class="pct">(38%)</span></td>
+            <td class="num cont-t">137 <span class="pct">(49%)</span></td>
+            <td class="num ret-t">38 <span class="pct">(13%)</span></td>
+            <td class="num dim">3.1</td>
+            <td class="barcell"><div class="bar" style="width:44.3%"><div class="seg debut" style="width:37.94%" title="Debutants: 107 (38%)"></div><div class="seg cont" style="width:48.58%" title="Continuing: 137 (49%)"></div><div class="seg ret" style="width:13.48%" title="Returnees: 38 (13%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S17</td>
+            <td class="num">283</td>
+            <td class="num debut-t">81 <span class="pct">(29%)</span></td>
+            <td class="num cont-t">173 <span class="pct">(61%)</span></td>
+            <td class="num ret-t">29 <span class="pct">(10%)</span></td>
+            <td class="num dim">2.4</td>
+            <td class="barcell"><div class="bar" style="width:44.4%"><div class="seg debut" style="width:28.62%" title="Debutants: 81 (29%)"></div><div class="seg cont" style="width:61.13%" title="Continuing: 173 (61%)"></div><div class="seg ret" style="width:10.25%" title="Returnees: 29 (10%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S18</td>
+            <td class="num">260</td>
+            <td class="num debut-t">63 <span class="pct">(24%)</span></td>
+            <td class="num cont-t">164 <span class="pct">(63%)</span></td>
+            <td class="num ret-t">33 <span class="pct">(13%)</span></td>
+            <td class="num dim">3.8</td>
+            <td class="barcell"><div class="bar" style="width:40.8%"><div class="seg debut" style="width:24.23%" title="Debutants: 63 (24%)"></div><div class="seg cont" style="width:63.08%" title="Continuing: 164 (63%)"></div><div class="seg ret" style="width:12.69%" title="Returnees: 33 (13%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S19</td>
+            <td class="num">287</td>
+            <td class="num debut-t">81 <span class="pct">(28%)</span></td>
+            <td class="num cont-t">154 <span class="pct">(54%)</span></td>
+            <td class="num ret-t">52 <span class="pct">(18%)</span></td>
+            <td class="num dim">3.6</td>
+            <td class="barcell"><div class="bar" style="width:45.1%"><div class="seg debut" style="width:28.22%" title="Debutants: 81 (28%)"></div><div class="seg cont" style="width:53.66%" title="Continuing: 154 (54%)"></div><div class="seg ret" style="width:18.12%" title="Returnees: 52 (18%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S20</td>
+            <td class="num">315</td>
+            <td class="num debut-t">103 <span class="pct">(33%)</span></td>
+            <td class="num cont-t">168 <span class="pct">(53%)</span></td>
+            <td class="num ret-t">44 <span class="pct">(14%)</span></td>
+            <td class="num dim">4.2</td>
+            <td class="barcell"><div class="bar" style="width:49.5%"><div class="seg debut" style="width:32.70%" title="Debutants: 103 (33%)"></div><div class="seg cont" style="width:53.33%" title="Continuing: 168 (53%)"></div><div class="seg ret" style="width:13.97%" title="Returnees: 44 (14%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S21</td>
+            <td class="num">464</td>
+            <td class="num debut-t">194 <span class="pct">(42%)</span></td>
+            <td class="num cont-t">206 <span class="pct">(44%)</span></td>
+            <td class="num ret-t">64 <span class="pct">(14%)</span></td>
+            <td class="num dim">4.7</td>
+            <td class="barcell"><div class="bar" style="width:72.8%"><div class="seg debut" style="width:41.81%" title="Debutants: 194 (42%)"></div><div class="seg cont" style="width:44.40%" title="Continuing: 206 (44%)"></div><div class="seg ret" style="width:13.79%" title="Returnees: 64 (14%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S22</td>
+            <td class="num">436</td>
+            <td class="num debut-t">95 <span class="pct">(22%)</span></td>
+            <td class="num cont-t">303 <span class="pct">(69%)</span></td>
+            <td class="num ret-t">38 <span class="pct">(9%)</span></td>
+            <td class="num dim">3.7</td>
+            <td class="barcell"><div class="bar" style="width:68.4%"><div class="seg debut" style="width:21.79%" title="Debutants: 95 (22%)"></div><div class="seg cont" style="width:69.50%" title="Continuing: 303 (69%)"></div><div class="seg ret" style="width:8.72%" title="Returnees: 38 (9%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S23</td>
+            <td class="num">433</td>
+            <td class="num debut-t">129 <span class="pct">(30%)</span></td>
+            <td class="num cont-t">268 <span class="pct">(62%)</span></td>
+            <td class="num ret-t">36 <span class="pct">(8%)</span></td>
+            <td class="num dim">3.8</td>
+            <td class="barcell"><div class="bar" style="width:68.0%"><div class="seg debut" style="width:29.79%" title="Debutants: 129 (30%)"></div><div class="seg cont" style="width:61.89%" title="Continuing: 268 (62%)"></div><div class="seg ret" style="width:8.31%" title="Returnees: 36 (8%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S24</td>
+            <td class="num">425</td>
+            <td class="num debut-t">111 <span class="pct">(26%)</span></td>
+            <td class="num cont-t">266 <span class="pct">(63%)</span></td>
+            <td class="num ret-t">48 <span class="pct">(11%)</span></td>
+            <td class="num dim">4.3</td>
+            <td class="barcell"><div class="bar" style="width:66.7%"><div class="seg debut" style="width:26.12%" title="Debutants: 111 (26%)"></div><div class="seg cont" style="width:62.59%" title="Continuing: 266 (63%)"></div><div class="seg ret" style="width:11.29%" title="Returnees: 48 (11%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S25</td>
+            <td class="num">573</td>
+            <td class="num debut-t">198 <span class="pct">(35%)</span></td>
+            <td class="num cont-t">283 <span class="pct">(49%)</span></td>
+            <td class="num ret-t">92 <span class="pct">(16%)</span></td>
+            <td class="num dim">4.1</td>
+            <td class="barcell"><div class="bar" style="width:90.0%"><div class="seg debut" style="width:34.55%" title="Debutants: 198 (35%)"></div><div class="seg cont" style="width:49.39%" title="Continuing: 283 (49%)"></div><div class="seg ret" style="width:16.06%" title="Returnees: 92 (16%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S26</td>
+            <td class="num">611</td>
+            <td class="num debut-t">192 <span class="pct">(31%)</span></td>
+            <td class="num cont-t">344 <span class="pct">(56%)</span></td>
+            <td class="num ret-t">75 <span class="pct">(12%)</span></td>
+            <td class="num dim">4.2</td>
+            <td class="barcell"><div class="bar" style="width:95.9%"><div class="seg debut" style="width:31.42%" title="Debutants: 192 (31%)"></div><div class="seg cont" style="width:56.30%" title="Continuing: 344 (56%)"></div><div class="seg ret" style="width:12.27%" title="Returnees: 75 (12%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S27</td>
+            <td class="num">612</td>
+            <td class="num debut-t">205 <span class="pct">(33%)</span></td>
+            <td class="num cont-t">359 <span class="pct">(59%)</span></td>
+            <td class="num ret-t">48 <span class="pct">(8%)</span></td>
+            <td class="num dim">3.6</td>
+            <td class="barcell"><div class="bar" style="width:96.1%"><div class="seg debut" style="width:33.50%" title="Debutants: 205 (33%)"></div><div class="seg cont" style="width:58.66%" title="Continuing: 359 (59%)"></div><div class="seg ret" style="width:7.84%" title="Returnees: 48 (8%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S28</td>
+            <td class="num">523</td>
+            <td class="num debut-t">127 <span class="pct">(24%)</span></td>
+            <td class="num cont-t">332 <span class="pct">(63%)</span></td>
+            <td class="num ret-t">64 <span class="pct">(12%)</span></td>
+            <td class="num dim">2.8</td>
+            <td class="barcell"><div class="bar" style="width:82.1%"><div class="seg debut" style="width:24.28%" title="Debutants: 127 (24%)"></div><div class="seg cont" style="width:63.48%" title="Continuing: 332 (63%)"></div><div class="seg ret" style="width:12.24%" title="Returnees: 64 (12%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S29</td>
+            <td class="num">637</td>
+            <td class="num debut-t">176 <span class="pct">(28%)</span></td>
+            <td class="num cont-t">360 <span class="pct">(57%)</span></td>
+            <td class="num ret-t">101 <span class="pct">(16%)</span></td>
+            <td class="num dim">3.5</td>
+            <td class="barcell"><div class="bar" style="width:100.0%"><div class="seg debut" style="width:27.63%" title="Debutants: 176 (28%)"></div><div class="seg cont" style="width:56.51%" title="Continuing: 360 (57%)"></div><div class="seg ret" style="width:15.86%" title="Returnees: 101 (16%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S30</td>
+            <td class="num">497</td>
+            <td class="num debut-t">84 <span class="pct">(17%)</span></td>
+            <td class="num cont-t">363 <span class="pct">(73%)</span></td>
+            <td class="num ret-t">50 <span class="pct">(10%)</span></td>
+            <td class="num dim">4.0</td>
+            <td class="barcell"><div class="bar" style="width:78.0%"><div class="seg debut" style="width:16.90%" title="Debutants: 84 (17%)"></div><div class="seg cont" style="width:73.04%" title="Continuing: 363 (73%)"></div><div class="seg ret" style="width:10.06%" title="Returnees: 50 (10%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S31</td>
+            <td class="num">433</td>
+            <td class="num debut-t">78 <span class="pct">(18%)</span></td>
+            <td class="num cont-t">295 <span class="pct">(68%)</span></td>
+            <td class="num ret-t">60 <span class="pct">(14%)</span></td>
+            <td class="num dim">3.1</td>
+            <td class="barcell"><div class="bar" style="width:68.0%"><div class="seg debut" style="width:18.01%" title="Debutants: 78 (18%)"></div><div class="seg cont" style="width:68.13%" title="Continuing: 295 (68%)"></div><div class="seg ret" style="width:13.86%" title="Returnees: 60 (14%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S32</td>
+            <td class="num">396</td>
+            <td class="num debut-t">86 <span class="pct">(22%)</span></td>
+            <td class="num cont-t">252 <span class="pct">(64%)</span></td>
+            <td class="num ret-t">58 <span class="pct">(15%)</span></td>
+            <td class="num dim">4.2</td>
+            <td class="barcell"><div class="bar" style="width:62.2%"><div class="seg debut" style="width:21.72%" title="Debutants: 86 (22%)"></div><div class="seg cont" style="width:63.64%" title="Continuing: 252 (64%)"></div><div class="seg ret" style="width:14.65%" title="Returnees: 58 (15%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S33</td>
+            <td class="num">431</td>
+            <td class="num debut-t">81 <span class="pct">(19%)</span></td>
+            <td class="num cont-t">259 <span class="pct">(60%)</span></td>
+            <td class="num ret-t">91 <span class="pct">(21%)</span></td>
+            <td class="num dim">3.1</td>
+            <td class="barcell"><div class="bar" style="width:67.7%"><div class="seg debut" style="width:18.79%" title="Debutants: 81 (19%)"></div><div class="seg cont" style="width:60.09%" title="Continuing: 259 (60%)"></div><div class="seg ret" style="width:21.11%" title="Returnees: 91 (21%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S34</td>
+            <td class="num">394</td>
+            <td class="num debut-t">74 <span class="pct">(19%)</span></td>
+            <td class="num cont-t">266 <span class="pct">(68%)</span></td>
+            <td class="num ret-t">54 <span class="pct">(14%)</span></td>
+            <td class="num dim">3.6</td>
+            <td class="barcell"><div class="bar" style="width:61.9%"><div class="seg debut" style="width:18.78%" title="Debutants: 74 (19%)"></div><div class="seg cont" style="width:67.51%" title="Continuing: 266 (68%)"></div><div class="seg ret" style="width:13.71%" title="Returnees: 54 (14%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S35</td>
+            <td class="num">470</td>
+            <td class="num debut-t">107 <span class="pct">(23%)</span></td>
+            <td class="num cont-t">267 <span class="pct">(57%)</span></td>
+            <td class="num ret-t">96 <span class="pct">(20%)</span></td>
+            <td class="num dim">4.2</td>
+            <td class="barcell"><div class="bar" style="width:73.8%"><div class="seg debut" style="width:22.77%" title="Debutants: 107 (23%)"></div><div class="seg cont" style="width:56.81%" title="Continuing: 267 (57%)"></div><div class="seg ret" style="width:20.43%" title="Returnees: 96 (20%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S36</td>
+            <td class="num">444</td>
+            <td class="num debut-t">97 <span class="pct">(22%)</span></td>
+            <td class="num cont-t">290 <span class="pct">(65%)</span></td>
+            <td class="num ret-t">57 <span class="pct">(13%)</span></td>
+            <td class="num dim">4.8</td>
+            <td class="barcell"><div class="bar" style="width:69.7%"><div class="seg debut" style="width:21.85%" title="Debutants: 97 (22%)"></div><div class="seg cont" style="width:65.32%" title="Continuing: 290 (65%)"></div><div class="seg ret" style="width:12.84%" title="Returnees: 57 (13%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S37</td>
+            <td class="num">432</td>
+            <td class="num debut-t">93 <span class="pct">(22%)</span></td>
+            <td class="num cont-t">281 <span class="pct">(65%)</span></td>
+            <td class="num ret-t">58 <span class="pct">(13%)</span></td>
+            <td class="num dim">4.7</td>
+            <td class="barcell"><div class="bar" style="width:67.8%"><div class="seg debut" style="width:21.53%" title="Debutants: 93 (22%)"></div><div class="seg cont" style="width:65.05%" title="Continuing: 281 (65%)"></div><div class="seg ret" style="width:13.43%" title="Returnees: 58 (13%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S38</td>
+            <td class="num">460</td>
+            <td class="num debut-t">90 <span class="pct">(20%)</span></td>
+            <td class="num cont-t">289 <span class="pct">(63%)</span></td>
+            <td class="num ret-t">81 <span class="pct">(18%)</span></td>
+            <td class="num dim">4.3</td>
+            <td class="barcell"><div class="bar" style="width:72.2%"><div class="seg debut" style="width:19.57%" title="Debutants: 90 (20%)"></div><div class="seg cont" style="width:62.83%" title="Continuing: 289 (63%)"></div><div class="seg ret" style="width:17.61%" title="Returnees: 81 (18%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S39</td>
+            <td class="num">446</td>
+            <td class="num debut-t">91 <span class="pct">(20%)</span></td>
+            <td class="num cont-t">288 <span class="pct">(65%)</span></td>
+            <td class="num ret-t">67 <span class="pct">(15%)</span></td>
+            <td class="num dim">5.2</td>
+            <td class="barcell"><div class="bar" style="width:70.0%"><div class="seg debut" style="width:20.40%" title="Debutants: 91 (20%)"></div><div class="seg cont" style="width:64.57%" title="Continuing: 288 (65%)"></div><div class="seg ret" style="width:15.02%" title="Returnees: 67 (15%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S40</td>
+            <td class="num">401</td>
+            <td class="num debut-t">82 <span class="pct">(20%)</span></td>
+            <td class="num cont-t">263 <span class="pct">(66%)</span></td>
+            <td class="num ret-t">56 <span class="pct">(14%)</span></td>
+            <td class="num dim">3.8</td>
+            <td class="barcell"><div class="bar" style="width:63.0%"><div class="seg debut" style="width:20.45%" title="Debutants: 82 (20%)"></div><div class="seg cont" style="width:65.59%" title="Continuing: 263 (66%)"></div><div class="seg ret" style="width:13.97%" title="Returnees: 56 (14%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S41</td>
+            <td class="num">388</td>
+            <td class="num debut-t">75 <span class="pct">(19%)</span></td>
+            <td class="num cont-t">238 <span class="pct">(61%)</span></td>
+            <td class="num ret-t">75 <span class="pct">(19%)</span></td>
+            <td class="num dim">5.4</td>
+            <td class="barcell"><div class="bar" style="width:60.9%"><div class="seg debut" style="width:19.33%" title="Debutants: 75 (19%)"></div><div class="seg cont" style="width:61.34%" title="Continuing: 238 (61%)"></div><div class="seg ret" style="width:19.33%" title="Returnees: 75 (19%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S42</td>
+            <td class="num">387</td>
+            <td class="num debut-t">66 <span class="pct">(17%)</span></td>
+            <td class="num cont-t">260 <span class="pct">(67%)</span></td>
+            <td class="num ret-t">61 <span class="pct">(16%)</span></td>
+            <td class="num dim">4.8</td>
+            <td class="barcell"><div class="bar" style="width:60.8%"><div class="seg debut" style="width:17.05%" title="Debutants: 66 (17%)"></div><div class="seg cont" style="width:67.18%" title="Continuing: 260 (67%)"></div><div class="seg ret" style="width:15.76%" title="Returnees: 61 (16%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S43</td>
+            <td class="num">424</td>
+            <td class="num debut-t">80 <span class="pct">(19%)</span></td>
+            <td class="num cont-t">266 <span class="pct">(63%)</span></td>
+            <td class="num ret-t">78 <span class="pct">(18%)</span></td>
+            <td class="num dim">4.3</td>
+            <td class="barcell"><div class="bar" style="width:66.6%"><div class="seg debut" style="width:18.87%" title="Debutants: 80 (19%)"></div><div class="seg cont" style="width:62.74%" title="Continuing: 266 (63%)"></div><div class="seg ret" style="width:18.40%" title="Returnees: 78 (18%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S44</td>
+            <td class="num">447</td>
+            <td class="num debut-t">112 <span class="pct">(25%)</span></td>
+            <td class="num cont-t">270 <span class="pct">(60%)</span></td>
+            <td class="num ret-t">65 <span class="pct">(15%)</span></td>
+            <td class="num dim">5.5</td>
+            <td class="barcell"><div class="bar" style="width:70.2%"><div class="seg debut" style="width:25.06%" title="Debutants: 112 (25%)"></div><div class="seg cont" style="width:60.40%" title="Continuing: 270 (60%)"></div><div class="seg ret" style="width:14.54%" title="Returnees: 65 (15%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S45</td>
+            <td class="num">488</td>
+            <td class="num debut-t">119 <span class="pct">(24%)</span></td>
+            <td class="num cont-t">290 <span class="pct">(59%)</span></td>
+            <td class="num ret-t">79 <span class="pct">(16%)</span></td>
+            <td class="num dim">4.6</td>
+            <td class="barcell"><div class="bar" style="width:76.6%"><div class="seg debut" style="width:24.39%" title="Debutants: 119 (24%)"></div><div class="seg cont" style="width:59.43%" title="Continuing: 290 (59%)"></div><div class="seg ret" style="width:16.19%" title="Returnees: 79 (16%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S46</td>
+            <td class="num">418</td>
+            <td class="num debut-t">65 <span class="pct">(16%)</span></td>
+            <td class="num cont-t">297 <span class="pct">(71%)</span></td>
+            <td class="num ret-t">56 <span class="pct">(13%)</span></td>
+            <td class="num dim">5.5</td>
+            <td class="barcell"><div class="bar" style="width:65.6%"><div class="seg debut" style="width:15.55%" title="Debutants: 65 (16%)"></div><div class="seg cont" style="width:71.05%" title="Continuing: 297 (71%)"></div><div class="seg ret" style="width:13.40%" title="Returnees: 56 (13%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S47</td>
+            <td class="num">489</td>
+            <td class="num debut-t">122 <span class="pct">(25%)</span></td>
+            <td class="num cont-t">286 <span class="pct">(58%)</span></td>
+            <td class="num ret-t">81 <span class="pct">(17%)</span></td>
+            <td class="num dim">4.8</td>
+            <td class="barcell"><div class="bar" style="width:76.8%"><div class="seg debut" style="width:24.95%" title="Debutants: 122 (25%)"></div><div class="seg cont" style="width:58.49%" title="Continuing: 286 (58%)"></div><div class="seg ret" style="width:16.56%" title="Returnees: 81 (17%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S48</td>
+            <td class="num">455</td>
+            <td class="num debut-t">88 <span class="pct">(19%)</span></td>
+            <td class="num cont-t">307 <span class="pct">(67%)</span></td>
+            <td class="num ret-t">60 <span class="pct">(13%)</span></td>
+            <td class="num dim">6.2</td>
+            <td class="barcell"><div class="bar" style="width:71.4%"><div class="seg debut" style="width:19.34%" title="Debutants: 88 (19%)"></div><div class="seg cont" style="width:67.47%" title="Continuing: 307 (67%)"></div><div class="seg ret" style="width:13.19%" title="Returnees: 60 (13%)"></div></div></td>
+        </tr>
+        <tr>
+            <td class="num season">S49</td>
+            <td class="num">450</td>
+            <td class="num debut-t">87 <span class="pct">(19%)</span></td>
+            <td class="num cont-t">298 <span class="pct">(66%)</span></td>
+            <td class="num ret-t">65 <span class="pct">(14%)</span></td>
+            <td class="num dim">5.6</td>
+            <td class="barcell"><div class="bar" style="width:70.6%"><div class="seg debut" style="width:19.33%" title="Debutants: 87 (19%)"></div><div class="seg cont" style="width:66.22%" title="Continuing: 298 (66%)"></div><div class="seg ret" style="width:14.44%" title="Returnees: 65 (14%)"></div></div></td>
+        </tr></tbody>
+    </table>
+</body>
+</html>
