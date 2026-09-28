@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Record Replay</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1719;--panel:#16242a;--ink:#e3ecec;--mist:#8fa6a8;--line:#24404a;
+      --teal:#2b7a83;--teal-b:#4db3bf;--gold:#c9a45c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Barlow,system-ui,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:2rem 1rem 4rem}
+h1{font-family:"Barlow Condensed";font-weight:800;font-size:2.6rem;margin:0;color:#fff;letter-spacing:.02em}
+h1 span{color:var(--teal-b)}
+.sub{color:var(--mist);margin:.3rem 0 1rem}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:.7rem 0 .5rem;border-bottom:1px solid var(--line)}
+.hud{display:flex;align-items:flex-end;gap:2rem;flex-wrap:wrap}
+.counter{font-family:"Barlow Condensed";font-weight:800;font-size:4.6rem;line-height:.9;color:var(--teal-b);
+         font-variant-numeric:tabular-nums;min-width:3ch;transition:color .2s,text-shadow .2s}
+.counter.hot{color:var(--gold);text-shadow:0 0 18px rgba(201,164,92,.55)}
+.lbl{color:var(--mist);font-size:.82rem}
+.clock{font-family:"Barlow Condensed";font-weight:700;font-size:1.7rem;color:#fff;font-variant-numeric:tabular-nums}
+.goal b{color:var(--gold);font-family:"Barlow Condensed";font-size:1.5rem}
+.ticker{flex:1;min-width:240px;font-size:.78rem;color:var(--mist);height:4.6em;overflow:hidden;line-height:1.15}
+.ticker div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ticker .st{color:var(--teal-b)}
+.controls{display:flex;gap:.6rem;align-items:center;margin-top:.6rem;flex-wrap:wrap}
+button{background:var(--teal);color:#fff;border:0;border-radius:6px;padding:.45rem 1rem;font:600 .9rem Barlow;cursor:pointer}
+button:hover{background:var(--teal-b);color:#08282c}
+select{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:.35rem}
+input[type=range]{flex:1;min-width:160px;accent-color:var(--teal-b)}
+.banner{display:none;margin-top:.55rem;background:linear-gradient(90deg,#3a3222,#16242a);border:1px solid var(--gold);
+        color:var(--gold);border-radius:8px;padding:.45rem .9rem;font-weight:600}
+.banner.show{display:block;animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(.97);opacity:0}100%{transform:scale(1);opacity:1}}
+svg{width:100%;height:110px;display:block;margin-top:.6rem}
+.axis{position:relative;height:18px;margin-top:.5rem;color:var(--mist);font-size:.72rem}
+.axis span{position:absolute;transform:translateX(-50%)}
+.lanes{position:relative;margin-top:.2rem}
+.bar{position:absolute;height:5px;border-radius:3px;cursor:pointer;transition:background .15s,box-shadow .15s,opacity .15s}
+.bar.pending{background:transparent;box-shadow:inset 0 0 0 1px #2a4a52}
+.bar.live{background:var(--teal-b);box-shadow:0 0 6px rgba(77,179,191,.85)}
+.bar.done.w{background:#b8c6c7;opacity:.55}
+.bar.done.b{background:#50666a;opacity:.85}
+.bar.done.d{background:var(--teal);opacity:.75}
+.bar:hover{outline:1px solid var(--gold)}
+.cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--gold);pointer-events:none;z-index:2}
+.mark{position:absolute;top:0;bottom:0;width:1px;pointer-events:none;
+      background:repeating-linear-gradient(var(--gold) 0 4px,transparent 4px 8px);opacity:.55}
+.tip{position:fixed;pointer-events:none;background:#0b1214;border:1px solid var(--teal);border-radius:6px;
+     padding:.45rem .6rem;font-size:.8rem;display:none;z-index:9;max-width:320px}
+.tip b{color:var(--teal-b)}
+.legend{color:var(--mist);font-size:.78rem;margin-top:1rem}
+.sw{display:inline-block;width:14px;height:5px;border-radius:2px;margin:0 .35rem 0 .9rem;vertical-align:middle}
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">PEAK <span>REPLAY</span></h1>
+  <p class="sub" id="sub"></p>
+  <div class="top">
+    <div class="hud">
+      <div><div class="counter" id="count">0</div><div class="lbl">games in progress</div></div>
+      <div><div class="clock" id="clock"></div><div class="lbl">UTC</div></div>
+      <div class="goal" id="goal"></div>
+      <div class="ticker" id="ticker"></div>
+    </div>
+    <div class="controls">
+      <button id="play">&#9654; Play</button>
+      <select id="speed" title="replay length">
+        <option value="30">Fast (30 s)</option><option value="60" selected>Normal (1 min)</option><option value="120">Slow (2 min)</option>
+      </select>
+      <input type="range" id="scrub">
+      <button id="jump">Jump to peak</button>
+    </div>
+    <div class="banner" id="banner"></div>
+    <svg id="curve" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="axis" id="axis"></div>
+  <div class="lanes" id="lanes"></div>
+  <div class="legend">
+    <span class="sw" style="background:#4db3bf;box-shadow:0 0 6px #4db3bf"></span>in progress
+    <span class="sw" style="background:#b8c6c7"></span>white won
+    <span class="sw" style="background:#50666a"></span>black won
+    <span class="sw" style="background:#2b7a83"></span>draw
+    <span class="sw" style="box-shadow:inset 0 0 0 1px #3a5a62"></span>not started yet
+    &nbsp;&middot;&nbsp; each bar is one game &middot; hover for details, click to open it on Lichess
+  </div>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+const D = {"season": 50, "round": 1, "peak": {"n": 24, "t": 1790434894062, "when": "Sat 26 Sep 2026, 15:01 UTC"}, "prev": null, "window": [1790424094062, 1790445694062], "games": [{"id": "ODPYHUHR", "s": 1790420516712, "e": 1790427585074, "w": "patk74", "b": "tomshko", "wt": "Fifty Shades of Time Trouble", "bt": "The horsey don't belong here", "res": "1-0", "rnd": 1}, {"id": "VssWBXY5", "s": 1790422362703, "e": 1790428017947, "w": "TBest", "b": "digvijay_sunil", "wt": "pspspspspsps", "bt": "Inexplicable Fianchetto Agenda", "res": "1-0", "rnd": 1}, {"id": "cziKpvcC", "s": 1790423700123, "e": 1790430911771, "w": "guitarspider", "b": "Silkthewanderer", "wt": "oh those 64 squares can encompass such immensity", "bt": "We're not going to TAKE TAKE TAKE it", "res": "1-0", "rnd": 1}, {"id": "1eMLrAM6", "s": 1790423700123, "e": 1790431873183, "w": "Mizrab", "b": "Tactix47", "wt": "Rooky Horror Pawn Show", "bt": "Mating for Godot", "res": "0-1", "rnd": 1}, {"id": "GZew5QdB", "s": 1790424000189, "e": 1790433456308, "w": "flipiflapi", "b": "BLang316", "wt": "What a team! And we managed to avoid Prosti", "bt": "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork", "res": "1-0", "rnd": 1}, {"id": "IIpkXoJY", "s": 1790424035222, "e": 1790428640793, "w": "PatrickVrielink", "b": "dcilliers", "wt": "fifty shades of black and white ", "bt": "King's Landing", "res": "1-0", "rnd": 1}, {"id": "zgnUeswp", "s": 1790429100162, "e": 1790434992246, "w": "bncl", "b": "avemanyeg", "wt": "Not all who blunder are lost", "bt": "Pawn with the Sickness", "res": "1-0", "rnd": 1}, {"id": "pb92wZiV", "s": 1790429287742, "e": 1790437790518, "w": "jdannan", "b": "sivakumarr", "wt": "Not all who blunder are lost", "bt": "Pawn with the Sickness", "res": "1-0", "rnd": 1}, {"id": "ZDnFfCg9", "s": 1790429380061, "e": 1790434546857, "w": "GroneN", "b": "Lordziax", "wt": "Fork You Very Much", "bt": "Rookies Of The Year", "res": "1-0", "rnd": 1}, {"id": "xL1k2b4e", "s": 1790430900118, "e": 1790436197275, "w": "Feet_Barbie", "b": "LloydRet", "wt": "What a team! And we managed to avoid Prosti", "bt": "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork", "res": "1-0", "rnd": 1}, {"id": "C9I6df4x", "s": 1790430900118, "e": 1790439583005, "w": "JEEprep2374", "b": "ARandomMove", "wt": "The Greek Gifty Nifty Fifty", "bt": "The Last Shall be the First", "res": "0-1", "rnd": 1}, {"id": "IOX4bsxe", "s": 1790430900118, "e": 1790439653489, "w": "Lupy", "b": "Shogistyle", "wt": "passed pawn patrol", "bt": "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style", "res": "1/2-1/2", "rnd": 1}, {"id": "ZUFYljsb", "s": 1790431160488, "e": 1790437051226, "w": "mmorrisohio", "b": "Pineapplechiffoncake", "wt": "Season 50 midlife crisis", "bt": "Svidl, Svidler, Svidlest", "res": "1-0", "rnd": 1}, {"id": "8ZJWkjMS", "s": 1790431209316, "e": 1790437137803, "w": "JRRice", "b": "Jbyrd11", "wt": "The horsey don't belong here", "bt": "Fifty Shades of Time Trouble", "res": "0-1", "rnd": 1}, {"id": "iPc5bjG6", "s": 1790431218385, "e": 1790439308945, "w": "MerrickS", "b": "ysgwydd", "wt": "The kannjuring", "bt": "Wandering Knights", "res": "0-1", "rnd": 1}, {"id": "3cT13FZT", "s": 1790431245058, "e": 1790439435141, "w": "gpetris", "b": "baberle", "wt": "Rooky Horror Pawn Show", "bt": "Mating for Godot", "res": "1-0", "rnd": 1}, {"id": "X0fs2jM1", "s": 1790431276775, "e": 1790436607119, "w": "jfiras", "b": "Polivolitis", "wt": "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)", "bt": "The Woodpushers", "res": "1-0", "rnd": 1}, {"id": "4k06IzM4", "s": 1790431285547, "e": 1790438348116, "w": "chesstricksandtraps", "b": "ecoarrivazumashoomzo", "wt": "50 Ways to Fork Your Lover", "bt": "my english needs work", "res": "1-0", "rnd": 1}, {"id": "6NTOZhXE", "s": 1790431287528, "e": 1790434501354, "w": "Razorneck", "b": "drchessdad", "wt": "Silk Road Sacrifices", "bt": "Morphy's Mates", "res": "1-0", "rnd": 1}, {"id": "HxMdbhKj", "s": 1790431304379, "e": 1790437890054, "w": "fritsj", "b": "sylvlondon", "wt": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "bt": "100 Suggestions You Must Know", "res": "0-1", "rnd": 1}, {"id": "ifiiBYFP", "s": 1790431337320, "e": 1790439223565, "w": "hthree", "b": "Subhraneil24", "wt": "King's Landing", "bt": "fifty shades of black and white ", "res": "1-0", "rnd": 1}, {"id": "f2eulrYi", "s": 1790431497432, "e": 1790437933886, "w": "cham", "b": "Kborman", "wt": "pspspspspsps", "bt": "Inexplicable Fianchetto Agenda", "res": "0-1", "rnd": 1}, {"id": "xdsCSkIa", "s": 1790431635100, "e": 1790432119338, "w": "Conan_9", "b": "Fischer_and_Chips88", "wt": "Silk Road Sacrifices", "bt": "Morphy's Mates", "res": "1-0", "rnd": 1}, {"id": "gyqJbPsr", "s": 1790431947687, "e": 1790441411788, "w": "mobusel", "b": "Magagna", "wt": "Don't give a check your ascii can't cache", "bt": "50 pawns of Giri", "res": "1/2-1/2", "rnd": 1}, {"id": "biwwwo3j", "s": 1790432595576, "e": 1790441786262, "w": "bajaka91", "b": "antazhi8", "wt": "50 pawns of Giri", "bt": "Don't give a check your ascii can't cache", "res": "1/2-1/2", "rnd": 1}, {"id": "3ImDwT3H", "s": 1790432700116, "e": 1790440517336, "w": "kurdd", "b": "yotambienjuego", "wt": "50 Shades of Swindles and Tricks", "bt": "Pirc and Roll", "res": "0-1", "rnd": 1}, {"id": "LPDSBeVX", "s": 1790433489234, "e": 1790441195082, "w": "darkfl0me", "b": "PrasannaKumar2084", "wt": "Illiterate Alliteration Explorers", "bt": "Knights of the Round Tablebase", "res": "1-0", "rnd": 1}, {"id": "S3XAfrJm", "s": 1790434500101, "e": 1790437999114, "w": "Pirca19", "b": "matthewhuber", "wt": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "bt": "100 Suggestions You Must Know", "res": "0-1", "rnd": 1}, {"id": "PCJhBkvN", "s": 1790434520502, "e": 1790442169429, "w": "tastypotatohead", "b": "ScienceGeek", "wt": "The Greek Gifty Nifty Fifty", "bt": "The Last Shall be the First", "res": "1/2-1/2", "rnd": 1}, {"id": "7RqmyAHY", "s": 1790434760058, "e": 1790443088620, "w": "mixxanber", "b": "Ciraid", "wt": "50 first mates", "bt": "Total Tomination", "res": "1-0", "rnd": 1}, {"id": "oaHif7wb", "s": 1790434874318, "e": 1790439521420, "w": "chaisoul", "b": "CandiateMaster2048", "wt": "King's Landing", "bt": "fifty shades of black and white ", "res": "1-0", "rnd": 1}, {"id": "gfn7sPlq", "s": 1790434874778, "e": 1790441426424, "w": "DrRickinCT", "b": "chraki", "wt": "Inexplicable Fianchetto Agenda", "bt": "pspspspspsps", "res": "0-1", "rnd": 1}, {"id": "jm581Sev", "s": 1790434894062, "e": 1790440526347, "w": "kygreek", "b": "PawnziScheme5280", "wt": "Don't give a check your ascii can't cache", "bt": "50 pawns of Giri", "res": "0-1", "rnd": 1}, {"id": "tOnVgQhB", "s": 1790436300117, "e": 1790443932309, "w": "super0jins", "b": "MilsBees", "wt": "We're not going to TAKE TAKE TAKE it", "bt": "oh those 64 squares can encompass such immensity", "res": "1-0", "rnd": 1}, {"id": "yGSniw7R", "s": 1790436697824, "e": 1790445651347, "w": "ben3536", "b": "Antisana", "wt": "J\u2019adoube-Al-Blunder", "bt": "If anyone can refute it\u2014don't show me", "res": "1-0", "rnd": 1}, {"id": "bgvScfAq", "s": 1790438314568, "e": 1790444485706, "w": "schittering06", "b": "octacle", "wt": "Svidl, Svidler, Svidlest", "bt": "Season 50 midlife crisis", "res": "1-0", "rnd": 1}, {"id": "kBNloOkJ", "s": 1790438317460, "e": 1790443946109, "w": "Nyrondiax", "b": "Shurbz", "wt": "There Will Be Blunders", "bt": "Riding with the King", "res": "0-1", "rnd": 1}, {"id": "CTi118rD", "s": 1790438414884, "e": 1790440991740, "w": "RBorja1980", "b": "SedNomini", "wt": "What a team! And we managed to avoid Prosti", "bt": "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork", "res": "1-0", "rnd": 1}, {"id": "YAAThEwu", "s": 1790438501399, "e": 1790446971958, "w": "lorb", "b": "bagelkh", "wt": "100 Suggestions You Must Know", "bt": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "res": "1-0", "rnd": 1}, {"id": "r4WXb3kF", "s": 1790439409344, "e": 1790445237668, "w": "owlfn62025", "b": "iWISHiWEREdecent", "wt": "Not all who blunder are lost", "bt": "Pawn with the Sickness", "res": "1-0", "rnd": 1}, {"id": "R0bXU2eq", "s": 1790442157532, "e": 1790448174121, "w": "pykkis", "b": "voylento", "wt": "Pawn with the Sickness", "bt": "Not all who blunder are lost", "res": "1-0", "rnd": 1}, {"id": "OvNdc9f0", "s": 1790442470258, "e": 1790446293478, "w": "far1108", "b": "Neothehero", "wt": "Riding with the King", "bt": "There Will Be Blunders", "res": "1-0", "rnd": 1}, {"id": "QFJqLMCI", "s": 1790443158613, "e": 1790447814796, "w": "Hanzo_19", "b": "Igor_Jamnik", "wt": "100 Suggestions You Must Know", "bt": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "res": "1-0", "rnd": 1}, {"id": "gLDY1Ls4", "s": 1790445683564, "e": 1790452261218, "w": "ananimalstolemypants", "b": "AlexGaul", "wt": "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style", "bt": "passed pawn patrol", "res": "0-1", "rnd": 1}]};
+const [T0, T1] = D.window, SPAN = T1 - T0;
+const G = D.games, P = D.peak, PREV = D.prev;
+const pct = t => 100 * (t - T0) / SPAN;
+const hhmm = t => new Date(t).toISOString().slice(11, 16);
+const $ = id => document.getElementById(id);
+const isRecord = !!(PREV && P.n > PREV.n);
+
+$('title').innerHTML = isRecord ? 'NEW <span>RECORD</span>' : 'PEAK <span>REPLAY</span>';
+$('sub').textContent = `Season ${D.season}, Round ${D.round} · peak of ${P.n} games at once, ${P.when} · ${G.length} games in this window`;
+$('goal').innerHTML = PREV
+  ? `<div class="lbl">record to beat</div><b>${PREV.n}</b> <span class="lbl">${PREV.when}</span>`
+  : `<div class="lbl">peak</div><b>${P.n}</b>`;
+
+// the minute the old record fell (first moment concurrency exceeds it)
+let breakT = null;
+if (isRecord) {
+  const ev = [];
+  G.forEach(g => { ev.push([g.s, 1]); ev.push([g.e, -1]); });
+  ev.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  let c = 0;
+  for (const [t, d] of ev) { c += d; if (d === 1 && c > PREV.n) { breakT = t; break; } }
+}
+
+// lanes: greedy packing, each game on the first free row
+const rowEnds = [];
+G.forEach(g => {
+  let r = rowEnds.findIndex(e => e <= g.s);
+  if (r < 0) { r = rowEnds.length; rowEnds.push(0); }
+  rowEnds[r] = g.e; g.row = r;
+});
+const ROW = 7, lanes = $('lanes');
+lanes.style.height = (rowEnds.length * ROW + 4) + 'px';
+const tip = $('tip');
+G.forEach(g => {
+  const el = document.createElement('div');
+  el.className = 'bar pending ' + (g.res === '1-0' ? 'w' : g.res === '0-1' ? 'b' : 'd');
+  const l = Math.max(0, pct(g.s)), r = Math.min(100, pct(g.e));
+  el.style.left = l + '%';
+  el.style.width = Math.max(0.25, r - l) + '%';
+  el.style.top = (g.row * ROW) + 'px';
+  el.onmousemove = ev => {
+    const res = g.res === '1/2-1/2' ? '½–½' : g.res;
+    tip.innerHTML = `<b>${g.w}</b> – <b>${g.b}</b> &nbsp;${res}<br>${g.wt} vs ${g.bt}<br>` +
+      `${hhmm(g.s)}–${hhmm(g.e)} UTC · ${Math.round((g.e - g.s) / 60000)} min`;
+    tip.style.display = 'block';
+    tip.style.left = Math.min(ev.clientX + 14, innerWidth - 330) + 'px';
+    tip.style.top = (ev.clientY + 14) + 'px';
+  };
+  el.onmouseleave = () => tip.style.display = 'none';
+  el.onclick = () => window.open('https://lichess.org/' + g.id, '_blank');
+  g.el = el;
+  lanes.appendChild(el);
+});
+[P.t, breakT].forEach(t => {
+  if (!t) return;
+  const m = document.createElement('div');
+  m.className = 'mark'; m.style.left = pct(t) + '%';
+  lanes.appendChild(m);
+});
+const cursor = document.createElement('div');
+cursor.className = 'cursor';
+lanes.appendChild(cursor);
+
+// time axis every 30 minutes
+const step = 30 * 60000;
+for (let t = Math.ceil(T0 / step) * step; t <= T1; t += step)
+  $('axis').insertAdjacentHTML('beforeend', `<span style="left:${pct(t)}%">${hhmm(t)}</span>`);
+
+// concurrency curve, sampled per minute
+const svg = $('curve'), W = 1000, HH = 110;
+const ymax = Math.max(P.n, PREV ? PREV.n : 0) * 1.12;
+const y = v => HH - HH * v / ymax;
+let d = `M0,${HH}`;
+for (let t = T0; t <= T1; t += 60000) {
+  const n = G.reduce((a, g) => a + (g.s <= t && t < g.e), 0);
+  d += ` L${(W * (t - T0) / SPAN).toFixed(1)},${y(n).toFixed(1)}`;
+}
+d += ` L${W},${HH} Z`;
+let s = `<path d="${d}" fill="rgba(77,179,191,.18)" stroke="#4db3bf" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`;
+if (PREV) s += `<line x1="0" x2="${W}" y1="${y(PREV.n)}" y2="${y(PREV.n)}" stroke="#c9a45c" stroke-dasharray="6 5" vector-effect="non-scaling-stroke"/>` +
+  `<text x="6" y="${y(PREV.n) - 4}" font-size="11" fill="#c9a45c">old record ${PREV.n}</text>`;
+s += `<line id="cline" x1="0" x2="0" y1="0" y2="${HH}" stroke="#c9a45c" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+svg.setAttribute('viewBox', `0 0 ${W} ${HH}`);
+svg.innerHTML = s;
+const cline = $('cline');
+
+// event ticker: games starting / finishing around the cursor
+const events = [];
+G.forEach(g => {
+  events.push({ t: g.s, html: `<span class="st">${hhmm(g.s)} ▶</span> ${g.w} – ${g.b} started` });
+  const res = g.res === '1/2-1/2' ? 'drawn' : g.res === '1-0' ? `${g.w} won` : g.res === '0-1' ? `${g.b} won` : 'finished';
+  events.push({ t: g.e, html: `${hhmm(g.e)} ■ ${g.w} – ${g.b}: ${res}` });
+});
+events.sort((a, b) => a.t - b.t);
+
+// playback
+const scrub = $('scrub');
+scrub.min = T0; scrub.max = T1; scrub.step = 'any';
+let cur = T0;
+const banner = $('banner');
+function setBanner(t) {
+  let msg = '';
+  if (breakT && t >= breakT) msg = `\u{1F389} Record broken at ${hhmm(breakT)} UTC — more than ${PREV.n} games at once for the first time`;
+  if (t >= P.t) msg = isRecord
+    ? `\u{1F389} New all-time record: ${P.n} games at once at ${hhmm(P.t)} UTC (old record ${PREV.n})`
+    : `\u{1F3C6} Peak reached: ${P.n} games at once at ${hhmm(P.t)} UTC`;
+  if (msg !== banner.dataset.msg) {
+    banner.dataset.msg = msg;
+    banner.textContent = msg;
+    banner.classList.remove('show');
+    if (msg) { void banner.offsetWidth; banner.classList.add('show'); }
+  }
+}
+function render(t) {
+  let n = 0;
+  for (const g of G) {
+    const live = g.s <= t && t < g.e;
+    n += live;
+    g.el.classList.toggle('live', live);
+    g.el.classList.toggle('done', t >= g.e);
+    g.el.classList.toggle('pending', t < g.s);
+  }
+  const c = $('count');
+  c.textContent = n;
+  c.classList.toggle('hot', PREV ? n > PREV.n : n === P.n);
+  $('clock').textContent = hhmm(t);
+  cursor.style.left = pct(t) + '%';
+  const x = W * (t - T0) / SPAN;
+  cline.setAttribute('x1', x); cline.setAttribute('x2', x);
+  let i = events.length;
+  while (i > 0 && events[i - 1].t > t) i--;
+  $('ticker').innerHTML = events.slice(Math.max(0, i - 4), i).reverse().map(e => `<div>${e.html}</div>`).join('');
+  setBanner(t);
+}
+scrub.oninput = () => { stop(); cur = +scrub.value; render(cur); };
+let raf = null, last = 0;
+function tick(ts) {
+  if (!last) last = ts;
+  const secs = +$('speed').value;
+  cur = Math.min(T1, cur + (ts - last) * SPAN / (secs * 1000));
+  last = ts; scrub.value = cur; render(cur);
+  if (cur >= T1) return stop();
+  raf = requestAnimationFrame(tick);
+}
+function stop() { if (raf) cancelAnimationFrame(raf); raf = null; last = 0; $('play').innerHTML = '&#9654; Play'; }
+$('play').onclick = () => {
+  if (raf) return stop();
+  if (cur >= T1) cur = T0;
+  $('play').innerHTML = '&#10074;&#10074; Pause';
+  raf = requestAnimationFrame(tick);
+};
+$('jump').onclick = () => { stop(); cur = P.t; scrub.value = cur; render(cur); };
+scrub.value = T0; render(T0);
+</script>
+</body>
+</html>
