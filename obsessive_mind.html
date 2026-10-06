@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other Works of an Obsessive Mind — The 4545 Chronicles</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #1a3a45 30%, #2c5f6f 70%, #3d7a8a 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '🛸';
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 3em;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        .back-link {
+            display: inline-block;
+            color: #a8d5e2;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        header {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .header-icon { font-size: 2.5em; margin-bottom: 15px; }
+
+        h1 {
+            font-size: 2.6em;
+            color: #2c5f6f;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #5a8a9a;
+            font-style: italic;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+
+        .section-icon { font-size: 1.8em; }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #2c5f6f;
+            font-weight: 600;
+        }
+
+        .section-note {
+            color: #718096;
+            font-size: 0.92em;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #2c5f6f;
+        }
+
+        .works {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .work {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #2c5f6f 0%, #3d7a8a 100%);
+            color: white;
+            padding: 18px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 3px 10px rgba(44, 95, 111, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .work:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(44, 95, 111, 0.5);
+            background: linear-gradient(135deg, #3d7a8a 0%, #2c5f6f 100%);
+        }
+
+        .work-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .work-name { font-weight: 600; font-size: 1.05em; }
+
+        .work-arrow { transition: transform 0.3s ease; }
+        .work:hover .work-arrow { transform: translateX(5px); }
+
+        .work-desc {
+            font-size: 0.9em;
+            color: #d6eef4;
+            line-height: 1.45;
+            flex-grow: 1;
+        }
+
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 20px;
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+        footer a { color: #a8d5e2; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+        footer .alien-signature { margin-top: 15px; font-size: 1.5em; opacity: 0.6; }
+
+        @media (max-width: 768px) {
+            header { padding: 30px 20px; }
+            h1 { font-size: 1.8em; }
+            .subtitle { font-size: 1em; }
+            .section { padding: 22px; }
+            .works { grid-template-columns: 1fr; }
+            body::before { font-size: 2em; top: 10px; right: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to The 4545 Chronicles</a>
+
+        <header>
+            <div class="header-icon">🧠</div>
+            <h1>Other Works of an Obsessive Mind</h1>
+        </header>
+
+        <!-- Updated regularly -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🔄</span>
+                <h2 class="section-title">Updated Regularly</h2>
+            </div>
+            <p class="section-note">Kept fresh automatically throughout the season.</p>
+            <div class="works">
+                <a href="predictions_matches.html" class="work">
+                    <div class="work-top"><span class="work-name">Match Predictions</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Win, draw and loss odds for every match of the current round, board by board.</p>
+                </a>
+                <a href="predictions_season_standings.html" class="work">
+                    <div class="work-top"><span class="work-name">Full Season Projection</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Where every team is projected to finish, with title and podium chances.</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Once a season -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">📅</span>
+                <h2 class="section-title">Once a Season</h2>
+            </div>
+            <p class="section-note">Refreshed between seasons, hopefully.</p>
+            <div class="works">
+                <a href="team_profiles.html" class="work">
+                    <div class="work-top"><span class="work-name">Team Profiles</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Veterans, newcomers and former-teammate reunions on every team.</p>
+                </a>
+                <a href="career_journey.html" class="work">
+                    <div class="work-top"><span class="work-name">Career Journey</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Look up any player and follow their league career season by season.</p>
+                </a>
+                <a href="weird_standings.html" class="work">
+                    <div class="work-top"><span class="work-name">Alternative Standings</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">The final table recomputed nine ways: colour-only, margins, game length, clocks, castling and more.</p>
+                </a>
+                <a href="composition.html" class="work">
+                    <div class="work-top"><span class="work-name">Season Composition</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Debutants, continuing players and returnees in every season's player base.</p>
+                </a>
+                <a href="retention_report.html" class="work">
+                    <div class="work-top"><span class="work-name">Retention Analyzer</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Player counts, retention rates and seasonality across league history.</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- One-offs -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🎲</span>
+                <h2 class="section-title">One-Offs</h2>
+            </div>
+            <p class="section-note">Random rabbit holes. Built once, kept for posterity.</p>
+            <div class="works">
+                <a href="six_degrees.html" class="work">
+                    <div class="work-top"><span class="work-name">Six Degrees of Lovlas</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Your shortest chain of opponents to a league legend from seasons 1–15.</p>
+                </a>
+                <a href="when.html" class="work">
+                    <div class="work-top"><span class="work-name">When the League Plays</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Every game start time in league history, mapped by weekday and hour.</p>
+                </a>
+                <a href="record.html" class="work">
+                    <div class="work-top"><span class="work-name">Record Replay</span><span class="work-arrow">→</span></div>
+                    <p class="work-desc">Replay the moment the league hit its most games in progress at once.</p>
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <p><a href="index.html">← The 4545 Chronicles</a></p>
+            <div class="alien-signature">🛸</div>
+        </footer>
+    </div>
+</body>
+</html>
