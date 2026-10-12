@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Storylines - Season 50 Round 3</title>
+    <title>Storylines - Season 50 Round 4</title>
     <style>
         :root {
             --bg-primary: #2d5266;
@@ -295,16 +296,33 @@
                 font-size: 1.1rem;
             }
         }
+    
+        /* --- newspaper masthead --- */
+        header h1 { font-family: 'Playfair Display', Georgia, serif; font-variant-numeric: lining-nums; font-weight: 900; font-size: 2.5rem !important; letter-spacing: -.01em; }
+        header .subtitle { font-variant: small-caps; letter-spacing: .12em; font-size: 1.05rem; padding: .45rem 0; margin: .5rem auto 0; max-width: 560px;
+            border-top: 3px double rgba(240,246,246,.35); border-bottom: 3px double rgba(240,246,246,.35); }
+        .players a.winner::after { content: ' ★'; color: var(--gold); font-size: .75em; }
+        .players a.loser { opacity: .5; }
+        .schedule-time.live { color: #ff8a7a; background: rgba(255,122,106,.12); }
+        @media (max-width: 600px) { header h1 { font-size: 1.8rem !important; } }
+    
+        .pts { display: none; margin-left: 0.5rem; padding-left: 0.5rem; border-left: 1px solid rgba(255, 255, 255, 0.18); color: var(--gold); font-weight: 700; }
+        body.show-points .pts { display: inline; }
+        .points-toggle { float: right; margin-top: 1rem; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.9rem; font-family: inherit; cursor: pointer; }
+        .points-toggle:hover { color: var(--text-primary); border-color: var(--accent); }
+        .points-toggle[aria-pressed="true"] { color: var(--gold); border-color: var(--gold); }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="index.html" style="display: inline-block; color: #a8d5e2; text-decoration: none; margin-bottom: 1rem; font-size: 0.95rem;">← The 4545 Chronicles</a>
         <header>
-            <h1>📺 Storylines of the Week</h1>
-            <div class="subtitle">Season 50 &middot; Round 3</div>
+            <h1>🗞️ Storylines of the Week</h1>
+            <div class="subtitle">Season 50 &middot; Round 4</div>
             <div class="stats">Top 10 of 216 pairings</div>
         </header>
         
+        <button type="button" id="pointsToggle" class="points-toggle" aria-pressed="false">Show score breakdown</button>
         <details class="guide-wrapper">
             <summary class="guide-toggle">📊 How is Hype Score calculated?</summary>
             <div class="guide">
@@ -409,27 +427,27 @@
         
         <div class="pairings">
 
-            <div class="pairing-card">
+            <div class="pairing-card lead">
                 <div class="pairing-header">
                     <div class="rank top-3">#1</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/M0r1/" target="_blank">M0r1</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Rolihlahla/" target="_blank">Rolihlahla</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/m-p-d/" target="_blank">m-p-d</a>
+                            <a href="https://www.lichess4545.com/team4545/player/patk74/" target="_blank">patk74</a>
                         </div>
-                        <div class="teams">Riding with the King vs Fifty Shades of Time Trouble</div>
-                        <div class="schedule-time played">✓ 1-0</div>
+                        <div class="teams">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition) vs Fifty Shades of Time Trouble</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">7.0</div>
+                        <div class="score-value">8.1</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🎂 m0r1's 200th game!</span>
-                    <span class="reason">🔥 Both on win streaks (3W vs 2W)</span>
-                    <span class="reason">🎖️ Veterans (199+2 games)</span>
+                    <span class="reason">🏆 Huge for team standings!<span class="pts">+3</span></span>
+                    <span class="reason">🎖️ Veterans (227+159 games)<span class="pts">+3.59</span></span>
+                    <span class="reason">👀 Vets first meeting! (227+159 games, never faced)<span class="pts">+1.5</span></span>
                 </div>
             </div>
 
@@ -438,22 +456,22 @@
                     <div class="rank top-3">#2</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Bortvinik/" target="_blank">Bortvinik</a>
+                            <a href="https://www.lichess4545.com/team4545/player/RBorja1980/" target="_blank">RBorja1980</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/ttsgosadow/" target="_blank">ttsgosadow</a>
+                            <a href="https://www.lichess4545.com/team4545/player/kostasvl/" target="_blank">kostasvl</a>
                         </div>
-                        <div class="teams">Silk Road Sacrifices vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
-                        <div class="schedule-time played">✓ 0-1</div>
+                        <div class="teams">What a team! And we managed to avoid Prosti vs 50 Ways to Fork Your Lover</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">7.0</div>
+                        <div class="score-value">8.0</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔄 Rematch (0-1)</span>
-                    <span class="reason">🔥 Hot streak clash! (4W vs 6W)</span>
-                    <span class="reason">🏆 Huge for team standings!</span>
+                    <span class="reason">💯 rborja1980's 100th game!<span class="pts">+3</span></span>
+                    <span class="reason">🔄 Rematch (RBorja1980 1-0)<span class="pts">+2</span></span>
+                    <span class="reason">🎖️ Veteran kostasvl (211 games)<span class="pts">+2.99</span></span>
                 </div>
             </div>
 
@@ -462,22 +480,22 @@
                     <div class="rank top-3">#3</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/timothyha/" target="_blank">timothyha</a>
+                            <a href="https://www.lichess4545.com/team4545/player/scarff/" target="_blank">scarff</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/ATrueRavenclaw/" target="_blank">ATrueRavenclaw</a>
+                            <a href="https://www.lichess4545.com/team4545/player/aloo_bhaloo/" target="_blank">aloo_bhaloo</a>
                         </div>
-                        <div class="teams">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition) vs Silk Road Sacrifices</div>
-                        <div class="schedule-time played">✓ 1-0</div>
+                        <div class="teams">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition) vs Fifty Shades of Time Trouble</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">6.8</div>
+                        <div class="score-value">7.5</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔄 Rematch (0-1)</span>
-                    <span class="reason">🏆 Huge for team standings!</span>
-                    <span class="reason">🎖️ Veterans (265+83 games)</span>
+                    <span class="reason">🏆 Huge for team standings!<span class="pts">+3</span></span>
+                    <span class="reason">🎖️ Veterans (318+103 games)<span class="pts">+3.03</span></span>
+                    <span class="reason">👀 Vets first meeting! (318+103 games, never faced)<span class="pts">+1.5</span></span>
                 </div>
             </div>
 
@@ -486,22 +504,22 @@
                     <div class="rank ">#4</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/mo_mo/" target="_blank">mo_mo</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Fierolocchio/" target="_blank">Fierolocchio</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/Rolihlahla/" target="_blank">Rolihlahla</a>
+                            <a href="https://www.lichess4545.com/team4545/player/shamdi/" target="_blank">shamdi</a>
                         </div>
-                        <div class="teams">Silk Road Sacrifices vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
-                        <div class="schedule-time played">✓ 1-0</div>
+                        <div class="teams">Illiterate Alliteration Explorers vs 50 Shades of Swindles and Tricks</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">6.4</div>
+                        <div class="score-value">7.2</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🎯 mo_mo's 45th game!</span>
-                    <span class="reason">🏆 Huge for team standings!</span>
-                    <span class="reason">🎖️ Veterans (44+226 games)</span>
+                    <span class="reason">💯 shamdi's 100th game!<span class="pts">+3</span></span>
+                    <span class="reason">🔄 Rematch (Fierolocchio 1-0)<span class="pts">+2</span></span>
+                    <span class="reason">🎖️ Veteran Fierolocchio (122 games)<span class="pts">+2.21</span></span>
                 </div>
             </div>
 
@@ -510,22 +528,22 @@
                     <div class="rank ">#5</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Leverkuhn/" target="_blank">Leverkuhn</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Joonaf/" target="_blank">Joonaf</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/Kayrosas/" target="_blank">Kayrosas</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Immortality/" target="_blank">Immortality</a>
                         </div>
-                        <div class="teams">50-50 my next move is a blunder vs Illiterate Alliteration Explorers</div>
-                        <div class="schedule-time played">✓ 0-1</div>
+                        <div class="teams">100 Suggestions You Must Know vs Season 50 midlife crisis</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">6.3</div>
+                        <div class="score-value">7.2</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔄 Rematch (0-1)</span>
-                    <span class="reason">🔥 Hot streak clash! (4W vs 5W)</span>
-                    <span class="reason">🎖️ Experience (104+25 games)</span>
+                    <span class="reason">💯 immortality's 100th game!<span class="pts">+3</span></span>
+                    <span class="reason">🔄 Rematch (Joonaf 1-0)<span class="pts">+2</span></span>
+                    <span class="reason">🎖️ Veteran Joonaf (121 games)<span class="pts">+2.2</span></span>
                 </div>
             </div>
 
@@ -534,22 +552,21 @@
                     <div class="rank ">#6</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Razorneck/" target="_blank">Razorneck</a>
+                            <a href="https://www.lichess4545.com/team4545/player/CarlosMagnussen/" target="_blank">CarlosMagnussen</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/kinG_Hunter-1/" target="_blank">kinG_Hunter-1</a>
+                            <a href="https://www.lichess4545.com/team4545/player/LemuelGullible/" target="_blank">LemuelGullible</a>
                         </div>
-                        <div class="teams">Silk Road Sacrifices vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
-                        <div class="schedule-time played">✓ 0-1</div>
+                        <div class="teams">Mating for Godot vs 50-50 my next move is a blunder</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">6.2</div>
+                        <div class="score-value">6.5</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔄 Rematch (0-1)</span>
-                    <span class="reason">🏆 Huge for team standings!</span>
-                    <span class="reason">🎖️ Veterans (201+18 games)</span>
+                    <span class="reason">⚔️ Rivals! Met 3x before (CarlosMagnussen 2½-½)<span class="pts">+4</span></span>
+                    <span class="reason">🎖️ Veteran CarlosMagnussen (149 games)<span class="pts">+2.45</span></span>
                 </div>
             </div>
 
@@ -558,22 +575,21 @@
                     <div class="rank ">#7</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Conan_9/" target="_blank">Conan_9</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Sarahwynn/" target="_blank">Sarahwynn</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/scarff/" target="_blank">scarff</a>
+                            <a href="https://www.lichess4545.com/team4545/player/adande1/" target="_blank">adande1</a>
                         </div>
-                        <div class="teams">Silk Road Sacrifices vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
-                        <div class="schedule-time played">✓ 1/2-1/2</div>
+                        <div class="teams">passed pawn patrol vs Fork You Very Much</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">6.1</div>
+                        <div class="score-value">6.2</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔥 Both on win streaks (2W vs 6W)</span>
-                    <span class="reason">🏆 Huge for team standings!</span>
-                    <span class="reason">🎖️ Veterans (9+317 games)</span>
+                    <span class="reason">🔄 Rematch #3 (adande1 2-0)<span class="pts">+3</span></span>
+                    <span class="reason">🎖️ Veterans (119+261 games)<span class="pts">+3.19</span></span>
                 </div>
             </div>
 
@@ -582,21 +598,21 @@
                     <div class="rank ">#8</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/bufferunderrun/" target="_blank">bufferunderrun</a>
+                            <a href="https://www.lichess4545.com/team4545/player/caodanny/" target="_blank">caodanny</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/Feet_Barbie/" target="_blank">Feet_Barbie</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Tranzoo/" target="_blank">Tranzoo</a>
                         </div>
-                        <div class="teams">Wandering Knights vs What a team! And we managed to avoid Prosti</div>
-                        <div class="schedule-time played">✓ 0-1</div>
+                        <div class="teams">Blunders Without Borders vs King's Landing</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">6.0</div>
+                        <div class="score-value">5.2</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🔄 Rematch #3 (½-1½)</span>
-                    <span class="reason">🎖️ Veterans (275+103 games)</span>
+                    <span class="reason">🎖️ Veterans (173+261 games)<span class="pts">+3.73</span></span>
+                    <span class="reason">👀 Vets first meeting! (173+261 games, never faced)<span class="pts">+1.5</span></span>
                 </div>
             </div>
 
@@ -605,22 +621,21 @@
                     <div class="rank ">#9</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/sideshow_bob/" target="_blank">sideshow_bob</a>
+                            <a href="https://www.lichess4545.com/team4545/player/ttsgosadow/" target="_blank">ttsgosadow</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/lc69/" target="_blank">lc69</a>
+                            <a href="https://www.lichess4545.com/team4545/player/mqll/" target="_blank">mqll</a>
                         </div>
-                        <div class="teams">If anyone can refute it—don't show me vs Blunders Without Borders</div>
-                        <div class="schedule-time played">✓ 1-0</div>
+                        <div class="teams">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition) vs Fifty Shades of Time Trouble</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.8</div>
+                        <div class="score-value">5.2</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">💯 sideshow_bob's 100th game!</span>
-                    <span class="reason">🎖️ Veterans (99+110 games)</span>
-                    <span class="reason">👀 Vets first meeting! (99+110 games, never faced)</span>
+                    <span class="reason">🏆 Huge for team standings!<span class="pts">+3</span></span>
+                    <span class="reason">🎖️ Veteran mqll (228 games)<span class="pts">+2.15</span></span>
                 </div>
             </div>
 
@@ -629,22 +644,21 @@
                     <div class="rank ">#10</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/gmat20020/" target="_blank">gmat20020</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Gideon7/" target="_blank">Gideon7</a>
                             <span class="vs">vs</span>
-                            <a href="https://www.lichess4545.com/team4545/player/zal667/" target="_blank">zal667</a>
+                            <a href="https://www.lichess4545.com/team4545/player/timothyha/" target="_blank">timothyha</a>
                         </div>
-                        <div class="teams">The Greek Gifty Nifty Fifty vs 50 first mates</div>
-                        <div class="schedule-time played">✓ 1-0</div>
+                        <div class="teams">Fifty Shades of Time Trouble vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
+                        <div class="schedule-time tbd">⏳ TBD</div>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">5.7</div>
+                        <div class="score-value">5.1</div>
                         <div class="score-label">hype</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">❄️ Both struggling (3L vs 2L)</span>
-                    <span class="reason">🎖️ Experience (144+22 games)</span>
-                    <span class="reason">🤝 Former teammates on Cool-de-sac</span>
+                    <span class="reason">🏆 Huge for team standings!<span class="pts">+3</span></span>
+                    <span class="reason">🎖️ Veteran timothyha (266 games)<span class="pts">+2.1</span></span>
                 </div>
             </div>
 
@@ -654,5 +668,23 @@
             Generated for <a href="https://www.lichess4545.com" target="_blank">Lichess4545</a> League
         </footer>
     </div>
+<script>
+(function () {
+    var b = document.getElementById('pointsToggle');
+    if (!b) return;
+    var on = false;
+    try { on = localStorage.getItem('showPoints') === '1'; } catch (e) {}
+    function set(v) {
+        document.body.classList.toggle('show-points', v);
+        b.setAttribute('aria-pressed', v ? 'true' : 'false');
+        b.textContent = v ? 'Hide score breakdown' : 'Show score breakdown';
+    }
+    set(on);
+    b.addEventListener('click', function () {
+        on = !on; set(on);
+        try { localStorage.setItem('showPoints', on ? '1' : '0'); } catch (e) {}
+    });
+})();
+</script>
 </body>
 </html>

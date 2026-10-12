@@ -1,652 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lichess 4545 POST-ROUND - Season 50, Round 2</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a3a45 0%, #2c5f6f 50%, #3d7a8a 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .header h1 {
-            color: #2d3748;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        .header .subtitle {
-            color: #718096;
-            font-size: 1.2em;
-        }
-        
-        .stats-bar {
-            background: rgba(255,255,255,0.95);
-            padding: 15px 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .stat {
-            text-align: center;
-            padding: 10px 20px;
-        }
-        
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2c5f6f;
-        }
-        
-        .stat-label {
-            color: #718096;
-            font-size: 0.9em;
-        }
-        
-        .section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #2c5f6f;
-        }
-        
-        .section-icon {
-            font-size: 2em;
-            margin-right: 15px;
-        }
-        
-        .section-title {
-            font-size: 1.5em;
-            color: #2d3748;
-            font-weight: 600;
-        }
-        
-        .pairing {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            background: #f7fafc;
-            border-left: 4px solid #2c5f6f;
-            transition: all 0.3s ease;
-        }
-        
-        .pairing:hover {
-            background: #edf2f7;
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .pairing-rank {
-            display: inline-block;
-            width: 40px;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-        
-        .pairing-players {
-            font-size: 1.1em;
-            color: #2d3748;
-            font-weight: 500;
-        }
-        
-        .pairing-result {
-            font-size: 1em;
-            font-weight: bold;
-            color: #2d3748;
-            margin-left: 15px;
-        }
-        
-        .game-link-inline {
-            margin-left: 10px;
-            color: #7c3aed;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9em;
-        }
-        
-        .game-link-inline:hover {
-            text-decoration: underline;
-        }
-        
-        .pairing-stats {
-            color: #718096;
-            font-size: 0.9em;
-            margin-top: 5px;
-            margin-left: 40px;
-        }
-        
-        .vs {
-            color: #2c5f6f;
-            font-weight: bold;
-            margin: 0 10px;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .badge-games {
-            background: #e6fffa;
-            color: #047857;
-        }
-        
-        .badge-milestone {
-            background: #fef3c7;
-            color: #92400e;
-            animation: pulse 2s infinite;
-        }
-        
-        .badge-debut {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        .debutant-win-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-left: 10px;
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .milestone-alert {
-            background: #fef3c7;
-            border-left-color: #f59e0b;
-            padding: 15px;
-            margin-top: 8px;
-            margin-left: 40px;
-            border-radius: 5px;
-            font-weight: 500;
-            color: #92400e;
-        }
-        
-        .score-summary {
-            background: #e0f2fe;
-            border-left: 4px solid #2c5f6f;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 1.1em;
-            color: #1e3a4f;
-        }
-        
-        .no-results {
-            text-align: center;
-            color: #718096;
-            padding: 30px;
-            font-style: italic;
-        }
-        
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 30px;
-            opacity: 0.8;
-        }
-        
-        @media print {
-            body {
-                background: white;
-            }
-            .pairing:hover {
-                transform: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notable Matchups: Results - Season 50, Round 3</title>
+<style>
+:root{--gold:#d4b856;--text:#f0f6f6;--muted:rgba(240,246,246,.62);--line:rgba(255,255,255,.12);--card:rgba(255,255,255,.05);--green:#7fd6a0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--text);min-height:100vh;padding:2rem;
+ background:linear-gradient(135deg,#1a323d 0%,#234250 50%,#2d5266 100%)}
+.container{max-width:900px;margin:0 auto}
+.back{display:inline-block;color:#a8d5e2;text-decoration:none;margin-bottom:1rem;font-size:.95rem}
+header{text-align:center;padding:2rem 1.5rem 1.6rem;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:2rem}
+header h1{font-size:2rem;margin-bottom:.35rem}
+header .sub{color:var(--muted);font-size:1.05rem}
+header .note{color:rgba(240,246,246,.45);font-size:.85rem;margin-top:.6rem}
+.stats{display:flex;justify-content:center;gap:2.5rem;margin-top:1.2rem;flex-wrap:wrap}
+.stat b{display:block;font-size:1.6rem;color:var(--gold)}.stat span{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+section{margin-bottom:2.2rem}
+h2{font-size:1.25rem;margin-bottom:.2rem}
+.intro{color:var(--muted);font-size:.88rem;margin-bottom:.9rem}
+.list{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto auto auto 1fr minmax(7.5rem,auto);align-items:center;gap:.7rem;padding:.7rem 1.2rem;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .w{text-align:right;font-weight:600}.row .b{font-weight:600}
+.row .vs{color:rgba(240,246,246,.4);font-size:.82rem}
+.n{display:inline-block;min-width:2.8rem;text-align:center;font-weight:700;font-size:.85rem;padding:.15rem .5rem;border-radius:20px;background:rgba(255,255,255,.08);color:var(--text)}
+.n.new{background:rgba(127,214,160,.15);color:var(--green)}
+.side{text-align:right;font-size:.8rem;color:var(--muted);white-space:nowrap}
+.side b{color:var(--gold);font-weight:700}
+.won::after{content:' ★';color:var(--gold);font-size:.8em}.lost{opacity:.5}
+.res{display:inline-flex;align-items:center;gap:.45rem;justify-content:flex-end;white-space:nowrap}
+.score{font-weight:700;font-size:.85rem;color:var(--gold);background:rgba(6,20,26,.6);border:1px solid rgba(212,184,86,.35);border-radius:6px;padding:.05rem .45rem}
+.play{color:#a8d5e2;text-decoration:none;font-size:.8rem}.play:hover{text-decoration:underline}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem}
+.ms{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:.9rem 1rem}
+.ms .big{font-size:1.5rem;font-weight:800;color:var(--gold);line-height:1}
+.ms .who{font-weight:700;font-size:1.05rem;margin-top:.35rem}
+.ms .what{color:var(--muted);font-size:.85rem;margin-top:.15rem}
+.ms .what b{color:var(--text);font-weight:600}
+.summary{color:var(--muted);font-size:.88rem;margin:-.3rem 0 .8rem}
+.summary b{color:var(--green)}
+.tag{font-size:.72rem;font-weight:700;color:var(--green);background:rgba(127,214,160,.14);border-radius:20px;padding:.1rem .5rem;margin-left:.35rem;white-space:nowrap}
+.none{color:var(--muted);font-size:.9rem;padding:1rem 1.2rem;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.drow{display:grid;grid-template-columns:13rem 5rem 1fr auto;align-items:center;gap:.8rem;padding:.65rem 1.2rem;border-top:1px solid var(--line)}
+.drow:first-child{border-top:0}
+.dname{font-weight:700;overflow-wrap:anywhere}
+.dopp{color:var(--muted)}.dopp b{color:var(--text);font-weight:600}.dg{font-size:.85em}
+.v{font-size:.78rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;min-width:4rem;text-align:center}
+.v.won{color:var(--green);background:rgba(127,214,160,.15)}.v.lost{color:#ff8f80;background:rgba(255,143,128,.12)}
+.v.d{color:var(--gold);background:rgba(212,184,86,.14)}.v.np{color:var(--muted);background:rgba(255,255,255,.07)}
+.v.won::after,.v.lost::after{content:none}.v.lost{opacity:1}
+footer{text-align:center;color:rgba(240,246,246,.4);font-size:.82rem;margin-top:2rem;line-height:1.6}
+@media(max-width:640px){
+ body{padding:1rem}
+ header h1{font-size:1.55rem}
+ .stats{gap:1.2rem}
+ .row{grid-template-columns:1fr auto;gap:.3rem .6rem;padding:.75rem 1rem}
+ .row .vs{display:none}
+ .row .w{text-align:left;grid-column:1;grid-row:1}.row .nw{grid-column:2;grid-row:1}
+ .row .b{grid-column:1;grid-row:2}.row .nb{grid-column:2;grid-row:2}
+ .row .side{grid-column:1/-1;grid-row:3;text-align:left}
+ .drow{grid-template-columns:1fr 5rem;gap:.25rem .6rem;padding:.7rem 1rem}
+ .drow .dopp{grid-column:1/-1}.drow .side{grid-column:1/-1;text-align:left}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>♟️ Notable Matchups - Post-Round Report</h1>
-            <div class="subtitle">Season 50 • Round 2</div>
-        </div>
-        
-        <div class="stats-bar">
-            <div class="stat">
-                <div class="stat-value">216</div>
-                <div class="stat-label">Total Pairings</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">16</div>
-                <div class="stat-label">Debut Games</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">6</div>
-                <div class="stat-label">Milestones</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">400</div>
-                <div class="stat-label">Most Combined</div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🎯</div>
-                <div class="section-title">Milestones Reached</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">ComputerUser2607<span class="vs">vs</span>alp_arslan92</span>
-                <span class="pairing-result">1-0</span>
-                <a href="https://lichess.org/KA5ZtY5m" target="_blank" class="game-link-inline">View →</a>
-
-                <div class="milestone-alert">
-                    🎉 ComputerUser2607 reached 100 games!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">ChessisHard101<span class="vs">vs</span>Marco_Chess13</span>
-                <span class="pairing-result">0-1</span>
-                <a href="https://lichess.org/OabSCbn7" target="_blank" class="game-link-inline">View →</a>
-
-                <div class="milestone-alert">
-                    🎉 Marco_Chess13 reached 45 games!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">LloydRet<span class="vs">vs</span>ben3536</span>
-                <span class="pairing-result">1-0</span>
-                <a href="https://lichess.org/YjgqlRfm" target="_blank" class="game-link-inline">View →</a>
-
-                <div class="milestone-alert">
-                    🎉 LloydRet reached 45 games!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">Darktigr<span class="vs">vs</span>NameGoesInHere</span>
-                <span class="pairing-result">1-0</span>
-                <a href="https://lichess.org/T8zrbIAq" target="_blank" class="game-link-inline">View →</a>
-
-                <div class="milestone-alert">
-                    🎉 Darktigr reached 45 games!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">michaeld<span class="vs">vs</span>Friedwing</span>
-                <span class="pairing-result">0-1</span>
-                <a href="https://lichess.org/Iyh2y03S" target="_blank" class="game-link-inline">View →</a>
-
-                <div class="milestone-alert">
-                    🎉 Friedwing reached 45 games!
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">⚔️</div>
-                <div class="section-title">Veterans Clash</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">1.</div>
-                <span class="pairing-players">mynameismund<span class="vs">vs</span>M0r1</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/QVS26HPE" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Min: 198 games</span>
-                <div class="pairing-stats">
-                    mynameismund: 202 games • M0r1: 198 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">2.</div>
-                <span class="pairing-players">prostidude<span class="vs">vs</span>UpGoerFive</span>
-                <span class="pairing-result">½-½</span><a href="https://lichess.org/XzG7476O" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Min: 134 games</span>
-                <div class="pairing-stats">
-                    prostidude: 134 games • UpGoerFive: 262 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">3.</div>
-                <span class="pairing-players">Jg777<span class="vs">vs</span>FunnyLikeAClown</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/HP5jLMAM" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Min: 112 games</span>
-                <div class="pairing-stats">
-                    Jg777: 191 games • FunnyLikeAClown: 112 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">cinemashow<span class="vs">vs</span>patk74</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/GibhAgi6" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Min: 110 games</span>
-                <div class="pairing-stats">
-                    cinemashow: 110 games • patk74: 157 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">Mennonite<span class="vs">vs</span>Leverkuhn</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/RNY1zWEi" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Min: 103 games</span>
-                <div class="pairing-stats">
-                    Mennonite: 103 games • Leverkuhn: 103 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🏆</div>
-                <div class="section-title">Top 5 Most Experienced Matchups</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥇</div>
-                <span class="pairing-players">mynameismund<span class="vs">vs</span>M0r1</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/QVS26HPE" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">400 combined</span>
-                <div class="pairing-stats">
-                    mynameismund: 202 games • M0r1: 198 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥈</div>
-                <span class="pairing-players">prostidude<span class="vs">vs</span>UpGoerFive</span>
-                <span class="pairing-result">½-½</span><a href="https://lichess.org/XzG7476O" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">396 combined</span>
-                <div class="pairing-stats">
-                    prostidude: 134 games • UpGoerFive: 262 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥉</div>
-                <span class="pairing-players">Bpack<span class="vs">vs</span>glbert</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/F4DyDgJS" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">377 combined</span>
-                <div class="pairing-stats">
-                    Bpack: 72 games • glbert: 305 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">scarff<span class="vs">vs</span>MasterSRV</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/SL8BXnev" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">351 combined</span>
-                <div class="pairing-stats">
-                    scarff: 316 games • MasterSRV: 35 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">Ciraid<span class="vs">vs</span>jwwells42</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/8zTuBuyb" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">317 combined</span>
-                <div class="pairing-stats">
-                    Ciraid: 85 games • jwwells42: 232 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">👴🆚🆕</div>
-                <div class="section-title">Vet Meets Newbie</div>
-            </div>
-
-            <div class="score-summary">
-                <strong>Top 5 Score:</strong> Vets 1 - 3 Newbies
-                 (1 draws)
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">1.</div>
-                <span class="pairing-players">scarff<span class="vs">vs</span>MasterSRV</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/SL8BXnev" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Gap: 281 games</span>
-                <div class="pairing-stats">
-                    scarff: 316 games • MasterSRV: 35 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">2.</div>
-                <span class="pairing-players">BaffoDacciaio<span class="vs">vs</span>adande1</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/KkekUslI" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Gap: 259 games</span>
-                <div class="pairing-stats">
-                    BaffoDacciaio: 0 games • adande1: 259 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">3.</div>
-                <span class="pairing-players">Hagia_Sophia<span class="vs">vs</span>bufferunderrun</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/yyzLzmiU" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Gap: 252 games</span>
-                <div class="pairing-stats">
-                    Hagia_Sophia: 22 games • bufferunderrun: 274 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">Tranzoo<span class="vs">vs</span>Raindy</span>
-                <span class="pairing-result">½-½</span><a href="https://lichess.org/eOxt2GGk" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Gap: 252 games</span>
-                <div class="pairing-stats">
-                    Tranzoo: 259 games • Raindy: 7 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">pavonine<span class="vs">vs</span>timothyha</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/nIfxzQ8C" target="_blank" class="game-link-inline">View →</a>
-                <span class="badge badge-games">Gap: 245 games</span>
-                <div class="pairing-stats">
-                    pavonine: 19 games • timothyha: 264 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🆕</div>
-                <div class="section-title">Debutants Watch</div>
-            </div>
-
-            <div class="score-summary">
-                <strong>Debutants Score:</strong> 7.0/16 points 
-                (16 games played)
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>SP1389</strong><span class="vs">vs</span>Feet_Barbie</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/JxN4DayB" target="_blank" class="game-link-inline">View →</a>
-                <span class="debutant-win-badge">🎉 Debutant wins!</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>City21</strong><span class="vs">vs</span>TheJeep</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/z9waGabE" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>HorribleChessTV</strong><span class="vs">vs</span>Razorneck</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/EZ2iA3xV" target="_blank" class="game-link-inline">View →</a>
-                <span class="debutant-win-badge">🎉 Debutant wins!</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">RatHotdog<span class="vs">vs</span><strong>MrMatt96</strong></span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/29QBBccL" target="_blank" class="game-link-inline">View →</a>
-                <span class="debutant-win-badge">🎉 Debutant wins!</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">Nubro<span class="vs">vs</span><strong>knusbrick</strong></span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/ZAw5jKkp" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>perspikace</strong><span class="vs">vs</span>Catholicity</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/s37mw9UN" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">pgrucza<span class="vs">vs</span><strong>NaturesAccomplice</strong></span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/n6tPw1mj" target="_blank" class="game-link-inline">View →</a>
-                <span class="debutant-win-badge">🎉 Debutant wins!</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">bncl<span class="vs">vs</span><strong>xMacxO</strong></span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/Ancnp8QN" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">Silkthewanderer<span class="vs">vs</span><strong>AbhiNavaP</strong></span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/I4ZXmyFK" target="_blank" class="game-link-inline">View →</a>
-                <span class="debutant-win-badge">🎉 Debutant wins!</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">simonWasHere<span class="vs">vs</span><strong>SlouchToElysium</strong></span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/3nBfAHqu" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">Fexxox<span class="vs">vs</span><strong>MaxViktorY</strong></span>
-                <span class="pairing-result">½-½</span><a href="https://lichess.org/yI6cAeLk" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>SixTiN06</strong><span class="vs">vs</span>ztraynor</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/8ZiJaSYm" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>Analogue_Man</strong><span class="vs">vs</span>BlazedAndConfused</span>
-                <span class="pairing-result">½-½</span><a href="https://lichess.org/KO6f0h2X" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">VanRoy<span class="vs">vs</span><strong>elqerronfel</strong></span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/kixd9bFc" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>BaffoDacciaio</strong><span class="vs">vs</span>adande1</span>
-                <span class="pairing-result">1-0</span><a href="https://lichess.org/KkekUslI" target="_blank" class="game-link-inline">View →</a>
-                <span class="debutant-win-badge">🎉 Debutant wins!</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>ChessSpectra</strong><span class="vs">vs</span>terrormt</span>
-                <span class="pairing-result">0-1</span><a href="https://lichess.org/TsYe0KZ0" target="_blank" class="game-link-inline">View →</a>
-                
-            </div>
-
-        </div>
-
-        <div class="footer">
-            <p>Generated on 2026-10-05 17:34:06 • Lichess 4545 Pairings Analyzer</p>
-            <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
-                Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
-            </p>
-        </div>
+<div class="container">
+  <a class="back" href="index.html">← The 4545 Chronicles</a>
+  <header>
+    <h1>♟️ Notable Matchups: Results</h1>
+    <div class="sub">Season 50 &middot; Round 3</div>
+    <div class="note">How the standout pairings of this round turned out. Numbers next to names are career games before this round.</div>
+    <div class="stats">
+      <div class="stat"><b>216</b><span>Pairings</span></div>
+      <div class="stat"><b>3</b><span>Milestones reached</span></div>
+      <div class="stat"><b>11</b><span>Debut games</span></div>
     </div>
+  </header>
+
+  <section>
+    <h2>🎯 Milestones</h2>
+    <div class="intro">Players who reached their 45th, 100th, 200th or 300th league game. Only games that were actually played count.</div>
+    <div class="grid"><div class="ms"><div class="big">Reached 200</div><div class="who">M0r1</div><div class="what">Won vs <b>m-p-d</b> · <a class="play" href="https://lichess.org/QVysYLT5" target="_blank">▶ game</a></div></div><div class="ms"><div class="big">Reached 100</div><div class="who">sideshow_bob</div><div class="what">Won vs <b>lc69</b> · <a class="play" href="https://lichess.org/qlfNSezP" target="_blank">▶ game</a></div></div><div class="ms"><div class="big">Reached 45</div><div class="who">mo_mo</div><div class="what">Won vs <b>Rolihlahla</b> · <a class="play" href="https://lichess.org/oEbeEA5D" target="_blank">▶ game</a></div></div></div>
+  </section>
+
+  <section>
+    <h2>🎖️ Veteran Pairings</h2>
+    <div class="intro">The most experienced pairings: both players have played a lot, or together they have played the most.</div>
+    <div class="list"><div class="row"><span class="w lost">jcarmody</span><span class="n  nw">192</span><span class="vs">vs</span><span class="n  nb">132</span><span class="b won">dama_x_rey</span><span class="side"><span class="res"><span class="score">0–1</span><a class="play" href="https://lichess.org/lsYITTKH" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">Tranzoo</span><span class="n  nw">260</span><span class="vs">vs</span><span class="n  nb">120</span><span class="b lost">momor</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/PvBGHQfL" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w lost">kostasvl</span><span class="n  nw">210</span><span class="vs">vs</span><span class="n  nb">106</span><span class="b won">kygreek</span><span class="side"><span class="res"><span class="score">0–1</span><a class="play" href="https://lichess.org/SdOgzXjj" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w lost">bufferunderrun</span><span class="n  nw">275</span><span class="vs">vs</span><span class="n  nb">103</span><span class="b won">Feet_Barbie</span><span class="side"><span class="res"><span class="score">0–1</span><a class="play" href="https://lichess.org/PWgKpcNF" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">sideshow_bob</span><span class="n  nw">99</span><span class="vs">vs</span><span class="n  nb">110</span><span class="b lost">lc69</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/qlfNSezP" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">timothyha</span><span class="n  nw">265</span><span class="vs">vs</span><span class="n  nb">83</span><span class="b lost">ATrueRavenclaw</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/jHd8tDRa" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w lost">val1313</span><span class="n  nw">268</span><span class="vs">vs</span><span class="n  nb">75</span><span class="b won">ysgwydd</span><span class="side"><span class="res"><span class="score">0–1</span><a class="play" href="https://lichess.org/F0ltoOsC" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w">Conan_9</span><span class="n  nw">9</span><span class="vs">vs</span><span class="n  nb">317</span><span class="b">scarff</span><span class="side"><span class="res"><span class="score">½–½</span><a class="play" href="https://lichess.org/CagtTMtN" target="_blank">▶ game</a></span></span></div></div>
+  </section>
+
+  <section>
+    <h2>⚖️ Vet Meets Newcomer</h2>
+    <div class="intro">The biggest gaps in experience this round.</div>
+    <div class="list"><div class="row"><span class="w">Conan_9</span><span class="n  nw">9</span><span class="vs">vs</span><span class="n  nb">317</span><span class="b">scarff</span><span class="side"><span class="res"><span class="score">½–½</span><a class="play" href="https://lichess.org/CagtTMtN" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">glbert</span><span class="n  nw">306</span><span class="vs">vs</span><span class="n  nb">11</span><span class="b lost">Jeb_al_Gloke</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/QI0swgmu" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">adande1</span><span class="n  nw">260</span><span class="vs">vs</span><span class="n  nb">5</span><span class="b lost">Johansen231</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/tZARSdMS" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w lost">UpGoerFive</span><span class="n  nw">263</span><span class="vs">vs</span><span class="n  nb">16</span><span class="b won">parziwal08</span><span class="side"><span class="res"><span class="score">0–1</span><a class="play" href="https://lichess.org/DFoMgwM9" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">Castling-Companion</span><span class="n  nw">9</span><span class="vs">vs</span><span class="n  nb">244</span><span class="b lost">NLance</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/2AIh5ajB" target="_blank">▶ game</a></span></span></div></div>
+  </section>
+
+  <section>
+    <h2>🌱 Debutants</h2>
+    <div class="intro">Players making their league debut, sorted by how experienced their opponent is.</div>
+    <div class="summary">Debutants scored <b>5.5/10</b> in their first games.</div>
+    <div class="list"><div class="row"><span class="w won">Mieskepillae</span><span class="n new nw">debut</span><span class="vs">vs</span><span class="n  nb">217</span><span class="b lost">Silkthewanderer</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/5vqpnpkq" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w">MrSpugeddi</span><span class="n new nw">debut</span><span class="vs">vs</span><span class="n  nb">89</span><span class="b">PaulWithAnS</span><span class="side"></span></div><div class="row"><span class="w won">rishaanrajan</span><span class="n new nw">debut</span><span class="vs">vs</span><span class="n  nb">69</span><span class="b lost">IroncladUnicorn</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/2pqmBvIV" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">Plaisirs_Ephemeres</span><span class="n new nw">debut</span><span class="vs">vs</span><span class="n  nb">42</span><span class="b lost">Warvold</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/gR35miGb" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w lost">pgrucza</span><span class="n  nw">26</span><span class="vs">vs</span><span class="n new nb">debut</span><span class="b won">apawnpusher</span><span class="side"><span class="res"><span class="score">0–1</span><a class="play" href="https://lichess.org/JTSfdUX2" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">cluffas</span><span class="n  nw">17</span><span class="vs">vs</span><span class="n new nb">debut</span><span class="b lost">Damianwong01</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/8fMha3gL" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">Raindy</span><span class="n  nw">8</span><span class="vs">vs</span><span class="n new nb">debut</span><span class="b lost">murphourinho</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/fOne61IZ" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">beisn</span><span class="n  nw">7</span><span class="vs">vs</span><span class="n new nb">debut</span><span class="b lost">The_Supreme_King</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/qlMxYANv" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">waldoistwo</span><span class="n new nw">debut</span><span class="vs">vs</span><span class="n  nb">2</span><span class="b lost">Gabreke</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/8KJDHZAX" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w">EndgameAmateur42</span><span class="n  nw">2</span><span class="vs">vs</span><span class="n new nb">debut</span><span class="b">iseerabbits</span><span class="side"><span class="res"><span class="score">½–½</span><a class="play" href="https://lichess.org/tZNi5SO5" target="_blank">▶ game</a></span></span></div><div class="row"><span class="w won">SlouchToElysium</span><span class="n  nw">1</span><span class="vs">vs</span><span class="n new nb">debut</span><span class="b lost">sandy0889</span><span class="side"><span class="res"><span class="score">1–0</span><a class="play" href="https://lichess.org/LU7E2OtY" target="_blank">▶ game</a></span></span></div></div>
+  </section>
+
+  <footer>Only games that were actually played count: no-show forfeits and scheduling draws are left out.<br>Generated 2026-10-12 13:23</footer>
+</div>
 </body>
 </html>

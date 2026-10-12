@@ -1,1562 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streak Watch - Season 50, Round 3</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a3a45 0%, #2c5f6f 50%, #3d7a8a 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .header h1 {
-            color: #2d3748;
-            font-size: 2.8em;
-            margin-bottom: 10px;
-        }
-        
-        .header .subtitle {
-            color: #718096;
-            font-size: 1.3em;
-            margin-bottom: 15px;
-        }
-        
-        .header .note {
-            color: #718096;
-            font-size: 0.95em;
-            font-style: italic;
-            margin-top: 10px;
-        }
-        
-        .header .stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 20px;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2c5f6f;
-        }
-        
-        .stat-label {
-            color: #718096;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-        
-        .section {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #2c5f6f;
-        }
-        
-        .section-header.winning {
-            border-bottom-color: #059669;
-        }
-        
-        .section-header.losing {
-            border-bottom-color: #0284c7;
-        }
-        
-        .section-label-epic {
-            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
-            color: white;
-            font-size: 0.9em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 14px 24px;
-            margin-bottom: 0;
-            border-radius: 10px 10px 0 0;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-label-epic::before {
-            content: "⚡";
-            font-size: 1.1em;
-        }
-        
-        .section-label-cold {
-            background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
-            color: white;
-            font-size: 0.9em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 14px 24px;
-            margin-bottom: 0;
-            border-radius: 10px 10px 0 0;
-            box-shadow: 0 4px 15px rgba(3, 105, 161, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-label-cold::before {
-            content: "🧊";
-            font-size: 1.1em;
-        }
-        
-        .epic-section {
-            margin-bottom: 40px;
-        }
-        
-        .epic-section .matchup-card:first-of-type {
-            border-radius: 0 0 10px 10px;
-        }
-        
-        .section-icon {
-            font-size: 2.5em;
-            margin-right: 15px;
-        }
-        
-        .section-title {
-            font-size: 1.8em;
-            color: #2d3748;
-            font-weight: 600;
-        }
-        
-        .streak-card {
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            background: #f8fafc;
-            border-left: 5px solid #64748b;
-            transition: all 0.3s ease;
-        }
-        
-        .streak-card.winning {
-            border-left-color: #059669;
-            background: #f0fdf9;
-        }
-        
-        .streak-card.losing {
-            border-left-color: #0284c7;
-            background: #f0f9ff;
-        }
-        
-        .streak-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .streak-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .player-name {
-            font-size: 1.4em;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        
-        .streak-badge {
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 1.1em;
-        }
-        
-        .streak-badge.winning {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            color: white;
-        }
-        
-        .streak-badge.losing {
-            background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-            color: white;
-        }
-        
-        .upcoming-opponent {
-            background: #fef9f3;
-            border: 2px solid #d97706;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #9a3412;
-        }
-        
-        .upcoming-opponent .label {
-            font-size: 0.85em;
-            color: #c2410c;
-            margin-right: 8px;
-        }
-        
-        .opponent-name {
-            color: #7c2d12;
-            font-size: 1.05em;
-        }
-        
-        .games-list {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        
-        .games-title {
-            font-size: 0.95em;
-            color: #718096;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .game-item {
-            padding: 8px 12px;
-            margin-bottom: 6px;
-            background: #f7fafc;
-            border-radius: 5px;
-            display: grid;
-            grid-template-columns: 120px 1fr auto;
-            gap: 15px;
-            align-items: center;
-            font-size: 0.9em;
-        }
-        
-        .game-info {
-            color: #718096;
-        }
-        
-        .game-opponent {
-            color: #2d3748;
-            font-weight: 500;
-        }
-        
-        .game-link {
-            text-decoration: none;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .streak-card.winning .game-link {
-            color: #059669;
-        }
-        
-        .streak-card.losing .game-link {
-            color: #0284c7;
-        }
-        
-        .game-link:hover {
-            text-decoration: underline;
-        }
-        
-        .no-streaks {
-            text-align: center;
-            padding: 40px;
-            color: #718096;
-            font-style: italic;
-        }
-        
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 30px;
-            opacity: 0.9;
-            font-size: 0.95em;
-        }
-        
-        .matchup-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .matchup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        .matchup-players {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        
-        .matchup-vs {
-            color: #94a3b8;
-            margin: 0 10px;
-        }
-        
-        .matchup-streaks {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .matchup-divider {
-            font-size: 1.5em;
-            color: #94a3b8;
-        }
-        
-        .matchup-streak-box {
-            padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .matchup-streak-box.hot {
-            background: #fffbeb;
-            border: 2px solid #d97706;
-        }
-        
-        .matchup-streak-box.cold {
-            background: #f0f9ff;
-            border: 2px solid #0ea5e9;
-        }
-        
-        .matchup-player-name {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a202c;
-            font-size: 1em;
-        }
-        
-        .matchup-streak-info {
-            font-size: 1.1em;
-            font-weight: 700;
-        }
-        
-        .matchup-streak-info.hot {
-            color: #b45309;
-        }
-        
-        .matchup-streak-info.cold {
-            color: #0284c7;
-        }
-        
-        @media (max-width: 768px) {
-            .game-item {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            
-            .header .stats {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .matchup-streaks {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Streak Watch - Season 50, Round 4</title>
+<style>
+:root{--gold:#d4b856;--hot:#f0a35a;--hot-bg:rgba(240,163,90,.14);--cold:#7cc8ea;--cold-bg:rgba(124,200,234,.14);
+ --text:#f0f6f6;--muted:rgba(240,246,246,.62);--line:rgba(255,255,255,.12);--card:rgba(255,255,255,.05)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--text);min-height:100vh;padding:2rem;
+ background:linear-gradient(135deg,#1a323d 0%,#234250 50%,#2d5266 100%)}
+.container{max-width:900px;margin:0 auto}
+.back{display:inline-block;color:#a8d5e2;text-decoration:none;margin-bottom:1rem;font-size:.95rem}
+header{text-align:center;padding:2rem 1.5rem 1.6rem;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:2rem}
+header h1{font-size:2rem;margin-bottom:.35rem}
+header .sub{color:var(--muted);font-size:1.05rem}
+header .note{color:rgba(240,246,246,.45);font-size:.85rem;margin-top:.6rem}
+.stats{display:flex;justify-content:center;gap:2.5rem;margin-top:1.2rem;flex-wrap:wrap}
+.stat b{display:block;font-size:1.6rem}.stat span{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.stat.hot b{color:var(--hot)}.stat.cold b{color:var(--cold)}
+section{margin-bottom:2.2rem}
+h2{font-size:1.25rem;margin-bottom:.2rem}
+.intro{color:var(--muted);font-size:.88rem;margin-bottom:.9rem}
+.clashes{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.clash{display:grid;grid-template-columns:1fr auto auto auto 1fr;align-items:center;gap:.8rem;padding:.75rem 1.2rem;border-top:1px solid var(--line)}
+.clash:first-child{border-top:0}
+.clash .w{text-align:right;font-weight:600}.clash .b{text-align:left;font-weight:600}
+.clash .vs{color:rgba(240,246,246,.4);font-size:.85rem}
+.pill{display:inline-block;min-width:3.4rem;text-align:center;font-weight:700;font-size:.9rem;padding:.2rem .55rem;border-radius:20px}
+.pill.hot{color:var(--hot);background:var(--hot-bg)}.pill.cold{color:var(--cold);background:var(--cold-bg)}
+.pill.big{box-shadow:0 0 0 1px currentColor}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem}
+.streak{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem}
+.streak.hot{border-left:4px solid var(--hot)}.streak.cold{border-left:4px solid var(--cold)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem}
+.top .name{font-size:1.15rem;font-weight:700}
+.top .next{color:var(--muted);font-size:.85rem;margin-top:.15rem}.top .next b{color:var(--text);font-weight:600}
+.len{text-align:center;line-height:1}.len b{display:block;font-size:1.7rem}.len span{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.streak.hot .len b{color:var(--hot)}.streak.cold .len b{color:var(--cold)}
+.beads{display:flex;flex-wrap:wrap;gap:4px;margin-top:.8rem}
+.beads a{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;text-decoration:none}
+.streak.hot .beads a{background:var(--hot-bg);color:var(--hot)}.streak.cold .beads a{background:var(--cold-bg);color:var(--cold)}
+.beads a:hover{outline:1px solid currentColor}
+details{margin-top:.6rem}
+summary{cursor:pointer;color:#a8d5e2;font-size:.82rem;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:' ▾'}details[open] summary::after{content:' ▴'}
+.games{margin-top:.5rem;display:grid;gap:3px}
+.games a{display:flex;justify-content:space-between;gap:.6rem;font-size:.82rem;color:var(--text);text-decoration:none;padding:.3rem .5rem;border-radius:5px;background:rgba(255,255,255,.04)}
+.games a span:first-child{color:var(--muted);white-space:nowrap}
+.games a:hover{background:rgba(255,255,255,.09)}
+.none{color:var(--muted);font-size:.9rem;padding:1rem 1.2rem;background:var(--card);border:1px solid var(--line);border-radius:12px}
+footer{text-align:center;color:rgba(240,246,246,.4);font-size:.82rem;margin-top:2rem;line-height:1.6}
+@media(max-width:640px){
+ body{padding:1rem}
+ header h1{font-size:1.6rem}
+ .stats{gap:1.2rem}.stat span{font-size:.65rem}
+ .grid{grid-template-columns:1fr}
+ .clash{grid-template-columns:1fr auto;gap:.3rem .6rem;padding:.75rem 1rem}
+ .clash .w,.clash .b{text-align:left}
+ .clash .vs{display:none}
+ .clash .w{grid-column:1;grid-row:1}.clash .pw{grid-column:2;grid-row:1}
+ .clash .b{grid-column:1;grid-row:2}.clash .pb{grid-column:2;grid-row:2}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🔥 Streak Watch</h1>
-            <div class="subtitle">Season 50 • Round 3</div>
-            <div class="note">Showing streaks of 5+ games (draws ignored)</div>
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value">11</div>
-                    <div class="stat-label">Hot Streaks</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">5</div>
-                    <div class="stat-label">Cold Streaks</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Something's Gotta Give Section (HOT VS HOT) - FIRST -->
-        <div class="epic-section">
-            <div class="section-label-epic">Something's Gotta Give</div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">Conan_9<span class="matchup-vs">vs</span>scarff</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Conan_9</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">scarff</div>
-                        <div class="matchup-streak-info hot">6 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">Bortvinik<span class="matchup-vs">vs</span>ttsgosadow</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Bortvinik</div>
-                        <div class="matchup-streak-info hot">4 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">ttsgosadow</div>
-                        <div class="matchup-streak-info hot">6 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">MarekW78<span class="matchup-vs">vs</span>Joonaf</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">MarekW78</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Joonaf</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">nikolast86<span class="matchup-vs">vs</span>Drotciv</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">nikolast86</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Drotciv</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">M0r1<span class="matchup-vs">vs</span>m-p-d</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">M0r1</div>
-                        <div class="matchup-streak-info hot">3 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">m-p-d</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">dragon19410<span class="matchup-vs">vs</span>electricfalcon</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">dragon19410</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">electricfalcon</div>
-                        <div class="matchup-streak-info hot">6 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">AceRb95<span class="matchup-vs">vs</span>metalpawn</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">AceRb95</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">metalpawn</div>
-                        <div class="matchup-streak-info hot">4 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">Leverkuhn<span class="matchup-vs">vs</span>Kayrosas</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Leverkuhn</div>
-                        <div class="matchup-streak-info hot">4 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Kayrosas</div>
-                        <div class="matchup-streak-info hot">5 wins</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">fwcj68<span class="matchup-vs">vs</span>TheJeep</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">fwcj68</div>
-                        <div class="matchup-streak-info hot">3 wins</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">TheJeep</div>
-                        <div class="matchup-streak-info hot">2 wins</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Cold War Section (COLD VS COLD) - SECOND -->
-        <div class="epic-section">
-            <div class="section-label-cold">Cold War</div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">mgold<span class="matchup-vs">vs</span>Fischer_and_Chips88</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">mgold</div>
-                        <div class="matchup-streak-info cold">2 losses</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">Fischer_and_Chips88</div>
-                        <div class="matchup-streak-info cold">3 losses</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">osumarko<span class="matchup-vs">vs</span>K5KGC</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">osumarko</div>
-                        <div class="matchup-streak-info cold">4 losses</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">K5KGC</div>
-                        <div class="matchup-streak-info cold">6 losses</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">Gingersquirrelnuts<span class="matchup-vs">vs</span>avemanyeg</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">Gingersquirrelnuts</div>
-                        <div class="matchup-streak-info cold">3 losses</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">avemanyeg</div>
-                        <div class="matchup-streak-info cold">2 losses</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">OK_4<span class="matchup-vs">vs</span>JohnJPershing</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">OK_4</div>
-                        <div class="matchup-streak-info cold">2 losses</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">JohnJPershing</div>
-                        <div class="matchup-streak-info cold">3 losses</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">its_ck<span class="matchup-vs">vs</span>Acebulf</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">its_ck</div>
-                        <div class="matchup-streak-info cold">3 losses</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">Acebulf</div>
-                        <div class="matchup-streak-info cold">3 losses</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">gmat20020<span class="matchup-vs">vs</span>zal667</div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">gmat20020</div>
-                        <div class="matchup-streak-info cold">3 losses</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">zal667</div>
-                        <div class="matchup-streak-info cold">2 losses</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Hot Streaks Section - THIRD -->
-        <div class="section">
-            <div class="section-header winning">
-                <div class="section-icon">🔥</div>
-                <div class="section-title">Hot Streaks (5+ Wins)</div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">cowtone</div>
-                    <div class="streak-badge winning">7 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">mixxanber</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs AlexGaul</span>
-                        <a href="https://lichess.org/ZcXa7z4f" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs BlazedAndConfused</span>
-                        <a href="https://lichess.org/rNv7LEm3" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs Hesperian</span>
-                        <a href="https://lichess.org/8uOpHWxe" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs kurdd</span>
-                        <a href="https://lichess.org/1fa4QsJj" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs serenemoose</span>
-                        <a href="https://lichess.org/pwVHw7JR" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R3</span>
-                        <span class="game-opponent">vs Jg777</span>
-                        <a href="https://lichess.org/pBiRdNW8" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R2</span>
-                        <span class="game-opponent">vs Queequ3g</span>
-                        <a href="https://lichess.org/QbH9tNZf" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">Alikadhim2</div>
-                    <div class="streak-badge winning">7 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">ARandomMove</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs ATrueRavenclaw</span>
-                        <a href="https://lichess.org/ZEp3eJqL" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs thestormingeagle</span>
-                        <a href="https://lichess.org/EBtSkH45" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs Zubenelgenubi</span>
-                        <a href="https://lichess.org/cYPbEgfR" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R4</span>
-                        <span class="game-opponent">vs jwwells42</span>
-                        <a href="https://lichess.org/kkLiLwzw" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R3</span>
-                        <span class="game-opponent">vs simonWasHere</span>
-                        <a href="https://lichess.org/YP32IGHW" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R2</span>
-                        <span class="game-opponent">vs ow4121</span>
-                        <a href="https://lichess.org/mTY3Pqhm" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R1</span>
-                        <span class="game-opponent">vs ananimalstolemypants</span>
-                        <a href="https://lichess.org/peN9JNmQ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">scarff</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">Conan_9</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs MasterSRV</span>
-                        <a href="https://lichess.org/SL8BXnev" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs medericnzieaudzaghe</span>
-                        <a href="https://lichess.org/eC5mBCkc" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs Imen001</span>
-                        <a href="https://lichess.org/bFWXeC1h" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs berndwind</span>
-                        <a href="https://lichess.org/FV5wn4xg" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs ysgwydd</span>
-                        <a href="https://lichess.org/eB6sQnB9" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs addead</span>
-                        <a href="https://lichess.org/7aHbUARz" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">electricfalcon</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">dragon19410</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs Jimq0</span>
-                        <a href="https://lichess.org/yyeaFcY7" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs macha1313</span>
-                        <a href="https://lichess.org/oo3ZrdIg" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs beisn</span>
-                        <a href="https://lichess.org/Sbf7YuZB" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs nightsub</span>
-                        <a href="https://lichess.org/tkSD6JKA" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R3</span>
-                        <span class="game-opponent">vs keeto</span>
-                        <a href="https://lichess.org/etAu87Xm" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R2</span>
-                        <span class="game-opponent">vs Elias_NL</span>
-                        <a href="https://lichess.org/ka187bvN" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">ComputerUser2607</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">Checkmate_Insurance</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs alp_arslan92</span>
-                        <a href="https://lichess.org/KA5ZtY5m" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs ChemEngineeer</span>
-                        <a href="https://lichess.org/6ozXAFDl" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs AACtrl</span>
-                        <a href="https://lichess.org/gdTsyaMa" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs rustyvm</span>
-                        <a href="https://lichess.org/zPfHJzlB" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs Nestor3690</span>
-                        <a href="https://lichess.org/qQOvOIFi" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs markmarkedymarkmark</span>
-                        <a href="https://lichess.org/43Ue6aPJ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">luwasserman</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">CS2K25</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs Cody13</span>
-                        <a href="https://lichess.org/fmP6MgF5" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs aguayo</span>
-                        <a href="https://lichess.org/Jm0J8qRC" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs BOTW26</span>
-                        <a href="https://lichess.org/FnxBUPBe" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs waterlorda7890</span>
-                        <a href="https://lichess.org/6IqN541c" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R4</span>
-                        <span class="game-opponent">vs jpgmich</span>
-                        <a href="https://lichess.org/wbBGYFH9" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R3</span>
-                        <span class="game-opponent">vs Angrybird029</span>
-                        <a href="https://lichess.org/157Bv6DY" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">ttsgosadow</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">Bortvinik</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs COSMOAPS</span>
-                        <a href="https://lichess.org/MxMfrPwC" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs MarketMike</span>
-                        <a href="https://lichess.org/Oe94Nk3p" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs ChessisHard101</span>
-                        <a href="https://lichess.org/Cn3MyHE8" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs kauberdi</span>
-                        <a href="https://lichess.org/9OFNm1cu" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R3</span>
-                        <span class="game-opponent">vs Mtsundance</span>
-                        <a href="https://lichess.org/ND8QIPsZ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R2</span>
-                        <span class="game-opponent">vs SeniorJrIII</span>
-                        <a href="https://lichess.org/Gok18N22" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">OnlyLongTimeGames</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">Jelle1</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs Shampanjasosialisti</span>
-                        <a href="https://lichess.org/meNRZjgT" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs NLance</span>
-                        <a href="https://lichess.org/P7zQZ2PH" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs S4AD1ST</span>
-                        <a href="https://lichess.org/9XujbssJ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs JEEprep2374</span>
-                        <a href="https://lichess.org/BeVsYkdT" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R4</span>
-                        <span class="game-opponent">vs karasso</span>
-                        <a href="https://lichess.org/xc7MmQRQ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R3</span>
-                        <span class="game-opponent">vs sivakumarr</span>
-                        <a href="https://lichess.org/6YHj4xRd" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">gavalanche20</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">shamdi</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs Versaumnisgrund</span>
-                        <a href="https://lichess.org/8eml00tZ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs nermin_dedovic</span>
-                        <a href="https://lichess.org/r6hvFPPN" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R4</span>
-                        <span class="game-opponent">vs Prep263</span>
-                        <a href="https://lichess.org/QBvwxDq7" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 45, R3</span>
-                        <span class="game-opponent">vs AeternaLudus</span>
-                        <a href="https://lichess.org/jNBVkebu" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 41, R7</span>
-                        <span class="game-opponent">vs jwwells42</span>
-                        <a href="https://lichess.org/g6nztKpx" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">Kayrosas</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">Leverkuhn</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs SlowRoast</span>
-                        <a href="https://lichess.org/sXN9gr1e" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs aldric123</span>
-                        <a href="https://lichess.org/E2bPJD6v" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs karasso</span>
-                        <a href="https://lichess.org/imSow9Cq" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs ItsASecret2000</span>
-                        <a href="https://lichess.org/QqPM52hg" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R4</span>
-                        <span class="game-opponent">vs King12-life</span>
-                        <a href="https://lichess.org/5OVw8T8p" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">hpors</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">mmkgtc</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs time_lord19</span>
-                        <a href="https://lichess.org/ozyvWXSM" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs angborxley</span>
-                        <a href="https://lichess.org/iIcR36d7" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs macha1313</span>
-                        <a href="https://lichess.org/iVwP2on6" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs stumct</span>
-                        <a href="https://lichess.org/e87EwwoC" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs FranconianChess</span>
-                        <a href="https://lichess.org/OJCTG3Dd" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Cold Streaks Section - FOURTH -->
-        <div class="section">
-            <div class="section-header losing">
-                <div class="section-icon">❄️</div>
-                <div class="section-title">Cold Streaks (5+ Losses)</div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">cham</div>
-                    <div class="streak-badge losing">7 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">TheRealDivider</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs HighonPotnuse</span>
-                        <a href="https://lichess.org/C8aXrh13" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs Kborman</span>
-                        <a href="https://lichess.org/f2eulrYi" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs lewinberg</span>
-                        <a href="https://lichess.org/xOAjEPRw" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs Bortvinik</span>
-                        <a href="https://lichess.org/lMYIUTXm" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs keeto</span>
-                        <a href="https://lichess.org/NXjgmuLc" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs jfiras</span>
-                        <a href="https://lichess.org/UASyl0HZ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs jkoch1</span>
-                        <a href="https://lichess.org/XYVXtgvt" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">mimrolls</div>
-                    <div class="streak-badge losing">7 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">rjhoro</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs DavidSifre</span>
-                        <a href="https://lichess.org/0PpyNqbG" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R1</span>
-                        <span class="game-opponent">vs SpacebarIsTaken</span>
-                        <a href="https://lichess.org/O98xBRI9" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 48, R4</span>
-                        <span class="game-opponent">vs PawnziScheme5280</span>
-                        <a href="https://lichess.org/81Ausj4q" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 48, R3</span>
-                        <span class="game-opponent">vs laughingoctopus</span>
-                        <a href="https://lichess.org/yGd2FILN" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 48, R2</span>
-                        <span class="game-opponent">vs electricfalcon</span>
-                        <a href="https://lichess.org/v3FJIbgO" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 47, R8</span>
-                        <span class="game-opponent">vs PuntCatcher</span>
-                        <a href="https://lichess.org/Smylm3sA" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 47, R7</span>
-                        <span class="game-opponent">vs rjhoro</span>
-                        <a href="https://lichess.org/3g4WYkYJ" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">Fyrox96</div>
-                    <div class="streak-badge losing">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">Hanzo_19</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs switchoffengine</span>
-                        <a href="https://lichess.org/yFSDDDSE" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs Unknownprodigy</span>
-                        <a href="https://lichess.org/5ZdWQ0JS" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs pavonine</span>
-                        <a href="https://lichess.org/9VPvraPa" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs sussasun</span>
-                        <a href="https://lichess.org/pjEHS0Cm" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs rajuppi</span>
-                        <a href="https://lichess.org/k7pitj24" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R4</span>
-                        <span class="game-opponent">vs switchoffengine</span>
-                        <a href="https://lichess.org/x1lm8FJE" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">K5KGC</div>
-                    <div class="streak-badge losing">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">osumarko</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs SpacebarIsTaken</span>
-                        <a href="https://lichess.org/ftX6K6aS" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs metalpawn</span>
-                        <a href="https://lichess.org/0o6a9glV" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs IntenseLotion</span>
-                        <a href="https://lichess.org/xreO1vrx" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R4</span>
-                        <span class="game-opponent">vs DrRickinCT</span>
-                        <a href="https://lichess.org/2IBgr8ez" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R3</span>
-                        <span class="game-opponent">vs angborxley</span>
-                        <a href="https://lichess.org/Xc4FI8HM" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R1</span>
-                        <span class="game-opponent">vs DavidSifre</span>
-                        <a href="https://lichess.org/bQ3bSFop" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">kurdd</div>
-                    <div class="streak-badge losing">6 games</div>
-                </div>
-
-                <div class="upcoming-opponent">
-                    <span class="label">🎯 Next opponent:</span>
-                    <span class="opponent-name">Zubenelgenubi</span>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-title">All Games in Streak:</div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R2</span>
-                        <span class="game-opponent">vs Gabreke</span>
-                        <a href="https://lichess.org/RM4Xdktu" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 50, R1</span>
-                        <span class="game-opponent">vs yotambienjuego</span>
-                        <a href="https://lichess.org/3ImDwT3H" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R8</span>
-                        <span class="game-opponent">vs ORIONfull</span>
-                        <a href="https://lichess.org/OklqS9Zm" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R7</span>
-                        <span class="game-opponent">vs MasterSRV</span>
-                        <a href="https://lichess.org/tLjsY3Cd" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R6</span>
-                        <span class="game-opponent">vs cowtone</span>
-                        <a href="https://lichess.org/1fa4QsJj" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                    <div class="game-item">
-                        <span class="game-info">Season 49, R5</span>
-                        <span class="game-opponent">vs AACtrl</span>
-                        <a href="https://lichess.org/tnMI720j" target="_blank" class="game-link">View →</a>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-        
-        <div class="footer">
-            <p>Generated on 2026-10-05 17:34:04 • Lichess 4545 Streak Watch</p>
-            <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
-                Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
-            </p>
-        </div>
+<div class="container">
+  <a class="back" href="index.html">← The 4545 Chronicles</a>
+  <header>
+    <h1>🔥 Streak Watch</h1>
+    <div class="sub">Season 50 &middot; Round 4</div>
+    <div class="note">Current league streaks of players in this round, across all seasons. A draw ends a streak.</div>
+    <div class="stats">
+      <div class="stat hot"><b>10</b><span>Win streaks of 5+</span></div>
+      <div class="stat cold"><b>10</b><span>Losing streaks of 5+</span></div>
     </div>
+  </header>
+
+  <section>
+    <h2>⚡ Something's Gotta Give</h2>
+    <div class="intro">Both players are on a winning streak of 2 or more, so at least one streak ends this round.</div>
+    <div class="clashes"><div class="clash"><span class="w">Chonov</span><span class="pill hot pw">2W</span><span class="vs">vs</span><span class="pill hot big pb">6W</span><span class="b">luwasserman</span></div><div class="clash"><span class="w">ztraynor</span><span class="pill hot big pw">4W</span><span class="vs">vs</span><span class="pill hot pb">3W</span><span class="b">mkubecek</span></div><div class="clash"><span class="w">tomb85</span><span class="pill hot big pw">3W</span><span class="vs">vs</span><span class="pill hot pb">2W</span><span class="b">SeniorJrIII</span></div><div class="clash"><span class="w">AphoticBlues</span><span class="pill hot pw">2W</span><span class="vs">vs</span><span class="pill hot big pb">3W</span><span class="b">Friedwing</span></div><div class="clash"><span class="w">stumct</span><span class="pill hot pw">2W</span><span class="vs">vs</span><span class="pill hot big pb">3W</span><span class="b">wtm22</span></div><div class="clash"><span class="w">Broot</span><span class="pill hot pw">2W</span><span class="vs">vs</span><span class="pill hot pb">2W</span><span class="b">oldfishnewfish</span></div><div class="clash"><span class="w">VanRoy</span><span class="pill hot pw">2W</span><span class="vs">vs</span><span class="pill hot pb">2W</span><span class="b">mekumcu</span></div></div>
+  </section>
+
+  <section>
+    <h2>🧊 Cold War</h2>
+    <div class="intro">Both players are on a losing streak of 2 or more, so at least one of them gets off the mark.</div>
+    <div class="clashes"><div class="clash"><span class="w">mongreltiger</span><span class="pill cold pw">2L</span><span class="vs">vs</span><span class="pill cold big pb">8L</span><span class="b">mimrolls</span></div><div class="clash"><span class="w">Hesperian</span><span class="pill cold big pw">5L</span><span class="vs">vs</span><span class="pill cold pb">3L</span><span class="b">BLang316</span></div><div class="clash"><span class="w">chraki</span><span class="pill cold pw">2L</span><span class="vs">vs</span><span class="pill cold big pb">3L</span><span class="b">jakubjaniak1994</span></div><div class="clash"><span class="w">bufferunderrun</span><span class="pill cold big pw">3L</span><span class="vs">vs</span><span class="pill cold pb">2L</span><span class="b">mobusel</span></div><div class="clash"><span class="w">angborxley</span><span class="pill cold pw">2L</span><span class="vs">vs</span><span class="pill cold big pb">3L</span><span class="b">DrRickinCT</span></div><div class="clash"><span class="w">zal667</span><span class="pill cold big pw">3L</span><span class="vs">vs</span><span class="pill cold pb">2L</span><span class="b">Angrybird029</span></div><div class="clash"><span class="w">Happysandbags</span><span class="pill cold big pw">3L</span><span class="vs">vs</span><span class="pill cold pb">2L</span><span class="b">pgrucza</span></div><div class="clash"><span class="w">WordRearrangment</span><span class="pill cold pw">2L</span><span class="vs">vs</span><span class="pill cold big pb">3L</span><span class="b">SedNomini</span></div><div class="clash"><span class="w">waterlorda7890</span><span class="pill cold pw">2L</span><span class="vs">vs</span><span class="pill cold pb">2L</span><span class="b">eight_x_eight</span></div></div>
+  </section>
+
+  <section>
+    <h2>🔥 Hot Streaks</h2>
+    <div class="intro">5 or more wins in a row. Each square is one game, oldest first. Click a square to open the game.</div>
+    <div class="grid"><div class="streak hot">
+  <div class="top"><div><div class="name">Alikadhim2</div><div class="next">Next: <b>NLance</b></div></div>
+  <div class="len"><b>8</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/peN9JNmQ" target="_blank" title="S49 R1 vs ananimalstolemypants">W</a><a href="https://lichess.org/mTY3Pqhm" target="_blank" title="S49 R2 vs ow4121">W</a><a href="https://lichess.org/YP32IGHW" target="_blank" title="S49 R3 vs simonWasHere">W</a><a href="https://lichess.org/kkLiLwzw" target="_blank" title="S49 R4 vs jwwells42">W</a><a href="https://lichess.org/cYPbEgfR" target="_blank" title="S49 R5 vs Zubenelgenubi">W</a><a href="https://lichess.org/EBtSkH45" target="_blank" title="S49 R6 vs thestormingeagle">W</a><a href="https://lichess.org/ZEp3eJqL" target="_blank" title="S50 R1 vs ATrueRavenclaw">W</a><a href="https://lichess.org/X481s0IY" target="_blank" title="S50 R3 vs ARandomMove">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/X481s0IY" target="_blank"><span>S50 R3</span><span>vs ARandomMove</span></a><a href="https://lichess.org/ZEp3eJqL" target="_blank"><span>S50 R1</span><span>vs ATrueRavenclaw</span></a><a href="https://lichess.org/EBtSkH45" target="_blank"><span>S49 R6</span><span>vs thestormingeagle</span></a><a href="https://lichess.org/cYPbEgfR" target="_blank"><span>S49 R5</span><span>vs Zubenelgenubi</span></a><a href="https://lichess.org/kkLiLwzw" target="_blank"><span>S49 R4</span><span>vs jwwells42</span></a><a href="https://lichess.org/YP32IGHW" target="_blank"><span>S49 R3</span><span>vs simonWasHere</span></a><a href="https://lichess.org/mTY3Pqhm" target="_blank"><span>S49 R2</span><span>vs ow4121</span></a><a href="https://lichess.org/peN9JNmQ" target="_blank"><span>S49 R1</span><span>vs ananimalstolemypants</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">ttsgosadow</div><div class="next">Next: <b>mqll</b></div></div>
+  <div class="len"><b>7</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/Gok18N22" target="_blank" title="S49 R2 vs SeniorJrIII">W</a><a href="https://lichess.org/ND8QIPsZ" target="_blank" title="S49 R3 vs Mtsundance">W</a><a href="https://lichess.org/9OFNm1cu" target="_blank" title="S49 R7 vs kauberdi">W</a><a href="https://lichess.org/Cn3MyHE8" target="_blank" title="S49 R8 vs ChessisHard101">W</a><a href="https://lichess.org/Oe94Nk3p" target="_blank" title="S50 R1 vs MarketMike">W</a><a href="https://lichess.org/MxMfrPwC" target="_blank" title="S50 R2 vs COSMOAPS">W</a><a href="https://lichess.org/KxNZE98D" target="_blank" title="S50 R3 vs Bortvinik">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/KxNZE98D" target="_blank"><span>S50 R3</span><span>vs Bortvinik</span></a><a href="https://lichess.org/MxMfrPwC" target="_blank"><span>S50 R2</span><span>vs COSMOAPS</span></a><a href="https://lichess.org/Oe94Nk3p" target="_blank"><span>S50 R1</span><span>vs MarketMike</span></a><a href="https://lichess.org/Cn3MyHE8" target="_blank"><span>S49 R8</span><span>vs ChessisHard101</span></a><a href="https://lichess.org/9OFNm1cu" target="_blank"><span>S49 R7</span><span>vs kauberdi</span></a><a href="https://lichess.org/ND8QIPsZ" target="_blank"><span>S49 R3</span><span>vs Mtsundance</span></a><a href="https://lichess.org/Gok18N22" target="_blank"><span>S49 R2</span><span>vs SeniorJrIII</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">Kayrosas</div><div class="next">Next: <b>Chesstrix01</b></div></div>
+  <div class="len"><b>6</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/5OVw8T8p" target="_blank" title="S49 R4 vs King12-life">W</a><a href="https://lichess.org/QqPM52hg" target="_blank" title="S49 R6 vs ItsASecret2000">W</a><a href="https://lichess.org/imSow9Cq" target="_blank" title="S49 R7 vs karasso">W</a><a href="https://lichess.org/E2bPJD6v" target="_blank" title="S49 R8 vs aldric123">W</a><a href="https://lichess.org/sXN9gr1e" target="_blank" title="S50 R1 vs SlowRoast">W</a><a href="https://lichess.org/hVGsetIP" target="_blank" title="S50 R3 vs Leverkuhn">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/hVGsetIP" target="_blank"><span>S50 R3</span><span>vs Leverkuhn</span></a><a href="https://lichess.org/sXN9gr1e" target="_blank"><span>S50 R1</span><span>vs SlowRoast</span></a><a href="https://lichess.org/E2bPJD6v" target="_blank"><span>S49 R8</span><span>vs aldric123</span></a><a href="https://lichess.org/imSow9Cq" target="_blank"><span>S49 R7</span><span>vs karasso</span></a><a href="https://lichess.org/QqPM52hg" target="_blank"><span>S49 R6</span><span>vs ItsASecret2000</span></a><a href="https://lichess.org/5OVw8T8p" target="_blank"><span>S49 R4</span><span>vs King12-life</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">luwasserman</div><div class="next">Next: <b>Chonov</b></div></div>
+  <div class="len"><b>6</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/157Bv6DY" target="_blank" title="S49 R3 vs Angrybird029">W</a><a href="https://lichess.org/wbBGYFH9" target="_blank" title="S49 R4 vs jpgmich">W</a><a href="https://lichess.org/6IqN541c" target="_blank" title="S49 R5 vs waterlorda7890">W</a><a href="https://lichess.org/FnxBUPBe" target="_blank" title="S49 R6 vs BOTW26">W</a><a href="https://lichess.org/Jm0J8qRC" target="_blank" title="S49 R7 vs aguayo">W</a><a href="https://lichess.org/fmP6MgF5" target="_blank" title="S50 R2 vs Cody13">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/fmP6MgF5" target="_blank"><span>S50 R2</span><span>vs Cody13</span></a><a href="https://lichess.org/Jm0J8qRC" target="_blank"><span>S49 R7</span><span>vs aguayo</span></a><a href="https://lichess.org/FnxBUPBe" target="_blank"><span>S49 R6</span><span>vs BOTW26</span></a><a href="https://lichess.org/6IqN541c" target="_blank"><span>S49 R5</span><span>vs waterlorda7890</span></a><a href="https://lichess.org/wbBGYFH9" target="_blank"><span>S49 R4</span><span>vs jpgmich</span></a><a href="https://lichess.org/157Bv6DY" target="_blank"><span>S49 R3</span><span>vs Angrybird029</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">hpors</div><div class="next">Next: <b>TimeFork</b></div></div>
+  <div class="len"><b>6</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/OJCTG3Dd" target="_blank" title="S49 R5 vs FranconianChess">W</a><a href="https://lichess.org/e87EwwoC" target="_blank" title="S49 R6 vs stumct">W</a><a href="https://lichess.org/iVwP2on6" target="_blank" title="S49 R7 vs macha1313">W</a><a href="https://lichess.org/iIcR36d7" target="_blank" title="S49 R8 vs angborxley">W</a><a href="https://lichess.org/ozyvWXSM" target="_blank" title="S50 R2 vs time_lord19">W</a><a href="https://lichess.org/eXdF07Iw" target="_blank" title="S50 R3 vs mmkgtc">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/eXdF07Iw" target="_blank"><span>S50 R3</span><span>vs mmkgtc</span></a><a href="https://lichess.org/ozyvWXSM" target="_blank"><span>S50 R2</span><span>vs time_lord19</span></a><a href="https://lichess.org/iIcR36d7" target="_blank"><span>S49 R8</span><span>vs angborxley</span></a><a href="https://lichess.org/iVwP2on6" target="_blank"><span>S49 R7</span><span>vs macha1313</span></a><a href="https://lichess.org/e87EwwoC" target="_blank"><span>S49 R6</span><span>vs stumct</span></a><a href="https://lichess.org/OJCTG3Dd" target="_blank"><span>S49 R5</span><span>vs FranconianChess</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">metalpawn</div><div class="next">Next: <b>brilliantBlunder</b></div></div>
+  <div class="len"><b>5</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/0o6a9glV" target="_blank" title="S49 R7 vs K5KGC">W</a><a href="https://lichess.org/HJYtiRl8" target="_blank" title="S49 R8 vs DavidSifre">W</a><a href="https://lichess.org/x22RzoGU" target="_blank" title="S50 R1 vs nightsub">W</a><a href="https://lichess.org/lxmFjhe3" target="_blank" title="S50 R2 vs DikiyDrozd">W</a><a href="https://lichess.org/3WKwBEIm" target="_blank" title="S50 R3 vs AceRb95">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/3WKwBEIm" target="_blank"><span>S50 R3</span><span>vs AceRb95</span></a><a href="https://lichess.org/lxmFjhe3" target="_blank"><span>S50 R2</span><span>vs DikiyDrozd</span></a><a href="https://lichess.org/x22RzoGU" target="_blank"><span>S50 R1</span><span>vs nightsub</span></a><a href="https://lichess.org/HJYtiRl8" target="_blank"><span>S49 R8</span><span>vs DavidSifre</span></a><a href="https://lichess.org/0o6a9glV" target="_blank"><span>S49 R7</span><span>vs K5KGC</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">gavalanche20</div><div class="next">Next: <b>Bennol</b></div></div>
+  <div class="len"><b>5</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/g6nztKpx" target="_blank" title="S41 R7 vs jwwells42">W</a><a href="https://lichess.org/jNBVkebu" target="_blank" title="S45 R3 vs AeternaLudus">W</a><a href="https://lichess.org/QBvwxDq7" target="_blank" title="S45 R4 vs Prep263">W</a><a href="https://lichess.org/r6hvFPPN" target="_blank" title="S50 R1 vs nermin_dedovic">W</a><a href="https://lichess.org/8eml00tZ" target="_blank" title="S50 R2 vs Versaumnisgrund">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/8eml00tZ" target="_blank"><span>S50 R2</span><span>vs Versaumnisgrund</span></a><a href="https://lichess.org/r6hvFPPN" target="_blank"><span>S50 R1</span><span>vs nermin_dedovic</span></a><a href="https://lichess.org/QBvwxDq7" target="_blank"><span>S45 R4</span><span>vs Prep263</span></a><a href="https://lichess.org/jNBVkebu" target="_blank"><span>S45 R3</span><span>vs AeternaLudus</span></a><a href="https://lichess.org/g6nztKpx" target="_blank"><span>S41 R7</span><span>vs jwwells42</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">eldotore</div><div class="next">Next: <b>fireball100</b></div></div>
+  <div class="len"><b>5</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/wY6sF2h3" target="_blank" title="S49 R7 vs pawneater2020">W</a><a href="https://lichess.org/lsQVt7KJ" target="_blank" title="S49 R8 vs PatrickVrielink">W</a><a href="https://lichess.org/ILdEjGxh" target="_blank" title="S50 R1 vs davegiltinan">W</a><a href="https://lichess.org/phg674gJ" target="_blank" title="S50 R2 vs pawneater2020">W</a><a href="https://lichess.org/pW27NgCt" target="_blank" title="S50 R3 vs ScienceGeek">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/pW27NgCt" target="_blank"><span>S50 R3</span><span>vs ScienceGeek</span></a><a href="https://lichess.org/phg674gJ" target="_blank"><span>S50 R2</span><span>vs pawneater2020</span></a><a href="https://lichess.org/ILdEjGxh" target="_blank"><span>S50 R1</span><span>vs davegiltinan</span></a><a href="https://lichess.org/lsQVt7KJ" target="_blank"><span>S49 R8</span><span>vs PatrickVrielink</span></a><a href="https://lichess.org/wY6sF2h3" target="_blank"><span>S49 R7</span><span>vs pawneater2020</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">scoobysnack19</div><div class="next">Next: <b>AceRb95</b></div></div>
+  <div class="len"><b>5</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/oFX0cHnT" target="_blank" title="S49 R7 vs dama_x_rey">W</a><a href="https://lichess.org/5HZyE4L2" target="_blank" title="S49 R8 vs WelshKebab">W</a><a href="https://lichess.org/pMM8UDiC" target="_blank" title="S50 R1 vs dama_x_rey">W</a><a href="https://lichess.org/QuBWmwdT" target="_blank" title="S50 R2 vs mongreltiger">W</a><a href="https://lichess.org/EhSM6NMy" target="_blank" title="S50 R3 vs AthenianKnight">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/EhSM6NMy" target="_blank"><span>S50 R3</span><span>vs AthenianKnight</span></a><a href="https://lichess.org/QuBWmwdT" target="_blank"><span>S50 R2</span><span>vs mongreltiger</span></a><a href="https://lichess.org/pMM8UDiC" target="_blank"><span>S50 R1</span><span>vs dama_x_rey</span></a><a href="https://lichess.org/5HZyE4L2" target="_blank"><span>S49 R8</span><span>vs WelshKebab</span></a><a href="https://lichess.org/oFX0cHnT" target="_blank"><span>S49 R7</span><span>vs dama_x_rey</span></a></div></details>
+</div><div class="streak hot">
+  <div class="top"><div><div class="name">capturingbravo</div><div class="next">Next: <b>Nubro</b></div></div>
+  <div class="len"><b>5</b><span>wins</span></div></div>
+  <div class="beads"><a href="https://lichess.org/xsAw0ayE" target="_blank" title="S49 R5 vs rjhoro">W</a><a href="https://lichess.org/OwwvfMLZ" target="_blank" title="S49 R6 vs Apidae">W</a><a href="https://lichess.org/8AI4ZuKa" target="_blank" title="S49 R7 vs KendragonX">W</a><a href="https://lichess.org/qlCdvOWS" target="_blank" title="S49 R8 vs osumarko">W</a><a href="https://lichess.org/Pe7XkObp" target="_blank" title="S50 R1 vs oldfishnewfish">W</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/Pe7XkObp" target="_blank"><span>S50 R1</span><span>vs oldfishnewfish</span></a><a href="https://lichess.org/qlCdvOWS" target="_blank"><span>S49 R8</span><span>vs osumarko</span></a><a href="https://lichess.org/8AI4ZuKa" target="_blank"><span>S49 R7</span><span>vs KendragonX</span></a><a href="https://lichess.org/OwwvfMLZ" target="_blank"><span>S49 R6</span><span>vs Apidae</span></a><a href="https://lichess.org/xsAw0ayE" target="_blank"><span>S49 R5</span><span>vs rjhoro</span></a></div></details>
+</div></div>
+  </section>
+
+  <section>
+    <h2>❄️ Cold Streaks</h2>
+    <div class="intro">5 or more losses in a row.</div>
+    <div class="grid"><div class="streak cold">
+  <div class="top"><div><div class="name">cham</div><div class="next">Next: <b>Marco_Chess13</b></div></div>
+  <div class="len"><b>8</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/XYVXtgvt" target="_blank" title="S49 R6 vs jkoch1">L</a><a href="https://lichess.org/UASyl0HZ" target="_blank" title="S49 R7 vs jfiras">L</a><a href="https://lichess.org/NXjgmuLc" target="_blank" title="S49 R7 vs keeto">L</a><a href="https://lichess.org/lMYIUTXm" target="_blank" title="S49 R7 vs Bortvinik">L</a><a href="https://lichess.org/xOAjEPRw" target="_blank" title="S49 R8 vs lewinberg">L</a><a href="https://lichess.org/f2eulrYi" target="_blank" title="S50 R1 vs Kborman">L</a><a href="https://lichess.org/C8aXrh13" target="_blank" title="S50 R2 vs HighonPotnuse">L</a><a href="https://lichess.org/53SUlInL" target="_blank" title="S50 R3 vs TheRealDivider">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/53SUlInL" target="_blank"><span>S50 R3</span><span>vs TheRealDivider</span></a><a href="https://lichess.org/C8aXrh13" target="_blank"><span>S50 R2</span><span>vs HighonPotnuse</span></a><a href="https://lichess.org/f2eulrYi" target="_blank"><span>S50 R1</span><span>vs Kborman</span></a><a href="https://lichess.org/xOAjEPRw" target="_blank"><span>S49 R8</span><span>vs lewinberg</span></a><a href="https://lichess.org/lMYIUTXm" target="_blank"><span>S49 R7</span><span>vs Bortvinik</span></a><a href="https://lichess.org/NXjgmuLc" target="_blank"><span>S49 R7</span><span>vs keeto</span></a><a href="https://lichess.org/UASyl0HZ" target="_blank"><span>S49 R7</span><span>vs jfiras</span></a><a href="https://lichess.org/XYVXtgvt" target="_blank"><span>S49 R6</span><span>vs jkoch1</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">mimrolls</div><div class="next">Next: <b>mongreltiger</b></div></div>
+  <div class="len"><b>8</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/3g4WYkYJ" target="_blank" title="S47 R7 vs rjhoro">L</a><a href="https://lichess.org/Smylm3sA" target="_blank" title="S47 R8 vs PuntCatcher">L</a><a href="https://lichess.org/v3FJIbgO" target="_blank" title="S48 R2 vs electricfalcon">L</a><a href="https://lichess.org/yGd2FILN" target="_blank" title="S48 R3 vs laughingoctopus">L</a><a href="https://lichess.org/81Ausj4q" target="_blank" title="S48 R4 vs PawnziScheme5280">L</a><a href="https://lichess.org/O98xBRI9" target="_blank" title="S49 R1 vs SpacebarIsTaken">L</a><a href="https://lichess.org/0PpyNqbG" target="_blank" title="S50 R1 vs DavidSifre">L</a><a href="https://lichess.org/kvknz6cD" target="_blank" title="S50 R3 vs rjhoro">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/kvknz6cD" target="_blank"><span>S50 R3</span><span>vs rjhoro</span></a><a href="https://lichess.org/0PpyNqbG" target="_blank"><span>S50 R1</span><span>vs DavidSifre</span></a><a href="https://lichess.org/O98xBRI9" target="_blank"><span>S49 R1</span><span>vs SpacebarIsTaken</span></a><a href="https://lichess.org/81Ausj4q" target="_blank"><span>S48 R4</span><span>vs PawnziScheme5280</span></a><a href="https://lichess.org/yGd2FILN" target="_blank"><span>S48 R3</span><span>vs laughingoctopus</span></a><a href="https://lichess.org/v3FJIbgO" target="_blank"><span>S48 R2</span><span>vs electricfalcon</span></a><a href="https://lichess.org/Smylm3sA" target="_blank"><span>S47 R8</span><span>vs PuntCatcher</span></a><a href="https://lichess.org/3g4WYkYJ" target="_blank"><span>S47 R7</span><span>vs rjhoro</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">K5KGC</div><div class="next">Next: <b>DikiyDrozd</b></div></div>
+  <div class="len"><b>7</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/bQ3bSFop" target="_blank" title="S49 R1 vs DavidSifre">L</a><a href="https://lichess.org/Xc4FI8HM" target="_blank" title="S49 R3 vs angborxley">L</a><a href="https://lichess.org/2IBgr8ez" target="_blank" title="S49 R4 vs DrRickinCT">L</a><a href="https://lichess.org/xreO1vrx" target="_blank" title="S49 R6 vs IntenseLotion">L</a><a href="https://lichess.org/0o6a9glV" target="_blank" title="S49 R7 vs metalpawn">L</a><a href="https://lichess.org/ftX6K6aS" target="_blank" title="S50 R2 vs SpacebarIsTaken">L</a><a href="https://lichess.org/Dtfs9UzE" target="_blank" title="S50 R3 vs osumarko">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/Dtfs9UzE" target="_blank"><span>S50 R3</span><span>vs osumarko</span></a><a href="https://lichess.org/ftX6K6aS" target="_blank"><span>S50 R2</span><span>vs SpacebarIsTaken</span></a><a href="https://lichess.org/0o6a9glV" target="_blank"><span>S49 R7</span><span>vs metalpawn</span></a><a href="https://lichess.org/xreO1vrx" target="_blank"><span>S49 R6</span><span>vs IntenseLotion</span></a><a href="https://lichess.org/2IBgr8ez" target="_blank"><span>S49 R4</span><span>vs DrRickinCT</span></a><a href="https://lichess.org/Xc4FI8HM" target="_blank"><span>S49 R3</span><span>vs angborxley</span></a><a href="https://lichess.org/bQ3bSFop" target="_blank"><span>S49 R1</span><span>vs DavidSifre</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">kurdd</div><div class="next">Next: <b>Rusty_2003</b></div></div>
+  <div class="len"><b>7</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/tnMI720j" target="_blank" title="S49 R5 vs AACtrl">L</a><a href="https://lichess.org/1fa4QsJj" target="_blank" title="S49 R6 vs cowtone">L</a><a href="https://lichess.org/tLjsY3Cd" target="_blank" title="S49 R7 vs MasterSRV">L</a><a href="https://lichess.org/OklqS9Zm" target="_blank" title="S49 R8 vs ORIONfull">L</a><a href="https://lichess.org/3ImDwT3H" target="_blank" title="S50 R1 vs yotambienjuego">L</a><a href="https://lichess.org/RM4Xdktu" target="_blank" title="S50 R2 vs Gabreke">L</a><a href="https://lichess.org/NEzqbggx" target="_blank" title="S50 R3 vs Zubenelgenubi">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/NEzqbggx" target="_blank"><span>S50 R3</span><span>vs Zubenelgenubi</span></a><a href="https://lichess.org/RM4Xdktu" target="_blank"><span>S50 R2</span><span>vs Gabreke</span></a><a href="https://lichess.org/3ImDwT3H" target="_blank"><span>S50 R1</span><span>vs yotambienjuego</span></a><a href="https://lichess.org/OklqS9Zm" target="_blank"><span>S49 R8</span><span>vs ORIONfull</span></a><a href="https://lichess.org/tLjsY3Cd" target="_blank"><span>S49 R7</span><span>vs MasterSRV</span></a><a href="https://lichess.org/1fa4QsJj" target="_blank"><span>S49 R6</span><span>vs cowtone</span></a><a href="https://lichess.org/tnMI720j" target="_blank"><span>S49 R5</span><span>vs AACtrl</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">octacle</div><div class="next">Next: <b>rcstinson</b></div></div>
+  <div class="len"><b>6</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/jYcdQVo9" target="_blank" title="S43 R4 vs AACtrl">L</a><a href="https://lichess.org/5MK949Sy" target="_blank" title="S44 R1 vs markmarkedymarkmark">L</a><a href="https://lichess.org/l2W8IIKp" target="_blank" title="S44 R2 vs PaulWithAnS">L</a><a href="https://lichess.org/V3AS4us4" target="_blank" title="S44 R3 vs NaveenGeorge">L</a><a href="https://lichess.org/bgvScfAq" target="_blank" title="S50 R1 vs schittering06">L</a><a href="https://lichess.org/zhoIPzMS" target="_blank" title="S50 R2 vs MrScribbles">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/zhoIPzMS" target="_blank"><span>S50 R2</span><span>vs MrScribbles</span></a><a href="https://lichess.org/bgvScfAq" target="_blank"><span>S50 R1</span><span>vs schittering06</span></a><a href="https://lichess.org/V3AS4us4" target="_blank"><span>S44 R3</span><span>vs NaveenGeorge</span></a><a href="https://lichess.org/l2W8IIKp" target="_blank"><span>S44 R2</span><span>vs PaulWithAnS</span></a><a href="https://lichess.org/5MK949Sy" target="_blank"><span>S44 R1</span><span>vs markmarkedymarkmark</span></a><a href="https://lichess.org/jYcdQVo9" target="_blank"><span>S43 R4</span><span>vs AACtrl</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">asian42</div><div class="next">Next: <b>lorb</b></div></div>
+  <div class="len"><b>5</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/bgwIQ2px" target="_blank" title="S30 R7 vs ghroby">L</a><a href="https://lichess.org/kScmKfvQ" target="_blank" title="S30 R8 vs davidthepawn">L</a><a href="https://lichess.org/NvQ1tARH" target="_blank" title="S50 R1 vs Jg777">L</a><a href="https://lichess.org/4xdSdZpw" target="_blank" title="S50 R2 vs Imen001">L</a><a href="https://lichess.org/At1rpaiB" target="_blank" title="S50 R3 vs VanRoy">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/At1rpaiB" target="_blank"><span>S50 R3</span><span>vs VanRoy</span></a><a href="https://lichess.org/4xdSdZpw" target="_blank"><span>S50 R2</span><span>vs Imen001</span></a><a href="https://lichess.org/NvQ1tARH" target="_blank"><span>S50 R1</span><span>vs Jg777</span></a><a href="https://lichess.org/kScmKfvQ" target="_blank"><span>S30 R8</span><span>vs davidthepawn</span></a><a href="https://lichess.org/bgwIQ2px" target="_blank"><span>S30 R7</span><span>vs ghroby</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">Mennonite</div><div class="next">Next: <b>SlowRoast</b></div></div>
+  <div class="len"><b>5</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/89DjEwOw" target="_blank" title="S49 R7 vs sylvlondon">L</a><a href="https://lichess.org/PdTEd5bG" target="_blank" title="S49 R8 vs Micomps">L</a><a href="https://lichess.org/nBhaxH6l" target="_blank" title="S50 R1 vs DiegoAlatriste">L</a><a href="https://lichess.org/RNY1zWEi" target="_blank" title="S50 R2 vs Leverkuhn">L</a><a href="https://lichess.org/88tGZpjM" target="_blank" title="S50 R3 vs pavonine">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/88tGZpjM" target="_blank"><span>S50 R3</span><span>vs pavonine</span></a><a href="https://lichess.org/RNY1zWEi" target="_blank"><span>S50 R2</span><span>vs Leverkuhn</span></a><a href="https://lichess.org/nBhaxH6l" target="_blank"><span>S50 R1</span><span>vs DiegoAlatriste</span></a><a href="https://lichess.org/PdTEd5bG" target="_blank"><span>S49 R8</span><span>vs Micomps</span></a><a href="https://lichess.org/89DjEwOw" target="_blank"><span>S49 R7</span><span>vs sylvlondon</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">Hesperian</div><div class="next">Next: <b>BLang316</b></div></div>
+  <div class="len"><b>5</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/8uOpHWxe" target="_blank" title="S49 R7 vs cowtone">L</a><a href="https://lichess.org/dnTaNXvL" target="_blank" title="S49 R8 vs rodeo">L</a><a href="https://lichess.org/ilOYaGYz" target="_blank" title="S50 R1 vs RabbieR">L</a><a href="https://lichess.org/G0ulvtCr" target="_blank" title="S50 R2 vs Sarahwynn">L</a><a href="https://lichess.org/B2JQEBA6" target="_blank" title="S50 R3 vs Paulze2000">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/B2JQEBA6" target="_blank"><span>S50 R3</span><span>vs Paulze2000</span></a><a href="https://lichess.org/G0ulvtCr" target="_blank"><span>S50 R2</span><span>vs Sarahwynn</span></a><a href="https://lichess.org/ilOYaGYz" target="_blank"><span>S50 R1</span><span>vs RabbieR</span></a><a href="https://lichess.org/dnTaNXvL" target="_blank"><span>S49 R8</span><span>vs rodeo</span></a><a href="https://lichess.org/8uOpHWxe" target="_blank"><span>S49 R7</span><span>vs cowtone</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">ChessisHard101</div><div class="next">Next: <b>kauberdi</b></div></div>
+  <div class="len"><b>5</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/daBoCqnA" target="_blank" title="S49 R7 vs IntenseLotion">L</a><a href="https://lichess.org/Cn3MyHE8" target="_blank" title="S49 R8 vs ttsgosadow">L</a><a href="https://lichess.org/GGwmgwTs" target="_blank" title="S50 R1 vs fulmarsky">L</a><a href="https://lichess.org/OabSCbn7" target="_blank" title="S50 R2 vs Marco_Chess13">L</a><a href="https://lichess.org/Dg8AnS5Z" target="_blank" title="S50 R3 vs oldfishnewfish">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/Dg8AnS5Z" target="_blank"><span>S50 R3</span><span>vs oldfishnewfish</span></a><a href="https://lichess.org/OabSCbn7" target="_blank"><span>S50 R2</span><span>vs Marco_Chess13</span></a><a href="https://lichess.org/GGwmgwTs" target="_blank"><span>S50 R1</span><span>vs fulmarsky</span></a><a href="https://lichess.org/Cn3MyHE8" target="_blank"><span>S49 R8</span><span>vs ttsgosadow</span></a><a href="https://lichess.org/daBoCqnA" target="_blank"><span>S49 R7</span><span>vs IntenseLotion</span></a></div></details>
+</div><div class="streak cold">
+  <div class="top"><div><div class="name">Jimq0</div><div class="next">Next: <b>nightsub</b></div></div>
+  <div class="len"><b>5</b><span>losses</span></div></div>
+  <div class="beads"><a href="https://lichess.org/vn9gfyXc" target="_blank" title="S49 R1 vs jcarmody">L</a><a href="https://lichess.org/IqxhnIU7" target="_blank" title="S49 R2 vs momor">L</a><a href="https://lichess.org/qskEiQSc" target="_blank" title="S49 R3 vs nrv773">L</a><a href="https://lichess.org/yyeaFcY7" target="_blank" title="S50 R2 vs electricfalcon">L</a><a href="https://lichess.org/RrEjiE2o" target="_blank" title="S50 R3 vs stumct">L</a></div>
+  <details><summary>Show the games</summary><div class="games"><a href="https://lichess.org/RrEjiE2o" target="_blank"><span>S50 R3</span><span>vs stumct</span></a><a href="https://lichess.org/yyeaFcY7" target="_blank"><span>S50 R2</span><span>vs electricfalcon</span></a><a href="https://lichess.org/qskEiQSc" target="_blank"><span>S49 R3</span><span>vs nrv773</span></a><a href="https://lichess.org/IqxhnIU7" target="_blank"><span>S49 R2</span><span>vs momor</span></a><a href="https://lichess.org/vn9gfyXc" target="_blank"><span>S49 R1</span><span>vs jcarmody</span></a></div></details>
+</div></div>
+  </section>
+
+  <footer>Only games that were actually played count: no-show forfeits and scheduling draws are left out.<br>Generated 2026-10-12 13:23</footer>
+</div>
 </body>
 </html>

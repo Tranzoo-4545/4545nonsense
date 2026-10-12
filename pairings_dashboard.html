@@ -1,511 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lichess 4545 - Season 50, Round 3 Dashboard</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a3a45 0%, #2c5f6f 50%, #3d7a8a 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .header h1 {
-            color: #2d3748;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-        
-        .header .subtitle {
-            color: #718096;
-            font-size: 1.2em;
-        }
-        
-        .stats-bar {
-            background: rgba(255,255,255,0.95);
-            padding: 15px 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .stat {
-            text-align: center;
-            padding: 10px 20px;
-        }
-        
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2c5f6f;
-        }
-        
-        .stat-label {
-            color: #718096;
-            font-size: 0.9em;
-        }
-        
-        .section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #2c5f6f;
-        }
-        
-        .section-icon {
-            font-size: 2em;
-            margin-right: 15px;
-        }
-        
-        .section-title {
-            font-size: 1.5em;
-            color: #2d3748;
-            font-weight: 600;
-        }
-        
-        .pairing {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            background: #f7fafc;
-            border-left: 4px solid #2c5f6f;
-            transition: all 0.3s ease;
-        }
-        
-        .pairing:hover {
-            background: #edf2f7;
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .pairing-rank {
-            display: inline-block;
-            width: 40px;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-        
-        .pairing-players {
-            font-size: 1.1em;
-            color: #2d3748;
-            font-weight: 500;
-        }
-        
-        .pairing-stats {
-            color: #718096;
-            font-size: 0.9em;
-            margin-top: 5px;
-            margin-left: 40px;
-        }
-        
-        .vs {
-            color: #2c5f6f;
-            font-weight: bold;
-            margin: 0 10px;
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .badge-games {
-            background: #e6fffa;
-            color: #047857;
-        }
-        
-        .badge-milestone {
-            background: #fef3c7;
-            color: #92400e;
-            animation: pulse 2s infinite;
-        }
-        
-        .badge-debut {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .milestone-alert {
-            background: #fef3c7;
-            border-left-color: #f59e0b;
-            padding: 15px;
-            margin-top: 8px;
-            margin-left: 40px;
-            border-radius: 5px;
-            font-weight: 500;
-            color: #92400e;
-        }
-        
-        .no-results {
-            text-align: center;
-            color: #718096;
-            padding: 30px;
-            font-style: italic;
-        }
-        
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 30px;
-            opacity: 0.8;
-        }
-        
-        @media print {
-            body {
-                background: white;
-            }
-            .pairing:hover {
-                transform: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notable Matchups - Season 50, Round 4</title>
+<style>
+:root{--gold:#d4b856;--text:#f0f6f6;--muted:rgba(240,246,246,.62);--line:rgba(255,255,255,.12);--card:rgba(255,255,255,.05);--green:#7fd6a0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--text);min-height:100vh;padding:2rem;
+ background:linear-gradient(135deg,#1a323d 0%,#234250 50%,#2d5266 100%)}
+.container{max-width:900px;margin:0 auto}
+.back{display:inline-block;color:#a8d5e2;text-decoration:none;margin-bottom:1rem;font-size:.95rem}
+header{text-align:center;padding:2rem 1.5rem 1.6rem;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:2rem}
+header h1{font-size:2rem;margin-bottom:.35rem}
+header .sub{color:var(--muted);font-size:1.05rem}
+header .note{color:rgba(240,246,246,.45);font-size:.85rem;margin-top:.6rem}
+.stats{display:flex;justify-content:center;gap:2.5rem;margin-top:1.2rem;flex-wrap:wrap}
+.stat b{display:block;font-size:1.6rem;color:var(--gold)}.stat span{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+section{margin-bottom:2.2rem}
+h2{font-size:1.25rem;margin-bottom:.2rem}
+.intro{color:var(--muted);font-size:.88rem;margin-bottom:.9rem}
+.list{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto auto auto 1fr minmax(7.5rem,auto);align-items:center;gap:.7rem;padding:.7rem 1.2rem;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .w{text-align:right;font-weight:600}.row .b{font-weight:600}
+.row .vs{color:rgba(240,246,246,.4);font-size:.82rem}
+.n{display:inline-block;min-width:2.8rem;text-align:center;font-weight:700;font-size:.85rem;padding:.15rem .5rem;border-radius:20px;background:rgba(255,255,255,.08);color:var(--text)}
+.n.new{background:rgba(127,214,160,.15);color:var(--green)}
+.side{text-align:right;font-size:.8rem;color:var(--muted);white-space:nowrap}
+.side b{color:var(--gold);font-weight:700}
+.won::after{content:' ★';color:var(--gold);font-size:.8em}.lost{opacity:.5}
+.res{display:inline-flex;align-items:center;gap:.45rem;justify-content:flex-end;white-space:nowrap}
+.score{font-weight:700;font-size:.85rem;color:var(--gold);background:rgba(6,20,26,.6);border:1px solid rgba(212,184,86,.35);border-radius:6px;padding:.05rem .45rem}
+.play{color:#a8d5e2;text-decoration:none;font-size:.8rem}.play:hover{text-decoration:underline}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem}
+.ms{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:.9rem 1rem}
+.ms .big{font-size:1.5rem;font-weight:800;color:var(--gold);line-height:1}
+.ms .who{font-weight:700;font-size:1.05rem;margin-top:.35rem}
+.ms .what{color:var(--muted);font-size:.85rem;margin-top:.15rem}
+.ms .what b{color:var(--text);font-weight:600}
+.summary{color:var(--muted);font-size:.88rem;margin:-.3rem 0 .8rem}
+.summary b{color:var(--green)}
+.tag{font-size:.72rem;font-weight:700;color:var(--green);background:rgba(127,214,160,.14);border-radius:20px;padding:.1rem .5rem;margin-left:.35rem;white-space:nowrap}
+.none{color:var(--muted);font-size:.9rem;padding:1rem 1.2rem;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.drow{display:grid;grid-template-columns:13rem 5rem 1fr auto;align-items:center;gap:.8rem;padding:.65rem 1.2rem;border-top:1px solid var(--line)}
+.drow:first-child{border-top:0}
+.dname{font-weight:700;overflow-wrap:anywhere}
+.dopp{color:var(--muted)}.dopp b{color:var(--text);font-weight:600}.dg{font-size:.85em}
+.v{font-size:.78rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;min-width:4rem;text-align:center}
+.v.won{color:var(--green);background:rgba(127,214,160,.15)}.v.lost{color:#ff8f80;background:rgba(255,143,128,.12)}
+.v.d{color:var(--gold);background:rgba(212,184,86,.14)}.v.np{color:var(--muted);background:rgba(255,255,255,.07)}
+.v.won::after,.v.lost::after{content:none}.v.lost{opacity:1}
+footer{text-align:center;color:rgba(240,246,246,.4);font-size:.82rem;margin-top:2rem;line-height:1.6}
+@media(max-width:640px){
+ body{padding:1rem}
+ header h1{font-size:1.55rem}
+ .stats{gap:1.2rem}
+ .row{grid-template-columns:1fr auto;gap:.3rem .6rem;padding:.75rem 1rem}
+ .row .vs{display:none}
+ .row .w{text-align:left;grid-column:1;grid-row:1}.row .nw{grid-column:2;grid-row:1}
+ .row .b{grid-column:1;grid-row:2}.row .nb{grid-column:2;grid-row:2}
+ .row .side{grid-column:1/-1;grid-row:3;text-align:left}
+ .drow{grid-template-columns:1fr 5rem;gap:.25rem .6rem;padding:.7rem 1rem}
+ .drow .dopp{grid-column:1/-1}.drow .side{grid-column:1/-1;text-align:left}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>♟️ Notable Matchups - Round Preview</h1>
-            <div class="subtitle">Season 50 • Round 3</div>
-        </div>
-        
-        <div class="stats-bar">
-            <div class="stat">
-                <div class="stat-value">216</div>
-                <div class="stat-label">Total Pairings</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">5</div>
-                <div class="stat-label">Milestones</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">380</div>
-                <div class="stat-label">Most Combined</div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🎯</div>
-                <div class="section-title">Milestone Watch</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">M0r1<span class="vs">vs</span>m-p-d</span>
-
-                <div class="milestone-alert">
-                    🎉 M0r1 is at 199 games - Next game is #200!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">mronemore<span class="vs">vs</span>GlennJamesMax</span>
-
-                <div class="milestone-alert">
-                    🎉 mronemore is at 199 games - Next game is #200!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">sideshow_bob<span class="vs">vs</span>lc69</span>
-
-                <div class="milestone-alert">
-                    🎉 sideshow_bob is at 99 games - Next game is #100!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">JokicInator15<span class="vs">vs</span>Kezberg</span>
-
-                <div class="milestone-alert">
-                    🎉 JokicInator15 is at 99 games - Next game is #100!
-                </div>
-
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🎯</div>
-                <span class="pairing-players">mo_mo<span class="vs">vs</span>Rolihlahla</span>
-
-                <div class="milestone-alert">
-                    🎉 mo_mo is at 44 games - Next game is #45!
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">⚔️</div>
-                <div class="section-title">Veterans Clash</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">1.</div>
-                <span class="pairing-players">jcarmody<span class="vs">vs</span>dama_x_rey</span>
-                <span class="badge badge-games">Min: 132 games</span>
-                <div class="pairing-stats">
-                    jcarmody: 192 games • dama_x_rey: 132 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">2.</div>
-                <span class="pairing-players">Tranzoo<span class="vs">vs</span>momor</span>
-                <span class="badge badge-games">Min: 120 games</span>
-                <div class="pairing-stats">
-                    Tranzoo: 260 games • momor: 120 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">3.</div>
-                <span class="pairing-players">kostasvl<span class="vs">vs</span>kygreek</span>
-                <span class="badge badge-games">Min: 106 games</span>
-                <div class="pairing-stats">
-                    kostasvl: 210 games • kygreek: 106 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">bufferunderrun<span class="vs">vs</span>Feet_Barbie</span>
-                <span class="badge badge-games">Min: 103 games</span>
-                <div class="pairing-stats">
-                    bufferunderrun: 275 games • Feet_Barbie: 103 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">sideshow_bob<span class="vs">vs</span>lc69</span>
-                <span class="badge badge-games">Min: 99 games</span>
-                <div class="pairing-stats">
-                    sideshow_bob: 99 games • lc69: 110 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🏆</div>
-                <div class="section-title">Top 5 Most Experienced Matchups</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥇</div>
-                <span class="pairing-players">Tranzoo<span class="vs">vs</span>momor</span>
-                <span class="badge badge-games">380 combined</span>
-                <div class="pairing-stats">
-                    Tranzoo: 260 games • momor: 120 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥈</div>
-                <span class="pairing-players">bufferunderrun<span class="vs">vs</span>Feet_Barbie</span>
-                <span class="badge badge-games">378 combined</span>
-                <div class="pairing-stats">
-                    bufferunderrun: 275 games • Feet_Barbie: 103 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🥉</div>
-                <span class="pairing-players">timothyha<span class="vs">vs</span>ATrueRavenclaw</span>
-                <span class="badge badge-games">348 combined</span>
-                <div class="pairing-stats">
-                    timothyha: 265 games • ATrueRavenclaw: 83 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">val1313<span class="vs">vs</span>ysgwydd</span>
-                <span class="badge badge-games">343 combined</span>
-                <div class="pairing-stats">
-                    val1313: 268 games • ysgwydd: 75 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">Conan_9<span class="vs">vs</span>scarff</span>
-                <span class="badge badge-games">326 combined</span>
-                <div class="pairing-stats">
-                    Conan_9: 9 games • scarff: 317 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">👴🆚🆕</div>
-                <div class="section-title">Vet Meets Newbie</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">1.</div>
-                <span class="pairing-players">Conan_9<span class="vs">vs</span>scarff</span>
-                <span class="badge badge-games">Gap: 308 games</span>
-                <div class="pairing-stats">
-                    Conan_9: 9 games • scarff: 317 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">2.</div>
-                <span class="pairing-players">glbert<span class="vs">vs</span>Jeb_al_Gloke</span>
-                <span class="badge badge-games">Gap: 295 games</span>
-                <div class="pairing-stats">
-                    glbert: 306 games • Jeb_al_Gloke: 11 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">3.</div>
-                <span class="pairing-players">adande1<span class="vs">vs</span>Johansen231</span>
-                <span class="badge badge-games">Gap: 255 games</span>
-                <div class="pairing-stats">
-                    adande1: 260 games • Johansen231: 5 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">4.</div>
-                <span class="pairing-players">UpGoerFive<span class="vs">vs</span>parziwal08</span>
-                <span class="badge badge-games">Gap: 247 games</span>
-                <div class="pairing-stats">
-                    UpGoerFive: 263 games • parziwal08: 16 games
-                </div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">5.</div>
-                <span class="pairing-players">Castling-Companion<span class="vs">vs</span>NLance</span>
-                <span class="badge badge-games">Gap: 235 games</span>
-                <div class="pairing-stats">
-                    Castling-Companion: 9 games • NLance: 244 games
-                </div>
-            </div>
-
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-icon">🆕</div>
-                <div class="section-title">Debutants Watch</div>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">CaioDias<span class="vs">vs</span><strong>Chess_with_Anay_YT</strong></span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>Plaisirs_Ephemeres</strong><span class="vs">vs</span>Warvold</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">Raindy<span class="vs">vs</span><strong>murphourinho</strong></span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">SlouchToElysium<span class="vs">vs</span><strong>sandy0889</strong></span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>rishaanrajan</strong><span class="vs">vs</span>IroncladUnicorn</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>Mieskepillae</strong><span class="vs">vs</span>Silkthewanderer</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>MrSpugeddi</strong><span class="vs">vs</span>PaulWithAnS</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players"><strong>waldoistwo</strong><span class="vs">vs</span>Gabreke</span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">EndgameAmateur42<span class="vs">vs</span><strong>iseerabbits</strong></span>
-            </div>
-
-            <div class="pairing">
-                <div class="pairing-rank">🆕</div>
-                <span class="pairing-players">beisn<span class="vs">vs</span><strong>The_Supreme_King</strong></span>
-            </div>
-
-        </div>
-
-        <div class="footer">
-            <p>Generated on 2026-10-05 17:34:01 • Lichess 4545 Pairings Analyzer</p>
-            <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
-                Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
-            </p>
-        </div>
+<div class="container">
+  <a class="back" href="index.html">← The 4545 Chronicles</a>
+  <header>
+    <h1>♟️ Notable Matchups</h1>
+    <div class="sub">Season 50 &middot; Round 4</div>
+    <div class="note">The standout pairings of this round, by career league games. Numbers next to names are career games before this round.</div>
+    <div class="stats">
+      <div class="stat"><b>216</b><span>Pairings</span></div>
+      <div class="stat"><b>6</b><span>Milestones in reach</span></div>
+      <div class="stat"><b>3</b><span>Debut games</span></div>
     </div>
+  </header>
+
+  <section>
+    <h2>🎯 Milestones</h2>
+    <div class="intro">Players one game away from their 45th, 100th, 200th or 300th league game.</div>
+    <div class="grid"><div class="ms"><div class="big">#100</div><div class="who">Immortality</div><div class="what">Next game is #100, vs <b>Joonaf</b></div></div><div class="ms"><div class="big">#100</div><div class="who">JokicInator15</div><div class="what">Next game is #100, vs <b>okady</b></div></div><div class="ms"><div class="big">#100</div><div class="who">shamdi</div><div class="what">Next game is #100, vs <b>Fierolocchio</b></div></div><div class="ms"><div class="big">#100</div><div class="who">RBorja1980</div><div class="what">Next game is #100, vs <b>kostasvl</b></div></div><div class="ms"><div class="big">#45</div><div class="who">NaveenGeorge</div><div class="what">Next game is #45, vs <b>ShadowOfSelf</b></div></div><div class="ms"><div class="big">#45</div><div class="who">avemanyeg</div><div class="what">Next game is #45, vs <b>Vayne987</b></div></div></div>
+  </section>
+
+  <section>
+    <h2>🎖️ Veteran Pairings</h2>
+    <div class="intro">The most experienced pairings: both players have played a lot, or together they have played the most.</div>
+    <div class="list"><div class="row"><span class="w">caodanny</span><span class="n  nw">173</span><span class="vs">vs</span><span class="n  nb">261</span><span class="b">Tranzoo</span><span class="side"><b>434</b> combined</span></div><div class="row"><span class="w">Rolihlahla</span><span class="n  nw">227</span><span class="vs">vs</span><span class="n  nb">159</span><span class="b">patk74</span><span class="side"><b>386</b> combined</span></div><div class="row"><span class="w">cvillian</span><span class="n  nw">147</span><span class="vs">vs</span><span class="n  nb">179</span><span class="b">MrScribbles</span><span class="side"><b>326</b> combined</span></div><div class="row"><span class="w">Sarahwynn</span><span class="n  nw">119</span><span class="vs">vs</span><span class="n  nb">261</span><span class="b">adande1</span><span class="side"><b>380</b> combined</span></div><div class="row"><span class="w">kygreek</span><span class="n  nw">107</span><span class="vs">vs</span><span class="n  nb">113</span><span class="b">cinemashow</span><span class="side"><b>220</b> combined</span></div><div class="row"><span class="w">scarff</span><span class="n  nw">318</span><span class="vs">vs</span><span class="n  nb">103</span><span class="b">aloo_bhaloo</span><span class="side"><b>421</b> combined</span></div><div class="row"><span class="w">mmorrisohio</span><span class="n  nw">86</span><span class="vs">vs</span><span class="n  nb">264</span><span class="b">UpGoerFive</span><span class="side"><b>350</b> combined</span></div></div>
+  </section>
+
+  <section>
+    <h2>⚖️ Vet Meets Newcomer</h2>
+    <div class="intro">The biggest gaps in experience this round.</div>
+    <div class="list"><div class="row"><span class="w">MarekW78</span><span class="n  nw">27</span><span class="vs">vs</span><span class="n  nb">307</span><span class="b">glbert</span><span class="side">gap <b>280</b></span></div><div class="row"><span class="w">bufferunderrun</span><span class="n  nw">276</span><span class="vs">vs</span><span class="n  nb">10</span><span class="b">mobusel</span><span class="side">gap <b>266</b></span></div><div class="row"><span class="w">Gideon7</span><span class="n  nw">10</span><span class="vs">vs</span><span class="n  nb">266</span><span class="b">timothyha</span><span class="side">gap <b>256</b></span></div><div class="row"><span class="w">NLance</span><span class="n  nw">245</span><span class="vs">vs</span><span class="n  nb">8</span><span class="b">Alikadhim2</span><span class="side">gap <b>237</b></span></div><div class="row"><span class="w">pemula64</span><span class="n  nw">36</span><span class="vs">vs</span><span class="n  nb">269</span><span class="b">val1313</span><span class="side">gap <b>233</b></span></div></div>
+  </section>
+
+  <section>
+    <h2>🌱 Debutants</h2>
+    <div class="intro">Players making their league debut, sorted by how experienced their opponent is.</div>
+    
+    <div class="list"><div class="row"><span class="w">playforfun18</span><span class="n new nw">debut</span><span class="vs">vs</span><span class="n  nb">154</span><span class="b">Lexgrad</span><span class="side"></span></div><div class="row"><span class="w">basyaar</span><span class="n  nw">28</span><span class="vs">vs</span><span class="n new nb">debut</span><span class="b">Algerianfox123</span><span class="side"></span></div><div class="row"><span class="w">wolfspelz</span><span class="n new nw">debut</span><span class="vs">vs</span><span class="n  nb">23</span><span class="b">jd0972</span><span class="side"></span></div></div>
+  </section>
+
+  <footer>Only games that were actually played count: no-show forfeits and scheduling draws are left out.<br>Generated 2026-10-12 13:23</footer>
+</div>
 </body>
 </html>

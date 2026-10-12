@@ -1,1116 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streak Watch POST-ROUND - Season 50, Round 2</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a3a45 0%, #2c5f6f 50%, #3d7a8a 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .header h1 {
-            color: #2d3748;
-            font-size: 2.8em;
-            margin-bottom: 10px;
-        }
-        
-        .header .subtitle {
-            color: #718096;
-            font-size: 1.3em;
-            margin-bottom: 15px;
-        }
-        
-        .header .note {
-            color: #718096;
-            font-size: 0.95em;
-            font-style: italic;
-            margin-top: 10px;
-        }
-        
-        .header .stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 20px;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2c5f6f;
-        }
-        
-        .stat-label {
-            color: #718096;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-        
-        .section {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #2c5f6f;
-        }
-        
-        .section-header.winning {
-            border-bottom-color: #059669;
-        }
-        
-        .section-header.losing {
-            border-bottom-color: #0284c7;
-        }
-        
-        .section-label-epic {
-            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
-            color: white;
-            font-size: 0.9em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 14px 24px;
-            margin-bottom: 0;
-            border-radius: 10px 10px 0 0;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-label-epic::before {
-            content: "⚡";
-            font-size: 1.1em;
-        }
-        
-        .section-label-cold {
-            background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
-            color: white;
-            font-size: 0.9em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 14px 24px;
-            margin-bottom: 0;
-            border-radius: 10px 10px 0 0;
-            box-shadow: 0 4px 15px rgba(3, 105, 161, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-label-cold::before {
-            content: "🧊";
-            font-size: 1.1em;
-        }
-        
-        .epic-section {
-            margin-bottom: 40px;
-        }
-        
-        .epic-section .matchup-card:first-of-type {
-            border-radius: 0 0 10px 10px;
-        }
-        
-        .section-icon {
-            font-size: 2.5em;
-            margin-right: 15px;
-        }
-        
-        .section-title {
-            font-size: 1.8em;
-            color: #2d3748;
-            font-weight: 600;
-        }
-        
-        .streak-card {
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            background: #f8fafc;
-            border-left: 5px solid #64748b;
-            transition: all 0.3s ease;
-        }
-        
-        .streak-card.winning {
-            border-left-color: #059669;
-            background: #f0fdf9;
-        }
-        
-        .streak-card.losing {
-            border-left-color: #0284c7;
-            background: #f0f9ff;
-        }
-        
-        .streak-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .streak-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .player-name {
-            font-size: 1.4em;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        
-        .streak-badge {
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 1.1em;
-        }
-        
-        .streak-badge.winning {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            color: white;
-        }
-        
-        .streak-badge.losing {
-            background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
-            color: white;
-        }
-        
-        .upcoming-opponent {
-            background: #fef9f3;
-            border: 2px solid #d97706;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #9a3412;
-        }
-        
-        .upcoming-opponent .label {
-            font-size: 0.85em;
-            color: #c2410c;
-            margin-right: 8px;
-        }
-        
-        .opponent-name {
-            color: #7c2d12;
-            font-size: 1.05em;
-        }
-        
-        /* Post-round outcome styles */
-        .outcome-section {
-            background: white;
-            border: 2px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-        
-        .outcome-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        
-        .outcome-label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2d3748;
-            font-size: 0.95em;
-        }
-        
-        .outcome-result {
-            font-size: 1.1em;
-            margin-bottom: 12px;
-            color: #4a5568;
-        }
-        
-        .outcome-status {
-            font-size: 1.15em;
-            font-weight: bold;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-top: 10px;
-            display: inline-block;
-        }
-        
-        .status-extended {
-            background: #ecfdf5;
-            color: #065f46;
-            border: 2px solid #059669;
-        }
-        
-        .status-broken {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 2px solid #dc2626;
-        }
-        
-        .status-extended-loss {
-            background: #f0f9ff;
-            color: #7f1d1d;
-            border: 2px solid #0284c7;
-        }
-        
-        .status-broken-good {
-            background: #ecfdf5;
-            color: #065f46;
-            border: 2px solid #059669;
-        }
-        
-        .status-no-game {
-            background: #f3f4f6;
-            color: #6b7280;
-            border: 2px solid #d1d5db;
-        }
-        
-        .outcome-game-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #2c5f6f;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        .outcome-game-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Matchup resolution styles */
-        .matchup-resolution {
-            background: #f8fafc;
-            border-top: 2px solid #e2e8f0;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 0 0 8px 8px;
-        }
-        
-        .resolution-title {
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 12px;
-            font-size: 0.95em;
-        }
-        
-        .resolution-result {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #2d3748;
-            text-align: center;
-        }
-        
-        .resolution-game-link {
-            display: inline-block;
-            margin-left: 15px;
-            color: #2c5f6f;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.85em;
-        }
-        
-        .resolution-game-link:hover {
-            text-decoration: underline;
-        }
-        
-        .games-list {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        
-        .games-title {
-            font-size: 0.95em;
-            color: #718096;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .game-item {
-            padding: 8px 12px;
-            margin-bottom: 6px;
-            background: #f7fafc;
-            border-radius: 5px;
-            display: grid;
-            grid-template-columns: 120px 1fr auto;
-            gap: 15px;
-            align-items: center;
-            font-size: 0.9em;
-        }
-        
-        .game-info {
-            color: #718096;
-        }
-        
-        .game-opponent {
-            color: #2d3748;
-            font-weight: 500;
-        }
-        
-        .game-link {
-            text-decoration: none;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .streak-card.winning .game-link {
-            color: #059669;
-        }
-        
-        .streak-card.losing .game-link {
-            color: #0284c7;
-        }
-        
-        .game-link:hover {
-            text-decoration: underline;
-        }
-        
-        .no-streaks {
-            text-align: center;
-            padding: 40px;
-            color: #718096;
-            font-style: italic;
-        }
-        
-        .footer {
-            text-align: center;
-            color: white;
-            margin-top: 30px;
-            opacity: 0.9;
-            font-size: 0.95em;
-        }
-        
-        .matchup-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .matchup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        
-        .matchup-players {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #2d3748;
-        }
-        
-        .matchup-vs {
-            color: #7c3aed;
-            margin: 0 10px;
-        }
-        
-        .matchup-subtitle {
-            font-size: 0.9em;
-            color: #718096;
-        }
-        
-        .matchup-streaks {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .matchup-divider {
-            font-size: 1.5em;
-            color: #94a3b8;
-        }
-        
-        .matchup-streak-box {
-            padding: 16px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .matchup-streak-box.hot {
-            background: #fffbeb;
-            border: 2px solid #d97706;
-        }
-        
-        .matchup-streak-box.cold {
-            background: #f0f9ff;
-            border: 2px solid #0ea5e9;
-        }
-        
-        .matchup-player-name {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1a202c;
-            font-size: 1em;
-        }
-        
-        .matchup-streak-info {
-            font-size: 1.1em;
-            font-weight: 700;
-        }
-        
-        .matchup-streak-info.hot {
-            color: #b45309;
-        }
-        
-        .matchup-streak-info.cold {
-            color: #0284c7;
-        }
-        
-        .streak-change {
-            font-size: 1.2em;
-            font-weight: 700;
-            margin-top: 8px;
-        }
-        
-        .streak-change.extended {
-            color: #059669;
-        }
-        
-        .streak-change.broken {
-            color: #dc2626;
-        }
-        
-        .streak-change-label {
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-        
-        .streak-change-label.extended {
-            color: #059669;
-        }
-        
-        .streak-change-label.broken {
-            color: #dc2626;
-        }
-        
-        @media (max-width: 768px) {
-            .game-item {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            
-            .header .stats {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .matchup-streaks {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Streak Watch Results - Season 50, Round 3</title>
+<style>
+:root{--gold:#d4b856;--hot:#f0a35a;--hot-bg:rgba(240,163,90,.14);--cold:#7cc8ea;--cold-bg:rgba(124,200,234,.14);
+ --text:#f0f6f6;--muted:rgba(240,246,246,.62);--line:rgba(255,255,255,.12);--card:rgba(255,255,255,.05)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--text);min-height:100vh;padding:2rem;
+ background:linear-gradient(135deg,#1a323d 0%,#234250 50%,#2d5266 100%)}
+.container{max-width:900px;margin:0 auto}
+.back{display:inline-block;color:#a8d5e2;text-decoration:none;margin-bottom:1rem;font-size:.95rem}
+header{text-align:center;padding:2rem 1.5rem 1.6rem;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:2rem}
+header h1{font-size:2rem;margin-bottom:.35rem}
+header .sub{color:var(--muted);font-size:1.05rem}
+header .note{color:rgba(240,246,246,.45);font-size:.85rem;margin-top:.6rem}
+.stats{display:flex;justify-content:center;gap:2.5rem;margin-top:1.2rem;flex-wrap:wrap}
+.stat b{display:block;font-size:1.6rem}.stat span{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.stat.hot b{color:var(--hot)}.stat.cold b{color:var(--cold)}
+section{margin-bottom:2.2rem}
+h2{font-size:1.25rem;margin-bottom:.2rem}
+.intro{color:var(--muted);font-size:.88rem;margin-bottom:.9rem}
+.clashes{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.clash{display:grid;grid-template-columns:1fr auto auto auto 1fr;align-items:center;gap:.8rem;padding:.75rem 1.2rem;border-top:1px solid var(--line)}
+.clash:first-child{border-top:0}
+.clash .w{text-align:right;font-weight:600}.clash .b{text-align:left;font-weight:600}
+.clash .vs{color:rgba(240,246,246,.4);font-size:.85rem}
+.pill{display:inline-block;min-width:3.4rem;text-align:center;font-weight:700;font-size:.9rem;padding:.2rem .55rem;border-radius:20px}
+.pill.hot{color:var(--hot);background:var(--hot-bg)}.pill.cold{color:var(--cold);background:var(--cold-bg)}
+.pill.big{box-shadow:0 0 0 1px currentColor}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem}
+.streak{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem}
+.streak.hot{border-left:4px solid var(--hot)}.streak.cold{border-left:4px solid var(--cold)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem}
+.top .name{font-size:1.15rem;font-weight:700}
+.top .next{color:var(--muted);font-size:.85rem;margin-top:.15rem}.top .next b{color:var(--text);font-weight:600}
+.len{text-align:center;line-height:1}.len b{display:block;font-size:1.7rem}.len span{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.streak.hot .len b{color:var(--hot)}.streak.cold .len b{color:var(--cold)}
+.beads{display:flex;flex-wrap:wrap;gap:4px;margin-top:.8rem}
+.beads a{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;text-decoration:none}
+.streak.hot .beads a{background:var(--hot-bg);color:var(--hot)}.streak.cold .beads a{background:var(--cold-bg);color:var(--cold)}
+.beads a:hover{outline:1px solid currentColor}
+details{margin-top:.6rem}
+summary{cursor:pointer;color:#a8d5e2;font-size:.82rem;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:' ▾'}details[open] summary::after{content:' ▴'}
+.games{margin-top:.5rem;display:grid;gap:3px}
+.games a{display:flex;justify-content:space-between;gap:.6rem;font-size:.82rem;color:var(--text);text-decoration:none;padding:.3rem .5rem;border-radius:5px;background:rgba(255,255,255,.04)}
+.games a span:first-child{color:var(--muted);white-space:nowrap}
+.games a:hover{background:rgba(255,255,255,.09)}
+.none{color:var(--muted);font-size:.9rem;padding:1rem 1.2rem;background:var(--card);border:1px solid var(--line);border-radius:12px}
+footer{text-align:center;color:rgba(240,246,246,.4);font-size:.82rem;margin-top:2rem;line-height:1.6}
+@media(max-width:640px){
+ body{padding:1rem}
+ header h1{font-size:1.6rem}
+ .stats{gap:1.2rem}.stat span{font-size:.65rem}
+ .grid{grid-template-columns:1fr}
+ .clash{grid-template-columns:1fr auto;gap:.3rem .6rem;padding:.75rem 1rem}
+ .clash .w,.clash .b{text-align:left}
+ .clash .vs{display:none}
+ .clash .w{grid-column:1;grid-row:1}.clash .pw{grid-column:2;grid-row:1}
+ .clash .b{grid-column:1;grid-row:2}.clash .pb{grid-column:2;grid-row:2}
+}
+
+.stat.good b{color:#7fd6a0}.stat.bad b{color:#ff8f80}
+.clash .res{display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:.8rem;color:var(--muted)}
+.clash{grid-template-columns:1fr auto 8rem auto 1fr}
+.clash .res .play{margin-left:.2rem}
+.clash .lost{opacity:.5}
+.clash .won::after{content:' ★';color:var(--gold);font-size:.8em}
+.chg{display:inline-flex;align-items:center;gap:.25rem;min-width:4.6rem;justify-content:center;font-weight:700;font-size:.85rem;padding:.2rem .55rem;border-radius:20px}
+.chg.up{color:#7fd6a0;background:rgba(127,214,160,.14)}
+.chg.end{color:#ff8f80;background:rgba(255,143,128,.12);}
+.chg.end.good{color:#7fd6a0;background:rgba(127,214,160,.10)}
+.chg.up.bad{color:#ff8f80;background:rgba(255,143,128,.12);text-decoration:none}
+.play{color:#a8d5e2;text-decoration:none;font-size:.8rem;white-space:nowrap}
+.play:hover{text-decoration:underline}
+.outcome{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--line);font-size:.85rem}
+.outcome .vs{color:var(--muted)}.outcome .vs b{color:var(--text);font-weight:600}
+.verdict{font-weight:700;font-size:.85rem;padding:.2rem .6rem;border-radius:20px;white-space:nowrap}
+.verdict.up{color:#7fd6a0;background:rgba(127,214,160,.14)}
+.verdict.end{color:#ff8f80;background:rgba(255,143,128,.12)}
+.verdict.good{color:#7fd6a0;background:rgba(127,214,160,.14)}
+.verdict.bad{color:#ff8f80;background:rgba(255,143,128,.12)}
+.streak.ended{opacity:.78}
+.chg.idle,.verdict.idle{color:var(--muted);background:rgba(255,255,255,.07)}
+@media(max-width:640px){
+ .clash{grid-template-columns:1fr auto;gap:.35rem .6rem}
+ .clash .res{grid-column:1/-1;grid-row:3;justify-content:flex-start}
+ .clash .res .word{display:none}
+ .outcome{flex-wrap:wrap}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🔥 Streak Watch - POST-ROUND</h1>
-            <div class="subtitle">Season 50 • Round 2 Results</div>
-            <div class="note">Showing what actually happened to streaks</div>
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value">15</div>
-                    <div class="stat-label">Hot Streaks</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">9</div>
-                    <div class="stat-label">Cold Streaks</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Something's Gotta Give Section (HOT VS HOT) - FIRST -->
-        <div class="epic-section">
-            <div class="section-label-epic">Something's Gotta Give</div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">gavalanche20<span class="matchup-vs">vs</span>Versaumnisgrund</div>
-                </div>
-                <div class="matchup-resolution">
-                    <div class="resolution-result">gavalanche20 wins!<a href="https://lichess.org/8eml00tZ" target="_blank" class="resolution-game-link">View Game →</a></div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">gavalanche20</div>
-                        <div class="streak-change extended">4 → 5 wins</div>
-                        <div class='streak-change-label extended'>Extended!</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Versaumnisgrund</div>
-                        <div class="streak-change broken">2 wins</div>
-                        <div class='streak-change-label broken'>Broken</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">Kborman<span class="matchup-vs">vs</span>Vayne987</div>
-                </div>
-                <div class="matchup-resolution">
-                    <div class="resolution-result">Vayne987 wins!<a href="https://lichess.org/SkjUIdsb" target="_blank" class="resolution-game-link">View Game →</a></div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Kborman</div>
-                        <div class="streak-change broken">7 wins</div>
-                        <div class='streak-change-label broken'>Broken</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Vayne987</div>
-                        <div class="streak-change extended">2 → 3 wins</div>
-                        <div class='streak-change-label extended'>Extended!</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">GlennJamesMax<span class="matchup-vs">vs</span>Hanzo_19</div>
-                </div>
-                <div class="matchup-resolution">
-                    <div class="resolution-result">GlennJamesMax wins!<a href="https://lichess.org/g10UOqbo" target="_blank" class="resolution-game-link">View Game →</a></div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">GlennJamesMax</div>
-                        <div class="streak-change extended">2 → 3 wins</div>
-                        <div class='streak-change-label extended'>Extended!</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">Hanzo_19</div>
-                        <div class="streak-change broken">2 wins</div>
-                        <div class='streak-change-label broken'>Broken</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">scarff<span class="matchup-vs">vs</span>MasterSRV</div>
-                </div>
-                <div class="matchup-resolution">
-                    <div class="resolution-result">scarff wins!<a href="https://lichess.org/SL8BXnev" target="_blank" class="resolution-game-link">View Game →</a></div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">scarff</div>
-                        <div class="streak-change extended">5 → 6 wins</div>
-                        <div class='streak-change-label extended'>Extended!</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">MasterSRV</div>
-                        <div class="streak-change broken">3 wins</div>
-                        <div class='streak-change-label broken'>Broken</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">scoobysnack19<span class="matchup-vs">vs</span>mongreltiger</div>
-                </div>
-                <div class="matchup-resolution">
-                    <div class="resolution-result">scoobysnack19 wins!<a href="https://lichess.org/QuBWmwdT" target="_blank" class="resolution-game-link">View Game →</a></div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">scoobysnack19</div>
-                        <div class="streak-change extended">3 → 4 wins</div>
-                        <div class='streak-change-label extended'>Extended!</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box hot">
-                        <div class="matchup-player-name">mongreltiger</div>
-                        <div class="streak-change broken">2 wins</div>
-                        <div class='streak-change-label broken'>Broken</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Cold War Section (COLD VS COLD) - SECOND -->
-        <div class="epic-section">
-            <div class="section-label-cold">Cold War</div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">TTotr<span class="matchup-vs">vs</span>NirakuHakamura</div>
-                </div>
-                <div class="matchup-resolution">
-                    <div class="resolution-result">TTotr wins!<a href="https://lichess.org/8YGKGfXQ" target="_blank" class="resolution-game-link">View Game →</a></div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">TTotr</div>
-                        <div class="streak-change extended">2 losses</div>
-                        <div class='streak-change-label extended'>Snapped!</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">NirakuHakamura</div>
-                        <div class="streak-change broken">2 → 3 losses</div>
-                        <div class='streak-change-label broken'>Continues</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="matchup-card">
-                <div class="matchup-header">
-                    <div class="matchup-players">jtschuwirth<span class="matchup-vs">vs</span>gmat20020</div>
-                </div>
-                <div class="matchup-resolution">
-                    <div class="resolution-result">jtschuwirth wins!<a href="https://lichess.org/RRckYxnN" target="_blank" class="resolution-game-link">View Game →</a></div>
-                </div>
-                <div class="matchup-streaks">
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">jtschuwirth</div>
-                        <div class="streak-change extended">2 losses</div>
-                        <div class='streak-change-label extended'>Snapped!</div>
-                    </div>
-                    <div class="matchup-divider">⚔</div>
-                    <div class="matchup-streak-box cold">
-                        <div class="matchup-player-name">gmat20020</div>
-                        <div class="streak-change broken">2 → 3 losses</div>
-                        <div class='streak-change-label broken'>Continues</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Hot Streaks Section - THIRD -->
-        <div class="section">
-            <div class="section-header winning">
-                <div class="section-icon">🔥</div>
-                <div class="section-title">Hot Streaks (5+ Wins)</div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">Kborman</div>
-                    <div class="streak-badge winning">7 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs Vayne987:</div>
-                    <div class="outcome-result">Lost</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken">✗ Streak broken</div>
-                        <a href="https://lichess.org/SkjUIdsb" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">cowtone</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs AlexGaul:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended">✓ Extended to 7!</div>
-                        <a href="https://lichess.org/ZcXa7z4f" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">Jeb_al_Gloke</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs gary0892:</div>
-                    <div class="outcome-result">Drew</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken">✗ Streak broken</div>
-                        <a href="https://lichess.org/RyGLFCCn" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">Welpe</div>
-                    <div class="streak-badge winning">6 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs TristanBrown17:</div>
-                    <div class="outcome-result">Lost</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken">✗ Streak broken</div>
-                        <a href="https://lichess.org/hkjMPTRs" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">scarff</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs MasterSRV:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended">✓ Extended to 6!</div>
-                        <a href="https://lichess.org/SL8BXnev" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">qrs</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs RabbieR:</div>
-                    <div class="outcome-result">Drew</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken">✗ Streak broken</div>
-                        <a href="https://lichess.org/LAltQt7i" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">electricfalcon</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs Jimq0:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended">✓ Extended to 6!</div>
-                        <a href="https://lichess.org/yyeaFcY7" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">ComputerUser2607</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs alp_arslan92:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended">✓ Extended to 6!</div>
-                        <a href="https://lichess.org/KA5ZtY5m" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">luwasserman</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs Cody13:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended">✓ Extended to 6!</div>
-                        <a href="https://lichess.org/fmP6MgF5" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">jfiras</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs giziti:</div>
-                    <div class="outcome-result">Lost</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken">✗ Streak broken</div>
-                        <a href="https://lichess.org/3IipqkGq" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">ekramymedad</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs fireball100:</div>
-                    <div class="outcome-result">Drew</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken">✗ Streak broken</div>
-                        <a href="https://lichess.org/G4kF0UZz" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">ttsgosadow</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs COSMOAPS:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended">✓ Extended to 6!</div>
-                        <a href="https://lichess.org/MxMfrPwC" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">OnlyLongTimeGames</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs Shampanjasosialisti:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended">✓ Extended to 6!</div>
-                        <a href="https://lichess.org/meNRZjgT" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">semlegesnev</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs nikker33:</div>
-                    <div class="outcome-result">Drew</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken">✗ Streak broken</div>
-                        <a href="https://lichess.org/NNBVRISY" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card winning">
-                <div class="streak-header">
-                    <div class="player-name">matthieu_max</div>
-                    <div class="streak-badge winning">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs mootivator:</div>
-                    <div class="outcome-result">Lost</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken">✗ Streak broken</div>
-                        <a href="https://lichess.org/YN8w61lu" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Cold Streaks Section - FOURTH -->
-        <div class="section">
-            <div class="section-header losing">
-                <div class="section-icon">❄️</div>
-                <div class="section-title">Cold Streaks (5+ Losses)</div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">mmkgtc</div>
-                    <div class="streak-badge losing">8 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs KendragonX:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken-good">✓ Streak broken!</div>
-                        <a href="https://lichess.org/dGhpwz7h" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">ecoarrivazumashoomzo</div>
-                    <div class="streak-badge losing">6 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs Zubenelgenubi:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken-good">✓ Streak broken!</div>
-                        <a href="https://lichess.org/aUjc6AG5" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">cham</div>
-                    <div class="streak-badge losing">6 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs HighonPotnuse:</div>
-                    <div class="outcome-result">Lost</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended-loss">✗ Extended to 7</div>
-                        <a href="https://lichess.org/C8aXrh13" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">RajjSinghh</div>
-                    <div class="streak-badge losing">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs Neothehero:</div>
-                    <div class="outcome-result">Drew</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken-good">✓ Streak broken!</div>
-                        <a href="https://lichess.org/n0VrFfpL" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">octacle</div>
-                    <div class="streak-badge losing">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs MrScribbles:</div>
-                    <div class="outcome-result">Lost</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended-loss">✗ Extended to 6</div>
-                        <a href="https://lichess.org/zhoIPzMS" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">ivanhomeless</div>
-                    <div class="streak-badge losing">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs BLuesiDE617:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken-good">✓ Streak broken!</div>
-                        <a href="https://lichess.org/6AeznuVa" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">LosingIsTheBest</div>
-                    <div class="streak-badge losing">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs tastypotatohead:</div>
-                    <div class="outcome-result">Won</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-broken-good">✓ Streak broken!</div>
-                        <a href="https://lichess.org/4gID18QX" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">K5KGC</div>
-                    <div class="streak-badge losing">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs SpacebarIsTaken:</div>
-                    <div class="outcome-result">Lost</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended-loss">✗ Extended to 6</div>
-                        <a href="https://lichess.org/ftX6K6aS" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="streak-card losing">
-                <div class="streak-header">
-                    <div class="player-name">kurdd</div>
-                    <div class="streak-badge losing">5 games</div>
-                </div>
-                <div class="outcome-section">
-                    <div class="outcome-label">🎯 Round 2 vs Gabreke:</div>
-                    <div class="outcome-result">Lost</div>
-                    <div class="outcome-content">
-                        <div class="outcome-status status-extended-loss">✗ Extended to 6</div>
-                        <a href="https://lichess.org/RM4Xdktu" target="_blank" class="outcome-game-link">View Game →</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <div class="footer">
-            <p>Generated on 2026-10-05 17:34:12 • Lichess 4545 Streak Watch</p>
-            <p style="margin-top: 10px; font-size: 0.85em; opacity: 0.8;">
-                Note: Only counts games that were played (have game links). Excludes no-show forfeits and scheduling draws.
-            </p>
-        </div>
+<div class="container">
+  <a class="back" href="index.html">← The 4545 Chronicles</a>
+  <header>
+    <h1>🔥 Streak Watch: Results</h1>
+    <div class="sub">Season 50 &middot; Round 3</div>
+    <div class="note">What happened to the streaks players brought into this round. A draw ends a streak.</div>
+    <div class="stats">
+      <div class="stat good"><b>4</b><span>Win streaks extended</span></div>
+      <div class="stat bad"><b>5</b><span>Win streaks ended</span></div>
+      <div class="stat good"><b>1</b><span>Losing runs snapped</span></div>
     </div>
+  </header>
+
+  <section>
+    <h2>⚡ Something's Gotta Give</h2>
+    <div class="intro">Both players came in on a winning streak of 2 or more.</div>
+    <div class="clashes"><div class="clash"><span class="w won">fwcj68</span><span class="chg up">3→4W</span><span class="res"><span class="word">beat</span> <a class="play" href="https://lichess.org/NvtYxrFJ" target="_blank">▶ game</a></span><span class="chg end" title="Streak ended">2W ✗</span><span class="b lost">TheJeep</span></div><div class="clash"><span class="w">dragon19410</span><span class="chg end" title="Streak ended">2W ✗</span><span class="res"><span class="word">drew</span> <a class="play" href="https://lichess.org/o3V1tfb9" target="_blank">▶ game</a></span><span class="chg end" title="Streak ended">6W ✗</span><span class="b">electricfalcon</span></div><div class="clash"><span class="w won">M0r1</span><span class="chg up">3→4W</span><span class="res"><span class="word">beat</span> <a class="play" href="https://lichess.org/QVysYLT5" target="_blank">▶ game</a></span><span class="chg end" title="Streak ended">2W ✗</span><span class="b lost">m-p-d</span></div><div class="clash"><span class="w lost">Leverkuhn</span><span class="chg end" title="Streak ended">4W ✗</span><span class="res"><span class="word">lost to</span> <a class="play" href="https://lichess.org/hVGsetIP" target="_blank">▶ game</a></span><span class="chg up">5→6W</span><span class="b won">Kayrosas</span></div><div class="clash"><span class="w lost">AceRb95</span><span class="chg end" title="Streak ended">2W ✗</span><span class="res"><span class="word">lost to</span> <a class="play" href="https://lichess.org/3WKwBEIm" target="_blank">▶ game</a></span><span class="chg up">4→5W</span><span class="b won">metalpawn</span></div><div class="clash"><span class="w won">MarekW78</span><span class="chg up">2→3W</span><span class="res"><span class="word">beat</span> <a class="play" href="https://lichess.org/nS8Z67E5" target="_blank">▶ game</a></span><span class="chg end" title="Streak ended">2W ✗</span><span class="b lost">Joonaf</span></div><div class="clash"><span class="w lost">Bortvinik</span><span class="chg end" title="Streak ended">4W ✗</span><span class="res"><span class="word">lost to</span> <a class="play" href="https://lichess.org/KxNZE98D" target="_blank">▶ game</a></span><span class="chg up">6→7W</span><span class="b won">ttsgosadow</span></div><div class="clash"><span class="w">Conan_9</span><span class="chg end" title="Streak ended">2W ✗</span><span class="res"><span class="word">drew</span> <a class="play" href="https://lichess.org/CagtTMtN" target="_blank">▶ game</a></span><span class="chg end" title="Streak ended">6W ✗</span><span class="b">scarff</span></div></div>
+  </section>
+
+  <section>
+    <h2>🧊 Cold War</h2>
+    <div class="intro">Both players came in on a losing streak of 2 or more.</div>
+    <div class="clashes"><div class="clash"><span class="w won">OK_4</span><span class="chg end good" title="Losing run snapped">2L ✗</span><span class="res"><span class="word">beat</span> <a class="play" href="https://lichess.org/PdAXsfcr" target="_blank">▶ game</a></span><span class="chg up bad">3→4L</span><span class="b lost">JohnJPershing</span></div><div class="clash"><span class="w won">gmat20020</span><span class="chg end good" title="Losing run snapped">3L ✗</span><span class="res"><span class="word">beat</span> <a class="play" href="https://lichess.org/1egDjkDJ" target="_blank">▶ game</a></span><span class="chg up bad">2→3L</span><span class="b lost">zal667</span></div><div class="clash"><span class="w won">Gingersquirrelnuts</span><span class="chg end good" title="Losing run snapped">3L ✗</span><span class="res"><span class="word">beat</span> <a class="play" href="https://lichess.org/erwwCI5q" target="_blank">▶ game</a></span><span class="chg up bad">2→3L</span><span class="b lost">avemanyeg</span></div><div class="clash"><span class="w lost">its_ck</span><span class="chg up bad">3→4L</span><span class="res"><span class="word">lost to</span> <a class="play" href="https://lichess.org/8wf1rPsF" target="_blank">▶ game</a></span><span class="chg end good" title="Losing run snapped">3L ✗</span><span class="b won">Acebulf</span></div><div class="clash"><span class="w won">mgold</span><span class="chg end good" title="Losing run snapped">2L ✗</span><span class="res"><span class="word">beat</span> <a class="play" href="https://lichess.org/mSwTDBgl" target="_blank">▶ game</a></span><span class="chg up bad">3→4L</span><span class="b lost">Fischer_and_Chips88</span></div><div class="clash"><span class="w">CaioDias</span><span class="chg end good" title="Losing run snapped">4L ✗</span><span class="res"><span class="word">drew</span> <a class="play" href="https://lichess.org/PQSXKaG3" target="_blank">▶ game</a></span><span class="chg end good" title="Losing run snapped">3L ✗</span><span class="b">ekopp2000</span></div><div class="clash"><span class="w won">osumarko</span><span class="chg end good" title="Losing run snapped">4L ✗</span><span class="res"><span class="word">beat</span> <a class="play" href="https://lichess.org/Dtfs9UzE" target="_blank">▶ game</a></span><span class="chg up bad">6→7L</span><span class="b lost">K5KGC</span></div></div>
+  </section>
+
+  <section>
+    <h2>🔥 Hot Streaks</h2>
+    <div class="intro">Players who came in on 5 or more wins in a row.</div>
+    <div class="grid"><div class="streak hot ended">
+  <div class="top"><div class="name">cowtone</div><div class="len"><b>7</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Drew vs <b>mixxanber</b> · <a class="play" href="https://lichess.org/OgbrUfgC" target="_blank">▶ game</a></span><span class="verdict end">Ended at 7</span></div>
+</div><div class="streak hot">
+  <div class="top"><div class="name">Alikadhim2</div><div class="len"><b>7</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Won vs <b>ARandomMove</b> · <a class="play" href="https://lichess.org/X481s0IY" target="_blank">▶ game</a></span><span class="verdict up">Now 8</span></div>
+</div><div class="streak hot ended">
+  <div class="top"><div class="name">scarff</div><div class="len"><b>6</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Drew vs <b>Conan_9</b> · <a class="play" href="https://lichess.org/CagtTMtN" target="_blank">▶ game</a></span><span class="verdict end">Ended at 6</span></div>
+</div><div class="streak hot ended">
+  <div class="top"><div class="name">electricfalcon</div><div class="len"><b>6</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Drew vs <b>dragon19410</b> · <a class="play" href="https://lichess.org/o3V1tfb9" target="_blank">▶ game</a></span><span class="verdict end">Ended at 6</span></div>
+</div><div class="streak hot ended">
+  <div class="top"><div class="name">ComputerUser2607</div><div class="len"><b>6</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Lost vs <b>Checkmate_Insurance</b> · <a class="play" href="https://lichess.org/LoHc8LIr" target="_blank">▶ game</a></span><span class="verdict end">Ended at 6</span></div>
+</div><div class="streak hot">
+  <div class="top"><div class="name">ttsgosadow</div><div class="len"><b>6</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Won vs <b>Bortvinik</b> · <a class="play" href="https://lichess.org/KxNZE98D" target="_blank">▶ game</a></span><span class="verdict up">Now 7</span></div>
+</div><div class="streak hot ended">
+  <div class="top"><div class="name">OnlyLongTimeGames</div><div class="len"><b>6</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Lost vs <b>faznaz83</b> · <a class="play" href="https://lichess.org/k3czsZBb" target="_blank">▶ game</a></span><span class="verdict end">Ended at 6</span></div>
+</div><div class="streak hot">
+  <div class="top"><div class="name">Kayrosas</div><div class="len"><b>5</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Won vs <b>Leverkuhn</b> · <a class="play" href="https://lichess.org/hVGsetIP" target="_blank">▶ game</a></span><span class="verdict up">Now 6</span></div>
+</div><div class="streak hot">
+  <div class="top"><div class="name">hpors</div><div class="len"><b>5</b><span>wins going in</span></div></div>
+  <div class="outcome"><span class="vs">Won vs <b>mmkgtc</b> · <a class="play" href="https://lichess.org/eXdF07Iw" target="_blank">▶ game</a></span><span class="verdict up">Now 6</span></div>
+</div></div>
+  </section>
+
+  <section>
+    <h2>❄️ Cold Streaks</h2>
+    <div class="intro">Players who came in on 5 or more losses in a row.</div>
+    <div class="grid"><div class="streak cold">
+  <div class="top"><div class="name">cham</div><div class="len"><b>7</b><span>losses going in</span></div></div>
+  <div class="outcome"><span class="vs">Lost vs <b>TheRealDivider</b> · <a class="play" href="https://lichess.org/53SUlInL" target="_blank">▶ game</a></span><span class="verdict bad">Now 8</span></div>
+</div><div class="streak cold">
+  <div class="top"><div class="name">mimrolls</div><div class="len"><b>7</b><span>losses going in</span></div></div>
+  <div class="outcome"><span class="vs">Lost vs <b>rjhoro</b> · <a class="play" href="https://lichess.org/kvknz6cD" target="_blank">▶ game</a></span><span class="verdict bad">Now 8</span></div>
+</div><div class="streak cold ended">
+  <div class="top"><div class="name">Fyrox96</div><div class="len"><b>6</b><span>losses going in</span></div></div>
+  <div class="outcome"><span class="vs">Drew vs <b>Hanzo_19</b> · <a class="play" href="https://lichess.org/sMLIYUrr" target="_blank">▶ game</a></span><span class="verdict good">Snapped after 6</span></div>
+</div><div class="streak cold">
+  <div class="top"><div class="name">K5KGC</div><div class="len"><b>6</b><span>losses going in</span></div></div>
+  <div class="outcome"><span class="vs">Lost vs <b>osumarko</b> · <a class="play" href="https://lichess.org/Dtfs9UzE" target="_blank">▶ game</a></span><span class="verdict bad">Now 7</span></div>
+</div><div class="streak cold">
+  <div class="top"><div class="name">kurdd</div><div class="len"><b>6</b><span>losses going in</span></div></div>
+  <div class="outcome"><span class="vs">Lost vs <b>Zubenelgenubi</b> · <a class="play" href="https://lichess.org/NEzqbggx" target="_blank">▶ game</a></span><span class="verdict bad">Now 7</span></div>
+</div></div>
+  </section>
+
+  <footer>Only games that were actually played count: no-show forfeits and scheduling draws are left out.<br>Generated 2026-10-12 13:23</footer>
+</div>
 </body>
 </html>
