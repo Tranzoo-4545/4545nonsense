@@ -270,7 +270,79 @@
                 right: 10px;
             }
         }
+
+        /* --- v2 tweaks --- */
+        .report-section:hover { transform: none; }
+        .report-link { padding: 13px 20px; }
+        .report-link .d { display: block; font-size: .8em; font-weight: 400; opacity: .78; margin-top: 2px; }
+        .report-link.fight, .report-link.cinema { padding: 18px 20px; border-left: 0; }
+        .report-link.fight { background: radial-gradient(ellipse at 20% -30%, rgba(212,184,86,.4), transparent 60%), #0f2830; border: 1px solid rgba(212,184,86,.6); }
+        .report-link.fight .nm { font-family: 'Oswald', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: 1.25em; }
+        .report-link.fight .link-arrow { color: #d4b856; }
+        .report-link.cinema { position: relative; padding: 26px 20px; background: radial-gradient(ellipse at 50% -30%, rgba(242,195,91,.25), transparent 60%), linear-gradient(160deg, #3a1726, #1f0e17); border: 1px solid rgba(242,195,91,.45); }
+        .report-link.cinema::before, .report-link.cinema::after { content: ''; position: absolute; left: 0; right: 0; height: 12px;
+          background: radial-gradient(ellipse 3px 2.5px at 8px 6px, #3a1a26 0 3px, transparent 3.5px) 0 0 / 18px 12px repeat-x, #120a0e; }
+        .report-link.cinema::before { top: 0; border-radius: 10px 10px 0 0; } .report-link.cinema::after { bottom: 0; border-radius: 0 0 10px 10px; }
+        .report-link.cinema .nm { font-weight: 800; font-size: 1.25em; color: #fff4ea; }
+        .report-link.cinema .link-arrow { color: #f2c35b; }
+        .report-link.fight:hover, .report-link.cinema:hover { filter: brightness(1.12); }
+        .lower { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; }
+        .lower a { display: flex; align-items: center; gap: 16px; border-radius: 15px; padding: 22px 26px; text-decoration: none; transition: transform .2s ease; }
+        .lower a:hover { transform: translateY(-3px); }
+        .lower .ic { font-size: 2em; } .lower .t { font-weight: 700; font-size: 1.15em; } .lower .dd { font-size: .88em; margin-top: 2px; } .lower .go { margin-left: auto; font-size: 1.2em; }
+        .lower .ach { background: #fff; box-shadow: 0 5px 20px rgba(0,0,0,.2); } .lower .ach .t, .lower .ach .go { color: #2c5f6f; } .lower .ach .dd { color: #6b8791; }
+        .lower .obs { border: 1px solid rgba(255,255,255,.28); color: #f0f6f6; } .lower .obs .dd { color: rgba(214,238,244,.75); }
+        .lower .obs:hover { background: rgba(255,255,255,.08); }
+        @media (max-width: 768px) { .lower { grid-template-columns: 1fr; gap: 16px; } }
+
+        /* --- v3 polish --- */
+        body {
+          background:
+            radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.7), transparent 60%),
+            radial-gradient(1px 1px at 32% 72%, rgba(255,255,255,.5), transparent 60%),
+            radial-gradient(1.5px 1.5px at 58% 12%, rgba(255,255,255,.6), transparent 60%),
+            radial-gradient(1px 1px at 78% 44%, rgba(255,255,255,.5), transparent 60%),
+            radial-gradient(1.5px 1.5px at 88% 82%, rgba(255,255,255,.45), transparent 60%),
+            radial-gradient(1px 1px at 6% 58%, rgba(255,255,255,.5), transparent 60%),
+            radial-gradient(1px 1px at 46% 38%, rgba(255,255,255,.35), transparent 60%),
+            radial-gradient(1px 1px at 68% 90%, rgba(255,255,255,.4), transparent 60%),
+            radial-gradient(ellipse at 15% 0%, rgba(74,158,187,.25), transparent 50%),
+            linear-gradient(160deg, #081620 0%, #12303b 35%, #22505e 75%, #2f6a79 100%) !important;
+          background-attachment: scroll !important;
+        }
+        header { background: rgba(8,22,30,.55) !important; border: 1px solid rgba(168,213,226,.22); box-shadow: 0 20px 60px rgba(0,0,0,.35) !important;
+          padding: 46px 40px 42px !important; overflow: hidden; backdrop-filter: blur(4px); }
+        header::before { content: ''; position: absolute; left: 50%; top: 50%; width: 820px; height: 190px; transform: translate(-50%,-50%) rotate(-8deg);
+          border: 1px solid rgba(168,213,226,.16); border-radius: 50%; pointer-events: none; }
+        header::after { content: ''; position: absolute; left: 50%; top: 50%; width: 560px; height: 120px; transform: translate(-50%,-50%) rotate(-8deg);
+          border: 1px dashed rgba(212,184,86,.22); border-radius: 50%; pointer-events: none; }
+        .alien-eyes { position: relative; z-index: 1; filter: drop-shadow(0 0 14px rgba(140,230,170,.45)); margin-bottom: 12px !important; }
+        h1 { position: relative; z-index: 1; font-family: 'Space Grotesk', -apple-system, sans-serif; color: #f0f6f6 !important; letter-spacing: -.01em;
+          text-shadow: 0 0 30px rgba(74,158,187,.45) !important; }
+        .subtitle { position: relative; z-index: 1; color: #a8d5e2 !important; letter-spacing: .04em; }
+
+        .report-section { border-radius: 18px !important; padding: 28px 28px 26px !important; box-shadow: 0 12px 40px rgba(0,0,0,.28) !important; }
+        .section-header { border-bottom: 1px solid #e3eef1 !important; padding-bottom: 14px !important; margin-bottom: 18px !important; gap: 12px !important; }
+        .section-icon { font-size: 1.6em !important; }
+        .section-title { font-family: 'Space Grotesk', -apple-system, sans-serif; font-size: 1.35em !important; font-weight: 700 !important; color: #1f4a57 !important; }
+
+        .report-link:not(.fight):not(.cinema):not(.featured) { background: #f3f8f9 !important; color: #173640 !important; border: 1px solid #e1edf0;
+          box-shadow: none !important; margin-bottom: 8px; padding: 12px 18px; }
+        .report-link:not(.fight):not(.cinema):not(.featured):hover { background: #e7f1f4 !important; border-color: #cfe2e8; transform: translateX(3px); }
+        .report-link:not(.fight):not(.cinema):not(.featured) .nm { font-weight: 600; }
+        .report-link:not(.fight):not(.cinema):not(.featured) .d { color: #6b8791; opacity: 1; }
+        .report-link:not(.fight):not(.cinema):not(.featured) .link-arrow { color: #3d7a8a; }
+        .report-link.fight, .report-link.cinema, .report-link.featured { margin-bottom: 10px; box-shadow: 0 6px 18px rgba(10,25,32,.25); }
+        .report-link.featured { border-left: 0 !important; background: linear-gradient(135deg, #1a4a5c 0%, #2c5f6f 100%) !important; }
+        .report-link.featured .nm { font-weight: 700; }
+        .report-link:hover { transform: translateY(-2px); }
+
+        .lower a.ach { border-radius: 18px; box-shadow: 0 12px 40px rgba(0,0,0,.28); }
+        .lower a.obs { border-radius: 18px; background: rgba(8,22,30,.35); }
+        .lower .t { font-family: 'Space Grotesk', -apple-system, sans-serif; }
+        footer { opacity: .75 !important; }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -289,48 +361,44 @@
                     <span class="section-icon">🔮</span>
                     <h2 class="section-title">Current Round Preview</h2>
                 </div>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/top_storylines.html" class="report-link featured">
+
+                <a href="https://tranzoo-4545.github.io/4545nonsense/top_storylines.html" class="report-link fight">
                     <div class="link-text">
-                        <span>⭐ Top Storylines</span>
+                        <span><span class="nm">Top Storylines</span><span class="d">The ten pairings to watch this round</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/daily_games.html" class="report-link featured">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/daily_games.html" class="report-link fight">
                     <div class="link-text">
-                        <span>⭐ Storyline of the Day</span>
+                        <span><span class="nm">Top Games of the Day</span><span class="d">The top bouts for each day of the round</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/preview.html" class="report-link">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/preview.html" class="report-link ">
                     <div class="link-text">
-                        <span>Pairing Previews</span>
+                        <span><span class="nm">Pairing Previews</span><span class="d">Every pairing in detail</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/pairings_dashboard.html" class="report-link">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/pairings_dashboard.html" class="report-link ">
                     <div class="link-text">
-                        <span>Notable Matchups</span>
+                        <span><span class="nm">Notable Matchups</span><span class="d">Milestones, veteran clashes and more</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/rivalry_tracker.html" class="report-link">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/rivalry_tracker.html" class="report-link ">
                     <div class="link-text">
-                        <span>Rivalry Tracker</span>
+                        <span><span class="nm">Rivalry Tracker</span><span class="d">Players who have met before</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/streaks_watch.html" class="report-link">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/streaks_watch.html" class="report-link ">
                     <div class="link-text">
-                        <span>Streak Watch</span>
+                        <span><span class="nm">Streak Watch</span><span class="d">The hottest and coldest streaks</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
+
             </div>
             
             <!-- Post-Round Report -->
@@ -339,60 +407,45 @@
                     <span class="section-icon">📊</span>
                     <h2 class="section-title">Post-Round Report</h2>
                 </div>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/storylines_roundup.html" class="report-link featured">
+
+                <a href="https://tranzoo-4545.github.io/4545nonsense/storylines_roundup.html" class="report-link cinema">
                     <div class="link-text">
-                        <span>⭐ Top Storylines</span>
+                        <span><span class="nm">Round Recap</span><span class="d">Last round's most dramatic games</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
                 <a href="https://tranzoo-4545.github.io/4545nonsense/matchups.html" class="report-link featured">
                     <div class="link-text">
-                        <span>⭐ Match Chronicles</span>
+                        <span><span class="nm">⭐ Match Chronicles</span><span class="d">How every team match unfolded, board by board</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/pairings_postround_report.html" class="report-link">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/pairings_postround_report.html" class="report-link ">
                     <div class="link-text">
-                        <span>Notable Matchups</span>
+                        <span><span class="nm">Notable Matchups</span><span class="d">How the standout pairings turned out</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/rivalry_tracker_postround.html" class="report-link">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/rivalry_tracker_postround.html" class="report-link ">
                     <div class="link-text">
-                        <span>Rivalry Tracker</span>
+                        <span><span class="nm">Rivalry Tracker</span><span class="d">How the rematches went</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                
-                <a href="https://tranzoo-4545.github.io/4545nonsense/streaks_watch_postround.html" class="report-link">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/streaks_watch_postround.html" class="report-link ">
                     <div class="link-text">
-                        <span>Streak Watch</span>
+                        <span><span class="nm">Streak Watch</span><span class="d">Streaks extended and snapped</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
+
             </div>
         </div>
         
-        <!-- Achievements Section -->
-        <div class="achievements-section">
-            <div class="section-header">
-                <span class="section-icon">🏆</span>
-                <h2 class="section-title">League Achievements</h2>
-            </div>
-            <p class="achievements-description">Milestones and accomplishments across all 4545 league history</p>
-            <a href="https://tranzoo-4545.github.io/4545nonsense/achievements.html" class="achievements-link">
-                View All Achievements →
-            </a>
+        <div class="lower">
+            <a class="ach" href="https://tranzoo-4545.github.io/4545nonsense/achievements.html"><span class="ic">🏆</span><div><div class="t">League Achievements</div><div class="dd">Milestones and badges across all 4545 history</div></div><span class="go">→</span></a>
+            <a class="obs" href="https://tranzoo-4545.github.io/4545nonsense/obsessive_mind.html"><span class="ic">🧠</span><div><div class="t">Other Works of an Obsessive Mind</div><div class="dd">Predictions, profiles and one-off deep dives</div></div><span class="go">→</span></a>
         </div>
-        
-        <div class="more-works">
-            <a href="https://tranzoo-4545.github.io/4545nonsense/obsessive_mind.html">🧠 Other Works of an Obsessive Mind →</a>
-        </div>
-        
         <footer>
             <p>Lichess 4545 Team League</p>
             <p style="margin-top: 10px; font-size: 0.9em;">
