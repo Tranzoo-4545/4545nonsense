@@ -501,6 +501,92 @@ def get_standings_multiplier(round_num):
     return multipliers.get(round_num, 1.0)
 
 
+# =============================================================================
+# "SHOW POINTS" SWITCH - which factor added how many points (off by default)
+# =============================================================================
+
+class PointedReasons(list):
+    """A list of reason labels that also remembers how many points each one added.
+
+    Behaves exactly like a normal list everywhere else (Excel, previews, JSON).
+    Points are measured as the score change since the previous label.
+    """
+    def __init__(self, score_now):
+        super().__init__()
+        self.points = []
+        self._score_now = score_now
+        self._seen = 0
+
+    def append(self, label):
+        now = self._score_now()
+        self.points.append(now - self._seen)
+        self._seen = now
+        super().append(label)
+
+    def settle(self):
+        """Give points that were added without a label to the previous label."""
+        now = self._score_now()
+        if self.points:
+            self.points[-1] += now - self._seen
+            self._seen = now
+
+    def drop_where(self, condition):
+        """Remove labels; their points are carried into the next label added."""
+        kept = [(r, p) for r, p in zip(self, self.points) if not condition(r)]
+        dropped = sum(p for r, p in zip(self, self.points) if condition(r))
+        super().__init__([r for r, _ in kept])
+        self.points = [p for _, p in kept]
+        self._seen -= dropped
+
+
+def points_html(reasons, i):
+    """The hidden '+3' after a chip; shown only when the viewer switches points on."""
+    pts = getattr(reasons, 'points', None)
+    if not pts or i >= len(pts) or abs(pts[i]) < 0.005:
+        return ''
+    v = f"{abs(pts[i]):.2f}".rstrip('0').rstrip('.')
+    sign = '+' if pts[i] > 0 else '−'
+    return f'<span class="pts">{sign}{v}</span>'
+
+
+POINTS_CSS = """
+        .pts { display: none; margin-left: 0.5rem; padding-left: 0.5rem; border-left: 1px solid rgba(255, 255, 255, 0.18); color: var(--gold); font-weight: 700; }
+        body.show-points .pts { display: inline; }
+        .points-toggle { float: right; margin-top: 1rem; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.9rem; font-family: inherit; cursor: pointer; }
+        .points-toggle:hover { color: var(--text-primary); border-color: var(--accent); }
+        .points-toggle[aria-pressed="true"] { color: var(--gold); border-color: var(--gold); }
+"""
+
+POINTS_BUTTON = '<button type="button" id="pointsToggle" class="points-toggle" aria-pressed="false">Show score breakdown</button>'
+
+POINTS_JS = """<script>
+(function () {
+    var b = document.getElementById('pointsToggle');
+    if (!b) return;
+    var on = false;
+    try { on = localStorage.getItem('showPoints') === '1'; } catch (e) {}
+    function set(v) {
+        document.body.classList.toggle('show-points', v);
+        b.setAttribute('aria-pressed', v ? 'true' : 'false');
+        b.textContent = v ? 'Hide score breakdown' : 'Show score breakdown';
+    }
+    set(on);
+    b.addEventListener('click', function () {
+        on = !on; set(on);
+        try { localStorage.setItem('showPoints', on ? '1' : '0'); } catch (e) {}
+    });
+})();
+</script>
+"""
+
+
+def add_points_switch(html):
+    """Add the CSS, the button next to the explainer, and the script to a finished page."""
+    html = html.replace('</style>', POINTS_CSS + '    </style>', 1)
+    html = html.replace('<details class="guide-wrapper">', POINTS_BUTTON + '\n        <details class="guide-wrapper">', 1)
+    return html.replace('</body>', POINTS_JS + '</body>', 1)
+
+
 def calculate_hype_score(pairing, player_history, standings, streaks, team_battle_ranks, current_season, player_titles=None, round_num=None):
     """Calculate hype score for a pairing. Returns (score, reasons, breakdown)."""
     white = (pairing.get('white') or '').lower()
@@ -512,7 +598,7 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
         player_titles = {}
     
     score = 0
-    reasons = []
+    reasons = PointedReasons(lambda: score)
     breakdown = {
         'milestone': 0,
         'win_milestone': 0,
@@ -597,7 +683,14 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
                 return str(int(p))
             whole = int(p)
             return '½' if whole == 0 else f"{whole}½"
-        return f"{fmt(w_pts)}-{fmt(b_pts)}"
+        # Say whose score it is: leader's name and score first, or "level"
+        if w_pts == b_pts:
+            return f"level {fmt(w_pts)}-{fmt(b_pts)}"
+        w_name = pairing.get('white') or white
+        b_name = pairing.get('black') or black
+        if w_pts > b_pts:
+            return f"{w_name} {fmt(w_pts)}-{fmt(b_pts)}"
+        return f"{b_name} {fmt(b_pts)}-{fmt(w_pts)}"
     
     if h2h_games >= 3:
         pts = 4
@@ -689,14 +782,17 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
         player_vet = min(games / 100, 2)
         vet_score += player_vet
     
-    if vet_score >= 2:
+    if vet_score >= 1:
         score += vet_score
         breakdown['veteran'] = vet_score
-        reasons.append(f"🎖️ Veterans ({white_data['total_games']}+{black_data['total_games']} games)")
-    elif vet_score >= 1:
-        score += vet_score
-        breakdown['veteran'] = vet_score
-        reasons.append(f"🎖️ Experience ({white_data['total_games']}+{black_data['total_games']} games)")
+        wg, bg = white_data.get('total_games', 0), black_data.get('total_games', 0)
+        vets = [(n, g) for n, g in ((pairing.get('white') or white, wg), (pairing.get('black') or black, bg)) if g >= 100]
+        if len(vets) == 2:
+            reasons.append(f"🎖️ Veterans ({wg}+{bg} games)")
+        elif len(vets) == 1:
+            reasons.append(f"🎖️ Veteran {vets[0][0]} ({vets[0][1]} games)")
+        else:
+            reasons.append(f"🎖️ Experience ({wg}+{bg} games)")
     
     # RETURN MATCH (0-4 points) - tiered by length of absence
     for player, data in [(white, white_data), (black, black_data)]:
@@ -858,6 +954,27 @@ def filter_season_by_round(season_data, before_round):
         if g.get('round', 0) < before_round and g.get('result', '') != ''  # Has result before target round
     ]
     return filtered
+
+
+NEWS_CSS = """
+        /* --- newspaper masthead --- */
+        header h1 { font-family: 'Playfair Display', Georgia, serif; font-variant-numeric: lining-nums; font-weight: 900; font-size: 2.5rem !important; letter-spacing: -.01em; }
+        header .subtitle { font-variant: small-caps; letter-spacing: .12em; font-size: 1.05rem; padding: .45rem 0; margin: .5rem auto 0; max-width: 560px;
+            border-top: 3px double rgba(240,246,246,.35); border-bottom: 3px double rgba(240,246,246,.35); }
+        .players a.winner::after { content: ' ★'; color: var(--gold); font-size: .75em; }
+        .players a.loser { opacity: .5; }
+        .schedule-time.live { color: #ff8a7a; background: rgba(255,122,106,.12); }
+        @media (max-width: 600px) { header h1 { font-size: 1.8rem !important; } }
+"""
+DAILY_NEWS_CSS = """
+        header h1 { font-family: 'Playfair Display', Georgia, serif; font-variant-numeric: lining-nums; font-weight: 900; font-size: 2.5rem !important; letter-spacing: -.01em; }
+        header .subtitle { font-variant: small-caps; letter-spacing: .12em; font-size: 1.05rem; padding: .45rem 0; margin: .5rem auto 0; max-width: 560px;
+            border-top: 3px double rgba(240,246,246,.35); border-bottom: 3px double rgba(240,246,246,.35); }
+        .game-score { display: flex; flex-direction: column; align-items: center; }
+        .gotd-badge { white-space: nowrap; text-align: center; }
+        @media (max-width: 600px) { header h1 { font-size: 1.8rem !important; } }
+"""
+NEWS_FONT = '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap" rel="stylesheet">'
 
 
 def generate_html_output(scored_pairings, season, round_num, output_file):
@@ -1164,8 +1281,9 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
 </head>
 <body>
     <div class="container">
+        <a href="index.html" style="display: inline-block; color: #a8d5e2; text-decoration: none; margin-bottom: 1rem; font-size: 0.95rem;">← The 4545 Chronicles</a>
         <header>
-            <h1>📺 Storylines of the Week</h1>
+            <h1>🗞️ Storylines of the Week</h1>
             <div class="subtitle">Season {season} &middot; Round {round_num}</div>
             <div class="stats">Top 10 of {len(scored_pairings)} pairings</div>
         </header>
@@ -1283,8 +1401,16 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
         black_link = f"https://www.lichess4545.com/team4545/player/{p['black']}/"
         
         # Build schedule status
-        if p.get('played'):
-            schedule_html = f'<div class="schedule-time played">✓ {p.get("result", "played")}</div>'
+        result = p.get('result') or ''
+        w_cls = b_cls = ''
+        if result in ('1-0', '1X-0F'):
+            w_cls, b_cls = ' class="winner"', ' class="loser"'
+        elif result in ('0-1', '0F-1X'):
+            w_cls, b_cls = ' class="loser"', ' class="winner"'
+        if p.get('played') and not result:
+            schedule_html = '<div class="schedule-time live">● Live now</div>'
+        elif p.get('played'):
+            schedule_html = f'<div class="schedule-time played">✓ {result}</div>'
         elif p.get('scheduled_time'):
             time_str = p['scheduled_time'].strftime('%a %b %d, %H:%M UTC')
             schedule_html = f'<div class="schedule-time scheduled">🕐 {time_str}</div>'
@@ -1292,14 +1418,14 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
             schedule_html = '<div class="schedule-time tbd">⏳ TBD</div>'
         
         html += f"""
-            <div class="pairing-card">
+            <div class="pairing-card{' lead' if i == 1 else ''}">
                 <div class="pairing-header">
                     <div class="rank {rank_class}">#{i}</div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="{white_link}" target="_blank">{p['white']}</a>
+                            <a href="{white_link}" target="_blank"{w_cls}>{p['white']}</a>
                             <span class="vs">vs</span>
-                            <a href="{black_link}" target="_blank">{p['black']}</a>
+                            <a href="{black_link}" target="_blank"{b_cls}>{p['black']}</a>
                         </div>
                         <div class="teams">{p['white_team']} vs {p['black_team']}</div>
                         {schedule_html}
@@ -1313,8 +1439,8 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
         
         if p['reasons']:
             html += '                <div class="reasons">\n'
-            for reason in p['reasons']:
-                html += f'                    <span class="reason">{reason}</span>\n'
+            for ri, reason in enumerate(p['reasons']):
+                html += f'                    <span class="reason">{reason}{points_html(p["reasons"], ri)}</span>\n'
             html += '                </div>\n'
         
         html += '            </div>\n'
@@ -1329,6 +1455,10 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
 </body>
 </html>
 """
+    
+    html = html.replace('</style>', NEWS_CSS + '    </style>', 1)
+    html = html.replace('<head>', '<head>\n    ' + NEWS_FONT, 1)
+    html = add_points_switch(html)
     
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html)
@@ -1426,6 +1556,7 @@ def generate_daily_html_output(scored_pairings, season, round_num, output_file):
 </head>
 <body>
     <div class="container">
+        <a href="index.html" style="display: inline-block; color: #a8d5e2; text-decoration: none; margin-bottom: 1rem; font-size: 0.95rem;">← The 4545 Chronicles</a>
         <div class="card">
             <h1>📅 Coming Soon!</h1>
             <div class="message">
@@ -1747,6 +1878,7 @@ def generate_daily_html_output(scored_pairings, season, round_num, output_file):
 </head>
 <body>
     <div class="container">
+        <a href="index.html" style="display: inline-block; color: #a8d5e2; text-decoration: none; margin-bottom: 1rem; font-size: 0.95rem;">← The 4545 Chronicles</a>
         <header>
             <h1>🏆 Top Games of the Day</h1>
             <div class="subtitle">Season {season} Round {round_num}</div>
@@ -1833,6 +1965,8 @@ def generate_daily_html_output(scored_pairings, season, round_num, output_file):
 </html>
 """
     
+    html = html.replace('</style>', DAILY_NEWS_CSS + '    </style>', 1)
+    html = html.replace('<head>', '<head>\n    ' + NEWS_FONT, 1)
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html)
     
