@@ -341,8 +341,16 @@
         .lower a.obs { border-radius: 18px; background: rgba(8,22,30,.35); }
         .lower .t { font-family: 'Space Grotesk', -apple-system, sans-serif; }
         footer { opacity: .75 !important; }
+
+        /* --- one style for the four main pages --- */
+        .report-link.featured { background: linear-gradient(135deg, #0f2830 0%, #1a4a5c 100%) !important; border: 1px solid rgba(212,184,86,.5) !important;
+          border-left: 1px solid rgba(212,184,86,.5) !important; padding: 16px 20px !important; }
+        .report-link.featured .nm { font-family: 'Space Grotesk', -apple-system, sans-serif; font-weight: 700; font-size: 1.12em; color: #f0f6f6; }
+        .report-link.featured .d { color: rgba(240,246,246,.72); opacity: 1; }
+        .report-link.featured .link-arrow { color: #d4b856; }
+        .report-link.featured:hover { filter: brightness(1.12); }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -362,13 +370,13 @@
                     <h2 class="section-title">Current Round Preview</h2>
                 </div>
 
-                <a href="https://tranzoo-4545.github.io/4545nonsense/top_storylines.html" class="report-link fight">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/top_storylines.html" class="report-link featured">
                     <div class="link-text">
                         <span><span class="nm">Top Storylines</span><span class="d">The ten pairings to watch this round</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
-                <a href="https://tranzoo-4545.github.io/4545nonsense/daily_games.html" class="report-link fight">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/daily_games.html" class="report-link featured">
                     <div class="link-text">
                         <span><span class="nm">Top Games of the Day</span><span class="d">The top bouts for each day of the round</span></span>
                         <span class="link-arrow">→</span>
@@ -408,7 +416,7 @@
                     <h2 class="section-title">Post-Round Report</h2>
                 </div>
 
-                <a href="https://tranzoo-4545.github.io/4545nonsense/storylines_roundup.html" class="report-link cinema">
+                <a href="https://tranzoo-4545.github.io/4545nonsense/storylines_roundup.html" class="report-link featured">
                     <div class="link-text">
                         <span><span class="nm">Round Recap</span><span class="d">Last round's most dramatic games</span></span>
                         <span class="link-arrow">→</span>
@@ -416,7 +424,7 @@
                 </a>
                 <a href="https://tranzoo-4545.github.io/4545nonsense/matchups.html" class="report-link featured">
                     <div class="link-text">
-                        <span><span class="nm">⭐ Match Chronicles</span><span class="d">How every team match unfolded, board by board</span></span>
+                        <span><span class="nm">Match Chronicles</span><span class="d">How every team match unfolded, board by board</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
