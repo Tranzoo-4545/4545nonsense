@@ -141,26 +141,26 @@ def get_championship_teams(all_season_data):
     return champions
 
 
-CHAMPIONS_FILE = 'champions.json'   # season -> champion team + its FINAL roster (uploaded next to this script)
+ROSTERS_FILE = 'final_rosters.json'   # season -> team -> FINAL roster (uploaded next to this script)
 
 
-def _champions_path():
-    """champions.json next to this script; the apps' copies (content_studio/, streaming/) use v7's, one folder up."""
+def _rosters_path():
+    """final_rosters.json next to this script; the apps' copies (content_studio/, streaming/) use v7's, one folder up."""
     here = Path(__file__).resolve().parent
     for d in (here, here.parent):
-        if (d / CHAMPIONS_FILE).exists():
-            return d / CHAMPIONS_FILE
-    return here / CHAMPIONS_FILE
+        if (d / ROSTERS_FILE).exists():
+            return d / ROSTERS_FILE
+    return here / ROSTERS_FILE
 
 
-def load_champion_rosters(championship_teams):
-    """{season: set of lowercase usernames}: the FINAL roster of each season's champion team (the league awards
-    the title to the final roster - no games-played rule). championship_teams: season -> team (standings winner).
+def load_final_rosters(seasons):
+    """{season: {team name: set of lowercase usernames}}: every team's FINAL league roster, for the given
+    finished seasons.
 
-    Read from champions.json. Where roster.py is available (the owner's machine), seasons that are missing or
-    list another team are added from the league roster and the file is saved. Without the file and without
-    roster.py (e.g. GitHub Actions before the upload) there are no champions, with a warning."""
-    path = _champions_path()
+    Read from final_rosters.json. Where roster.py is available (the owner's machine), missing seasons are added from
+    the league roster and the file is saved. Without the file and without roster.py (e.g. GitHub Actions before the
+    upload) those seasons have no rosters, with a warning."""
+    path = _rosters_path()
     try:
         saved = json.loads(path.read_text(encoding='utf-8')).get('seasons', {})
     except FileNotFoundError:
@@ -168,32 +168,67 @@ def load_champion_rosters(championship_teams):
     except Exception as e:
         print(f"  Warning: could not read {path.name} ({e})")
         saved = {}
-    stale = [s for s, team in championship_teams.items() if (saved.get(str(s)) or {}).get('team') != team]
-    if stale:
+    missing = sorted(s for s in set(seasons) if str(s) not in saved)
+    if missing:
         try:
             import roster as roster_mod
         except ImportError:
             roster_mod = None
         added = 0
-        for s in sorted(stale) if roster_mod else []:
+        for s in missing if roster_mod else []:
             r = roster_mod.get(s)
-            players = [u for _, u, _ in r.team_players(championship_teams[s])] if r else []
-            if players:
-                saved[str(s)] = {'team': championship_teams[s], 'players': sorted(players, key=str.lower)}
+            teams = {t['name']: sorted((u for _, u, _ in t['players']), key=str.lower)
+                     for t in (r.teams.values() if r else []) if t['players']}
+            if teams:
+                saved[str(s)] = dict(sorted(teams.items(), key=lambda kv: kv[0].lower()))
                 added += 1
         if added:
             path.write_text(json.dumps({
-                'about': 'Champion team and its FINAL league roster per finished season. Built by storylines_v4.py '
-                         'from standings + roster.py; upload next to storylines_v4.py.',
+                'about': "Every team's FINAL league roster per finished season. Built by storylines_v4.py from "
+                         "roster.py; upload next to storylines_v4.py.",
                 'seasons': dict(sorted(saved.items(), key=lambda kv: int(kv[0]))),
             }, indent=1, ensure_ascii=False), encoding='utf-8')
-            print(f"  Champions: added {added} season(s) to {path}")
-        missing = [s for s in stale if (saved.get(str(s)) or {}).get('team') != championship_teams[s]]
-        if missing:
-            print(f"  Warning: no final roster for the champions of season(s) {', '.join(map(str, missing))} "
-                  f"- no champion titles for them ({path.name} missing or out of date)")
-    return {int(s): {u.lower() for u in v['players']} for s, v in saved.items()
-            if championship_teams.get(int(s)) == v['team']}
+            print(f"  Final rosters: added {added} season(s) to {path}")
+        still = [s for s in missing if str(s) not in saved]
+        if still:
+            print(f"  Warning: no final rosters for season(s) {', '.join(map(str, still))} - no champions or roster "
+                  f"teammates for them ({path.name} missing or out of date)")
+    return {int(s): {t: {u.lower() for u in ps} for t, ps in teams.items()}
+            for s, teams in saved.items() if int(s) in set(seasons)}
+
+
+def load_champion_rosters(championship_teams):
+    """{season: set of lowercase usernames}: the FINAL roster of each season's champion team (the league awards
+    the title to the final roster - no games-played rule). championship_teams: season -> team (standings winner)."""
+    rosters = load_final_rosters(championship_teams)
+    out = {}
+    for s, team in championship_teams.items():
+        for t, names in rosters.get(s, {}).items():
+            if t.lower() == team.lower():
+                out[s] = names
+    return out
+
+
+def add_roster_teams(players, seasons):
+    """Mark each player's final-roster teams: players[name]['roster_teams'] = {(team, season)}."""
+    for season_num, teams in load_final_rosters(seasons).items():
+        for team, names in teams.items():
+            for name in names:
+                if name in players:
+                    players[name].setdefault('roster_teams', set()).add((team, season_num))
+
+
+def teammate_teams(white_data, black_data):
+    """[(team, season)] the two players were teammates on, oldest first: both played 4+ games for that team that
+    season, OR both were on its final roster (one of each does not count)."""
+    out = {}
+    wt, bt = white_data.get('teams', {}), black_data.get('teams', {})
+    for (team, season), n in wt.items():
+        if n >= 4 and bt.get((team, season), 0) >= 4:
+            out[(team.lower(), season)] = (team, season)
+    for team, season in set(white_data.get('roster_teams', ())) & set(black_data.get('roster_teams', ())):
+        out.setdefault((team.lower(), season), (team, season))
+    return [out[k] for k in sorted(out, key=lambda k: (k[1], k[0]))]
 
 
 def load_player_titles():
@@ -357,7 +392,9 @@ def build_player_history(all_season_data, current_season=None, before_round=None
                 players[white]['opponents'][black]['draws'] += 1
                 players[black]['opponents'][white]['draws'] += 1
     
-    # Championship teams: players on the FINAL roster of each season's champion (champions.json)
+    # Final-roster teams of finished seasons (for "former teammates"), then championship teams: players on the
+    # FINAL roster of each season's champion (both from final_rosters.json)
+    add_roster_teams(players, {s for s in all_season_data if current_season and s < current_season} | set(championship_teams))
     for season_num, names in load_champion_rosters(championship_teams).items():
         for name in names:
             if name in players:
@@ -891,22 +928,19 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
             breakdown['return_match'] += pts
             reasons.append(f"🪃 {player}'s return after {gap} seasons!")
     
-    # FORMER TEAMMATES (0-5 points) - both played 4+ games on same team(s)
+    # FORMER TEAMMATES (0-5 points) - both played 4+ games for the same team, or both on its final roster
     # +1 bonus if they won the league together
     # Teams are now keyed by (team_name, season) to distinguish same-name teams
-    white_teams = white_data.get('teams', {})
-    black_teams = black_data.get('teams', {})
     white_champs = white_data.get('championship_teams', set())
     black_champs = black_data.get('championship_teams', set())
     
-    # Find teams where BOTH played 4+ games (same team in same season)
-    shared_teams = []
-    for team_key, white_games in white_teams.items():
-        if white_games >= 4 and black_teams.get(team_key, 0) >= 4:
-            shared_teams.append(team_key)
+    # Teams they shared (same team, same season): both 4+ games for it, or both on its final roster
+    shared_teams = teammate_teams(white_data, black_data)
     
     # Check if any shared team is a championship team for both
-    shared_championship = any(team_key in white_champs and team_key in black_champs for team_key in shared_teams)
+    lower = lambda keys: {(t.lower(), s) for t, s in keys}
+    shared_championship = any((t.lower(), s) in lower(white_champs) and (t.lower(), s) in lower(black_champs)
+                              for t, s in shared_teams)
     
     # Extract team names for display (team_key is (team_name, season))
     shared_team_names = [team_key[0] for team_key in shared_teams]
@@ -1424,9 +1458,9 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
             <h3>🤝 Former Teammates (0-5 pts)</h3>
             <table>
                 <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Both played 4+ games on 1 shared team</td><td class="points">+2</td></tr>
-                <tr><td>Both played 4+ games on 2 shared teams</td><td class="points">+3</td></tr>
-                <tr><td>Both played 4+ games on 3+ shared teams</td><td class="points">+4</td></tr>
+                <tr><td>Teammates on 1 shared team (both 4+ games for it, or both on its final roster)</td><td class="points">+2</td></tr>
+                <tr><td>Teammates on 2 shared teams</td><td class="points">+3</td></tr>
+                <tr><td>Teammates on 3+ shared teams</td><td class="points">+4</td></tr>
                 <tr><td>Bonus: Won league together</td><td class="points">+1</td></tr>
             </table>
             
