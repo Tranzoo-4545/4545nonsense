@@ -65,8 +65,10 @@ def save_season_to_cache(season, data):
     """Save season data to cache."""
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     cache_file = CACHE_DIR / f"season_{season}_with_unplayed.json"
-    with open(cache_file, 'w', encoding='utf-8') as f:
+    tmp = cache_file.with_name(cache_file.name + '.tmp')
+    with open(tmp, 'w', encoding='utf-8') as f:
         json.dump(data, f)
+    tmp.replace(cache_file)      # all or nothing: an interrupted write never leaves a half-written season
 
 
 def refresh_season_cache(season, force=False):
@@ -249,22 +251,45 @@ def save_player_titles(titles):
         json.dump(titles, f)
 
 
+TITLES_RECHECK_DAYS = 30   # untitled players are asked again after this many days (titles get awarded)
+TITLES_CHECKED_FILE = TITLES_CACHE_FILE.with_name('player_titles_checked.json')   # player -> date last asked
+
+
 def fetch_player_titles(usernames):
-    """Fetch player titles from Lichess API (bulk request)."""
+    """Fetch player titles from Lichess API (bulk request, 300 per request), cached in player_titles.json.
+
+    Only players Lichess actually answered for are cached (a failed batch is asked again next run), and untitled
+    players are asked again after TITLES_RECHECK_DAYS. roundup_v4 and team_matchup_report use this one too."""
     try:
         import requests
     except ImportError:
         return {}
-    
+
     if not usernames:
         return {}
-    
+
     # Load existing cache
     cached = load_player_titles()
-    
-    # Filter to usernames we don't have cached
+    try:
+        checked = json.loads(TITLES_CHECKED_FILE.read_text(encoding='utf-8'))
+    except Exception:
+        checked = {}
+    today = datetime.now().date()
+
+    def due(u):
+        """Not cached, or untitled and not asked for TITLES_RECHECK_DAYS (titled players keep their title)."""
+        if u not in cached:
+            return True
+        if cached[u]:
+            return False
+        try:
+            return (today - datetime.fromisoformat(checked[u]).date()).days >= TITLES_RECHECK_DAYS
+        except Exception:
+            return True
+
     usernames_lower = [u.lower() for u in usernames]
-    to_fetch = [u for u in usernames_lower if u not in cached]
+    to_fetch = sorted({u for u in usernames_lower if due(u)})
+    answered = set()   # names in batches Lichess answered (200) - only these are cached
     
     if not to_fetch:
         return {u: cached.get(u) for u in usernames_lower}
@@ -286,7 +311,8 @@ def fetch_player_titles(usernames):
             
             if response.status_code == 200:
                 content = response.text.strip()
-                
+                answered.update(batch)
+
                 # Handle both nd-json (one object per line) and JSON array formats
                 for line in content.split('\n'):
                     if not line:
@@ -308,17 +334,24 @@ def fetch_player_titles(usernames):
                             titles[username] = title
                     except json.JSONDecodeError:
                         continue
-            
+            else:
+                print(f"    ⚠ Titles: Lichess answered {response.status_code} for {len(batch)} players - "
+                      f"not cached, asked again next run")
+
             time.sleep(0.5)  # Be nice to API
         except Exception as e:
-            print(f"    Warning: Error fetching titles: {e}")
-    
-    # Cache all results (including None for non-titled)
-    for u in to_fetch:
-        if u not in titles:
-            titles[u] = None
-    
+            print(f"    ⚠ Titles: error for {len(batch)} players ({e}) - not cached, asked again next run")
+
+    # Cache only players Lichess answered for (no title / closed account = None); failed batches stay unknown
+    for u in answered:
+        titles.setdefault(u, None)     # answered but not in the reply = no title or closed account
+        checked[u] = today.isoformat()
+
     save_player_titles(titles)
+    try:
+        TITLES_CHECKED_FILE.write_text(json.dumps(checked), encoding='utf-8')
+    except Exception:
+        pass
     
     return {u: titles.get(u) for u in usernames_lower}
 
