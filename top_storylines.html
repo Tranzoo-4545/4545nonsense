@@ -311,6 +311,13 @@
         .points-toggle { float: right; margin-top: 1rem; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.9rem; font-family: inherit; cursor: pointer; }
         .points-toggle:hover { color: var(--text-primary); border-color: var(--accent); }
         .points-toggle[aria-pressed="true"] { color: var(--gold); border-color: var(--gold); }
+        @media (max-width: 600px) {
+            .container { display: flex; flex-direction: column; }
+            .container > * { order: 2; }
+            .container > a:first-child, .container > header, .container > .guide-wrapper { order: 0; }
+            .container > .guide-wrapper { margin-bottom: 0.6rem; }
+            .points-toggle { order: 1; float: none; align-self: flex-start; margin: 0 0 1.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -400,9 +407,9 @@
             <h3>🤝 Former Teammates (0-5 pts)</h3>
             <table>
                 <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Both played 4+ games on 1 shared team</td><td class="points">+2</td></tr>
-                <tr><td>Both played 4+ games on 2 shared teams</td><td class="points">+3</td></tr>
-                <tr><td>Both played 4+ games on 3+ shared teams</td><td class="points">+4</td></tr>
+                <tr><td>Teammates on 1 shared team (both 4+ games for it, or both on its final roster)</td><td class="points">+2</td></tr>
+                <tr><td>Teammates on 2 shared teams</td><td class="points">+3</td></tr>
+                <tr><td>Teammates on 3+ shared teams</td><td class="points">+4</td></tr>
                 <tr><td>Bonus: Won league together</td><td class="points">+1</td></tr>
             </table>
             
