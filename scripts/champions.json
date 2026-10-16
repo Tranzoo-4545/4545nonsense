@@ -1,0 +1,619 @@
+{
+ "about": "Champion team and its FINAL league roster per finished season. Built by storylines_v4.py from standings + roster.py; upload next to storylines_v4.py.",
+ "seasons": {
+  "1": {
+   "team": "Pawn Chop",
+   "players": [
+    "CheapEndgameTricks",
+    "coolalzi",
+    "crabbypat",
+    "gehenna"
+   ]
+  },
+  "2": {
+   "team": "Sicilian Dragons",
+   "players": [
+    "Immortality",
+    "jaivl",
+    "matuiss2",
+    "scarff",
+    "somethingpretentious"
+   ]
+  },
+  "3": {
+   "team": "Smack My Bishop",
+   "players": [
+    "diamanthori",
+    "eamonmont",
+    "infested",
+    "mbazylisk",
+    "quirked",
+    "SirDore"
+   ]
+  },
+  "4": {
+   "team": "The Hateful Mate",
+   "players": [
+    "cactus",
+    "EsolcNeveton",
+    "Heidman",
+    "isaypotato",
+    "lakinwecker",
+    "R-Mena"
+   ]
+  },
+  "5": {
+   "team": "Blunder-Mifflin",
+   "players": [
+    "aliquantus",
+    "jivey",
+    "madatadam",
+    "OuterHeaven92",
+    "parkerzs",
+    "samjjames"
+   ]
+  },
+  "6": {
+   "team": "Petrojan Horse",
+   "players": [
+    "FelixNL",
+    "nubnub57",
+    "Petruchio",
+    "samjjames",
+    "Tchang1997",
+    "Theknug"
+   ]
+  },
+  "7": {
+   "team": "Isolated Puns",
+   "players": [
+    "autotelic",
+    "Daveyjones01",
+    "Delpire",
+    "hetraie",
+    "IHugoStiglitz",
+    "morallygray"
+   ]
+  },
+  "8": {
+   "team": "Summer Pawn Storm",
+   "players": [
+    "Blekinge",
+    "Boviced",
+    "FelixNL",
+    "matt_p_14",
+    "MrLegilimens",
+    "nadgob"
+   ]
+  },
+  "9": {
+   "team": "Bad News Bishops",
+   "players": [
+    "GetAGripWhitby",
+    "Napoleon_Solo",
+    "OuterHeaven92",
+    "rb52",
+    "roso97",
+    "udaysatya"
+   ]
+  },
+  "10": {
+   "team": "We're OK with any name, actually",
+   "players": [
+    "dose7781",
+    "Heinie",
+    "MoistvonLipwig",
+    "NarwhalePete",
+    "pmyourpepes",
+    "rgpchesspe"
+   ]
+  },
+  "11": {
+   "team": "Sexy Spidergoats",
+   "players": [
+    "glbert",
+    "GnarlyGoat",
+    "lovlas",
+    "Poseh",
+    "PsiMaster",
+    "Tranzoo"
+   ]
+  },
+  "12": {
+   "team": "We're not OK with any name, actually.",
+   "players": [
+    "litzr",
+    "myle",
+    "Napoleon_Solo",
+    "roso97",
+    "sgis",
+    "tnan123"
+   ]
+  },
+  "13": {
+   "team": "Sac It and See",
+   "players": [
+    "DracoxVitae",
+    "FischyVishy",
+    "Khidal",
+    "lakinwecker",
+    "somethingpretentious",
+    "Spiteknight"
+   ]
+  },
+  "14": {
+   "team": "Hey Guys, it's John",
+   "players": [
+    "colwem",
+    "ErinYu",
+    "JoeyMellberg",
+    "PP_92",
+    "TCGRIF",
+    "toni4127"
+   ]
+  },
+  "15": {
+   "team": "The Dark Knights",
+   "players": [
+    "astralfenix",
+    "BigEvo8",
+    "kostasvl",
+    "Lethgo",
+    "Numberman768",
+    "SentinelCrush"
+   ]
+  },
+  "16": {
+   "team": "Lichess Lovers",
+   "players": [
+    "Calcium237",
+    "jessehf",
+    "leo2dipikke",
+    "LucaGaglia73",
+    "paolone",
+    "pedropablo72",
+    "rampichino",
+    "Toffeeman"
+   ]
+  },
+  "17": {
+   "team": "Smother of Dragons",
+   "players": [
+    "f1nn33",
+    "kajoM",
+    "lapetitemort",
+    "matrix47",
+    "RelativeImpact",
+    "roso97",
+    "sgis",
+    "Tsatsa64"
+   ]
+  },
+  "18": {
+   "team": "Embrace the Pain",
+   "players": [
+    "CamelClutcher",
+    "darubaru",
+    "david-innes",
+    "GOKUBA",
+    "MoiRon",
+    "pepepibote",
+    "thundercougarfalcon",
+    "Tranzoo"
+   ]
+  },
+  "19": {
+   "team": "Team Names Don't Matter When You Win",
+   "players": [
+    "Ahedrista",
+    "JohnFrancis",
+    "kvltvr_wvltvr",
+    "MrScribbles",
+    "pepepibote",
+    "rodeo",
+    "Tranzoo",
+    "WildGooseChess"
+   ]
+  },
+  "20": {
+   "team": "The Guarded Hedgehogs",
+   "players": [
+    "Bafetimbi_Gomis",
+    "f1nn33",
+    "HoudinicisMedicis",
+    "mcastellani18",
+    "mirkojotic",
+    "Ou57",
+    "Razorneck",
+    "Tsatsa64"
+   ]
+  },
+  "21": {
+   "team": "Castled Kings",
+   "players": [
+    "callum234",
+    "ducksss",
+    "gborges0727",
+    "ghans81",
+    "jfarah",
+    "shmeeshlov",
+    "TurnOnTheLights",
+    "VicPez"
+   ]
+  },
+  "22": {
+   "team": "ANCL",
+   "players": [
+    "Chesspatzerswan",
+    "Ecelal",
+    "freddy267t",
+    "Grizzzly1000",
+    "joyboy",
+    "NightJumpsKing",
+    "Toonerer",
+    "Valoree"
+   ]
+  },
+  "23": {
+   "team": "Stonkfish",
+   "players": [
+    "DonPauleone",
+    "nerja25390",
+    "Nviper06",
+    "Qplayer",
+    "rahulukumar",
+    "Sonata2",
+    "TamarindSauce",
+    "ZheniaSemyanko"
+   ]
+  },
+  "24": {
+   "team": "No BS in Chess",
+   "players": [
+    "apdent42",
+    "cantosh",
+    "Charlesb198",
+    "HighonPotnuse",
+    "JustinTanas",
+    "Lalaze",
+    "M0r1",
+    "masedog91"
+   ]
+  },
+  "25": {
+   "team": "The Opposition",
+   "players": [
+    "Aphla",
+    "Chesspatzerswan",
+    "esKaayY",
+    "malbin",
+    "Pe-lle",
+    "penguinsr6",
+    "rezoons",
+    "slackwyrm",
+    "smerlijn",
+    "snorcal"
+   ]
+  },
+  "26": {
+   "team": "From Russia with Luft",
+   "players": [
+    "g4lois",
+    "HouseOfCargs",
+    "Jamougha",
+    "Juke_3",
+    "maxivgc",
+    "Sammeth",
+    "SaucySailorJackTar",
+    "Thooorin",
+    "wilfj",
+    "yerboiMatias"
+   ]
+  },
+  "27": {
+   "team": "Positional King Sacrifice",
+   "players": [
+    "Angrybird029",
+    "espnjosh",
+    "Fishmoro",
+    "JensenUVA",
+    "lc91",
+    "mepahl57",
+    "Moccy",
+    "mronemore",
+    "pic1991",
+    "T_Taylor"
+   ]
+  },
+  "28": {
+   "team": "The Borgov Collective",
+   "players": [
+    "Davidc2214",
+    "Eternal013",
+    "fhunfi",
+    "Groger12",
+    "heidigjr",
+    "Jamoke",
+    "Jamougha",
+    "losttheplot",
+    "SaucySailorJackTar",
+    "Thooorin"
+   ]
+  },
+  "29": {
+   "team": "Adult Decliners",
+   "players": [
+    "Abolizer",
+    "izzie26",
+    "Jputterg",
+    "jurica_c",
+    "KirkD",
+    "Kjar",
+    "Rolihlahla",
+    "samuelglats",
+    "scarff",
+    "timothyha"
+   ]
+  },
+  "30": {
+   "team": "Discovered Mates",
+   "players": [
+    "BoldPodiene",
+    "CPTsopiens",
+    "jrcrawford512",
+    "LIYV",
+    "PresidentXiJinping",
+    "Reiscritor",
+    "STCLion",
+    "The_Wayward_Prince"
+   ]
+  },
+  "31": {
+   "team": "Last Pawn to London",
+   "players": [
+    "bushie123",
+    "Dhmayer",
+    "jkleebone",
+    "M0r1",
+    "Midnightokar",
+    "rafaelnajera",
+    "rojazu",
+    "VlShm"
+   ]
+  },
+  "32": {
+   "team": "sac-sac-oops",
+   "players": [
+    "alen111",
+    "Bitter_Cherry",
+    "chatakkuma",
+    "fvafier",
+    "Midnightokar",
+    "mmorrisohio",
+    "PharmacistGambit",
+    "twobits"
+   ]
+  },
+  "33": {
+   "team": "Londoners against the system",
+   "players": [
+    "Akibart",
+    "applebub",
+    "bufferunderrun",
+    "bushie123",
+    "greysensei",
+    "rojazu",
+    "T0Sharaff8200",
+    "Waxy"
+   ]
+  },
+  "34": {
+   "team": "Erigaisi and the Arjunauts",
+   "players": [
+    "aerDNA69",
+    "anmrose",
+    "gercondon",
+    "JustChillJoe",
+    "PatchyThePirate",
+    "reddevil906",
+    "val1313",
+    "Zyfaro"
+   ]
+  },
+  "35": {
+   "team": "The Lord of the Dings",
+   "players": [
+    "BernardLunder",
+    "Darktigr",
+    "Matt365",
+    "Pughie",
+    "ShadowedSpace",
+    "vejen",
+    "wdhorton",
+    "wilfj"
+   ]
+  },
+  "36": {
+   "team": "Pow! Right in the chessticles",
+   "players": [
+    "cvillian",
+    "dave3",
+    "HoudinicisMedicis",
+    "imikacic",
+    "LIOANYS",
+    "NebraskaNarwhal",
+    "Thaitanium101",
+    "zher0"
+   ]
+  },
+  "37": {
+   "team": "b2 or not b2",
+   "players": [
+    "alp_arslan92",
+    "HunterDavis",
+    "ipr",
+    "jantho",
+    "Jg777",
+    "mason52301",
+    "SlowChess73",
+    "Zubenelgenubi"
+   ]
+  },
+  "38": {
+   "team": "Checkmate ends the game",
+   "players": [
+    "Akshak",
+    "AutoChessPlay",
+    "Bortvinik",
+    "freddy267t",
+    "kb6567",
+    "moneydragon",
+    "rafaelnajera",
+    "topspin15"
+   ]
+  },
+  "39": {
+   "team": "Senior dogs that can't get onto the couch (or sofa if you're British) anymore due to their bad knees",
+   "players": [
+    "Feet_Barbie",
+    "flipiflapi",
+    "fwcj68",
+    "gary0892",
+    "lone_rangerheavy",
+    "MilsBees",
+    "RBorja1980",
+    "yeyq"
+   ]
+  },
+  "40": {
+   "team": "Chess on Tap",
+   "players": [
+    "Blitzfly",
+    "BradyW23",
+    "bufferunderrun",
+    "guingil",
+    "infundibulus",
+    "LelouchOver9000",
+    "nic_west",
+    "tteason2"
+   ]
+  },
+  "41": {
+   "team": "Great Ideas, Terrible Execution",
+   "players": [
+    "aerDNA69",
+    "Arges42",
+    "Bpack",
+    "flamingfalconman",
+    "killager1",
+    "oNoMyKing",
+    "Secret_Fish",
+    "urjah"
+   ]
+  },
+  "42": {
+   "team": "Pawn Grabbers Guide to the Universe",
+   "players": [
+    "bobsouzabr",
+    "DrRickinCT",
+    "far1108",
+    "gercondon",
+    "King_Raven",
+    "leartt",
+    "Paulze2000",
+    "tomshko"
+   ]
+  },
+  "43": {
+   "team": "I Like my Suggestion",
+   "players": [
+    "basilcandle",
+    "Ciraid",
+    "cowtone",
+    "Joonaf",
+    "lorb",
+    "matthewhuber",
+    "sylvlondon",
+    "UpGoerFive"
+   ]
+  },
+  "44": {
+   "team": "The Empire Strikes Back-Rank",
+   "players": [
+    "aldric123",
+    "ColtonMTotland",
+    "huckleberryrae",
+    "Kuhla",
+    "kyriakos1301",
+    "lanyangyangg",
+    "muksia",
+    "Warvold"
+   ]
+  },
+  "45": {
+   "team": "Mate-Tricks",
+   "players": [
+    "cobaltwave",
+    "Dadievid",
+    "EllipticDad",
+    "EvilNalu",
+    "gaben1773",
+    "Not_Any_More",
+    "ribrubrib",
+    "Squarehopper"
+   ]
+  },
+  "46": {
+   "team": "Working on our 46-pack",
+   "players": [
+    "berndwind",
+    "chesssedin",
+    "cinemashow",
+    "guitarspider",
+    "Marco_Chess13",
+    "pezzo17",
+    "Pope123",
+    "rio2018"
+   ]
+  },
+  "47": {
+   "team": "Better Call Tal",
+   "players": [
+    "aguayo",
+    "ButterPecan",
+    "chess131969",
+    "Lotus_62",
+    "M_H_R",
+    "Reodor",
+    "ribette",
+    "Superfighter"
+   ]
+  },
+  "48": {
+   "team": "With FENs like these, who needs enemies?",
+   "players": [
+    "guitarspider",
+    "jcarmody",
+    "MrScribbles",
+    "PatchyThePirate",
+    "Pope123",
+    "Silkthewanderer",
+    "stevenlongs",
+    "Zubenelgenubi"
+   ]
+  },
+  "49": {
+   "team": "Messi Mates",
+   "players": [
+    "hpors",
+    "kinG_Hunter-1",
+    "ribrubrib",
+    "robertjackson",
+    "Rolihlahla",
+    "Rufelos",
+    "scarff",
+    "timothyha"
+   ]
+  }
+ }
+}

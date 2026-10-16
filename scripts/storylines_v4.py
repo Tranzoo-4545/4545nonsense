@@ -137,8 +137,63 @@ def get_championship_teams(all_season_data):
         if standings:
             # First place team (standings use 'name' key)
             champions[season_num] = standings[0]['name']
-    
+
     return champions
+
+
+CHAMPIONS_FILE = 'champions.json'   # season -> champion team + its FINAL roster (uploaded next to this script)
+
+
+def _champions_path():
+    """champions.json next to this script; the apps' copies (content_studio/, streaming/) use v7's, one folder up."""
+    here = Path(__file__).resolve().parent
+    for d in (here, here.parent):
+        if (d / CHAMPIONS_FILE).exists():
+            return d / CHAMPIONS_FILE
+    return here / CHAMPIONS_FILE
+
+
+def load_champion_rosters(championship_teams):
+    """{season: set of lowercase usernames}: the FINAL roster of each season's champion team (the league awards
+    the title to the final roster - no games-played rule). championship_teams: season -> team (standings winner).
+
+    Read from champions.json. Where roster.py is available (the owner's machine), seasons that are missing or
+    list another team are added from the league roster and the file is saved. Without the file and without
+    roster.py (e.g. GitHub Actions before the upload) there are no champions, with a warning."""
+    path = _champions_path()
+    try:
+        saved = json.loads(path.read_text(encoding='utf-8')).get('seasons', {})
+    except FileNotFoundError:
+        saved = {}
+    except Exception as e:
+        print(f"  Warning: could not read {path.name} ({e})")
+        saved = {}
+    stale = [s for s, team in championship_teams.items() if (saved.get(str(s)) or {}).get('team') != team]
+    if stale:
+        try:
+            import roster as roster_mod
+        except ImportError:
+            roster_mod = None
+        added = 0
+        for s in sorted(stale) if roster_mod else []:
+            r = roster_mod.get(s)
+            players = [u for _, u, _ in r.team_players(championship_teams[s])] if r else []
+            if players:
+                saved[str(s)] = {'team': championship_teams[s], 'players': sorted(players, key=str.lower)}
+                added += 1
+        if added:
+            path.write_text(json.dumps({
+                'about': 'Champion team and its FINAL league roster per finished season. Built by storylines_v4.py '
+                         'from standings + roster.py; upload next to storylines_v4.py.',
+                'seasons': dict(sorted(saved.items(), key=lambda kv: int(kv[0]))),
+            }, indent=1, ensure_ascii=False), encoding='utf-8')
+            print(f"  Champions: added {added} season(s) to {path}")
+        missing = [s for s in stale if (saved.get(str(s)) or {}).get('team') != championship_teams[s]]
+        if missing:
+            print(f"  Warning: no final roster for the champions of season(s) {', '.join(map(str, missing))} "
+                  f"- no champion titles for them ({path.name} missing or out of date)")
+    return {int(s): {u.lower() for u in v['players']} for s, v in saved.items()
+            if championship_teams.get(int(s)) == v['team']}
 
 
 def load_player_titles():
@@ -244,7 +299,7 @@ def build_player_history(all_season_data, current_season=None, before_round=None
         'total_wins': 0,
         'opponents': defaultdict(lambda: {'games': 0, 'wins': 0, 'losses': 0, 'draws': 0}),
         'teams': defaultdict(int),  # (team_name, season) -> games played
-        'championship_teams': set(),  # teams they won the league with (4+ games)
+        'championship_teams': set(),  # (team, season) they won the league with - on the FINAL roster
         'seasons_played': set(),  # set of season numbers
         'games_per_season': defaultdict(int),  # season -> game count
     })
@@ -302,15 +357,12 @@ def build_player_history(all_season_data, current_season=None, before_round=None
                 players[white]['opponents'][black]['draws'] += 1
                 players[black]['opponents'][white]['draws'] += 1
     
-    # Now calculate championship teams for each player
-    for player, data in players.items():
-        for team_key, games in data['teams'].items():
-            team_name, team_season = team_key  # Unpack composite key
-            if games >= 4:  # Only count if played 4+ games for team
-                # Check if this team won that season
-                if championship_teams.get(team_season) == team_name:
-                    data['championship_teams'].add(team_key)
-    
+    # Championship teams: players on the FINAL roster of each season's champion (champions.json)
+    for season_num, names in load_champion_rosters(championship_teams).items():
+        for name in names:
+            if name in players:
+                players[name]['championship_teams'].add((championship_teams[season_num], season_num))
+
     return players
 
 
