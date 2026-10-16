@@ -61,10 +61,11 @@ class BoardPairing:
     black_team: str
     game_id: Optional[str] = None
     result: Optional[float] = None  # 1 = white wins, 0.5 = draw, 0 = black wins, None = not played
-    
+    double_forfeit: bool = False  # 0F-0F: finished, 0 points to each side (result stays None)
+
     @property
     def is_played(self) -> bool:
-        return self.result is not None
+        return self.result is not None or self.double_forfeit
 
 
 def expected_score(player: Player, opponent: Player) -> float:
@@ -184,6 +185,8 @@ def simulate_match(pairings: list[BoardPairing], n_simulations: int = 10000) -> 
     team_a_actual = 0.0
     team_b_actual = 0.0
     for p in completed:
+        if p.double_forfeit:
+            continue  # 0-0
         if p.white_team == team_a:
             team_a_actual += p.result
             team_b_actual += (1 - p.result)
@@ -269,6 +272,8 @@ def simulate_single_match(pairings: list[BoardPairing]) -> tuple:
     team_b_wins = 0
     
     for p in pairings:
+        if p.double_forfeit:
+            continue  # 0-0
         if p.is_played:
             # Use actual result
             if p.white_team == team_a:
@@ -378,9 +383,10 @@ def get_standings_before_round(season_data: dict, before_round: int) -> dict:
                     else:
                         team_a_points += 1
                         team_a_wins += 1
-                elif result in ('1/2-1/2', '1/2Z-1/2Z', '0F-0F'):
+                elif result in ('1/2-1/2', '1/2Z-1/2Z'):
                     team_a_points += 0.5
                     team_b_points += 0.5
+                # 0F-0F (double forfeit): no points for either team
             
             # Update game points, games won, and head-to-head
             teams[team_a]['game_points'] += team_a_points
@@ -806,10 +812,7 @@ def parse_result(result_str: str) -> Optional[float]:
     # Draws (including scheduling draws)
     elif result_str in ('1/2-1/2', '1/2Z-1/2Z'):
         return 0.5
-    # Double forfeit
-    elif result_str == '0F-0F':
-        return 0.5  # Treat as draw for scoring purposes
-    
+    # Double forfeit (0F-0F) is not a single score: caller sets BoardPairing.double_forfeit
     return None
 
 
@@ -859,6 +862,7 @@ def get_round_pairings(season_data: dict, round_num: int, player_ratings: dict) 
             black_team=black_team,
             game_id=game_id,
             result=result,
+            double_forfeit=result_str.strip() == '0F-0F',
         )
         
         matchup_key = tuple(sorted([white_team, black_team]))
@@ -1182,7 +1186,9 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int) 
             
             # Determine individual scores/display for each player
             if pairing.is_played:
-                if pairing.result == 1:  # White won
+                if pairing.double_forfeit:
+                    white_score, black_score = "0F", "0F"
+                elif pairing.result == 1:  # White won
                     white_score, black_score = "1", "0"
                 elif pairing.result == 0:  # Black won
                     white_score, black_score = "0", "1"
@@ -1926,6 +1932,8 @@ def simulate_full_season(
                 team_b_wins = 0
                 
                 for pairing in matchup:
+                    if pairing.double_forfeit:
+                        continue  # 0-0
                     if pairing.is_played:
                         # Use actual result
                         game_result = pairing.result
@@ -2029,6 +2037,287 @@ def simulate_full_season(
     return results
 
 
+def parse_roster_excel(excel_path: str) -> dict:
+    """
+    Parse team roster from Excel file.
+    
+    Returns dict: {team_name: [player1, player2, ..., player8]}
+    Players are ordered by board (1-8).
+    """
+    try:
+        import pandas as pd
+    except ImportError:
+        print("Error: pandas required for --roster. Run: pip install pandas openpyxl")
+        return {}
+    
+    df = pd.read_excel(excel_path)
+    columns = list(df.columns)
+    
+    # Build a map of board number -> (name_col_idx, rating_col_idx)
+    # Pattern: Board N column, then possibly empty columns, then Rtg column
+    board_columns = {}
+    
+    for board in range(1, 9):
+        board_col_idx = None
+        
+        # Find "Board N" column
+        for i, col in enumerate(columns):
+            if str(col).strip() == f'Board {board}':
+                board_col_idx = i
+                break
+        
+        if board_col_idx is not None:
+            board_columns[board] = board_col_idx
+    
+    if not board_columns:
+        print(f"  ERROR: No 'Board N' columns found in {excel_path}")
+        return {}
+    
+    # Find Team column
+    team_col_idx = 0
+    for i, col in enumerate(columns):
+        if str(col).strip().lower() == 'team':
+            team_col_idx = i
+            break
+    
+    team_rosters = {}
+    
+    for idx, row in df.iterrows():
+        team_name = row.iloc[team_col_idx]
+        if pd.isna(team_name):
+            continue
+        
+        team_name = str(team_name).strip()
+        if not team_name or team_name.lower() == 'team':
+            continue
+        
+        players = []
+        
+        for board in sorted(board_columns.keys()):
+            name_idx = board_columns[board]
+            player_name = row.iloc[name_idx]
+            
+            if pd.isna(player_name):
+                continue
+            
+            player_name = str(player_name).strip().lower()
+            if player_name:
+                players.append(player_name)
+        
+        if players:
+            team_rosters[team_name] = players
+    
+    return team_rosters
+
+
+def simulate_full_season_from_roster(
+    team_rosters: dict,
+    player_ratings: dict,
+    num_simulations: int = 10000,
+    final_round: int = 8
+) -> dict:
+    """
+    Simulate an entire season from scratch using team rosters.
+    
+    Args:
+        team_rosters: {team_name: [player1, player2, ..., player8]}
+        player_ratings: {username: Player}
+        num_simulations: number of Monte Carlo simulations
+        final_round: final round number (default 8)
+    
+    Returns:
+        standings_prediction: {team: {placement_probs, expected_placement, ...}}
+    """
+    teams = list(team_rosters.keys())
+    
+    # Initialize standings at 0-0 for all teams
+    standings_before = {
+        team: {
+            'match_points': 0,
+            'game_points': 0.0,
+            'games_won': 0,
+            'matches': [],
+            'opponents': {}
+        }
+        for team in teams
+    }
+    
+    # No historical matchups (fresh season)
+    historical_matchups = set()
+    
+    # Track placement counts across all simulations
+    placement_counts = {team: defaultdict(int) for team in teams}
+    total_placements = {team: 0.0 for team in teams}
+    total_match_points = {team: 0.0 for team in teams}
+    total_game_points = {team: 0.0 for team in teams}
+    
+    # Current placements are all tied at 1
+    current_placements = {team: 1 for team in teams}
+    
+    rounds_to_simulate = final_round
+    
+    print(f"\nSimulating {rounds_to_simulate} rounds (full season from roster)...")
+    print(f"Running {num_simulations:,} full-season simulations\n")
+    
+    progress_interval = max(1, num_simulations // 20)
+    
+    for sim in range(num_simulations):
+        # Progress display
+        if sim % progress_interval == 0 or sim == num_simulations - 1:
+            pct = (sim + 1) / num_simulations * 100
+            print(f"\r  Progress: {pct:5.1f}% ({sim + 1:,}/{num_simulations:,})", end='', flush=True)
+        
+        # Copy standings for this simulation
+        sim_standings = {
+            team: {
+                'match_points': 0,
+                'game_points': 0.0,
+                'games_won': 0,
+                'opponents': {}
+            }
+            for team in teams
+        }
+        
+        sim_matchups = set()
+        
+        # Simulate each round
+        for round_num in range(1, final_round + 1):
+            # Swiss pairing: sort by current standings
+            sorted_teams = sorted(
+                teams,
+                key=lambda t: (
+                    -sim_standings[t]['match_points'],
+                    -sim_standings[t]['game_points'],
+                    random.random()  # Tiebreaker
+                )
+            )
+            
+            # Pair teams (avoiding repeats)
+            round_pairings = []
+            paired = set()
+            
+            for team in sorted_teams:
+                if team in paired:
+                    continue
+                
+                # Find best available opponent
+                for opponent in sorted_teams:
+                    if opponent == team or opponent in paired:
+                        continue
+                    
+                    matchup_key = tuple(sorted([team, opponent]))
+                    if matchup_key in sim_matchups:
+                        continue
+                    
+                    # Found valid pairing
+                    round_pairings.append((team, opponent))
+                    paired.add(team)
+                    paired.add(opponent)
+                    sim_matchups.add(matchup_key)
+                    break
+            
+            # Simulate each match
+            for team_a, team_b in round_pairings:
+                roster_a = team_rosters[team_a]
+                roster_b = team_rosters[team_b]
+                
+                a_score = 0.0
+                b_score = 0.0
+                
+                for board in range(min(len(roster_a), len(roster_b))):
+                    player_a = roster_a[board]
+                    player_b = roster_b[board]
+                    
+                    pa = player_ratings.get(player_a, Player(player_a))
+                    pb = player_ratings.get(player_b, Player(player_b))
+                    
+                    # Alternate colors by board
+                    if board % 2 == 0:
+                        white, black = pa, pb
+                    else:
+                        white, black = pb, pa
+                    
+                    # Calculate probabilities
+                    draw_prob = calculate_draw_probability(white, black)
+                    white_win_base = expected_score(white, black)
+                    
+                    # Adjust for white advantage (V6 uses +20)
+                    WHITE_ADVANTAGE = 20
+                    white_adj = Player(white.username, white.rating + WHITE_ADVANTAGE, white.rd)
+                    white_win_base = expected_score(white_adj, black)
+                    
+                    # Normalize for decisive games
+                    white_win = white_win_base * (1 - draw_prob) / (white_win_base + (1 - white_win_base))
+                    black_win = (1 - draw_prob) - white_win
+                    
+                    # Simulate game
+                    r = random.random()
+                    if r < white_win:
+                        result = 1.0
+                    elif r < white_win + draw_prob:
+                        result = 0.5
+                    else:
+                        result = 0.0
+                    
+                    # Assign points based on who was white
+                    if board % 2 == 0:
+                        a_score += result
+                        b_score += (1 - result)
+                    else:
+                        b_score += result
+                        a_score += (1 - result)
+                
+                # Update standings
+                sim_standings[team_a]['game_points'] += a_score
+                sim_standings[team_b]['game_points'] += b_score
+                
+                if a_score > b_score:
+                    sim_standings[team_a]['match_points'] += 2
+                elif b_score > a_score:
+                    sim_standings[team_b]['match_points'] += 2
+                else:
+                    sim_standings[team_a]['match_points'] += 1
+                    sim_standings[team_b]['match_points'] += 1
+                
+                sim_standings[team_a]['opponents'][team_b] = a_score
+                sim_standings[team_b]['opponents'][team_a] = b_score
+        
+        # Calculate final placements for this simulation
+        default_stats = {'match_points': 0, 'game_points': 0.0, 'games_won': 0, 'sonneborn_berger': 0.0, 'opponents': {}}
+        final_sorted = sorted(
+            [(team, {**default_stats, **sim_standings[team]}) for team in teams],
+            key=functools.cmp_to_key(compare_teams)
+        )
+        
+        for place, (team, _) in enumerate(final_sorted, 1):
+            placement_counts[team][place] += 1
+            total_placements[team] += place
+            total_match_points[team] += sim_standings[team]['match_points']
+            total_game_points[team] += sim_standings[team]['game_points']
+    
+    print()  # Newline after progress
+    
+    # Calculate final statistics
+    standings_prediction = {}
+    for team in teams:
+        placement_probs = {
+            place: count / num_simulations
+            for place, count in placement_counts[team].items()
+        }
+        
+        standings_prediction[team] = {
+            'placement_probs': placement_probs,
+            'expected_placement': total_placements[team] / num_simulations,
+            'expected_match_points': total_match_points[team] / num_simulations,
+            'expected_game_points': total_game_points[team] / num_simulations,
+            'current_standing': current_placements[team],
+            'current_match_points': 0,
+            'current_game_points': 0.0,
+        }
+    
+    return standings_prediction
+
+
 def main():
     parser = argparse.ArgumentParser(description='Predict team match outcomes using Glicko-2 ratings')
     parser.add_argument('--season', '-s', type=int, required=True, help='Season number')
@@ -2038,8 +2327,90 @@ def main():
     parser.add_argument('--no-cache', action='store_true', help='Skip rating cache, fetch fresh from Lichess')
     parser.add_argument('--export-sims', type=str, default=None, help='Export individual simulation results to Excel file')
     parser.add_argument('--full-season', action='store_true', help='Simulate entire remaining season with Swiss pairings')
+    parser.add_argument('--roster', type=str, default=None, help='Excel file with team rosters (for pre-season predictions)')
     
     args = parser.parse_args()
+    
+    # ROSTER MODE: Pre-season prediction from Excel
+    if args.roster:
+        if not args.full_season:
+            print("Error: --roster requires --full-season flag")
+            return
+        
+        print(f"\n{'='*60}")
+        print(f"MATCH PREDICTOR - Season {args.season} PRE-SEASON (from roster)")
+        print(f"{'='*60}\n")
+        
+        print(f"Loading team rosters from {args.roster}...")
+        team_rosters = parse_roster_excel(args.roster)
+        
+        if not team_rosters:
+            print("Error: No teams found in roster file")
+            return
+        
+        print(f"  Found {len(team_rosters)} teams")
+        
+        # Get all unique players
+        usernames = set()
+        for players in team_rosters.values():
+            for player in players:
+                usernames.add(player.lower())
+        
+        print(f"\nLoading ratings for {len(usernames)} players...")
+        player_ratings = fetch_player_ratings(list(usernames), use_cache=not args.no_cache)
+        
+        print(f"\n{'='*60}")
+        print("FULL SEASON SIMULATION (from roster)")
+        print(f"{'='*60}")
+        
+        standings_prediction = simulate_full_season_from_roster(
+            team_rosters, player_ratings, args.simulations
+        )
+        
+        # Sort by expected placement
+        sorted_standings = sorted(
+            standings_prediction.items(),
+            key=lambda x: x[1]['expected_placement']
+        )
+        
+        print(f"\n{'#':<3} {'Team':<35} {'Proj':>5} {'1st':>6} {'Top 3':>7}")
+        print("-" * 60)
+        for i, (team, stats) in enumerate(sorted_standings, 1):
+            top1_prob = stats['placement_probs'].get(1, 0) * 100
+            top3_prob = sum(stats['placement_probs'].get(j, 0) for j in range(1, 4)) * 100
+            proj = stats['expected_placement']
+            print(f"{i:<3} {team[:35]:<35} {proj:>5.1f} {top1_prob:>5.0f}% {top3_prob:>6.0f}%")
+        
+        # Generate HTML outputs
+        if args.output:
+            prefix = args.output.replace('.html', '')
+            
+            # Standings table
+            standings_html = generate_standings_html(standings_prediction, args.season, args.round)
+            standings_html = standings_html.replace(
+                f'Season {args.season} Round {args.round}',
+                f'Season {args.season} Pre-Season Projection (from roster)'
+            )
+            standings_file = f"{prefix}_season_standings.html"
+            with open(standings_file, 'w', encoding='utf-8') as f:
+                f.write(standings_html)
+            print(f"\n✅ Season standings projection: {standings_file}")
+            
+            # Distribution heatmap
+            distribution_html = generate_distribution_html(standings_prediction, args.season, args.round)
+            distribution_html = distribution_html.replace(
+                f'Season {args.season} Round {args.round}',
+                f'Season {args.season} Pre-Season Projection (from roster)'
+            )
+            distribution_file = f"{prefix}_season_distribution.html"
+            with open(distribution_file, 'w', encoding='utf-8') as f:
+                f.write(distribution_html)
+            print(f"✅ Season placement distribution: {distribution_file}")
+        
+        print(f"\n{'='*60}")
+        print("PREDICTION COMPLETE")
+        print(f"{'='*60}\n")
+        return
     
     mode = "FULL SEASON" if args.full_season else f"Round {args.round}"
     print(f"\n{'='*60}")
