@@ -12,7 +12,6 @@ Usage:
 """
 
 import argparse
-import functools
 import json
 import math
 import os
@@ -433,57 +432,45 @@ def get_standings_before_round(season_data: dict, before_round: int) -> dict:
     return result
 
 
-def compare_teams(team_a_data: tuple, team_b_data: tuple) -> int:
+def sort_standings(items) -> list:
     """
-    Compare two teams for standings sorting.
-    
-    Args:
-        team_a_data: (team_name, stats_dict)
-        team_b_data: (team_name, stats_dict)
-    
-    Returns:
-        -1 if team_a is higher, 1 if team_b is higher, 0 if equal
-    
-    Tiebreakers (in order):
+    Sort (team_name, stats_dict) pairs into the league table order - the same order as
+    standings.calculate_standings:
     1. Match Points (desc)
     2. Game Points (desc)
-    3. Head-to-head score (desc)
+    3. Head-to-head (desc), the league's way: within each group of teams level on match points AND
+       game points, the match points each team took off the others in that group (works for 3+ team
+       ties, unlike comparing two teams at a time). Match points per meeting come from the game points
+       in 'opponents' (teams meet at most once a season).
     4. Games Won (desc)
     5. Sonneborn-Berger (desc)
     6. Team Name (alphabetical)
     """
-    name_a, stats_a = team_a_data
-    name_b, stats_b = team_b_data
-    
-    # 1. Match Points (desc)
-    if stats_a.get('match_points', 0) != stats_b.get('match_points', 0):
-        return -1 if stats_a.get('match_points', 0) > stats_b.get('match_points', 0) else 1
-    
-    # 2. Game Points (desc)
-    if stats_a.get('game_points', 0) != stats_b.get('game_points', 0):
-        return -1 if stats_a.get('game_points', 0) > stats_b.get('game_points', 0) else 1
-    
-    # 3. Head-to-head (desc) - only if they've played each other
-    opponents_a = stats_a.get('opponents', {})
-    opponents_b = stats_b.get('opponents', {})
-    h2h_a = opponents_a.get(name_b, 0)
-    h2h_b = opponents_b.get(name_a, 0)
-    if h2h_a != h2h_b:
-        return -1 if h2h_a > h2h_b else 1
-    
-    # 4. Games Won (desc)
-    if stats_a.get('games_won', 0) != stats_b.get('games_won', 0):
-        return -1 if stats_a.get('games_won', 0) > stats_b.get('games_won', 0) else 1
-    
-    # 5. Sonneborn-Berger (desc)
-    if stats_a.get('sonneborn_berger', 0) != stats_b.get('sonneborn_berger', 0):
-        return -1 if stats_a.get('sonneborn_berger', 0) > stats_b.get('sonneborn_berger', 0) else 1
-    
-    # 6. Team Name (alphabetical)
-    if name_a != name_b:
-        return -1 if name_a < name_b else 1
-    
-    return 0
+    items = list(items)
+    stats_by_team = dict(items)
+    groups = defaultdict(set)
+    for name, stats in items:
+        groups[(stats.get('match_points', 0), stats.get('game_points', 0))].add(name)
+
+    def head_to_head(name, stats):
+        group = groups[(stats.get('match_points', 0), stats.get('game_points', 0))]
+        scored = stats.get('opponents') or {}
+        total = 0
+        for opp in group:
+            if opp == name or opp not in scored:
+                continue
+            conceded = (stats_by_team[opp].get('opponents') or {}).get(name, 0)
+            total += 2 if scored[opp] > conceded else 1 if scored[opp] == conceded else 0
+        return total
+
+    return sorted(items, key=lambda x: (
+        -x[1].get('match_points', 0),
+        -x[1].get('game_points', 0),
+        -head_to_head(*x),
+        -x[1].get('games_won', 0),
+        -x[1].get('sonneborn_berger', 0),
+        x[0],
+    ))
 
 
 def simulate_standings(all_matchups: list, standings_before: dict, n_simulations: int = 10000, capture_details: bool = False) -> tuple:
@@ -584,10 +571,7 @@ def simulate_standings(all_matchups: list, standings_before: dict, n_simulations
             sim_standings[team]['sonneborn_berger'] = sb_score
         
         # Sort to get placements using full tiebreakers (including H2H)
-        sorted_teams = sorted(
-            sim_standings.items(),
-            key=functools.cmp_to_key(compare_teams)
-        )
+        sorted_teams = sort_standings(sim_standings.items())
         
         # Record placements and totals
         sim_placements = {}
@@ -608,11 +592,8 @@ def simulate_standings(all_matchups: list, standings_before: dict, n_simulations
     # Calculate current standings (before this round's games)
     # Use full tiebreakers including H2H
     default_stats = {'match_points': 0, 'game_points': 0.0, 'games_won': 0, 'sonneborn_berger': 0.0, 'opponents': {}}
-    current_sorted = sorted(
-        [(team, {**default_stats, **standings_before.get(team, {})}) 
-         for team in all_teams],
-        key=functools.cmp_to_key(compare_teams)
-    )
+    current_sorted = sort_standings([(team, {**default_stats, **standings_before.get(team, {})}) 
+         for team in all_teams])
     current_placements = {team: i + 1 for i, (team, _) in enumerate(current_sorted)}
     
     # Build result
@@ -1856,11 +1837,8 @@ def simulate_full_season(
     # Calculate current standings for display
     # Use full tiebreakers including H2H
     default_stats = {'match_points': 0, 'game_points': 0.0, 'games_won': 0, 'sonneborn_berger': 0.0, 'opponents': {}}
-    current_sorted = sorted(
-        [(team, {**default_stats, **standings_before.get(team, {})}) 
-         for team in teams],
-        key=functools.cmp_to_key(compare_teams)
-    )
+    current_sorted = sort_standings([(team, {**default_stats, **standings_before.get(team, {})}) 
+         for team in teams])
     current_placements = {team: i + 1 for i, (team, _) in enumerate(current_sorted)}
     
     rounds_to_simulate = final_round - current_round + 1
@@ -2001,10 +1979,7 @@ def simulate_full_season(
             sim_standings[team]['sonneborn_berger'] = sb_score
         
         # Calculate final placements using full tiebreakers (including H2H)
-        final_standings = sorted(
-            sim_standings.items(),
-            key=functools.cmp_to_key(compare_teams)
-        )
+        final_standings = sort_standings(sim_standings.items())
         
         for place, (team, stats) in enumerate(final_standings, 1):
             placement_counts[team][place] += 1
@@ -2284,10 +2259,7 @@ def simulate_full_season_from_roster(
         
         # Calculate final placements for this simulation
         default_stats = {'match_points': 0, 'game_points': 0.0, 'games_won': 0, 'sonneborn_berger': 0.0, 'opponents': {}}
-        final_sorted = sorted(
-            [(team, {**default_stats, **sim_standings[team]}) for team in teams],
-            key=functools.cmp_to_key(compare_teams)
-        )
+        final_sorted = sort_standings([(team, {**default_stats, **sim_standings[team]}) for team in teams])
         
         for place, (team, _) in enumerate(final_sorted, 1):
             placement_counts[team][place] += 1
