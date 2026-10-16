@@ -555,6 +555,13 @@ POINTS_CSS = """
         .points-toggle { float: right; margin-top: 1rem; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 1rem; font-size: 0.9rem; font-family: inherit; cursor: pointer; }
         .points-toggle:hover { color: var(--text-primary); border-color: var(--accent); }
         .points-toggle[aria-pressed="true"] { color: var(--gold); border-color: var(--gold); }
+        @media (max-width: 600px) {
+            .container { display: flex; flex-direction: column; }
+            .container > * { order: 2; }
+            .container > a:first-child, .container > header, .container > .guide-wrapper { order: 0; }
+            .container > .guide-wrapper { margin-bottom: 0.6rem; }
+            .points-toggle { order: 1; float: none; align-self: flex-start; margin: 0 0 1.5rem; }
+        }
 """
 
 POINTS_BUTTON = '<button type="button" id="pointsToggle" class="points-toggle" aria-pressed="false">Show score breakdown</button>'
