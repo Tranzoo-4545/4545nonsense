@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Who Said It?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1719;--panel:#16242a;--panel2:#1c2e35;--teal:#4db3bf;--teal-deep:#123a40;--ink:#e3ecec;--mist:#8fa6a8;--line:#24404a;--ok:#3ecf8e;--bad:#ef6461;--gold:#e8b04b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Barlow,system-ui,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:1.4rem 16px 3rem}
+.back{color:var(--mist);text-decoration:none;font-size:.9rem}.back:hover{color:var(--teal)}
+h1{font-family:"Barlow Condensed";font-weight:800;font-size:3rem;margin:.8rem 0 0;letter-spacing:.01em}
+h1 span{color:var(--teal)}
+.sub{color:var(--mist);margin:.3rem 0 1.6rem}
+.bar{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--mist);margin-bottom:.6rem}
+.prog{height:4px;background:var(--line);border-radius:4px;margin-bottom:1.2rem;overflow:hidden}.prog i{display:block;height:100%;background:var(--teal);transition:width .3s}
+.bubble{position:relative;background:var(--panel2);border-radius:18px;padding:1.4rem 1.5rem;font-size:1.35rem;line-height:1.45;font-weight:500;margin-bottom:1.6rem;min-height:5rem}
+.bubble::after{content:"";position:absolute;left:34px;bottom:-14px;border:14px solid transparent;border-top-color:var(--panel2);border-bottom:0}
+.bubble p{margin:0 0 .35rem}.bubble p:last-child{margin:0}
+.ask{font-family:"Barlow Condensed";font-weight:600;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mist);margin:0 0 .6rem 4px}
+.opts{display:grid;gap:.6rem}
+.opts button{font:600 1.1rem Barlow,system-ui,sans-serif;color:var(--ink);background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:.8rem 1rem;text-align:left;cursor:pointer;overflow-wrap:anywhere}
+.opts button:hover:not(:disabled){border-color:var(--teal)}
+.opts button:disabled{cursor:default}
+.opts button.right{border-color:var(--ok);background:rgba(62,207,142,.12)}
+.opts button.wrong{border-color:var(--bad);background:rgba(239,100,97,.12)}
+.reveal{margin-top:1rem;background:var(--panel);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:.8rem 1rem;color:var(--mist)}
+.reveal b{color:var(--ink)}.reveal a{color:var(--teal);font-weight:600;text-decoration:none;white-space:nowrap}
+.next{margin-top:1rem;font:700 1.05rem Barlow,system-ui,sans-serif;background:var(--teal);color:#08282c;border:0;border-radius:10px;padding:.75rem 1.4rem;cursor:pointer}
+.end{text-align:center;padding:1.5rem 0}
+.end .score{font-family:"Barlow Condensed";font-weight:800;font-size:5rem;color:var(--teal);line-height:1}
+.end .verdict{font-size:1.3rem;margin:.6rem 0 1.4rem}
+.end ol{text-align:left;color:var(--mist);font-size:.92rem;padding-left:1.4rem;margin:1.2rem 0 0}
+.end li{margin:.3rem 0}.end li.r::marker{color:var(--ok)}.end li.w::marker{color:var(--bad)}
+.end li a{color:var(--teal);text-decoration:none}
+.foot{color:var(--mist);font-size:.8rem;border-top:1px solid var(--line);margin-top:2.4rem;padding-top:.8rem}
+</style></head><body><div class="wrap">
+<a class="back" href="index.html">← The 4545 Chronicles</a>
+<h1>Who <span>Said It?</span></h1>
+<p class="sub">17 real lines from the spectator chats of Season 50 games. For each one, three names, and all three were in that chat.</p>
+<div id="app"></div>
+<p class="foot">Quotes are word for word from Lichess game chats, picked from a small sample of Season 50 games. The game is revealed after you answer.</p>
+</div>
+<script>
+const Q = [{"q": ["Holy heck an NM in the wild", "I thought they were a myth", "A tale told to scare children in the night"], "answer": "MrScribbles", "options": ["MrScribbles", "GlennJamesMax", "Grzybozbur"], "game": "faznaz83 – OnlyLongTimeGames", "round": 3, "link": "https://lichess.org/k3czsZBb"}, {"q": ["Never underestimate fireball.", "My village made that mistake once. Never again."], "answer": "DavidSifre", "options": ["nyanners", "Warvold", "DavidSifre"], "game": "jd0972 – fireball100", "round": 3, "link": "https://lichess.org/Rf5gOW7z"}, {"q": ["he is now watching the 101 dalmatians.  crisis over"], "answer": "val1313", "options": ["val1313", "Feet_Barbie", "flipiflapi"], "game": "val1313 – aguayo", "round": 2, "link": "https://lichess.org/AlzjEczI"}, {"q": ["The FBI has entered the chat."], "answer": "Mennonite", "options": ["terrormt", "Mennonite", "JohnJPershing"], "game": "terrormt – Hagia_Sophia", "round": 4, "link": "https://lichess.org/dXJtWNYX"}, {"q": ["i watched a youtube video on how to mate with two bishops and now I certainly don't know how to do it"], "answer": "bumbling_bozo", "options": ["King12-life", "bumbling_bozo", "Duty5521"], "game": "MarekW78 – Alzaw", "round": 1, "link": "https://lichess.org/BMM6jS93"}, {"q": ["hang in there little guy (a2)"], "answer": "FunnyAnimatorJimTV", "options": ["Kayrosas", "FunnyAnimatorJimTV", "Castling-Companion"], "game": "FunnyAnimatorJimTV – Castling-Companion", "round": 4, "link": "https://lichess.org/oGY4Zlvb"}, {"q": ["I guess playing in a pub in London while having a Sunday Roast was not a great idea after all"], "answer": "robertjackson", "options": ["robertjackson", "giziti", "scarff"], "game": "n8otom8o – robertjackson", "round": 2, "link": "https://lichess.org/c2Sfdbuq"}, {"q": ["Just made banana bread, who wants some?"], "answer": "Tactix47", "options": ["Tactix47", "Chonov", "MrScribbles"], "game": "ZorakforPresident – baberle", "round": 3, "link": "https://lichess.org/b9hYaaBg"}, {"q": ["I heard someone describe NM as \"not much\""], "answer": "prostidude", "options": ["OnlyLongTimeGames", "invinci7777", "prostidude"], "game": "faznaz83 – OnlyLongTimeGames", "round": 3, "link": "https://lichess.org/k3czsZBb"}, {"q": ["There's no Tarrasch Indian", "Checkmate, atheists"], "answer": "eathotdog", "options": ["Micomps", "socholate", "eathotdog"], "game": "Micomps – RatHotdog", "round": 3, "link": "https://lichess.org/7L9Hxvx2"}, {"q": ["How do I unsubscribe to fireball's fun facts?"], "answer": "Warvold", "options": ["Mizrab", "Warvold", "DavidSifre"], "game": "jd0972 – fireball100", "round": 3, "link": "https://lichess.org/Rf5gOW7z"}, {"q": ["the key thing for knight endings....", "is to remember that knights move like an \"L\""], "answer": "ButterPecan", "options": ["Banshee3333", "ButterPecan", "ben3536"], "game": "ButterPecan – Banshee3333", "round": 1, "link": "https://lichess.org/c5HmxoCr"}, {"q": ["we have reached the level of intensity in which people become quiet around you in a coffeehouse."], "answer": "baberle", "options": ["Tactix47", "baberle", "ZorakforPresident"], "game": "ZorakforPresident – baberle", "round": 3, "link": "https://lichess.org/b9hYaaBg"}, {"q": ["Nobody cares..."], "answer": "jcarmody", "options": ["jcarmody", "Zubenelgenubi", "guitarspider"], "game": "Zubenelgenubi – kurdd", "round": 3, "link": "https://lichess.org/NEzqbggx"}, {"q": ["the writing is on the wall, time to proofread said writing"], "answer": "ztraynor", "options": ["PaulWithAnS", "ztraynor", "GenTurgidson"], "game": "GenTurgidson – ztraynor", "round": 3, "link": "https://lichess.org/zgCRBGHG"}, {"q": ["Keep in mind this is a calm and measured Exchange Slav people :D"], "answer": "guitarspider", "options": ["guitarspider", "Joonaf", "Inter-temporal"], "game": "prostidude – UpGoerFive", "round": 2, "link": "https://lichess.org/XzG7476O"}, {"q": ["we have investigated ourselves and found no issue"], "answer": "nyanners", "options": ["nyanners", "Warvold", "PratikBora"], "game": "jd0972 – fireball100", "round": 3, "link": "https://lichess.org/Rf5gOW7z"}];
+const app = document.getElementById('app');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let i = 0, score = 0, log = [];
+function show() {
+  const q = Q[i];
+  app.innerHTML = `<div class="bar"><span>Question ${i + 1} of ${Q.length}</span><span>Score ${score}</span></div>
+    <div class="prog"><i style="width:${i / Q.length * 100}%"></i></div>
+    <div class="bubble">${q.q.map(t => `<p>${esc(t)}</p>`).join('')}</div>
+    <p class="ask">Who said it?</p>
+    <div class="opts">${q.options.map(o => `<button>${esc(o)}</button>`).join('')}</div><div id="after"></div>`;
+  app.querySelectorAll('.opts button').forEach(b => b.onclick = () => answer(b));
+}
+function answer(b) {
+  const q = Q[i], ok = b.textContent === q.answer;
+  if (ok) score++;
+  log.push(ok);
+  app.querySelectorAll('.opts button').forEach(x => { x.disabled = true; if (x.textContent === q.answer) x.classList.add('right'); });
+  if (!ok) b.classList.add('wrong');
+  document.getElementById('after').innerHTML = `<div class="reveal">${ok ? 'Right!' : 'Nope.'} It was <b>${esc(q.answer)}</b>,
+    in the chat of ${esc(q.game)} (Season 50, Round ${q.round}). <a href="${q.link}" target="_blank" rel="noopener">See the game ↗</a></div>
+    <button class="next">${i + 1 < Q.length ? 'Next quote →' : 'See my score'}</button>`;
+  app.querySelector('.bar span:last-child').textContent = 'Score ' + score;
+  app.querySelector('.next').onclick = () => { i++; i < Q.length ? show() : end(); };
+  app.querySelector('.next').focus();
+}
+function end() {
+  const r = score / Q.length;
+  const verdict = r === 1 ? 'Perfect. You were in every chat, weren’t you?'
+    : r >= .75 ? 'Seriously impressive. You know your league.'
+    : r >= .5 ? 'Not bad at all. A regular spectator.'
+    : r >= .25 ? 'Room for improvement. Maybe watch a few more games?'
+    : 'Did you even read the chat? (Fair. Nobody does.)';
+  app.innerHTML = `<div class="end"><div class="score">${score} / ${Q.length}</div><div class="verdict">${verdict}</div>
+    <button class="next" id="again">Play again</button>
+    <ol>${Q.map((q, k) => `<li class="${log[k] ? 'r' : 'w'}">“${esc(q.q.join(' / '))}” <b>${esc(q.answer)}</b> · <a href="${q.link}" target="_blank" rel="noopener">game ↗</a></li>`).join('')}</ol></div>`;
+  document.getElementById('again').onclick = () => { i = 0; score = 0; log = []; show(); };
+}
+show();
+</script></body></html>
