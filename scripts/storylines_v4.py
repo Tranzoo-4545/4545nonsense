@@ -1062,7 +1062,7 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
     # VETS FIRST MEETING (0-1.5 points) - experienced players who never faced each other
     white_games = white_data.get('total_games', 0)
     black_games = black_data.get('total_games', 0)
-    never_played = h2h_games == 0
+    never_played = h2h_games == 0 and not meetings      # met in LoneWolf/Chess960 = not a first meeting (his call)
     
     if never_played:
         if white_games >= 100 and black_games >= 100:
