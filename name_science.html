@@ -1,0 +1,267 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Team Name Science</title><style>
+:root{--bg:#0b1410;--panel:#122019;--line:#24402f;--glow:#7dff9b;--acid:#c8ff3d;--purple:#c58cff;--blood:#ff5d6c;
+--text:#e3f2e8;--dim:#8fae99;--paper:#f3ead2}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 50% -200px,#1d3a28 0,var(--bg) 60%) fixed,var(--bg);color:var(--text);
+font:16px/1.55 "Segoe UI",system-ui,sans-serif}
+.wrap{max-width:1020px;margin:0 auto;padding:22px 16px 60px}
+a.back{color:var(--dim);text-decoration:none;font-size:14px} a.back:hover{color:var(--glow)}
+header{text-align:center;margin:26px 0 30px}
+.kicker{font:700 12px/1 ui-monospace,Consolas,monospace;letter-spacing:.3em;color:var(--purple)}
+h1{font:900 clamp(30px,6vw,56px)/1.05 Georgia,serif;margin:12px 0 10px;color:var(--acid);
+text-shadow:0 0 18px rgba(200,255,61,.35),0 0 2px #000;letter-spacing:.02em}
+.sub{color:var(--dim);max-width:640px;margin:0 auto}
+.beakers{font-size:34px;letter-spacing:12px;margin-top:10px;filter:drop-shadow(0 0 8px rgba(125,255,155,.4))}
+.beakers span{display:inline-block;animation:bub 2.6s ease-in-out infinite}
+.beakers span:nth-child(2){animation-delay:.4s} .beakers span:nth-child(3){animation-delay:.8s}
+@keyframes bub{50%{transform:translateY(-6px) rotate(-4deg)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0;
+box-shadow:0 0 0 1px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35)}
+h2{font:800 13px/1 ui-monospace,Consolas,monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--glow);margin:0 0 12px}
+.method{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:#0e1a14;border:1px dashed var(--line);border-radius:8px;padding:10px 12px}
+.stat b{display:block;font:800 24px/1.1 Georgia,serif;color:var(--acid)} .stat span{font-size:13px;color:var(--dim)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.row{display:grid;grid-template-columns:118px 1fr 52px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed #1e3628}
+.row:last-child{border-bottom:0}
+.w{font:800 17px/1.1 Georgia,serif} .lucky .w{color:var(--acid)} .cursed .w{color:var(--blood)}
+.meta{font-size:12px;color:var(--dim);line-height:1.35}
+.meta i{color:var(--text);font-style:normal}
+.bar{height:8px;background:#0b130f;border-radius:4px;position:relative;margin-bottom:4px}
+.bar i{position:absolute;top:0;bottom:0;border-radius:4px}
+.bar::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#4b6b57}
+.lucky .bar i{background:linear-gradient(90deg,#3c8f52,var(--acid));box-shadow:0 0 8px rgba(200,255,61,.4)}
+.cursed .bar i{background:linear-gradient(90deg,var(--blood),#7d2633)}
+.pct{text-align:right;font:800 15px ui-monospace,Consolas,monospace}
+.lucky .pct{color:var(--acid)} .cursed .pct{color:var(--blood)}
+.lab{text-align:center;background:repeating-linear-gradient(0deg,#122019 0 22px,#132219 22px 23px)}
+.monster{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0;margin:16px 0 8px}
+.part{font:900 clamp(20px,3.6vw,34px)/1 Georgia,serif;padding:12px 16px;background:var(--paper);color:#1d2a20;
+border:2px solid #1d2a20;position:relative;transform:rotate(var(--r));box-shadow:3px 4px 0 rgba(0,0,0,.45)}
+.part+.part{margin-left:-2px}
+.part::before{content:"";position:absolute;left:-9px;top:8px;bottom:8px;width:14px;z-index:2;
+background:repeating-linear-gradient(0deg,transparent 0 6px,#1d2a20 6px 8px);clip-path:inset(0 4px 0 4px)}
+.part:first-child::before{display:none}
+.part small{position:absolute;bottom:-18px;left:0;right:0;font:700 11px ui-monospace,Consolas,monospace;color:var(--acid)}
+.anti .part{background:#2a1418;color:#ffb3ba;border-color:#ff5d6c}
+.anti .part small{color:var(--blood)}
+.verdict{margin-top:30px;font-size:18px} .verdict b{color:var(--acid);font-size:22px}
+.anti .verdict b{color:var(--blood)}
+.translate{color:var(--dim);font-style:italic;margin-top:6px}
+.pred{display:flex;gap:10px;flex-wrap:wrap}
+.pred input{flex:1;min-width:220px;font:600 18px Georgia,serif;padding:12px 14px;border-radius:8px;border:2px solid var(--line);
+background:#0b130f;color:var(--text)} .pred input:focus{outline:none;border-color:var(--glow)}
+.out{margin-top:14px;min-height:64px;font-size:17px}
+.out .big{font:900 34px/1 Georgia,serif;color:var(--acid);display:block;margin-bottom:6px}
+.out .big.bad{color:var(--blood)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font:700 13px ui-monospace,Consolas,monospace;padding:3px 8px;border-radius:999px;border:1px solid var(--line)}
+.chip.up{color:var(--acid);border-color:#4b7a2b} .chip.down{color:var(--blood);border-color:#7d2633}
+.reality{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.case{background:#0e1a14;border-radius:10px;padding:14px;border-left:4px solid var(--purple)}
+.case .t{font:800 18px Georgia,serif;margin:4px 0} .case .k{font:700 11px ui-monospace,Consolas,monospace;letter-spacing:.16em;color:var(--purple)}
+.frow{display:grid;grid-template-columns:54px 1fr 56px 56px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px dashed #1e3628}
+.frow.head{font:700 11px ui-monospace,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.frow .chips{margin-top:4px} .frow .chip{font-size:11px;padding:1px 7px}
+.case .chips{margin-top:6px}
+.frow .fp{font:800 15px ui-monospace,Consolas,monospace;color:var(--acid)} .frow .fn{font:700 16px Georgia,serif}
+.frow .fs,.frow .fc{text-align:right;font:700 14px ui-monospace,Consolas,monospace} .frow .fc{color:var(--dim)}
+.frow.top .fn{color:var(--acid);font-size:19px}
+.foot{font-size:13px;color:var(--dim);border-top:1px dashed var(--line);margin-top:30px;padding-top:14px}
+@media(max-width:760px){.method{grid-template-columns:1fr 1fr}.cols,.reality{grid-template-columns:1fr}.row{grid-template-columns:96px 1fr 46px}}
+</style></head><body><div class="wrap">
+<a class="back" href="index.html">← The 4545 Chronicles</a>
+<header>
+<h1>Team Name Science</h1>
+<p class="sub">Which words in team names go with a good finish, and which with a bad one? 1,769 teams from
+49 finished seasons.</p>
+<div class="beakers"><span>⚗️</span><span>🧪</span><span>🧬</span></div></header>
+
+<section class="card">
+<div class="method">
+<div class="stat"><b>1,769</b><span>teams, Seasons 1–49</span></div>
+<div class="stat"><b>81</b><span>words used by at least 8 teams</span></div>
+<div class="stat"><b>50%</b><span>an average finish: champion = 100%, last place = 0%</span></div>
+</div>
+<p class="meta" style="margin:12px 0 0">Each word gets the average final placing of the teams that had it in their name. "Bishop" and "bishops" count as one word; words like "the" or "of" are left out.</p></section>
+
+<div class="cols">
+<section class="card lucky"><h2>✨ The Lucky Words</h2><div class="row"><div class="w">bishop</div>
+  <div><div class="bar"><i style="left:50.0%;width:15.1%"></i></div>
+  <div class="meta">30 teams · <i>2 titles</i> · best: <i>Smack My Bishop</i> (1st, S3)</div></div>
+  <div class="pct">65%</div></div>
+<div class="row"><div class="w">luft</div>
+  <div><div class="bar"><i style="left:50.0%;width:15.0%"></i></div>
+  <div class="meta">9 teams · <i>1 title</i> · best: <i>From Russia with Luft</i> (1st, S26)</div></div>
+  <div class="pct">65%</div></div>
+<div class="row"><div class="w">never</div>
+  <div><div class="bar"><i style="left:50.0%;width:14.4%"></i></div>
+  <div class="meta">8 teams · best: <i>Nepo say Never</i> (4th, S31)</div></div>
+  <div class="pct">64%</div></div>
+<div class="row"><div class="w">sac</div>
+  <div><div class="bar"><i style="left:50.0%;width:13.3%"></i></div>
+  <div class="meta">19 teams · <i>2 titles</i> · best: <i>Sac It and See</i> (1st, S13)</div></div>
+  <div class="pct">63%</div></div>
+<div class="row"><div class="w">dragon</div>
+  <div><div class="bar"><i style="left:50.0%;width:12.7%"></i></div>
+  <div class="meta">16 teams · <i>2 titles</i> · best: <i>Sicilian Dragons</i> (1st, S2)</div></div>
+  <div class="pct">63%</div></div>
+<div class="row"><div class="w">suggestion</div>
+  <div><div class="bar"><i style="left:50.0%;width:11.9%"></i></div>
+  <div class="meta">10 teams · <i>1 title</i> · best: <i>I Like my Suggestion</i> (1st, S43)</div></div>
+  <div class="pct">62%</div></div>
+<div class="row"><div class="w">square</div>
+  <div><div class="bar"><i style="left:50.0%;width:11.8%"></i></div>
+  <div class="meta">8 teams · best: <i>64 squares of An(gu)ish</i> (3rd, S43)</div></div>
+  <div class="pct">62%</div></div>
+<div class="row"><div class="w">gambit</div>
+  <div><div class="bar"><i style="left:50.0%;width:11.6%"></i></div>
+  <div class="meta">17 teams · best: <i>Quarantine Gambit Accepted</i> (2nd, S21)</div></div>
+  <div class="pct">62%</div></div>
+<div class="row"><div class="w">piece</div>
+  <div><div class="bar"><i style="left:50.0%;width:11.3%"></i></div>
+  <div class="meta">9 teams · best: <i>Six Piece Tablebase</i> (3rd, S14)</div></div>
+  <div class="pct">61%</div></div>
+<div class="row"><div class="w">other</div>
+  <div><div class="bar"><i style="left:50.0%;width:10.4%"></i></div>
+  <div class="meta">8 teams · best: <i>Elo from the other side</i> (9th, S47)</div></div>
+  <div class="pct">60%</div></div>
+<div class="row"><div class="w">come</div>
+  <div><div class="bar"><i style="left:50.0%;width:9.8%"></i></div>
+  <div class="meta">9 teams · best: <i>Réti Or Not Here We Come</i> (4th, S21)</div></div>
+  <div class="pct">60%</div></div>
+<div class="row"><div class="w">alekhine</div>
+  <div><div class="bar"><i style="left:50.0%;width:9.1%"></i></div>
+  <div class="meta">8 teams · best: <i>Alekhine&#x27;s Bazooka</i> (9th, S23)</div></div>
+  <div class="pct">59%</div></div></section>
+<section class="card cursed"><h2>💀 The Cursed Words</h2><div class="row"><div class="w">move</div>
+  <div><div class="bar"><i style="left:30.9%;width:19.1%"></i></div>
+  <div class="meta">24 teams · worst: <i>Hushed Moves</i> (42nd, S43)</div></div>
+  <div class="pct">31%</div></div>
+<div class="row"><div class="w">check</div>
+  <div><div class="bar"><i style="left:31.4%;width:18.6%"></i></div>
+  <div class="meta">15 teams · worst: <i>Sanity Check</i> (44th, S49)</div></div>
+  <div class="pct">31%</div></div>
+<div class="row"><div class="w">declined</div>
+  <div><div class="bar"><i style="left:31.5%;width:18.5%"></i></div>
+  <div class="meta">8 teams · worst: <i>Queen&#x27;s Covid Declined</i> (46th, S21)</div></div>
+  <div class="pct">31%</div></div>
+<div class="row"><div class="w">take</div>
+  <div><div class="bar"><i style="left:34.3%;width:15.7%"></i></div>
+  <div class="meta">10 teams · worst: <i>If takes, takes, then takes, takes, takes, takes takes, takes, check, takes, takes...</i> (39th, S40)</div></div>
+  <div class="pct">34%</div></div>
+<div class="row"><div class="w">fork</div>
+  <div><div class="bar"><i style="left:34.7%;width:15.3%"></i></div>
+  <div class="meta">19 teams · worst: <i>Fork me twice, can&#x27;t get forked again</i> (38th, S41)</div></div>
+  <div class="pct">35%</div></div>
+<div class="row"><div class="w">time</div>
+  <div><div class="bar"><i style="left:34.8%;width:15.2%"></i></div>
+  <div class="meta">11 teams · worst: <i>The Clock Crushers: Dangerous in any Time Control</i> (45th, S35)</div></div>
+  <div class="pct">35%</div></div>
+<div class="row"><div class="w">good</div>
+  <div><div class="bar"><i style="left:35.9%;width:14.1%"></i></div>
+  <div class="meta">17 teams · worst: <i>We are so good that we should be in the TCEC</i> (40th, S33)</div></div>
+  <div class="pct">36%</div></div>
+<div class="row"><div class="w">magnus</div>
+  <div><div class="bar"><i style="left:37.5%;width:12.5%"></i></div>
+  <div class="meta">10 teams · worst: <i>Watch out Magnus!</i> (42nd, S37)</div></div>
+  <div class="pct">38%</div></div>
+<div class="row"><div class="w">play</div>
+  <div><div class="bar"><i style="left:37.9%;width:12.1%"></i></div>
+  <div class="meta">10 teams · worst: <i>We have prepared together so we all play the same-ish</i> (39th, S45)</div></div>
+  <div class="pct">38%</div></div>
+<div class="row"><div class="w">45</div>
+  <div><div class="bar"><i style="left:38.3%;width:11.7%"></i></div>
+  <div class="meta">12 teams · worst: <i>45 move suggestions, none good</i> (41st, S45)</div></div>
+  <div class="pct">38%</div></div>
+<div class="row"><div class="w">find</div>
+  <div><div class="bar"><i style="left:38.8%;width:11.2%"></i></div>
+  <div class="meta">9 teams · worst: <i>I will find you, and I will mate you</i> (42nd, S27)</div></div>
+  <div class="pct">39%</div></div>
+<div class="row"><div class="w">horse</div>
+  <div><div class="bar"><i style="left:40.6%;width:9.4%"></i></div>
+  <div class="meta">9 teams · <i>1 title</i> · worst: <i>Eat that Horse!</i> (42nd, S22)</div></div>
+  <div class="pct">41%</div></div></section>
+</div>
+
+<section class="card lab"><h2>The perfect team name</h2>
+<div class="monster"><span class="part" style="--r:-2.5deg">BISHOP<small>+15</small></span><span class="part" style="--r:1.8deg">LUFT<small>+15</small></span><span class="part" style="--r:-1.2deg">NEVER<small>+14</small></span><span class="part" style="--r:2.6deg">SAC<small>+13</small></span><span class="part" style="--r:-1.8deg">DRAGON<small>+13</small></span></div>
+<div class="verdict">Predicted finish: <b>1st of 54</b> (121%)</div>
+</section>
+
+<section class="card lab anti"><h2>The worst team name</h2>
+<div class="monster"><span class="part" style="--r:-2.5deg">MOVE<small>−19</small></span><span class="part" style="--r:1.8deg">CHECK<small>−19</small></span><span class="part" style="--r:-1.2deg">DECLINED<small>−19</small></span><span class="part" style="--r:2.6deg">TAKE<small>−16</small></span><span class="part" style="--r:-1.8deg">FORK<small>−15</small></span></div>
+<div class="verdict">Predicted finish: <b>54th of 54</b> (-37%)</div>
+</section>
+
+<section class="card"><h2>Test a team name</h2>
+<div class="pred"><input id="nm" placeholder="Type a team name…" autocomplete="off" spellcheck="false"></div>
+<div class="out" id="out"><span class="meta">Type a team name to see its predicted finish.</span></div>
+</section>
+
+<section class="card"><h2>Season 50: the prediction</h2>
+<p class="meta" style="margin:0 0 10px">All 54 teams scored by their names alone: 50% plus or minus each word that was used by enough teams
+(the chips). Right column: their place in the real table now, during Round 4.</p>
+<div class="frow head"><span class="fp">Pred.</span><span class="fn">Team</span><span class="fs">Score</span><span class="fc">Now</span></div><div class="frow top"><span class="fp">1st</span>
+  <span><span class="fn">100 Suggestions You Must Know</span><span class="chips"><span class="chip up">suggestion +12</span><span class="chip up">know +8</span></span></span>
+  <span class="fs">70%</span><span class="fc">6th</span></div><div class="frow"><span class="fp">2nd</span>
+  <span><span class="fn">oh those 64 squares can encompass such immensity</span><span class="chips"><span class="chip up">square +12</span></span></span>
+  <span class="fs">62%</span><span class="fc">33rd</span></div><div class="frow"><span class="fp">3rd</span>
+  <span><span class="fn">Yeah, well, that&#x27;s just like, your opening, man.</span><span class="chips"><span class="chip up">like +9</span></span></span>
+  <span class="fs">59%</span><span class="fc">10th</span></div><div class="frow"><span class="fp">4th</span>
+  <span><span class="fn">Svidler? I hardly know her</span><span class="chips"><span class="chip up">know +8</span></span></span>
+  <span class="fs">58%</span><span class="fc">41st</span></div><div class="frow"><span class="fp">5th</span>
+  <span><span class="fn">The horsey don&#x27;t belong here</span><span class="chips"><span class="chip up">here +6</span></span></span>
+  <span class="fs">56%</span><span class="fc">13th</span></div><div class="frow"><span class="fp">6th</span>
+  <span><span class="fn">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</span><span class="chips"><span class="chip up">king +5</span></span></span>
+  <span class="fs">55%</span><span class="fc">2nd</span></div><div class="frow"><span class="fp">7th</span>
+  <span><span class="fn">Riding with the King</span><span class="chips"><span class="chip up">king +5</span></span></span>
+  <span class="fs">55%</span><span class="fc">7th</span></div><div class="frow"><span class="fp">8th</span>
+  <span><span class="fn">King&#x27;s Landing</span><span class="chips"><span class="chip up">king +5</span></span></span>
+  <span class="fs">55%</span><span class="fc">25th</span></div><div class="frow"><span class="fp">9th</span>
+  <span><span class="fn">Morphy&#x27;s Mates</span><span class="chips"><span class="chip up">mate +5</span></span></span>
+  <span class="fs">55%</span><span class="fc">22nd</span></div><div class="frow"><span class="fp">10th</span>
+  <span><span class="fn">50 first mates</span><span class="chips"><span class="chip up">mate +5</span></span></span>
+  <span class="fs">55%</span><span class="fc">30th</span></div>
+<p class="meta" style="margin:10px 0 0">Predicted last: <i>50-50 my next move is a blunder</i> (27%, 39th now)</p>
+<div class="chips"><span class="chip down">move −19</span><span class="chip down">blunder −4</span></div></section>
+
+<section class="card"><h2>The model vs reality</h2>
+<div class="reality">
+<div class="case"><div class="k">HIGHEST-SCORING REAL NAME</div><div class="t">I don&#x27;t think he knows about second piece sac, Pip</div>
+<div class="meta">Season 32 · score 81% = predicted 7th of 34 · finished <i>28th</i></div>
+<div class="chips"><span class="chip up">sac +13</span><span class="chip up">piece +11</span><span class="chip up">know +8</span><span class="chip down">think −2</span></div></div>
+<div class="case"><div class="k">LOWEST-SCORING CHAMPION</div><div class="t">Petrojan Horse</div>
+<div class="meta">Season 6 · score 41% = predicted 15th of 24 · won the league</div>
+<div class="chips"><span class="chip down">horse −9</span></div></div>
+</div></section>
+
+<p class="foot">Built 18 Oct 2026 from the league's results (official tiebreaks, finished seasons only).</p>
+</div>
+<script>
+const W = {"pawn": 0.5193, "knight": 0.4897, "resign": 0.5081, "team": 0.4699, "dragon": 0.6275, "accelerated": 0.5014, "sicilian": 0.4597, "square": 0.6177, "tal": 0.5024, "piece": 0.613, "other": 0.6037, "reti": 0.5181, "think": 0.4772, "bishop": 0.6507, "sac": 0.633, "caruana": 0.4108, "chess": 0.4672, "mate": 0.5528, "en": 0.4121, "magnus": 0.3754, "again": 0.5235, "make": 0.4916, "check": 0.3136, "checkmate": 0.5424, "horse": 0.4063, "king": 0.5535, "blunder": 0.4584, "board": 0.437, "player": 0.485, "fischer": 0.4378, "rook": 0.4729, "better": 0.4195, "call": 0.5397, "fork": 0.3471, "may": 0.5035, "here": 0.5559, "come": 0.5979, "queen": 0.437, "like": 0.5873, "draw": 0.4845, "caro": 0.5566, "patzer": 0.4981, "move": 0.3089, "best": 0.4079, "knightmare": 0.468, "never": 0.644, "bad": 0.5775, "time": 0.3484, "dark": 0.5214, "good": 0.3586, "name": 0.5338, "luft": 0.6503, "file": 0.4374, "alekhine": 0.5906, "lichess": 0.4469, "45": 0.3834, "win": 0.5203, "find": 0.3878, "more": 0.4255, "gambit": 0.6161, "long": 0.4546, "will": 0.4909, "system": 0.4869, "play": 0.3786, "kann": 0.5185, "endgame": 0.4965, "ding": 0.5271, "season": 0.5473, "last": 0.4444, "old": 0.4718, "declined": 0.3147, "game": 0.4989, "club": 0.4626, "take": 0.3433, "only": 0.5284, "two": 0.4704, "still": 0.4724, "world": 0.4163, "know": 0.583, "where": 0.4777, "suggestion": 0.6188};
+const FILLER = new Set(["a", "all", "an", "and", "are", "as", "at", "be", "but", "by", "can", "do", "dont", "for", "from", "get", "got", "has", "have", "he", "her", "his", "i", "if", "im", "in", "is", "it", "its", "just", "me", "my", "n", "no", "not", "of", "on", "one", "or", "our", "out", "s", "she", "so", "t", "than", "that", "the", "their", "them", "they", "this", "to", "up", "us", "was", "we", "were", "what", "who", "with", "you", "your"]);
+const $ = s => document.querySelector(s);
+const ord = n => n + ((n % 100 >= 11 && n % 100 <= 13) ? 'th' : ({1: 'st', 2: 'nd', 3: 'rd'}[n % 10] || 'th'));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+function run() {
+  const words = [...new Set(($('#nm').value.toLowerCase().match(/[a-z0-9']+/g) || []).map(w => w.replace(/'/g, '')))].filter(Boolean);
+  if (!words.length) { $('#out').innerHTML = '<span class="meta">The machine is waiting.</span>'; return; }
+  const hits = [];
+  for (const w of words) {
+    const k = w in W ? w : (w.endsWith('s') && w.slice(0, -1) in W ? w.slice(0, -1) : null);
+    if (k && !FILLER.has(k)) hits.push([k, W[k] - 0.5]);
+  }
+  if (!hits.length) {
+    $('#out').innerHTML = '<span class="big">50% · 27th of 54</span>None of these words were used by enough teams.';
+    return;
+  }
+  const p = 0.5 + hits.reduce((a, h) => a + h[1], 0), place = Math.max(1, Math.min(54, Math.round(1 + (1 - p) * 53)));
+  hits.sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
+  $('#out').innerHTML = `<span class="big ${p < 0.5 ? 'bad' : ''}">${Math.round(p * 100)}% · predicted ${ord(place)} of 54</span>` +
+    '<div class="chips">' + hits.map(h => `<span class="chip ${h[1] >= 0 ? 'up' : 'down'}">${esc(h[0])} ${h[1] >= 0 ? '+' : '−'}${Math.abs(Math.round(h[1] * 100))}</span>`).join('') + '</div>';
+}
+$('#nm').addEventListener('input', run);
+</script></body></html>
