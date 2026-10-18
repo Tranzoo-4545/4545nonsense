@@ -1499,6 +1499,14 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
                 <tr><td>Played 3+ times (Rivals!)</td><td class="points">+4</td></tr>
             </table>
             
+            <h3>🐺 Met in LoneWolf / Chess960 (0-1.5 pts)</h3>
+            <table>
+                <tr><th>Condition</th><th>Points</th></tr>
+                <tr><td>Played each other in LoneWolf or Chess960</td><td class="points">+1</td></tr>
+                <tr><td>...and the last meeting was within the past 4 weeks</td><td class="points">+1.5</td></tr>
+            </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Counted once, even if they met in both leagues</p>
+            
             <h3>🔥 Form Clash (0-3 pts)</h3>
             <table>
                 <tr><th>Condition</th><th>Points</th></tr>
@@ -1550,6 +1558,7 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
                 <tr><td>Both 80+ games, never faced each other</td><td class="points">+0.75</td></tr>
                 <tr><td>Both 100+ games, never faced each other</td><td class="points">+1.5</td></tr>
             </table>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Not if they have met in LoneWolf or Chess960</p>
             
             <h3>🌱 Debutants' Duel (1.5 pts)</h3>
             <table>
@@ -1558,7 +1567,7 @@ def generate_html_output(scored_pairings, season, round_num, output_file):
             </table>
             
             <p style="color: var(--text-secondary); margin-top: 1.5rem;">
-                <strong>Maximum possible score: ~38.5 points</strong>
+                <strong>Maximum possible score: ~40 points</strong>
             </p>
             </div>
         </details>
