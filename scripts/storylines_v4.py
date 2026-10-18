@@ -29,7 +29,7 @@ import json
 import re
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from collections import defaultdict
 
@@ -146,13 +146,35 @@ def get_championship_teams(all_season_data):
 ROSTERS_FILE = 'final_rosters.json'   # season -> team -> FINAL roster (uploaded next to this script)
 
 
-def _rosters_path():
-    """final_rosters.json next to this script; the apps' copies (content_studio/, streaming/) use v7's, one folder up."""
+def _rosters_path(name=ROSTERS_FILE):
+    """final_rosters.json (or another data file) next to this script; the apps' copies (content_studio/, streaming/)
+    use v7's, one folder up."""
     here = Path(__file__).resolve().parent
     for d in (here, here.parent):
-        if (d / ROSTERS_FILE).exists():
-            return d / ROSTERS_FILE
-    return here / ROSTERS_FILE
+        if (d / name).exists():
+            return d / name
+    return here / name
+
+
+OTHER_LEAGUES_FILE = 'other_leagues.json'   # built + pushed by other_leagues.py (Control Panel step, when ticked)
+_other_meetings = None
+
+
+def load_other_meetings():
+    """{'a|b' (lowercase, sorted): [[league, season, section, round, white, black, result, date], ...]}: meetings of
+    current team4545 players in LoneWolf / Chess960. No file = no factor (one warning)."""
+    global _other_meetings
+    if _other_meetings is None:
+        path = _rosters_path(OTHER_LEAGUES_FILE)
+        try:
+            _other_meetings = json.loads(path.read_text(encoding='utf-8')).get('pairs', {})
+        except FileNotFoundError:
+            print(f"  Warning: no {OTHER_LEAGUES_FILE} - no 'Met in LoneWolf/Chess960' factor")
+            _other_meetings = {}
+        except Exception as e:
+            print(f"  Warning: could not read {OTHER_LEAGUES_FILE} ({e}) - no 'Met in LoneWolf/Chess960' factor")
+            _other_meetings = {}
+    return _other_meetings
 
 
 def load_final_rosters(seasons):
@@ -732,6 +754,7 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
         'milestone': 0,
         'win_milestone': 0,
         'h2h': 0,
+        'other_leagues': 0,
         'form_clash': 0,
         'team_battle': 0,
         'veteran': 0,
@@ -846,6 +869,30 @@ def calculate_hype_score(pairing, player_history, standings, streaks, team_battl
         w_draws = h2h.get('draws', 0)
         reasons.append(f"🔄 Rematch ({fmt_h2h_score(w_wins, w_losses, w_draws)})")
     
+    # MET IN THE OTHER 4545 LEAGUES (1 point, 1.5 if within the last 4 weeks) - LoneWolf / Chess960
+    meetings = load_other_meetings().get('|'.join(sorted((white, black))), [])
+    if meetings:
+        ow = ol = od = 0
+        for m in meetings:
+            if m[6] == '1/2-1/2':
+                od += 1
+            elif (m[4].lower() == white) == (m[6] == '1-0'):
+                ow += 1
+            else:
+                ol += 1
+        days = [(datetime.now(timezone.utc).date() - datetime.strptime(m[7], '%Y-%m-%d').date()).days
+                for m in meetings if m[7]]
+        recent = min((d for d in days if 0 <= d <= 28), default=None)
+        pts = 1.5 if recent is not None else 1
+        score += pts
+        breakdown['other_leagues'] = pts
+        names = ' & '.join(n for k, n in (('lonewolf', 'LoneWolf'), ('chess960', 'Chess960')) if any(m[0] == k for m in meetings))
+        times = f" {len(meetings)}x" if len(meetings) > 1 else ''
+        when = '' if recent is None else (' today' if recent == 0 else ' yesterday' if recent == 1 else f" {recent} days ago")
+        when = f", last one{when}" if when and len(meetings) > 1 else when
+        icon = '🐺' if any(m[0] == 'lonewolf' for m in meetings) else '🎲'
+        reasons.append(f"{icon} Met{times} in {names}{when} ({fmt_h2h_score(ow, ol, od)})")
+
     # FORM CLASH (0-3 points)
     white_streak = streaks.get(white, {'type': None, 'length': 0})
     black_streak = streaks.get(black, {'type': None, 'length': 0})
@@ -2253,6 +2300,7 @@ def generate_excel_output(scored_pairings, season, round_num, output_file):
         ('milestone', 'Milestone'),
         ('win_milestone', '100th Win'),
         ('h2h', 'H2H'),
+        ('other_leagues', 'LW/960'),
         ('form_clash', 'Form'),
         ('team_battle', 'Team Battle'),
         ('veteran', 'Veteran'),
