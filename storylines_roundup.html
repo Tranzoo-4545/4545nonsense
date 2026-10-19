@@ -565,7 +565,7 @@
             <table>
                 <tr><th>Condition</th><th>Points</th></tr>
                 <tr><td>Spicy gambit (King's Gambit, Evans, etc.)</td><td class="points">+3</td></tr>
-                <tr><td>Sharp system (Najdorf, Dragon, KID, etc.)</td><td class="points">+2</td></tr>
+                <tr><td>Sharp system (Yugoslav Attack, Poisoned Pawn, Albin Countergambit, etc.)</td><td class="points">+2</td></tr>
             </table>
             
             <h3 style="margin-top: 1.5rem;">Eval-Based Factors (requires Lichess analysis)</h3>
@@ -573,8 +573,8 @@
             <h3>🔄 Comeback (0-2.5 pts)</h3>
             <table>
                 <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Was losing by 3-4 pawns, won</td><td class="points">+1.5</td></tr>
-                <tr><td>Was losing by 5+ pawns, won</td><td class="points">+2.5</td></tr>
+                <tr><td>Was losing by 3-4 pawns, won (still lost after the opponent's reply - not a one-move blip)</td><td class="points">+1.5</td></tr>
+                <tr><td>Was losing by 5+ pawns, won (same rule)</td><td class="points">+2.5</td></tr>
             </table>
             
             <h3>💀 Back from Mate (0-1 pt)</h3>
@@ -583,10 +583,14 @@
                 <tr><td>Had mate against, won or drew</td><td class="points">+1</td></tr>
             </table>
             
-            <h3>🎢 Rollercoaster (0-3 pts)</h3>
+            <h3>🎢 Rollercoaster / 🔀 Swing after Swing (0-3 pts)</h3>
+            <p style="color: var(--text-secondary);">A side "leads" at ±1.5 pawns. A blip is a lead that's gone again after
+                the opponent's very next move (one player blunders, the other gives it straight back).
+                A game gets one of the two, never both.</p>
             <table>
                 <tr><th>Condition</th><th>Points</th></tr>
-                <tr><td>Lead changed 3+ times at ±1.5 pawn threshold</td><td class="points">+3</td></tr>
+                <tr><td>Rollercoaster: the lead changed hands 3+ times, blips not counted</td><td class="points">+3</td></tr>
+                <tr><td>Swing after swing: 3+ lead changes only when blips are counted (not a Rollercoaster)</td><td class="points">+2</td></tr>
             </table>
             
             <h3 style="margin-top: 1.5rem;">Time Pressure (requires clocks + Lichess analysis)</h3>
@@ -611,11 +615,13 @@
             
             <h3 style="margin-top: 1.5rem;">Match Situation Factors</h3>
             
-            <h3>⚖️ Match Situation (0-4 pts)</h3>
+            <h3>⚖️ Match Situation (0-5.5 pts)</h3>
             <table>
                 <tr><th>Match score right before this game finished</th><th>Points</th></tr>
-                <tr><td>Match Decider: teams level, this was the last board left</td><td class="points">+4</td></tr>
-                <tr><td>Match Point: one team a full point up, this was the last board left</td><td class="points">+2</td></tr>
+                <tr><td>Match Decider: teams level, last board left, and it was won (it decided the match)</td><td class="points">+5.5</td></tr>
+                <tr><td>Match Decider: teams level, last board left, drawn (the match ends level)</td><td class="points">+4</td></tr>
+                <tr><td>Saved the Match: a team a point down won the last board (the match ends level)</td><td class="points">+3</td></tr>
+                <tr><td>Match Point: a team a point up won or drew the last board</td><td class="points">+2</td></tr>
                 <tr><td>All Square: teams level, this and one other board left</td><td class="points">+1</td></tr>
             </table>
             
@@ -674,7 +680,7 @@
                             <a href="https://lichess.org/RRJQy3b6" target="_blank" class="result-link">1–0</a>
                             <a href="https://www.lichess4545.com/team4545/player/Micomps/" target="_blank" class="loser">Micomps</a>
                         </div>
-                        <div class="ending"><b>Checkmate</b> · 60 moves</div>
+                        <div class="ending"><b>Checkmate</b> · 61 moves</div>
                         <div class="teams">J’adoube-Al-Blunder vs Svidler? I hardly know her</div>
                         <a class="replay" href="https://lichess.org/RRJQy3b6" target="_blank">▶ Replay the game</a>
                     </div>
@@ -697,27 +703,26 @@
                     <div class="rank top-3"><span class="stub">#2</span></div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Marco_Chess13/" target="_blank" class="loser">Marco_Chess13</a>
-                            <a href="https://lichess.org/V36WIk0p" target="_blank" class="result-link">0–1</a>
-                            <a href="https://www.lichess4545.com/team4545/player/cham/" target="_blank" class="winner">cham</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Silkthewanderer/" target="_blank" class="winner">Silkthewanderer</a>
+                            <a href="https://lichess.org/vWDCmiOZ" target="_blank" class="result-link">1–0</a>
+                            <a href="https://www.lichess4545.com/team4545/player/betolini/" target="_blank" class="loser">betolini</a>
                         </div>
-                        <div class="ending"><b>Resignation</b> · 43 moves</div>
-                        <div class="teams">my english needs work vs pspspspspsps</div>
-                        <a class="replay" href="https://lichess.org/V36WIk0p" target="_blank">▶ Replay the game</a>
+                        <div class="ending"><b>Resignation</b> · 75 moves</div>
+                        <div class="teams">We're not going to TAKE TAKE TAKE it vs Leningrad School of Blunders</div>
+                        <a class="replay" href="https://lichess.org/vWDCmiOZ" target="_blank">▶ Replay the game</a>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">11.8</div>
+                        <div class="score-value">11.3</div>
                         <div class="score-label">drama</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🥈 Big for team standings!<span class="pts">+0.75</span></span>
-                    <span class="reason">🛑 Stopped marco_chess13's 3-game win streak<span class="pts">+1.5</span></span>
-                    <span class="reason">💪 cham breaks 8-game losing streak!<span class="pts">+3</span></span>
-                    <span class="reason">🧙 Comeback! Was losing by 4+ pawns<span class="pts">+1.5</span></span>
-                    <span class="reason">🎢 Rollercoaster! Lead changed 3 times<span class="pts">+3</span></span>
-                    <span class="reason">⏱️ Time trouble (move 26)<span class="pts">+1</span></span>
-                    <span class="reason">💬 Chat buzzing (12 chatters)<span class="pts">+1</span></span>
+                    <span class="reason">🎖️ Veteran Silkthewanderer (218 games)<span class="pts">+1.33</span></span>
+                    <span class="reason">🎯 Upset! (119 rating underdog)<span class="pts">+2</span></span>
+                    <span class="reason">💪 silkthewanderer breaks 3-game losing streak<span class="pts">+1.5</span></span>
+                    <span class="reason">🐢 Long battle with a winner! (75 moves)<span class="pts">+3</span></span>
+                    <span class="reason">💬 Lively chat (8 chatters)<span class="pts">+0.5</span></span>
+                    <span class="reason">🎾 Saved the match! (4–4)<span class="pts">+3</span></span>
                 </div>
             </div>
 
@@ -726,66 +731,11 @@
                     <div class="rank top-3"><span class="stub">#3</span></div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Silkthewanderer/" target="_blank" class="winner">Silkthewanderer</a>
-                            <a href="https://lichess.org/vWDCmiOZ" target="_blank" class="result-link">1–0</a>
-                            <a href="https://www.lichess4545.com/team4545/player/betolini/" target="_blank" class="loser">betolini</a>
-                        </div>
-                        <div class="ending"><b>Resignation</b> · 74 moves</div>
-                        <div class="teams">We're not going to TAKE TAKE TAKE it vs Leningrad School of Blunders</div>
-                        <a class="replay" href="https://lichess.org/vWDCmiOZ" target="_blank">▶ Replay the game</a>
-                    </div>
-                    <div class="score-badge">
-                        <div class="score-value">10.3</div>
-                        <div class="score-label">drama</div>
-                    </div>
-                </div>
-                <div class="reasons">
-                    <span class="reason">🎖️ Veteran Silkthewanderer (218 games)<span class="pts">+1.33</span></span>
-                    <span class="reason">🎯 Upset! (119 rating underdog)<span class="pts">+2</span></span>
-                    <span class="reason">💪 silkthewanderer breaks 3-game losing streak<span class="pts">+1.5</span></span>
-                    <span class="reason">🐢 Long battle with a winner! (74 moves)<span class="pts">+3</span></span>
-                    <span class="reason">💬 Lively chat (8 chatters)<span class="pts">+0.5</span></span>
-                    <span class="reason">🎾 Match point! 3–4 with only this board left<span class="pts">+2</span></span>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="game-header">
-                    <div class="rank "><span class="stub">#4</span></div>
-                    <div class="matchup">
-                        <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/TimeFork/" target="_blank" class="winner">TimeFork</a>
-                            <a href="https://lichess.org/b9tSJxf2" target="_blank" class="result-link">1–0</a>
-                            <a href="https://www.lichess4545.com/team4545/player/hpors/" target="_blank" class="loser">hpors</a>
-                        </div>
-                        <div class="ending"><b>Resignation</b> · 43 moves</div>
-                        <div class="teams">Fifty Shades of Time Trouble vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
-                        <a class="replay" href="https://lichess.org/b9tSJxf2" target="_blank">▶ Replay the game</a>
-                    </div>
-                    <div class="score-badge">
-                        <div class="score-value">10.0</div>
-                        <div class="score-label">drama</div>
-                    </div>
-                </div>
-                <div class="reasons">
-                    <span class="reason">🏆 Huge for team standings!<span class="pts">+1.5</span></span>
-                    <span class="reason">🎯 Big upset! Won despite being 179 lower rated<span class="pts">+3.5</span></span>
-                    <span class="reason">🛑 Stopped hpors's 6-game win streak<span class="pts">+2</span></span>
-                    <span class="reason">🧙 Epic comeback! Was losing by 5+ pawns<span class="pts">+2.5</span></span>
-                    <span class="reason">💬 Lively chat (8 chatters)<span class="pts">+0.5</span></span>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="game-header">
-                    <div class="rank "><span class="stub">#5</span></div>
-                    <div class="matchup">
-                        <div class="players">
                             <a href="https://www.lichess4545.com/team4545/player/Fyrox96/" target="_blank" class="winner">Fyrox96</a>
                             <a href="https://lichess.org/UM3J79LA" target="_blank" class="result-link">1–0</a>
                             <a href="https://www.lichess4545.com/team4545/player/TBest/" target="_blank" class="loser">TBest</a>
                         </div>
-                        <div class="ending"><b>Resignation</b> · 24 moves</div>
+                        <div class="ending"><b>Resignation</b> · 25 moves</div>
                         <div class="teams">my english needs work vs pspspspspsps</div>
                         <a class="replay" href="https://lichess.org/UM3J79LA" target="_blank">▶ Replay the game</a>
                     </div>
@@ -799,21 +749,49 @@
                     <span class="reason">🥈 Big for team standings!<span class="pts">+0.75</span></span>
                     <span class="reason">🎯 Huge upset! Won despite being 218 lower rated<span class="pts">+5</span></span>
                     <span class="reason">🛑 Stopped tbest's 3-game win streak<span class="pts">+1.5</span></span>
-                    <span class="reason">⚡ Quick finish in 24 moves<span class="pts">+1</span></span>
+                    <span class="reason">⚡ Quick finish in 25 moves<span class="pts">+1</span></span>
                     <span class="reason">💬 Lively chat (10 chatters)<span class="pts">+0.5</span></span>
                 </div>
             </div>
 
             <div class="game-card">
                 <div class="game-header">
-                    <div class="rank "><span class="stub">#6</span></div>
+                    <div class="rank "><span class="stub">#4</span></div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/Marco_Chess13/" target="_blank" class="loser">Marco_Chess13</a>
+                            <a href="https://lichess.org/V36WIk0p" target="_blank" class="result-link">0–1</a>
+                            <a href="https://www.lichess4545.com/team4545/player/cham/" target="_blank" class="winner">cham</a>
+                        </div>
+                        <div class="ending"><b>Resignation</b> · 43 moves</div>
+                        <div class="teams">my english needs work vs pspspspspsps</div>
+                        <a class="replay" href="https://lichess.org/V36WIk0p" target="_blank">▶ Replay the game</a>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">9.2</div>
+                        <div class="score-label">drama</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🥈 Big for team standings!<span class="pts">+0.75</span></span>
+                    <span class="reason">🛑 Stopped marco_chess13's 3-game win streak<span class="pts">+1.5</span></span>
+                    <span class="reason">💪 cham breaks 8-game losing streak!<span class="pts">+3</span></span>
+                    <span class="reason">🔀 Swing after swing! (3 swings)<span class="pts">+2</span></span>
+                    <span class="reason">⏱️ Time trouble (move 26)<span class="pts">+1</span></span>
+                    <span class="reason">💬 Chat buzzing (12 chatters)<span class="pts">+1</span></span>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-header">
+                    <div class="rank "><span class="stub">#5</span></div>
                     <div class="matchup">
                         <div class="players">
                             <a href="https://www.lichess4545.com/team4545/player/Kayrosas/" target="_blank" class="winner">Kayrosas</a>
                             <a href="https://lichess.org/C7nLysKH" target="_blank" class="result-link">1–0</a>
                             <a href="https://www.lichess4545.com/team4545/player/Chesstrix01/" target="_blank" class="loser">Chesstrix01</a>
                         </div>
-                        <div class="ending"><b>Checkmate</b> · 67 moves</div>
+                        <div class="ending"><b>Checkmate</b> · 68 moves</div>
                         <div class="teams">Illiterate Alliteration Explorers vs 50 Shades of Swindles and Tricks</div>
                         <a class="replay" href="https://lichess.org/C7nLysKH" target="_blank">▶ Replay the game</a>
                     </div>
@@ -833,6 +811,33 @@
 
             <div class="game-card">
                 <div class="game-header">
+                    <div class="rank "><span class="stub">#6</span></div>
+                    <div class="matchup">
+                        <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/TimeFork/" target="_blank" class="winner">TimeFork</a>
+                            <a href="https://lichess.org/b9tSJxf2" target="_blank" class="result-link">1–0</a>
+                            <a href="https://www.lichess4545.com/team4545/player/hpors/" target="_blank" class="loser">hpors</a>
+                        </div>
+                        <div class="ending"><b>Resignation</b> · 44 moves</div>
+                        <div class="teams">Fifty Shades of Time Trouble vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
+                        <a class="replay" href="https://lichess.org/b9tSJxf2" target="_blank">▶ Replay the game</a>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">9.0</div>
+                        <div class="score-label">drama</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🏆 Huge for team standings!<span class="pts">+1.5</span></span>
+                    <span class="reason">🎯 Big upset! Won despite being 179 lower rated<span class="pts">+3.5</span></span>
+                    <span class="reason">🛑 Stopped hpors's 6-game win streak<span class="pts">+2</span></span>
+                    <span class="reason">🧙 Comeback! Was losing by 3+ pawns<span class="pts">+1.5</span></span>
+                    <span class="reason">💬 Lively chat (8 chatters)<span class="pts">+0.5</span></span>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-header">
                     <div class="rank "><span class="stub">#7</span></div>
                     <div class="matchup">
                         <div class="players">
@@ -840,7 +845,7 @@
                             <a href="https://lichess.org/ZgNEoHlQ" target="_blank" class="result-link">1–0</a>
                             <a href="https://www.lichess4545.com/team4545/player/kostasvl/" target="_blank" class="loser">kostasvl</a>
                         </div>
-                        <div class="ending"><b>Resignation</b> · 13 moves</div>
+                        <div class="ending"><b>Resignation</b> · 14 moves</div>
                         <div class="teams">What a team! And we managed to avoid Prosti vs 50 Ways to Fork Your Lover</div>
                         <a class="replay" href="https://lichess.org/ZgNEoHlQ" target="_blank">▶ Replay the game</a>
                     </div>
@@ -853,7 +858,7 @@
                     <span class="reason">💯 rborja1980's 100th game!<span class="pts">+3</span></span>
                     <span class="reason">🔄 Rematch (RBorja1980 1-0 before)<span class="pts">+2</span></span>
                     <span class="reason">🎖️ Veteran kostasvl (211 games)<span class="pts">+1.99</span></span>
-                    <span class="reason">⚡ Miniature! Decided in just 13 moves<span class="pts">+2</span></span>
+                    <span class="reason">⚡ Miniature! Decided in just 14 moves<span class="pts">+2</span></span>
                 </div>
             </div>
 
@@ -862,11 +867,37 @@
                     <div class="rank "><span class="stub">#8</span></div>
                     <div class="matchup">
                         <div class="players">
+                            <a href="https://www.lichess4545.com/team4545/player/m-p-d/" target="_blank" class="loser">m-p-d</a>
+                            <a href="https://lichess.org/ZHWxH0Gw" target="_blank" class="result-link">0–1</a>
+                            <a href="https://www.lichess4545.com/team4545/player/robertjackson/" target="_blank" class="winner">robertjackson</a>
+                        </div>
+                        <div class="ending"><b>Resignation</b> · 40 moves</div>
+                        <div class="teams">Fifty Shades of Time Trouble vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
+                        <a class="replay" href="https://lichess.org/ZHWxH0Gw" target="_blank">▶ Replay the game</a>
+                    </div>
+                    <div class="score-badge">
+                        <div class="score-value">8.5</div>
+                        <div class="score-label">drama</div>
+                    </div>
+                </div>
+                <div class="reasons">
+                    <span class="reason">🏆 Huge for team standings!<span class="pts">+1.5</span></span>
+                    <span class="reason">🎖️ Veteran robertjackson (126 games)<span class="pts">+1.03</span></span>
+                    <span class="reason">💬 Lively chat (10 chatters)<span class="pts">+0.5</span></span>
+                    <span class="reason">⚖️ Match decider! 3½–3½ with only this board left<span class="pts">+5.5</span></span>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div class="game-header">
+                    <div class="rank "><span class="stub">#9</span></div>
+                    <div class="matchup">
+                        <div class="players">
                             <a href="https://www.lichess4545.com/team4545/player/Rolihlahla/" target="_blank" class="winner">Rolihlahla</a>
                             <a href="https://lichess.org/d8VN6XSY" target="_blank" class="result-link">1–0</a>
                             <a href="https://www.lichess4545.com/team4545/player/patk74/" target="_blank" class="loser">patk74</a>
                         </div>
-                        <div class="ending"><b>Resignation</b> · 24 moves</div>
+                        <div class="ending"><b>Resignation</b> · 25 moves</div>
                         <div class="teams">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition) vs Fifty Shades of Time Trouble</div>
                         <a class="replay" href="https://lichess.org/d8VN6XSY" target="_blank">▶ Replay the game</a>
                     </div>
@@ -880,14 +911,14 @@
                     <span class="reason">🎖️ Veterans (227+159 games)<span class="pts">+2</span></span>
                     <span class="reason">👀 Vets first meeting! (227+159 games, never faced)<span class="pts">+1.5</span></span>
                     <span class="reason">🛑 Stopped patk74's 3-game win streak<span class="pts">+1.5</span></span>
-                    <span class="reason">⚡ Quick finish in 24 moves<span class="pts">+1</span></span>
+                    <span class="reason">⚡ Quick finish in 25 moves<span class="pts">+1</span></span>
                     <span class="reason">💬 Lively chat (8 chatters)<span class="pts">+0.5</span></span>
                 </div>
             </div>
 
             <div class="game-card">
                 <div class="game-header">
-                    <div class="rank "><span class="stub">#9</span></div>
+                    <div class="rank "><span class="stub">#10</span></div>
                     <div class="matchup">
                         <div class="players">
                             <a href="https://www.lichess4545.com/team4545/player/Fierolocchio/" target="_blank" class="loser">Fierolocchio</a>
@@ -913,7 +944,7 @@
 
             <div class="game-card">
                 <div class="game-header">
-                    <div class="rank "><span class="stub">#10</span></div>
+                    <div class="rank "><span class="stub">#11</span></div>
                     <div class="matchup">
                         <div class="players">
                             <a href="https://www.lichess4545.com/team4545/player/CarlosMagnussen/" target="_blank" class="loser">CarlosMagnussen</a>
@@ -938,31 +969,6 @@
 
             <div class="game-card">
                 <div class="game-header">
-                    <div class="rank "><span class="stub">#11</span></div>
-                    <div class="matchup">
-                        <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/Real_VMD/" target="_blank" class="winner">Real_VMD</a>
-                            <a href="https://lichess.org/fPqIFYGn" target="_blank" class="result-link">1–0</a>
-                            <a href="https://www.lichess4545.com/team4545/player/Monocarp/" target="_blank" class="loser">Monocarp</a>
-                        </div>
-                        <div class="ending"><b>Checkmate</b> · 73 moves</div>
-                        <div class="teams">The horsey don't belong here vs Pirc and Roll</div>
-                        <a class="replay" href="https://lichess.org/fPqIFYGn" target="_blank">▶ Replay the game</a>
-                    </div>
-                    <div class="score-badge">
-                        <div class="score-value">7.5</div>
-                        <div class="score-label">drama</div>
-                    </div>
-                </div>
-                <div class="reasons">
-                    <span class="reason">🔥 real_vmd now on 5-game win streak<span class="pts">+2</span></span>
-                    <span class="reason">🐢 Long battle with a winner! (73 moves)<span class="pts">+3</span></span>
-                    <span class="reason">🧙 Epic comeback! Was losing by 5+ pawns<span class="pts">+2.5</span></span>
-                </div>
-            </div>
-
-            <div class="game-card">
-                <div class="game-header">
                     <div class="rank "><span class="stub">#12</span></div>
                     <div class="matchup">
                         <div class="players">
@@ -970,7 +976,7 @@
                             <a href="https://lichess.org/QtPJgZXz" target="_blank" class="result-link">1–0</a>
                             <a href="https://www.lichess4545.com/team4545/player/Tranzoo/" target="_blank" class="loser">Tranzoo</a>
                         </div>
-                        <div class="ending"><b>Resignation</b> · 52 moves</div>
+                        <div class="ending"><b>Resignation</b> · 53 moves</div>
                         <div class="teams">Blunders Without Borders vs King's Landing</div>
                         <a class="replay" href="https://lichess.org/QtPJgZXz" target="_blank">▶ Replay the game</a>
                     </div>
@@ -1019,25 +1025,23 @@
                     <div class="rank "><span class="stub">#14</span></div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/angborxley/" target="_blank" class="winner">angborxley</a>
-                            <a href="https://lichess.org/s7g9cnBO" target="_blank" class="result-link">1–0</a>
-                            <a href="https://www.lichess4545.com/team4545/player/DrRickinCT/" target="_blank" class="loser">DrRickinCT</a>
+                            <a href="https://www.lichess4545.com/team4545/player/fulmarsky/" target="_blank" class="loser">fulmarsky</a>
+                            <a href="https://lichess.org/Amiu4H0E" target="_blank" class="result-link">0–1</a>
+                            <a href="https://www.lichess4545.com/team4545/player/TheJeep/" target="_blank" class="winner">TheJeep</a>
                         </div>
-                        <div class="ending"><b>Resignation</b> · 52 moves</div>
-                        <div class="teams">fifty shades of black and white  vs Inexplicable Fianchetto Agenda</div>
-                        <a class="replay" href="https://lichess.org/s7g9cnBO" target="_blank">▶ Replay the game</a>
+                        <div class="ending"><b>Checkmate</b> · 46 moves</div>
+                        <div class="teams">oh those 64 squares can encompass such immensity vs Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style</div>
+                        <a class="replay" href="https://lichess.org/Amiu4H0E" target="_blank">▶ Replay the game</a>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">7.1</div>
+                        <div class="score-value">7.0</div>
                         <div class="score-label">drama</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🎖️ Experience (38+70 games)<span class="pts">+1.08</span></span>
-                    <span class="reason">🧙 Comeback! Was losing by 3+ pawns<span class="pts">+1.5</span></span>
-                    <span class="reason">🎢 Rollercoaster! Lead changed 3 times<span class="pts">+3</span></span>
-                    <span class="reason">⏱️ Time trouble (move 22)<span class="pts">+1</span></span>
+                    <span class="reason">🎖️ Experience (98+3 games)<span class="pts">+1.01</span></span>
                     <span class="reason">💬 Lively chat (7 chatters)<span class="pts">+0.5</span></span>
+                    <span class="reason">⚖️ Match decider! 3½–3½ with only this board left<span class="pts">+5.5</span></span>
                 </div>
             </div>
 
@@ -1046,24 +1050,23 @@
                     <div class="rank "><span class="stub">#15</span></div>
                     <div class="matchup">
                         <div class="players">
-                            <a href="https://www.lichess4545.com/team4545/player/m-p-d/" target="_blank" class="loser">m-p-d</a>
-                            <a href="https://lichess.org/ZHWxH0Gw" target="_blank" class="result-link">0–1</a>
-                            <a href="https://www.lichess4545.com/team4545/player/robertjackson/" target="_blank" class="winner">robertjackson</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Real_VMD/" target="_blank" class="winner">Real_VMD</a>
+                            <a href="https://lichess.org/fPqIFYGn" target="_blank" class="result-link">1–0</a>
+                            <a href="https://www.lichess4545.com/team4545/player/Monocarp/" target="_blank" class="loser">Monocarp</a>
                         </div>
-                        <div class="ending"><b>Resignation</b> · 40 moves</div>
-                        <div class="teams">Fifty Shades of Time Trouble vs Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div>
-                        <a class="replay" href="https://lichess.org/ZHWxH0Gw" target="_blank">▶ Replay the game</a>
+                        <div class="ending"><b>Checkmate</b> · 74 moves</div>
+                        <div class="teams">The horsey don't belong here vs Pirc and Roll</div>
+                        <a class="replay" href="https://lichess.org/fPqIFYGn" target="_blank">▶ Replay the game</a>
                     </div>
                     <div class="score-badge">
-                        <div class="score-value">7.0</div>
+                        <div class="score-value">6.5</div>
                         <div class="score-label">drama</div>
                     </div>
                 </div>
                 <div class="reasons">
-                    <span class="reason">🏆 Huge for team standings!<span class="pts">+1.5</span></span>
-                    <span class="reason">🎖️ Veteran robertjackson (126 games)<span class="pts">+1.03</span></span>
-                    <span class="reason">💬 Lively chat (10 chatters)<span class="pts">+0.5</span></span>
-                    <span class="reason">⚖️ Match decider! 3½–3½ with only this board left<span class="pts">+4</span></span>
+                    <span class="reason">🔥 real_vmd now on 5-game win streak<span class="pts">+2</span></span>
+                    <span class="reason">🐢 Long battle with a winner! (74 moves)<span class="pts">+3</span></span>
+                    <span class="reason">🧙 Comeback! Was losing by 4+ pawns<span class="pts">+1.5</span></span>
                 </div>
             </div>
 
