@@ -115,9 +115,10 @@ def calculate_standings(season_data):
     Returns list of teams sorted by tiebreakers:
     1. Match points
     2. Game points
-    3. Head-to-head (TODO: complex)
+    3. Head-to-head: match points scored against the other teams tied on match AND game points
+       (the league's own rule, from heltour's Season._calculate_team_scores)
     4. Number of games won
-    5. Sonneborn-Berger (TODO: complex)
+    5. Sonneborn-Berger
     """
     games = season_data.get('games', [])
     
@@ -250,10 +251,21 @@ def calculate_standings(season_data):
             'opponents': dict(team_data['opponents']),
         })
     
-    # Sort: match points (desc), game points (desc), games won (desc), SB (desc)
+    # Head-to-head, the league's way: within each group of teams level on match points AND
+    # game points, add up the match points each team took off the others in that group.
+    # (Works for 3+ team ties too, unlike comparing two teams at a time.)
+    tied = defaultdict(set)
+    for t in standings:
+        tied[(t['match_points'], t['game_points'])].add(t['name'])
+    for t in standings:
+        group = tied[(t['match_points'], t['game_points'])]
+        t['head_to_head'] = sum(mp for opp, mp in teams[t['name']]['matches'] if opp in group and opp != t['name'])
+
+    # Sort: match points, game points, head-to-head, games won, Sonneborn-Berger, name
     standings.sort(key=lambda t: (
         -t['match_points'],
         -t['game_points'],
+        -t['head_to_head'],
         -t['games_won'],
         -t['sonneborn_berger'],
         t['name']  # Alphabetical as final tiebreaker
