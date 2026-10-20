@@ -1,0 +1,1114 @@
+{
+ "seasons": {
+  "50": {
+   "1": {
+    "commit": "af179f8",
+    "published": "2026-09-21T12:31:49Z",
+    "source": "published",
+    "teams": {
+     "50 Shades of Swindles and Tricks": {
+      "place": 1,
+      "title": 0.03,
+      "top3": 0.09
+     },
+     "50 Ways to Fork Your Lover": {
+      "place": 2,
+      "title": 0.03,
+      "top3": 0.07
+     },
+     "50 first mates": {
+      "place": 3,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "50 pawns of Giri": {
+      "place": 4,
+      "title": 0.03,
+      "top3": 0.07
+     },
+     "50-50 my next move is a blunder": {
+      "place": 5,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Blunders Without Borders": {
+      "place": 6,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Don't give a check your ascii can't cache": {
+      "place": 7,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Fifty Shades of Time Trouble": {
+      "place": 8,
+      "title": 0.02,
+      "top3": 0.07
+     },
+     "Fork You Very Much": {
+      "place": 9,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "If anyone can refute it—don't show me": {
+      "place": 10,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Illiterate Alliteration Explorers": {
+      "place": 11,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Inexplicable Fianchetto Agenda": {
+      "place": 12,
+      "title": 0.02,
+      "top3": 0.07
+     },
+     "J’adoube-Al-Blunder": {
+      "place": 13,
+      "title": 0.02,
+      "top3": 0.05
+     },
+     "King's Landing": {
+      "place": 14,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Knights of the Round Tablebase": {
+      "place": 15,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork": {
+      "place": 16,
+      "title": 0.03,
+      "top3": 0.09
+     },
+     "Leningrad School of Blunders": {
+      "place": 17,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Mating for Godot": {
+      "place": 18,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Morphy's Mates": {
+      "place": 19,
+      "title": 0.03,
+      "top3": 0.07
+     },
+     "Not all who blunder are lost": {
+      "place": 20,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Old but hoping for stratospheric improvement": {
+      "place": 21,
+      "title": 0.03,
+      "top3": 0.08
+     },
+     "Operation Pawnstorm": {
+      "place": 22,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style": {
+      "place": 23,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)": {
+      "place": 24,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Pirc and Roll": {
+      "place": 25,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Riding with the King": {
+      "place": 26,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Rookies Of The Year": {
+      "place": 27,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Rooky Horror Pawn Show": {
+      "place": 28,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Rooky Horror Pawn Show fan club": {
+      "place": 29,
+      "title": 0.02,
+      "top3": 0.05
+     },
+     "Season 50 midlife crisis": {
+      "place": 30,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Silk Road Sacrifices": {
+      "place": 31,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Svidl, Svidler, Svidlest": {
+      "place": 32,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Svidler? I hardly know her": {
+      "place": 33,
+      "title": 0.02,
+      "top3": 0.04
+     },
+     "Team 52": {
+      "place": 34,
+      "title": 0.08,
+      "top3": 0.19
+     },
+     "Team 53": {
+      "place": 35,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Team 7": {
+      "place": 36,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "The Greek Gifty Nifty Fifty": {
+      "place": 37,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "The Last Shall be the First": {
+      "place": 38,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The Tarrasch Talkers": {
+      "place": 39,
+      "title": 0.03,
+      "top3": 0.07
+     },
+     "The Woodpushers": {
+      "place": 40,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The horsey don't belong here": {
+      "place": 41,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "The kannjuring": {
+      "place": 42,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "There Will Be Blunders": {
+      "place": 43,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Total Tomination": {
+      "place": 44,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Wandering Knights": {
+      "place": 45,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "We're not going to TAKE TAKE TAKE it": {
+      "place": 46,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "What a team! And we managed to avoid Prosti": {
+      "place": 47,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Yeah, well, that's just like, your opening, man.": {
+      "place": 48,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "fifty shades of black and white ": {
+      "place": 49,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "https://www.youtube.com/watch?v=dQw4w9WgXcQ": {
+      "place": 50,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "my english needs work": {
+      "place": 51,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "oh those 64 squares can encompass such immensity": {
+      "place": 52,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "passed pawn patrol": {
+      "place": 53,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "pspspspspsps": {
+      "place": 54,
+      "title": 0.01,
+      "top3": 0.03
+     }
+    }
+   },
+   "2": {
+    "commit": "ab86367",
+    "published": "2026-09-28T13:30:18Z",
+    "source": "published",
+    "teams": {
+     "100 Suggestions You Must Know": {
+      "place": 4,
+      "title": 0.17,
+      "top3": 0.35
+     },
+     "50 Shades of Swindles and Tricks": {
+      "place": 53,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "50 Ways to Fork Your Lover": {
+      "place": 46,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "50 first mates": {
+      "place": 34,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "50 pawns of Giri": {
+      "place": 9,
+      "title": 0.06,
+      "top3": 0.16
+     },
+     "50-50 my next move is a blunder": {
+      "place": 22,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "50th Parallel Pawns": {
+      "place": 23,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Blunders Without Borders": {
+      "place": 10,
+      "title": 0.03,
+      "top3": 0.09
+     },
+     "Don't give a check your ascii can't cache": {
+      "place": 48,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Fifty Shades of Time Trouble": {
+      "place": 11,
+      "title": 0.03,
+      "top3": 0.09
+     },
+     "Fork You Very Much": {
+      "place": 30,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "If anyone can refute it—don't show me": {
+      "place": 31,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Illiterate Alliteration Explorers": {
+      "place": 12,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Inexplicable Fianchetto Agenda": {
+      "place": 49,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "J’adoube-Al-Blunder": {
+      "place": 32,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "King's Landing": {
+      "place": 24,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Knights of the Round Tablebase": {
+      "place": 40,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork": {
+      "place": 35,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Leningrad School of Blunders": {
+      "place": 47,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Mating for Godot": {
+      "place": 36,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Morphy's Mates": {
+      "place": 37,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Not all who blunder are lost": {
+      "place": 25,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Old but hoping for stratospheric improvement": {
+      "place": 14,
+      "title": 0.05,
+      "top3": 0.14
+     },
+     "Operation Pawnstorm": {
+      "place": 7,
+      "title": 0.04,
+      "top3": 0.12
+     },
+     "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style": {
+      "place": 15,
+      "title": 0.04,
+      "top3": 0.12
+     },
+     "Pawn with the Sickness": {
+      "place": 26,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)": {
+      "place": 1,
+      "title": 0.06,
+      "top3": 0.16
+     },
+     "Pirc and Roll": {
+      "place": 2,
+      "title": 0.06,
+      "top3": 0.16
+     },
+     "Riding with the King": {
+      "place": 6,
+      "title": 0.04,
+      "top3": 0.12
+     },
+     "Rookies Of The Year": {
+      "place": 33,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Rooky Horror Pawn Show": {
+      "place": 16,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Rooky Horror Pawn Show fan club": {
+      "place": 44,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Season 50 midlife crisis": {
+      "place": 27,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Silk Road Sacrifices": {
+      "place": 17,
+      "title": 0.03,
+      "top3": 0.09
+     },
+     "Svidl, Svidler, Svidlest": {
+      "place": 28,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Svidler? I hardly know her": {
+      "place": 41,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The Greek Gifty Nifty Fifty": {
+      "place": 38,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The Last Shall be the First": {
+      "place": 18,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "The Tarrasch Talkers": {
+      "place": 42,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The Woodpushers": {
+      "place": 54,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The horsey don't belong here": {
+      "place": 43,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The kannjuring": {
+      "place": 52,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "There Will Be Blunders": {
+      "place": 51,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Total Tomination": {
+      "place": 19,
+      "title": 0.03,
+      "top3": 0.1
+     },
+     "Wandering Knights": {
+      "place": 3,
+      "title": 0.04,
+      "top3": 0.11
+     },
+     "We're not going to TAKE TAKE TAKE it": {
+      "place": 20,
+      "title": 0.03,
+      "top3": 0.09
+     },
+     "What a team! And we managed to avoid Prosti": {
+      "place": 21,
+      "title": 0.03,
+      "top3": 0.09
+     },
+     "Yeah, well, that's just like, your opening, man.": {
+      "place": 13,
+      "title": 0.03,
+      "top3": 0.09
+     },
+     "fifty shades of black and white ": {
+      "place": 29,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "https://www.youtube.com/watch?v=dQw4w9WgXcQ": {
+      "place": 50,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "my english needs work": {
+      "place": 8,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "oh those 64 squares can encompass such immensity": {
+      "place": 39,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "passed pawn patrol": {
+      "place": 45,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "pspspspspsps": {
+      "place": 5,
+      "title": 0.01,
+      "top3": 0.03
+     }
+    }
+   },
+   "3": {
+    "commit": "0542e7c",
+    "published": "2026-10-05T20:15:49Z",
+    "source": "published",
+    "teams": {
+     "100 Suggestions You Must Know": {
+      "place": 2,
+      "title": 0.3,
+      "top3": 0.55
+     },
+     "50 Shades of Swindles and Tricks": {
+      "place": 36,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "50 Ways to Fork Your Lover": {
+      "place": 24,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "50 first mates": {
+      "place": 49,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "50 pawns of Giri": {
+      "place": 7,
+      "title": 0.08,
+      "top3": 0.22
+     },
+     "50-50 my next move is a blunder": {
+      "place": 22,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "50th Parallel Pawns": {
+      "place": 14,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Blunders Without Borders": {
+      "place": 13,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Don't give a check your ascii can't cache": {
+      "place": 35,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Fifty Shades of Time Trouble": {
+      "place": 8,
+      "title": 0.06,
+      "top3": 0.17
+     },
+     "Fork You Very Much": {
+      "place": 42,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "If anyone can refute it—don't show me": {
+      "place": 18,
+      "title": 0.02,
+      "top3": 0.08
+     },
+     "Illiterate Alliteration Explorers": {
+      "place": 32,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Inexplicable Fianchetto Agenda": {
+      "place": 44,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "J’adoube-Al-Blunder": {
+      "place": 10,
+      "title": 0.03,
+      "top3": 0.1
+     },
+     "King's Landing": {
+      "place": 37,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Knights of the Round Tablebase": {
+      "place": 50,
+      "title": 0.0,
+      "top3": 0.03
+     },
+     "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork": {
+      "place": 52,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "Leningrad School of Blunders": {
+      "place": 51,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "Mating for Godot": {
+      "place": 25,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Morphy's Mates": {
+      "place": 21,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "Not all who blunder are lost": {
+      "place": 38,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Old but hoping for stratospheric improvement": {
+      "place": 33,
+      "title": 0.01,
+      "top3": 0.06
+     },
+     "Operation Pawnstorm": {
+      "place": 11,
+      "title": 0.02,
+      "top3": 0.09
+     },
+     "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style": {
+      "place": 20,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "Pawn with the Sickness": {
+      "place": 43,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)": {
+      "place": 1,
+      "title": 0.11,
+      "top3": 0.29
+     },
+     "Pirc and Roll": {
+      "place": 9,
+      "title": 0.04,
+      "top3": 0.14
+     },
+     "Riding with the King": {
+      "place": 4,
+      "title": 0.09,
+      "top3": 0.23
+     },
+     "Rookies Of The Year": {
+      "place": 12,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "Rooky Horror Pawn Show": {
+      "place": 16,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "Rooky Horror Pawn Show fan club": {
+      "place": 40,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Season 50 midlife crisis": {
+      "place": 15,
+      "title": 0.02,
+      "top3": 0.08
+     },
+     "Silk Road Sacrifices": {
+      "place": 5,
+      "title": 0.04,
+      "top3": 0.14
+     },
+     "Svidl, Svidler, Svidlest": {
+      "place": 23,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Svidler? I hardly know her": {
+      "place": 41,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The Greek Gifty Nifty Fifty": {
+      "place": 47,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "The Last Shall be the First": {
+      "place": 30,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The Tarrasch Talkers": {
+      "place": 39,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "The Woodpushers": {
+      "place": 46,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "The horsey don't belong here": {
+      "place": 26,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "The kannjuring": {
+      "place": 54,
+      "title": 0.0,
+      "top3": 0.01
+     },
+     "There Will Be Blunders": {
+      "place": 45,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Total Tomination": {
+      "place": 27,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Wandering Knights": {
+      "place": 19,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "We're not going to TAKE TAKE TAKE it": {
+      "place": 28,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "What a team! And we managed to avoid Prosti": {
+      "place": 29,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Yeah, well, that's just like, your opening, man.": {
+      "place": 31,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "fifty shades of black and white ": {
+      "place": 17,
+      "title": 0.02,
+      "top3": 0.07
+     },
+     "https://www.youtube.com/watch?v=dQw4w9WgXcQ": {
+      "place": 53,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "my english needs work": {
+      "place": 6,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "oh those 64 squares can encompass such immensity": {
+      "place": 48,
+      "title": 0.0,
+      "top3": 0.01
+     },
+     "passed pawn patrol": {
+      "place": 34,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "pspspspspsps": {
+      "place": 3,
+      "title": 0.01,
+      "top3": 0.05
+     }
+    }
+   },
+   "4": {
+    "commit": "56c2b26",
+    "published": "2026-10-12T13:40:32Z",
+    "source": "published",
+    "teams": {
+     "100 Suggestions You Must Know": {
+      "place": 8,
+      "title": 0.08,
+      "top3": 0.24
+     },
+     "50 Shades of Swindles and Tricks": {
+      "place": 23,
+      "title": 0.02,
+      "top3": 0.07
+     },
+     "50 Ways to Fork Your Lover": {
+      "place": 41,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "50 first mates": {
+      "place": 38,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "50 pawns of Giri": {
+      "place": 20,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "50-50 my next move is a blunder": {
+      "place": 40,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "50th Parallel Pawns": {
+      "place": 14,
+      "title": 0.01,
+      "top3": 0.06
+     },
+     "Blunders Without Borders": {
+      "place": 32,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Don't give a check your ascii can't cache": {
+      "place": 17,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "Fifty Shades of Time Trouble": {
+      "place": 3,
+      "title": 0.14,
+      "top3": 0.32
+     },
+     "Fork You Very Much": {
+      "place": 46,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "If anyone can refute it—don't show me": {
+      "place": 5,
+      "title": 0.09,
+      "top3": 0.25
+     },
+     "Illiterate Alliteration Explorers": {
+      "place": 15,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Inexplicable Fianchetto Agenda": {
+      "place": 28,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "J’adoube-Al-Blunder": {
+      "place": 25,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "King's Landing": {
+      "place": 27,
+      "title": 0.02,
+      "top3": 0.05
+     },
+     "Knights of the Round Tablebase": {
+      "place": 42,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork": {
+      "place": 52,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "Leningrad School of Blunders": {
+      "place": 36,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "Mating for Godot": {
+      "place": 35,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "Morphy's Mates": {
+      "place": 11,
+      "title": 0.03,
+      "top3": 0.1
+     },
+     "Not all who blunder are lost": {
+      "place": 48,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "Old but hoping for stratospheric improvement": {
+      "place": 24,
+      "title": 0.02,
+      "top3": 0.06
+     },
+     "Operation Pawnstorm": {
+      "place": 6,
+      "title": 0.07,
+      "top3": 0.21
+     },
+     "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style": {
+      "place": 33,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "Pawn with the Sickness": {
+      "place": 29,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)": {
+      "place": 1,
+      "title": 0.27,
+      "top3": 0.51
+     },
+     "Pirc and Roll": {
+      "place": 9,
+      "title": 0.03,
+      "top3": 0.11
+     },
+     "Riding with the King": {
+      "place": 16,
+      "title": 0.02,
+      "top3": 0.09
+     },
+     "Rookies Of The Year": {
+      "place": 12,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "Rooky Horror Pawn Show": {
+      "place": 19,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "Rooky Horror Pawn Show fan club": {
+      "place": 47,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "Season 50 midlife crisis": {
+      "place": 7,
+      "title": 0.03,
+      "top3": 0.12
+     },
+     "Silk Road Sacrifices": {
+      "place": 22,
+      "title": 0.01,
+      "top3": 0.03
+     },
+     "Svidl, Svidler, Svidlest": {
+      "place": 34,
+      "title": 0.0,
+      "top3": 0.01
+     },
+     "Svidler? I hardly know her": {
+      "place": 30,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "The Greek Gifty Nifty Fifty": {
+      "place": 51,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "The Last Shall be the First": {
+      "place": 43,
+      "title": 0.0,
+      "top3": 0.01
+     },
+     "The Tarrasch Talkers": {
+      "place": 26,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "The Woodpushers": {
+      "place": 50,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "The horsey don't belong here": {
+      "place": 18,
+      "title": 0.01,
+      "top3": 0.06
+     },
+     "The kannjuring": {
+      "place": 54,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "There Will Be Blunders": {
+      "place": 49,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "Total Tomination": {
+      "place": 13,
+      "title": 0.01,
+      "top3": 0.05
+     },
+     "Wandering Knights": {
+      "place": 10,
+      "title": 0.01,
+      "top3": 0.06
+     },
+     "We're not going to TAKE TAKE TAKE it": {
+      "place": 44,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "What a team! And we managed to avoid Prosti": {
+      "place": 37,
+      "title": 0.0,
+      "top3": 0.03
+     },
+     "Yeah, well, that's just like, your opening, man.": {
+      "place": 21,
+      "title": 0.02,
+      "top3": 0.05
+     },
+     "fifty shades of black and white ": {
+      "place": 31,
+      "title": 0.01,
+      "top3": 0.04
+     },
+     "https://www.youtube.com/watch?v=dQw4w9WgXcQ": {
+      "place": 53,
+      "title": 0.0,
+      "top3": 0.0
+     },
+     "my english needs work": {
+      "place": 4,
+      "title": 0.05,
+      "top3": 0.15
+     },
+     "oh those 64 squares can encompass such immensity": {
+      "place": 39,
+      "title": 0.0,
+      "top3": 0.02
+     },
+     "passed pawn patrol": {
+      "place": 45,
+      "title": 0.0,
+      "top3": 0.01
+     },
+     "pspspspspsps": {
+      "place": 2,
+      "title": 0.04,
+      "top3": 0.12
+     }
+    }
+   }
+  }
+ }
+}

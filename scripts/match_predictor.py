@@ -1261,9 +1261,11 @@ def _stake_pct(p: Optional[float]) -> str:
     return '–' if p is None else _esc(fmt_pct(p))
 
 
-def _stake_wdl(wdl: tuple, words: bool, now: Optional[float] = None) -> str:
-    """'Win 54% · Draw 32% · Loss 14%' (words=True) or '54% · 32% · 14%', numbers bold; with now: 'Now 40% | Win …'."""
-    lead = f'<span class="nw"><span class="k">Now</span> <b>{_stake_pct(now)}</b></span><span class="bar">|</span>' if now is not None else ''
+def _stake_wdl(wdl: tuple, words: bool, now: Optional[float] = None, after_now: str = '') -> str:
+    """'Win 54% · Draw 32% · Loss 14%' (words=True) or '54% · 32% · 14%', numbers bold; with now: 'Now 40% | Win …'
+    (after_now: e.g. the this-week arrow, right after the Now figure)."""
+    lead = (f'<span class="nw"><span class="k">Now</span> <b>{_stake_pct(now)}</b>{after_now}</span><span class="bar">|</span>'
+            if now is not None else '')
     parts = []
     for word, p in zip(('Win', 'Draw', 'Loss'), wdl):
         num = f'<b>{_stake_pct(p)}</b>'
@@ -1382,13 +1384,18 @@ def _ordinal(n: int) -> str:
     return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 
-def stake_season_card(m: dict, places: dict, round_num: int, matches_href: Optional[str]) -> str:
-    """Season finish: the featured match as one compact card (higher-placed team first)."""
+def stake_season_card(m: dict, places: dict, round_num: int, matches_href: Optional[str],
+                      week_ref: Optional[dict] = None) -> str:
+    """Season finish: the featured match as one compact card (higher-placed team first).
+    week_ref: the round's reference (prediction history) - this-week arrows after the Now figures."""
     parts = []
     for team in sorted((m['a'], m['b']), key=lambda t: places.get(t, 999)):
-        lines = ''.join(f'<div class="fs-line"><span class="s-lab">{label}</span>'
-                        f'<span>{_stake_wdl(m["teams"][team][key]["wdl"], True, m["teams"][team][key]["now"])}</span></div>'
-                        for key, label in STAKE_MEASURES)
+        lines = ''
+        for key, label in STAKE_MEASURES:
+            info = m['teams'][team][key]
+            lines += (f'<div class="fs-line"><span class="s-lab">{label}</span>'
+                      f'<span>{_stake_wdl(info["wdl"], True, info["now"], _week_arrow(info["now"], week_ref, team, key))}'
+                      f'</span></div>')
         now = f'<div class="fx-now">Now {_ordinal(places[team])}</div>' if team in places else ''
         parts.append(f'<div class="fx-team" data-team="{_esc(team)}" data-mark>{now}<div class="fx-name">'
                      f'{_esc(team)}</div><div class="fx-stats">{lines}</div></div>')
@@ -1400,6 +1407,262 @@ def stake_season_card(m: dict, places: dict, round_num: int, matches_href: Optio
         <div class="fx-teams">{parts[0]}<div class="fx-vs">vs</div>{parts[1]}</div>
         <div class="fx-foot"><p class="fs-note">Season chance after a win · draw · loss in this Round {round_num} match.{dash}</p>{link}</div>
     </section>
+'''
+
+
+# ---------------------------------------------------------------------------
+# PREDICTION HISTORY ("this week" arrows + "By round" charts on Season finish)
+# ---------------------------------------------------------------------------
+# prediction_history.json next to this script (v7 locally, the website repo's scripts/ in GitHub Actions):
+# {"seasons": {"50": {"5": {"source": "reference", "teams": {team: {"title": 0.39, "top3": ..., "top8": ...,
+#   "top15": ..., "place": 1}}, ...}}}}. Per round ONE entry, never overwritten:
+#   "reference" = the --full-season projection with that round's boards treated as unplayed (the state when the
+#                 round started on Monday), computed by the first --full-season run of the round that finds none;
+#   "published" = backfilled once from the website's history (first published run of the round; whole percents).
+HISTORY_FILE = Path(__file__).resolve().parent / 'prediction_history.json'
+HISTORY_SEASONS_KEPT = 2        # the current season + the previous one
+WEEK_ARROW_MIN = 0.03           # a this-week arrow from 3 points of change
+WEEK_ARROW_BIG = 0.10           # 10+ points: gold pill
+HISTORY_KEYS = (('title', 1), ('top3', 3), ('top8', 8), ('top15', 15))
+
+
+def load_prediction_history(path: Optional[Path] = None) -> Optional[dict]:
+    """The history file; {} when there is none yet, None when it can't be read (then nothing is shown or written)."""
+    path = Path(path or HISTORY_FILE)
+    if not path.exists():
+        return {}
+    try:
+        with open(path, encoding='utf-8') as f:
+            data = json.load(f)
+        if not isinstance(data, dict) or not isinstance(data.get('seasons', {}), dict):
+            raise ValueError('unexpected layout')
+        return data
+    except Exception as e:
+        print(f"⚠ Prediction history unreadable ({path.name}: {e}) - no this-week arrows / charts, file left as it is")
+        return None
+
+
+def save_prediction_history(data: dict, season: int, path: Optional[Path] = None) -> bool:
+    """Write the history (only the current season + the previous one kept). Failure = a warning, never an error."""
+    path = Path(path or HISTORY_FILE)
+    try:
+        seasons = data.setdefault('seasons', {})
+        for key in list(seasons):
+            if not key.isdigit() or int(key) <= season - HISTORY_SEASONS_KEPT:
+                del seasons[key]
+        tmp = path.with_suffix('.json.tmp')
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=1, sort_keys=True)
+        tmp.replace(path)
+        return True
+    except Exception as e:
+        print(f"⚠ Could not save the prediction history ({e})")
+        return False
+
+
+def projection_summary(standings_prediction: dict) -> dict:
+    """team -> {title, top3, top8, top15, place now} (fractions, 4 decimals) of a season projection."""
+    out = {}
+    for team, stats in standings_prediction.items():
+        probs = stats['placement_probs']
+        row = {key: round(sum(probs.get(j, 0) for j in range(1, k + 1)), 4) for key, k in HISTORY_KEYS}
+        row['place'] = stats.get('current_standing')
+        out[team] = row
+    return out
+
+
+def season_reference_data(season_data: dict, round_num: int) -> dict:
+    """The season with this round's boards treated as unplayed (previous results + this round's pairings)."""
+    games = []
+    for g in season_data.get('games', []):
+        if g.get('round') == round_num:
+            g = dict(g)
+            g['result'] = ''
+        games.append(g)
+    return {**season_data, 'games': games}
+
+
+def update_prediction_history(season: int, round_num: int, season_data: dict, matchups: list, player_ratings: dict,
+                              standings_prediction: dict, n_sims: int, path: Optional[Path] = None) -> Optional[dict]:
+    """This season's history as {round: entry}; adds this round's reference first if there is none yet (never
+    overwrites one). The reference simulation uses its own seeded random numbers and restores the shared state
+    afterwards, so the page's numbers don't depend on whether a reference was made in this run.
+    None = history unreadable (no arrows / charts)."""
+    history = load_prediction_history(path)
+    if history is None:
+        return None
+    rounds = history.setdefault('seasons', {}).setdefault(str(season), {})
+    if str(round_num) not in rounds:
+        played = sum(1 for m in matchups for p in m if p.is_played)
+        if played == 0:
+            ref = standings_prediction          # nothing played yet: this projection is the round's starting point
+        else:
+            print(f"Reference for Round {round_num} (its {played} played boards treated as unplayed)...")
+            state = random.getstate()
+            random.seed(f'4545 reference S{season} R{round_num}')
+            try:
+                ref = simulate_full_season(season_reference_data(season_data, round_num), round_num,
+                                           player_ratings, n_sims)
+            finally:
+                random.setstate(state)
+        rounds[str(round_num)] = {
+            'source': 'reference',
+            'created': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'),
+            'n_sims': n_sims,
+            'boards_played_then': played,
+            'teams': projection_summary(ref),
+        }
+        if not _ratings_look_fetched(matchups):
+            print("⚠ Most ratings missing (fetch failed?) - this round's reference not saved")
+        elif save_prediction_history(history, season, path):
+            print(f"✅ Prediction history: Round {round_num} reference saved ({Path(path or HISTORY_FILE).name})")
+    return {int(r): e for r, e in rounds.items() if r.isdigit() and isinstance(e, dict)}
+
+
+def _ratings_look_fetched(matchups: list) -> bool:
+    """False when most of the round's players have the default rating (the ratings fetch failed) -
+    a reference made from those would be wrong for the whole week, so it is not saved."""
+    players = [pl for m in matchups for p in m for pl in (p.white, p.black)]
+    if not players:
+        return False
+    default = sum(1 for pl in players if pl.rating == DEFAULT_RATING and pl.rd == DEFAULT_RD)
+    return default <= len(players) / 2
+
+
+def _week_arrow(now: Optional[float], ref: Optional[dict], team: str, key: str) -> str:
+    """'▲5' / '▼12' (gold pill from WEEK_ARROW_BIG) = change since the round's reference; '' under WEEK_ARROW_MIN."""
+    if now is None or not ref or team not in ref or ref[team].get(key) is None:
+        return ''
+    delta = now - ref[team][key]
+    if abs(delta) < WEEK_ARROW_MIN:
+        return ''
+    n = round(abs(delta) * 100)
+    sym, word = ('▲', 'up') if delta > 0 else ('▼', 'down')
+    cls = 'wk big' if abs(delta) >= WEEK_ARROW_BIG else 'wk'
+    return f'<span class="{cls}" title="{word} {n} points this week">{sym}{n}</span>'
+
+
+def _pct_label(v: float) -> str:
+    return '<1%' if 0 < v < 0.005 else f'{round(v * 100)}%'
+
+
+def _trend_svg(team: str, points: list) -> str:
+    """Small line chart: title (solid) and top 3 (dashed) per round + Now. points: [(label, title, top3)], None = no data."""
+    known = [p for p in points if p[1] is not None]
+    top = max(p[2] for p in known)
+    if top < 0.02:
+        return '<p class="trend-none">Top 3 chance under 2% all season.</p>'
+    ymax = next(m for m in (5, 10, 20, 30, 50, 75, 100) if top * 100 <= m)
+    x0, x1, y0, y1 = 30, 252, 10, 70
+    step = (x1 - x0) / max(1, len(points) - 1)
+    xs = [x0 + i * step for i in range(len(points))]
+
+    def y(v):
+        return y1 - (v * 100 / ymax) * (y1 - y0)
+    out = [f'<svg viewBox="0 0 330 94" class="trend-svg" role="img" '
+           f'aria-label="Title and top 3 chance by round for {_esc(team)}">',
+           f'<line x1="{x0}" x2="{x1}" y1="{y1}" y2="{y1}" stroke="#d3e3e6" stroke-width="1"/>',
+           f'<line x1="{x0}" x2="{x1}" y1="{y0}" y2="{y0}" stroke="#e7f1f2" stroke-width="1" stroke-dasharray="2 3"/>',
+           f'<text x="{x0 - 6}" y="{y1 + 3.5}" text-anchor="end" font-size="11" fill="#5f7c86">0</text>',
+           f'<text x="{x0 - 6}" y="{y0 + 3.5}" text-anchor="end" font-size="11" fill="#5f7c86">{ymax}%</text>']
+    for i, p in enumerate(points):
+        bold = ' font-weight="700"' if p[0] == 'Now' else ''
+        out.append(f'<text x="{xs[i]:.1f}" y="88" text-anchor="middle" font-size="11" fill="#5f7c86"{bold}>{p[0]}</text>')
+    ends = {}
+    for idx, color, dash, rad in ((2, '#5f9aaa', '4 3', 3.2), (1, '#1a4a5c', '', 3.6)):   # top 3 under the title
+        seg = [(xs[i], y(p[idx])) for i, p in enumerate(points) if p[idx] is not None]
+        d = ' '.join(('M' if j == 0 else 'L') + f'{a:.1f},{b:.1f}' for j, (a, b) in enumerate(seg))
+        da = f' stroke-dasharray="{dash}"' if dash else ''
+        if len(seg) > 1:
+            out.append(f'<path d="{d}" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round"{da}/>')
+        for a, b in seg:
+            out.append(f'<circle cx="{a:.1f}" cy="{b:.1f}" r="{rad}" fill="{color}" stroke="#ffffff" stroke-width="1.5"/>')
+        ends[idx] = seg[-1][1]
+    lt, l3 = ends[1], ends[2]
+    if abs(lt - l3) < 12:                          # direct labels at the right end, pushed apart
+        mid = (lt + l3) / 2
+        lt, l3 = (mid + 6, mid - 6) if lt >= l3 else (mid - 6, mid + 6)
+    now = points[-1]
+    out.append(f'<text x="{x1 + 9}" y="{l3 + 3.5:.1f}" font-size="11.5" fill="#0f2830">Top 3 '
+               f'<tspan font-weight="700">{_esc(_pct_label(now[2]))}</tspan></text>')
+    out.append(f'<text x="{x1 + 9}" y="{lt + 3.5:.1f}" font-size="11.5" fill="#0f2830">Title '
+               f'<tspan font-weight="700">{_esc(_pct_label(now[1]))}</tspan></text>')
+    for i, p in enumerate(points):                 # hover: one column per point with a tooltip
+        if p[1] is None:
+            tip = f'{p[0]}: no data'
+        else:
+            when = 'Now' if p[0] == 'Now' else f'{p[0]} start'
+            tip = f'{when}: Title {_pct_label(p[1])} · Top 3 {_pct_label(p[2])}'
+        out.append(f'<rect x="{xs[i] - step / 2:.1f}" y="2" width="{step:.1f}" height="90" fill="transparent">'
+                   f'<title>{_esc(tip)}</title></rect>')
+    out.append('</svg>')
+    return ''.join(out)
+
+
+def _trend_block(team: str, history_rounds: dict, round_num: int, now: dict) -> str:
+    """'By round' chart of one team: each round's start (history) + Now. '' when the history has nothing."""
+    points = []
+    for r in range(1, round_num + 1):
+        row = history_rounds.get(r, {}).get('teams', {}).get(team)
+        points.append((f'R{r}', row['title'], row['top3']) if row else (f'R{r}', None, None))
+    points.append(('Now', now['title'], now['top3']))
+    return ('<div class="trend"><div class="trend-head"><span>By round</span>'
+            '<span class="trend-key"><i class="sw sw-t"></i>Title <i class="sw sw-3"></i>Top 3</span></div>'
+            + _trend_svg(team, points) + '</div>')
+
+
+WEEK_CSS = '''
+        .wk { display: block; font-size: 0.68rem; font-weight: 600; line-height: 1.1; margin-top: 0.1rem; opacity: 0.85;
+            font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .wk.big { display: table; margin: 0.1rem auto 0; opacity: 1; background: #d4b856; color: #0f2830; border-radius: 999px;
+            padding: 0.05rem 0.35rem; font-weight: 700; }
+        .fs-line .wk { display: inline-block; margin: 0 0 0 0.3rem; }
+        .wk-key { color: var(--muted); font-size: 0.8rem; margin: 0 0 0.5rem; }
+        .wk-key .wk { display: inline-block; color: var(--ink); }
+        .trend { margin-top: 0.6rem; border-top: 1px solid var(--line); padding-top: 0.5rem; }
+        .trend-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem;
+            font-size: 0.75rem; color: var(--muted); }
+        .trend-head > span:first-child { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: var(--teal); }
+        .trend-key { white-space: nowrap; }
+        .sw { display: inline-block; width: 16px; height: 0; vertical-align: middle; margin: 0 0.25rem 0 0.5rem; }
+        .sw-t { border-top: 2px solid #1a4a5c; }
+        .sw-3 { border-top: 2px dashed #5f9aaa; }
+        .trend-svg { width: 100%; height: auto; display: block; margin-top: 0.2rem; }
+        .trend-none { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
+        .my-trend { max-width: 460px; margin: -0.75rem auto 1.5rem; background: var(--card); border: 1px solid var(--gold);
+            box-shadow: inset 4px 0 0 var(--gold); border-radius: 12px; padding: 0.6rem 0.9rem 0.5rem; }
+        .my-trend[hidden] { display: none; }
+        .my-trend .my-name { font-weight: 700; color: var(--deep); overflow-wrap: anywhere; font-size: 0.9rem; }
+        .my-trend .trend { margin-top: 0.2rem; border-top: 0; padding-top: 0; }
+'''
+
+# The picked team's "By round" chart under the picker (a copy of the one in its team card)
+TREND_JS = '''
+<script>
+(function () {
+    var sel = document.getElementById('team-pick');
+    var panel = document.getElementById('my-trend');
+    if (!sel || !panel) return;
+    function show() {
+        var team = sel.value;
+        panel.innerHTML = '';
+        var card = Array.prototype.filter.call(document.querySelectorAll('.team-card'), function (c) {
+            return c.getAttribute('data-team') === team; })[0];
+        var tr = team && card && card.querySelector('.trend');
+        if (!tr) { panel.hidden = true; return; }
+        var name = document.createElement('div');
+        name.className = 'my-name';
+        name.textContent = team;
+        panel.appendChild(name);
+        panel.appendChild(tr.cloneNode(true));
+        panel.hidden = false;
+    }
+    sel.addEventListener('change', show);
+    var clear = document.getElementById('team-clear');
+    if (clear) clear.addEventListener('click', function () { setTimeout(show, 0); });
+    show();
+})();
+</script>
 '''
 
 
@@ -1638,18 +1901,24 @@ def generate_standings_html(standings_prediction: dict, season: int, round_num: 
 
 def generate_distribution_html(standings_prediction: dict, season: int, round_num: int,
                                nav: Optional[dict] = None, mode: str = 'round', n_sims: Optional[int] = None,
-                               rounds_left: Optional[int] = None, stake_card: str = '') -> str:
+                               rounds_left: Optional[int] = None, stake_card: str = '',
+                               history_rounds: Optional[dict] = None) -> str:
     """Chances of each place: summary bands first (phone friendly), every place behind a toggle, then team cards.
-    stake_card: HTML of the 'Biggest potential swing this round' card (stake_season_card), shown above the summary table."""
+    stake_card: HTML of the 'Biggest potential swing this round' card (stake_season_card), shown above the summary table.
+    history_rounds: this season's prediction history {round: entry} (Season finish only) - this-week arrows against
+    this round's entry and a 'By round' chart per team. None / empty = neither."""
     t = _mode_texts(mode, season, round_num, n_sims)
     page_key = 'distribution' if mode == 'round' else 'season_distribution'
     sorted_standings = _sorted_standings(standings_prediction)
     num_teams = len(sorted_standings)
 
-    # Bands: 1st/Title and Top 3 always; Top 8 / Bottom 8 only when there are enough teams for them to mean something
+    # Bands (all 'higher is better'): 1st/Title and Top 3 always; Top 8 / Top 15 only when there are enough teams
     bands = [(t['first'], 'top', 1), ('Top 3', 'top', 3)]
     if num_teams >= 20:
-        bands += [('Top 8', 'top', 8), ('Bottom 8', 'bottom', 8)]
+        bands += [('Top 8', 'top', 8), ('Top 15', 'top', 15)]
+    band_keys = {1: 'title', 3: 'top3', 8: 'top8', 15: 'top15'}
+    history_rounds = history_rounds if mode == 'season' and history_rounds else {}
+    week_ref = history_rounds.get(round_num, {}).get('teams') or None
 
     css = '''
         .wrap { max-width: 860px; margin: 0 auto; }
@@ -1699,21 +1968,32 @@ def generate_distribution_html(standings_prediction: dict, season: int, round_nu
             places = range(1, k + 1) if side == 'top' else range(num_teams - k + 1, num_teams + 1)
             p = sum(probs.get(j, 0) for j in places)
             settled = _settled_by_points(standings_prediction, team, k, rounds_left) if side == 'top' else None
-            cells += _prob_cell(p, settled)
+            cell = _prob_cell(p, settled)
+            arrow = _week_arrow(p, week_ref, team, band_keys[k]) if side == 'top' else ''
+            cells += cell[:-5] + arrow + '</td>' if arrow else cell
         if with_points:
             cells += (f'<td class="dim">{stats["expected_match_points"]:.1f}</td>'
                       f'<td class="dim">{stats["expected_game_points"]:.1f}</td>')
         rows += (f'<tr data-i="{i}" data-team="{_esc(team)}"><td class="tl team">{_esc(team)}</td>'
                  f'<td class="dim">{stats["current_standing"]}</td>{cells}</tr>\n')
 
-    bottom_note = f' Bottom 8 = places {num_teams - 7}-{num_teams}.' if num_teams >= 20 else ''
     clinch_note = (' Clinched / Out of reach = already settled by match points alone (tiebreaks not counted).'
                    if rounds_left else '')
     points_note = ' MP / GP = average match / game points at the end of the season.' if with_points else ''
     if stake_card:
         css += STAKE_SEASON_CSS
-    body = f'''{_picker_html(standings_prediction.keys())}{stake_card}
-    <div class="wrap">
+    script = PICKER_JS
+    my_trend = week_key = ''
+    if history_rounds:
+        css += WEEK_CSS
+        script += TREND_JS
+        my_trend = '\n    <div class="my-trend" id="my-trend" hidden></div>'
+    if week_ref:
+        week_key = ('\n    <p class="wk-key"><span class="wk">▲</span>/<span class="wk">▼</span> = change this week, since the '
+                    f'round started on Monday; shown from {round(WEEK_ARROW_MIN * 100)} points '
+                    f'(<span class="wk big">▲{round(WEEK_ARROW_BIG * 100)}</span> = {round(WEEK_ARROW_BIG * 100)} or more).</p>')
+    body = f'''{_picker_html(standings_prediction.keys())}{my_trend}{stake_card}
+    <div class="wrap">{week_key}
     <div class="box">
         <table class="std{' wide' if with_points else ''}">
             <thead><tr><th class="tl">Team</th><th title="Place now">Now</th>{head}</tr></thead>
@@ -1721,7 +2001,7 @@ def generate_distribution_html(standings_prediction: dict, season: int, round_nu
 {rows}            </tbody>
         </table>
     </div>
-    <p class="note">Teams in projected order.{bottom_note}{points_note} &lt;1% = happened in only a few simulations, – = never happened.{clinch_note}</p>
+    <p class="note">Teams in projected order.{points_note} &lt;1% = happened in only a few simulations, – = never happened.{clinch_note}</p>
     </div>
 '''
 
@@ -1789,16 +2069,17 @@ def generate_distribution_html(standings_prediction: dict, season: int, round_nu
 
         top1 = probs.get(1, 0)
         top3 = sum(probs.get(j, 0) for j in range(1, 4))
+        trend = _trend_block(team, history_rounds, round_num, {'title': top1, 'top3': top3}) if history_rounds else ''
         body += f'''
         <div class="team-card" data-i="{i}" data-team="{_esc(team)}">
             <div class="team-card-header">
                 <span class="team-card-name">{_esc(team)}</span>
                 <span class="team-card-stats">Now {current} → likely {most_likely_pos}</span>
             </div>
-            <svg viewBox="0 0 {chart_width} {chart_height}" class="team-chart" role="img" aria-label="Chance of each place for {_esc(team)}">
+            <svg viewBox="-4 -12 {chart_width + 10} {chart_height + 12}" class="team-chart" role="img" aria-label="Chance of each place for {_esc(team)}">
                 {svg_bars}
                 {svg_labels}
-            </svg>
+            </svg>{trend}
             <div class="team-card-footer">
                 <span class="prob-badge">{t['first']} {fmt_pct(top1)}</span>
                 <span class="prob-badge">Top 3 {fmt_pct(top3)}</span>
@@ -1806,11 +2087,13 @@ def generate_distribution_html(standings_prediction: dict, season: int, round_nu
         </div>
 '''
 
-    body += '''    </div>
-    <p class="note">Bars: chance of each place (numbers in %), places 1 to the last left to right.</p>
+    trend_note = (" By round: each point is that round's projection when it started (Monday); Now = latest update."
+                  if history_rounds else '')
+    body += f'''    </div>
+    <p class="note">Bars: chance of each place (numbers in %), places 1 to the last left to right.{trend_note}</p>
 '''
     return _page(t['dist_title'], t['dist_h1'], t['dist_sub'], body, page_key, round_num, nav,
-                 extra_css=css, script=PICKER_JS)
+                 extra_css=css, script=script)
 
 
 def generate_season_forward_html(season: int, round_num: int, target: str) -> str:
@@ -2592,6 +2875,8 @@ def main():
     parser.add_argument('--export-sims', type=str, default=None, help='Export individual simulation results to Excel file')
     parser.add_argument('--full-season', action='store_true', help='Simulate entire remaining season with Swiss pairings')
     parser.add_argument('--roster', type=str, default=None, help='Excel file with team rosters (for pre-season predictions)')
+    parser.add_argument('--history', type=str, default=None,
+                        help='Prediction history file (default: prediction_history.json next to this script; --full-season)')
     
     args = parser.parse_args()
     
@@ -2715,6 +3000,12 @@ def main():
         featured = featured_stake(stakes, places)
         if featured:
             print(f"Biggest potential swing this round: {featured['a']} vs {featured['b']}")
+        # Prediction history: this round's reference (once) for the this-week arrows + the By-round charts
+        history_rounds = None
+        if args.output:
+            history_rounds = update_prediction_history(args.season, args.round, season_data, matchups, player_ratings,
+                                                       standings_prediction, args.simulations, args.history)
+        week_ref = (history_rounds or {}).get(args.round, {}).get('teams')
         
         # Sort by expected placement
         sorted_standings = sorted(
@@ -2751,11 +3042,11 @@ def main():
             matches_file = f"{prefix}_matches.html"
             has_matches = os.path.exists(matches_file)
             stake_card = (stake_season_card(featured, places, args.round,
-                                            os.path.basename(matches_file) if has_matches else None)
+                                            os.path.basename(matches_file) if has_matches else None, week_ref)
                           if featured else '')
             distribution_html = generate_distribution_html(standings_prediction, args.season, args.round, nav=nav,
                                                            mode='season', n_sims=args.simulations, rounds_left=rounds_left,
-                                                           stake_card=stake_card)
+                                                           stake_card=stake_card, history_rounds=history_rounds)
             distribution_file = f"{prefix}_season_distribution.html"
             with open(distribution_file, 'w', encoding='utf-8') as f:
                 f.write(distribution_html)

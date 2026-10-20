@@ -63,6 +63,8 @@ jobs:
           # Add files to staging to detect both new and modified files
           git add predictions_matches.html predictions_standings.html predictions_distribution.html \
                   predictions_season_standings.html predictions_season_distribution.html 2>/dev/null || true
+          # Prediction history (this-week arrows, By-round charts) - own line: a missing file must not stop the pages
+          git add scripts/prediction_history.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
