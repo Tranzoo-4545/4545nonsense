@@ -1,608 +1,257 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Predicted Standings - Season 50 Round 5</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table after Round 5 - Season 50</title>
     <style>
         
         :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-card: #21262d;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --border-color: #30363d;
-            --team-a-color: #58a6ff;
-            --team-b-color: #f78166;
-            --win-color: #3fb950;
-            --draw-color: #d29922;
+            --bg: #f0f6f6;
+            --card: #ffffff;
+            --card-2: #e7f1f2;
+            --ink: #0f2830;
+            --muted: #5f7c86;
+            --teal: #2c5f6f;
+            --teal-2: #3d7a8a;
+            --deep: #1a4a5c;
+            --pale: #a8d5e2;
+            --gold: #d4b856;
+            --line: #d3e3e6;
+            --team-a: #2c5f6f;
+            --team-b: #9a4f2a;
+            --draw: #d4b856;
+            --mine: #fbf3d6;
         }
-        
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            padding: 2rem;
+            background: var(--bg);
+            color: var(--ink);
             line-height: 1.5;
         }
-        
+        .topbar {
+            background: var(--deep);
+            padding: 0.6rem 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem 1.25rem;
+        }
+        .topbar a { color: #ffffff; text-decoration: none; }
+        .topbar .back { font-weight: 600; white-space: nowrap; }
+        .topbar .back:hover { text-decoration: underline; }
+        .pages { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .pages a {
+            font-size: 0.85rem;
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            white-space: nowrap;
+        }
+        .pages a:hover { background: rgba(255, 255, 255, 0.12); }
+        .pages a.on { background: #ffffff; color: var(--deep); font-weight: 600; border-color: #ffffff; }
+        .page { max-width: 1200px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
         h1 {
             text-align: center;
-            margin-bottom: 0.5rem;
+            color: var(--teal);
             font-size: 1.8rem;
+            line-height: 1.25;
+            margin-bottom: 0.4rem;
         }
-        
-        .subtitle {
+        h2 { color: var(--teal); font-size: 1.2rem; margin: 2.5rem 0 0.75rem; }
+        .subtitle { text-align: center; color: var(--muted); margin-bottom: 1.5rem; }
+        .note { color: var(--muted); font-size: 0.8rem; margin: 0.6rem 0 0; }
+        .picker {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0 auto 1.5rem;
+        }
+        .picker label { color: var(--muted); font-size: 0.9rem; }
+        .picker select {
+            font: inherit;
+            font-size: 0.9rem;
+            max-width: 100%;
+            padding: 0.35rem 0.5rem;
+            border: 1px solid var(--pale);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--ink);
+        }
+        .picker button {
+            font: inherit;
+            font-size: 0.85rem;
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--teal);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--teal);
+            cursor: pointer;
+        }
+        .picker button[hidden] { display: none; }
+        .box {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+        table.std { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        table.std th {
+            background: var(--card-2);
+            color: var(--muted);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.6rem 0.4rem;
             text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
+        }
+        table.std td { padding: 0.5rem 0.4rem; text-align: center; border-top: 1px solid var(--line); }
+        table.std th.tl, table.std td.tl { text-align: left; padding-left: 0.75rem; }
+        td.team { font-weight: 600; overflow-wrap: anywhere; min-width: 7rem; }
+        td.rank { color: var(--teal); font-weight: 700; width: 2.2rem; }
+        td.dim { color: var(--muted); }
+        td.lbl { font-size: 0.72rem; font-weight: 700; line-height: 1.2; }
+        td.lbl.yes { color: var(--teal); }
+        td.lbl.no { color: var(--muted); font-weight: 500; }
+        tr.mine td:not([style]), .team-card.mine { background: var(--mine); }
+        tr.mine td.team { color: var(--deep); }
+        tr.mine td:first-child { box-shadow: inset 4px 0 0 var(--gold); }
+        .team-card.mine { border-color: var(--gold); box-shadow: inset 4px 0 0 var(--gold); }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.4rem; }
+            table.std { font-size: 0.8rem; }
+            table.std th { font-size: 0.62rem; letter-spacing: 0; padding: 0.5rem 0.2rem; }
+            table.std td { padding: 0.45rem 0.2rem; }
+            table.std th.tl, table.std td.tl { padding-left: 0.5rem; }
+            td.team { min-width: 6rem; }
         }
 
+        
     </style>
 </head>
 <body>
-    <h1>📊 Predicted Standings After Round 5</h1>
-    <p class="subtitle">Season 50 • Monte Carlo Simulation • Generated: 2026-10-20 16:11 UTC</p>
-    
-    <div style="max-width: 800px; margin: 1.5rem auto; background: var(--bg-secondary); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
-            <thead>
-                <tr style="background: var(--bg-card); color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">
-                    <th style="padding: 0.75rem; text-align: center; width: 40px;">#</th>
-                    <th style="padding: 0.75rem; text-align: left;">Team</th>
-                    <th style="padding: 0.75rem; text-align: center;">Now</th>
-                    <th style="padding: 0.75rem; text-align: center;">1st</th>
-                    <th style="padding: 0.75rem; text-align: center;">Top 3</th>
-                    <th style="padding: 0.75rem; text-align: center;">MP</th>
-                    <th style="padding: 0.75rem; text-align: center;">GP</th>
-                </tr>
-            </thead>
-            <tbody>
+    <nav class="topbar">
+        <a class="back" href="index.html">← The 4545 Chronicles</a>
+        <div class="pages"><a href="predictions_matches.html">Matches</a><a class="on" aria-current="page" href="predictions_standings.html">Table after R5</a><a href="predictions_distribution.html">Places after R5</a><a href="predictions_season_distribution.html">Season finish</a></div>
+    </nav>
+    <main class="page">
+    <h1>Table after Round 5</h1>
+    <p class="subtitle">Season 50 · projected from 10,000 simulations of this round · updated 2026-10-20 17:32 UTC</p>
 
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">1</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">70%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color);">99%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9.3</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">27.9</td>
-                </tr>
+    <div class="picker">
+        <label for="team-pick">Your team:</label>
+        <select id="team-pick"><option value="">Choose a team…</option><option value="100 Suggestions You Must Know">100 Suggestions You Must Know</option><option value="50 first mates">50 first mates</option><option value="50 pawns of Giri">50 pawns of Giri</option><option value="50 Shades of Swindles and Tricks">50 Shades of Swindles and Tricks</option><option value="50 Ways to Fork Your Lover">50 Ways to Fork Your Lover</option><option value="50-50 my next move is a blunder">50-50 my next move is a blunder</option><option value="50th Parallel Pawns">50th Parallel Pawns</option><option value="Blunders Without Borders">Blunders Without Borders</option><option value="Don&#x27;t give a check your ascii can&#x27;t cache">Don&#x27;t give a check your ascii can&#x27;t cache</option><option value="fifty shades of black and white ">fifty shades of black and white </option><option value="Fifty Shades of Time Trouble">Fifty Shades of Time Trouble</option><option value="Fork You Very Much">Fork You Very Much</option><option value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">https://www.youtube.com/watch?v=dQw4w9WgXcQ</option><option value="If anyone can refute it—don&#x27;t show me">If anyone can refute it—don&#x27;t show me</option><option value="Illiterate Alliteration Explorers">Illiterate Alliteration Explorers</option><option value="Inexplicable Fianchetto Agenda">Inexplicable Fianchetto Agenda</option><option value="J’adoube-Al-Blunder">J’adoube-Al-Blunder</option><option value="King&#x27;s Landing">King&#x27;s Landing</option><option value="Knights of the Round Tablebase">Knights of the Round Tablebase</option><option value="Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork">Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork</option><option value="Leningrad School of Blunders">Leningrad School of Blunders</option><option value="Mating for Godot">Mating for Godot</option><option value="Morphy&#x27;s Mates">Morphy&#x27;s Mates</option><option value="my english needs work">my english needs work</option><option value="Not all who blunder are lost">Not all who blunder are lost</option><option value="oh those 64 squares can encompass such immensity">oh those 64 squares can encompass such immensity</option><option value="Old but hoping for stratospheric improvement">Old but hoping for stratospheric improvement</option><option value="Operation Pawnstorm">Operation Pawnstorm</option><option value="Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style">Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style</option><option value="passed pawn patrol">passed pawn patrol</option><option value="Pawn with the Sickness">Pawn with the Sickness</option><option value="Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</option><option value="Pirc and Roll">Pirc and Roll</option><option value="pspspspspsps">pspspspspsps</option><option value="Riding with the King">Riding with the King</option><option value="Rookies Of The Year">Rookies Of The Year</option><option value="Rooky Horror Pawn Show">Rooky Horror Pawn Show</option><option value="Rooky Horror Pawn Show fan club">Rooky Horror Pawn Show fan club</option><option value="Season 50 midlife crisis">Season 50 midlife crisis</option><option value="Silk Road Sacrifices">Silk Road Sacrifices</option><option value="Svidl, Svidler, Svidlest">Svidl, Svidler, Svidlest</option><option value="Svidler? I hardly know her">Svidler? I hardly know her</option><option value="The Greek Gifty Nifty Fifty">The Greek Gifty Nifty Fifty</option><option value="The horsey don&#x27;t belong here">The horsey don&#x27;t belong here</option><option value="The kannjuring">The kannjuring</option><option value="The Last Shall be the First">The Last Shall be the First</option><option value="The Tarrasch Talkers">The Tarrasch Talkers</option><option value="The Woodpushers">The Woodpushers</option><option value="There Will Be Blunders">There Will Be Blunders</option><option value="Total Tomination">Total Tomination</option><option value="Wandering Knights">Wandering Knights</option><option value="We&#x27;re not going to TAKE TAKE TAKE it">We&#x27;re not going to TAKE TAKE TAKE it</option><option value="What a team! And we managed to avoid Prosti">What a team! And we managed to avoid Prosti</option><option value="Yeah, well, that&#x27;s just like, your opening, man.">Yeah, well, that&#x27;s just like, your opening, man.</option></select>
+        <button type="button" id="team-clear" hidden>Show all</button>
+    </div>
 
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">2</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">my english needs work</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">30%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">46%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">8.7</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">23.1</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color); font-weight: 600;">3</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">If anyone can refute it—don't show me</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--win-color);">56%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">8.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">24.2</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">4</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">pspspspspsps</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">28%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.3</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">23.4</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">5</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">100 Suggestions You Must Know</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.0</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">23.4</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">6</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Wandering Knights</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22.8</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">7</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">50 pawns of Giri</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">10</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.3</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">21.9</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">8</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Riding with the King</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">8</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22.2</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">9</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">50th Parallel Pawns</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">8%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7.0</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22.1</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">10</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Fifty Shades of Time Trouble</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">7</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.7</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22.1</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">11</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Rooky Horror Pawn Show</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">12</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.8</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">12</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">J’adoube-Al-Blunder</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">13</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.0</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">23.5</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">13</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The horsey don't belong here</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">11</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.7</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.6</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">14</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Operation Pawnstorm</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">14</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.0</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22.6</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">15</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">fifty shades of black and white </td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">16</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">21.6</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">16</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Total Tomination</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">15</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">21.3</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">17</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Season 50 midlife crisis</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">18</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.0</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.9</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">18</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Illiterate Alliteration Explorers</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">17</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.9</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">19</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">50 Shades of Swindles and Tricks</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.2</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">20</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Yeah, well, that's just like, your opening, man.</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">19</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">6.0</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.0</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">21</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Pirc and Roll</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">21</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22.7</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">22</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">What a team! And we managed to avoid Prosti</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">22</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">21.7</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">23</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Morphy's Mates</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">23</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">21.7</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">24</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">26</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.3</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.9</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">25</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">50 first mates</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">27</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.7</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">26</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Knights of the Round Tablebase</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">32</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.3</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.0</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">27</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Old but hoping for stratospheric improvement</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">33</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.2</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">19.4</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">28</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Don't give a check your ascii can't cache</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">29</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.3</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">29</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Rookies Of The Year</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">28</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.3</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">30</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">King's Landing</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">25</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.8</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.1</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">31</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">50-50 my next move is a blunder</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">30</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">19.8</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">32</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Tarrasch Talkers</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">24</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.7</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">20.0</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">33</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Pawn with the Sickness</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">31</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.7</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">19.6</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">34</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Silk Road Sacrifices</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">34</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">18.8</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">35</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Blunders Without Borders</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">35</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">5.0</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">18.0</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">36</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Rooky Horror Pawn Show fan club</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">37</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.3</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">19.1</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">37</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Leningrad School of Blunders</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">36</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.0</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">19.5</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">38</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Svidler? I hardly know her</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">41</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.3</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">17.9</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">39</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">We're not going to TAKE TAKE TAKE it</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">38</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">4.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">18.2</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">40</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">passed pawn patrol</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">39</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">17.8</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">41</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Greek Gifty Nifty Fifty</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">42</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">19.6</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">42</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Inexplicable Fianchetto Agenda</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">40</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3.7</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">16.9</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">43</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Mating for Godot</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">45</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">18.1</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">44</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Fork You Very Much</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">46</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3.2</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">17.8</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">45</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">oh those 64 squares can encompass such immensity</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">44</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.8</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">18.2</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">46</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Svidl, Svidler, Svidlest</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">43</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.7</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">18.1</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">47</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">There Will Be Blunders</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">48</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">3.2</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">17.3</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">48</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Last Shall be the First</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">47</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">16.9</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">49</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">50 Ways to Fork Your Lover</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">49</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">16.4</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">50</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The kannjuring</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">50</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.8</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">16.2</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">51</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">https://www.youtube.com/watch?v=dQw4w9WgXcQ</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">51</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">2.2</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">16.8</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">52</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Not all who blunder are lost</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">52</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">1.9</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">15.9</td>
-                </tr>
-
-                <tr style="background: var(--bg-card); border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">53</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">The Woodpushers</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">53</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">1.8</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">14.2</td>
-                </tr>
-
-                <tr style="background: transparent; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-primary); font-weight: 600;">54</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">54</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary); font-weight: 400;">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">0%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">1.1</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">15.6</td>
-                </tr>
-
+    <div class="box" style="max-width: 820px; margin: 0 auto;">
+        <table class="std">
+            <thead><tr>
+                <th>#</th><th class="tl">Team</th><th title="Place now">Now</th>
+                <th>1st</th><th>Top 3</th>
+                <th title="Average match points after this round">MP</th><th title="Average game points after this round">GP</th>
+            </tr></thead>
+            <tbody data-pin-list>
+<tr data-i="1" data-team="Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)"><td class="rank">1</td><td class="tl team">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</td><td class="dim">1</td><td style="background: rgb(47, 103, 120); color: #fff; font-weight: 600;">70%</td><td style="background: rgb(27, 75, 93); color: #fff; font-weight: 600;">>99%</td><td class="dim">9.2</td><td class="dim">27.9</td></tr>
+<tr data-i="2" data-team="my english needs work"><td class="rank">2</td><td class="tl team">my english needs work</td><td class="dim">2</td><td style="background: rgba(168, 213, 226, 0.66);">30%</td><td style="background: rgba(168, 213, 226, 0.95);">47%</td><td class="dim">8.8</td><td class="dim">23.1</td></tr>
+<tr data-i="3" data-team="If anyone can refute it—don&#x27;t show me"><td class="rank">3</td><td class="tl team">If anyone can refute it—don&#x27;t show me</td><td class="dim">3</td><td style="background: rgba(168, 213, 226, 0.15);"><1%</td><td style="background: rgb(56, 115, 131); color: #fff; font-weight: 600;">57%</td><td class="dim">8.1</td><td class="dim">24.2</td></tr>
+<tr data-i="4" data-team="100 Suggestions You Must Know"><td class="rank">4</td><td class="tl team">100 Suggestions You Must Know</td><td class="dim">4</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.60);">26%</td><td class="dim">7.0</td><td class="dim">23.4</td></tr>
+<tr data-i="5" data-team="pspspspspsps"><td class="rank">5</td><td class="tl team">pspspspspsps</td><td class="dim">5</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.46);">18%</td><td class="dim">7.0</td><td class="dim">23.0</td></tr>
+<tr data-i="6" data-team="Wandering Knights"><td class="rank">6</td><td class="tl team">Wandering Knights</td><td class="dim">6</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.53);">22%</td><td class="dim">6.9</td><td class="dim">22.8</td></tr>
+<tr data-i="7" data-team="Fifty Shades of Time Trouble"><td class="rank">7</td><td class="tl team">Fifty Shades of Time Trouble</td><td class="dim">7</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.32);">10%</td><td class="dim">6.9</td><td class="dim">22.4</td></tr>
+<tr data-i="8" data-team="Riding with the King"><td class="rank">8</td><td class="tl team">Riding with the King</td><td class="dim">8</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.25);">6%</td><td class="dim">7.1</td><td class="dim">22.1</td></tr>
+<tr data-i="9" data-team="50th Parallel Pawns"><td class="rank">9</td><td class="tl team">50th Parallel Pawns</td><td class="dim">9</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.29);">8%</td><td class="dim">7.0</td><td class="dim">22.1</td></tr>
+<tr data-i="10" data-team="50 pawns of Giri"><td class="rank">10</td><td class="tl team">50 pawns of Giri</td><td class="dim">10</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.20);">3%</td><td class="dim">7.1</td><td class="dim">21.6</td></tr>
+<tr data-i="11" data-team="The horsey don&#x27;t belong here"><td class="rank">11</td><td class="tl team">The horsey don&#x27;t belong here</td><td class="dim">11</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.17);">1%</td><td class="dim">7.0</td><td class="dim">21.0</td></tr>
+<tr data-i="12" data-team="Rooky Horror Pawn Show"><td class="rank">12</td><td class="tl team">Rooky Horror Pawn Show</td><td class="dim">12</td><td class="dim">–</td><td style="background: rgba(168, 213, 226, 0.16);"><1%</td><td class="dim">6.9</td><td class="dim">20.9</td></tr>
+<tr data-i="13" data-team="J’adoube-Al-Blunder"><td class="rank">13</td><td class="tl team">J’adoube-Al-Blunder</td><td class="dim">13</td><td class="dim">–</td><td class="dim">–</td><td class="dim">6.0</td><td class="dim">23.6</td></tr>
+<tr data-i="14" data-team="Operation Pawnstorm"><td class="rank">14</td><td class="tl team">Operation Pawnstorm</td><td class="dim">14</td><td class="dim">–</td><td class="dim">–</td><td class="dim">6.0</td><td class="dim">22.6</td></tr>
+<tr data-i="15" data-team="fifty shades of black and white "><td class="rank">15</td><td class="tl team">fifty shades of black and white </td><td class="dim">16</td><td class="dim">–</td><td class="dim">–</td><td class="dim">6.1</td><td class="dim">21.7</td></tr>
+<tr data-i="16" data-team="Total Tomination"><td class="rank">16</td><td class="tl team">Total Tomination</td><td class="dim">15</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.9</td><td class="dim">21.4</td></tr>
+<tr data-i="17" data-team="Season 50 midlife crisis"><td class="rank">17</td><td class="tl team">Season 50 midlife crisis</td><td class="dim">18</td><td class="dim">–</td><td class="dim">–</td><td class="dim">6.0</td><td class="dim">20.9</td></tr>
+<tr data-i="18" data-team="Illiterate Alliteration Explorers"><td class="rank">18</td><td class="tl team">Illiterate Alliteration Explorers</td><td class="dim">17</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.9</td><td class="dim">20.8</td></tr>
+<tr data-i="19" data-team="50 Shades of Swindles and Tricks"><td class="rank">19</td><td class="tl team">50 Shades of Swindles and Tricks</td><td class="dim">20</td><td class="dim">–</td><td class="dim">–</td><td class="dim">6.1</td><td class="dim">20.1</td></tr>
+<tr data-i="20" data-team="Yeah, well, that&#x27;s just like, your opening, man."><td class="rank">20</td><td class="tl team">Yeah, well, that&#x27;s just like, your opening, man.</td><td class="dim">19</td><td class="dim">–</td><td class="dim">–</td><td class="dim">6.0</td><td class="dim">19.9</td></tr>
+<tr data-i="21" data-team="Pirc and Roll"><td class="rank">21</td><td class="tl team">Pirc and Roll</td><td class="dim">21</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.1</td><td class="dim">22.7</td></tr>
+<tr data-i="22" data-team="What a team! And we managed to avoid Prosti"><td class="rank">22</td><td class="tl team">What a team! And we managed to avoid Prosti</td><td class="dim">22</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.1</td><td class="dim">21.7</td></tr>
+<tr data-i="23" data-team="Morphy&#x27;s Mates"><td class="rank">23</td><td class="tl team">Morphy&#x27;s Mates</td><td class="dim">23</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.2</td><td class="dim">21.8</td></tr>
+<tr data-i="24" data-team="Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style"><td class="rank">24</td><td class="tl team">Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style</td><td class="dim">26</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.2</td><td class="dim">20.8</td></tr>
+<tr data-i="25" data-team="50 first mates"><td class="rank">25</td><td class="tl team">50 first mates</td><td class="dim">27</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.1</td><td class="dim">20.7</td></tr>
+<tr data-i="26" data-team="The Tarrasch Talkers"><td class="rank">26</td><td class="tl team">The Tarrasch Talkers</td><td class="dim">24</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.0</td><td class="dim">20.5</td></tr>
+<tr data-i="27" data-team="Rookies Of The Year"><td class="rank">27</td><td class="tl team">Rookies Of The Year</td><td class="dim">28</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.9</td><td class="dim">20.3</td></tr>
+<tr data-i="28" data-team="Old but hoping for stratospheric improvement"><td class="rank">28</td><td class="tl team">Old but hoping for stratospheric improvement</td><td class="dim">33</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.2</td><td class="dim">19.3</td></tr>
+<tr data-i="29" data-team="Don&#x27;t give a check your ascii can&#x27;t cache"><td class="rank">29</td><td class="tl team">Don&#x27;t give a check your ascii can&#x27;t cache</td><td class="dim">29</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.9</td><td class="dim">20.3</td></tr>
+<tr data-i="30" data-team="King&#x27;s Landing"><td class="rank">30</td><td class="tl team">King&#x27;s Landing</td><td class="dim">25</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.8</td><td class="dim">20.2</td></tr>
+<tr data-i="31" data-team="50-50 my next move is a blunder"><td class="rank">31</td><td class="tl team">50-50 my next move is a blunder</td><td class="dim">30</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.8</td><td class="dim">19.7</td></tr>
+<tr data-i="32" data-team="Knights of the Round Tablebase"><td class="rank">32</td><td class="tl team">Knights of the Round Tablebase</td><td class="dim">32</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.0</td><td class="dim">19.5</td></tr>
+<tr data-i="33" data-team="Pawn with the Sickness"><td class="rank">33</td><td class="tl team">Pawn with the Sickness</td><td class="dim">31</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.8</td><td class="dim">19.7</td></tr>
+<tr data-i="34" data-team="Silk Road Sacrifices"><td class="rank">34</td><td class="tl team">Silk Road Sacrifices</td><td class="dim">34</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.9</td><td class="dim">18.8</td></tr>
+<tr data-i="35" data-team="Blunders Without Borders"><td class="rank">35</td><td class="tl team">Blunders Without Borders</td><td class="dim">35</td><td class="dim">–</td><td class="dim">–</td><td class="dim">5.0</td><td class="dim">18.0</td></tr>
+<tr data-i="36" data-team="Leningrad School of Blunders"><td class="rank">36</td><td class="tl team">Leningrad School of Blunders</td><td class="dim">36</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.0</td><td class="dim">19.5</td></tr>
+<tr data-i="37" data-team="We&#x27;re not going to TAKE TAKE TAKE it"><td class="rank">37</td><td class="tl team">We&#x27;re not going to TAKE TAKE TAKE it</td><td class="dim">38</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.2</td><td class="dim">18.3</td></tr>
+<tr data-i="38" data-team="Rooky Horror Pawn Show fan club"><td class="rank">38</td><td class="tl team">Rooky Horror Pawn Show fan club</td><td class="dim">37</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.0</td><td class="dim">18.6</td></tr>
+<tr data-i="39" data-team="Svidler? I hardly know her"><td class="rank">39</td><td class="tl team">Svidler? I hardly know her</td><td class="dim">41</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.1</td><td class="dim">17.7</td></tr>
+<tr data-i="40" data-team="Inexplicable Fianchetto Agenda"><td class="rank">40</td><td class="tl team">Inexplicable Fianchetto Agenda</td><td class="dim">40</td><td class="dim">–</td><td class="dim">–</td><td class="dim">4.0</td><td class="dim">17.4</td></tr>
+<tr data-i="41" data-team="passed pawn patrol"><td class="rank">41</td><td class="tl team">passed pawn patrol</td><td class="dim">39</td><td class="dim">–</td><td class="dim">–</td><td class="dim">3.8</td><td class="dim">17.7</td></tr>
+<tr data-i="42" data-team="The Greek Gifty Nifty Fifty"><td class="rank">42</td><td class="tl team">The Greek Gifty Nifty Fifty</td><td class="dim">42</td><td class="dim">–</td><td class="dim">–</td><td class="dim">3.1</td><td class="dim">19.6</td></tr>
+<tr data-i="43" data-team="Mating for Godot"><td class="rank">43</td><td class="tl team">Mating for Godot</td><td class="dim">45</td><td class="dim">–</td><td class="dim">–</td><td class="dim">3.2</td><td class="dim">18.3</td></tr>
+<tr data-i="44" data-team="Fork You Very Much"><td class="rank">44</td><td class="tl team">Fork You Very Much</td><td class="dim">46</td><td class="dim">–</td><td class="dim">–</td><td class="dim">3.2</td><td class="dim">17.8</td></tr>
+<tr data-i="45" data-team="Svidl, Svidler, Svidlest"><td class="rank">45</td><td class="tl team">Svidl, Svidler, Svidlest</td><td class="dim">43</td><td class="dim">–</td><td class="dim">–</td><td class="dim">2.9</td><td class="dim">18.3</td></tr>
+<tr data-i="46" data-team="oh those 64 squares can encompass such immensity"><td class="rank">46</td><td class="tl team">oh those 64 squares can encompass such immensity</td><td class="dim">44</td><td class="dim">–</td><td class="dim">–</td><td class="dim">2.9</td><td class="dim">18.3</td></tr>
+<tr data-i="47" data-team="There Will Be Blunders"><td class="rank">47</td><td class="tl team">There Will Be Blunders</td><td class="dim">48</td><td class="dim">–</td><td class="dim">–</td><td class="dim">3.1</td><td class="dim">17.2</td></tr>
+<tr data-i="48" data-team="50 Ways to Fork Your Lover"><td class="rank">48</td><td class="tl team">50 Ways to Fork Your Lover</td><td class="dim">49</td><td class="dim">–</td><td class="dim">–</td><td class="dim">2.9</td><td class="dim">16.4</td></tr>
+<tr data-i="49" data-team="The Last Shall be the First"><td class="rank">49</td><td class="tl team">The Last Shall be the First</td><td class="dim">47</td><td class="dim">–</td><td class="dim">–</td><td class="dim">2.8</td><td class="dim">16.7</td></tr>
+<tr data-i="50" data-team="The kannjuring"><td class="rank">50</td><td class="tl team">The kannjuring</td><td class="dim">50</td><td class="dim">–</td><td class="dim">–</td><td class="dim">2.8</td><td class="dim">16.2</td></tr>
+<tr data-i="51" data-team="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><td class="rank">51</td><td class="tl team">https://www.youtube.com/watch?v=dQw4w9WgXcQ</td><td class="dim">51</td><td class="dim">–</td><td class="dim">–</td><td class="dim">2.2</td><td class="dim">16.8</td></tr>
+<tr data-i="52" data-team="Not all who blunder are lost"><td class="rank">52</td><td class="tl team">Not all who blunder are lost</td><td class="dim">52</td><td class="dim">–</td><td class="dim">–</td><td class="dim">1.9</td><td class="dim">15.8</td></tr>
+<tr data-i="53" data-team="The Woodpushers"><td class="rank">53</td><td class="tl team">The Woodpushers</td><td class="dim">53</td><td class="dim">–</td><td class="dim">–</td><td class="dim">1.8</td><td class="dim">14.2</td></tr>
+<tr data-i="54" data-team="Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork"><td class="rank">54</td><td class="tl team">Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork</td><td class="dim">54</td><td class="dim">–</td><td class="dim">–</td><td class="dim">1.1</td><td class="dim">15.7</td></tr>
             </tbody>
         </table>
     </div>
+    <p class="note" style="max-width: 820px; margin: 0.6rem auto 0;"># = projected order. MP / GP = average match / game points after this round.
+    &lt;1% = happened in only a few simulations, – = never happened.</p>
+
+    </main>
+
+<script>
+(function () {
+    var KEY = '4545-predictions-my-team';
+    var sel = document.getElementById('team-pick');
+    var clear = document.getElementById('team-clear');
+    if (!sel) return;
+    function apply(team) {
+        var lists = document.querySelectorAll('[data-pin-list]');
+        for (var l = 0; l < lists.length; l++) {
+            var list = lists[l];
+            var items = Array.prototype.slice.call(list.children).filter(function (e) { return e.hasAttribute('data-i'); });
+            items.sort(function (a, b) { return a.getAttribute('data-i') - b.getAttribute('data-i'); });
+            items.forEach(function (e) { e.classList.remove('mine'); list.appendChild(e); });
+            items.forEach(function (e) {
+                if (team && e.getAttribute('data-team') === team) {
+                    e.classList.add('mine');
+                    list.insertBefore(e, list.firstChild);
+                }
+            });
+        }
+        clear.hidden = !team;
+    }
+    function remember(team) {
+        try {
+            if (team) { localStorage.setItem(KEY, team); } else { localStorage.removeItem(KEY); }
+        } catch (e) {}
+    }
+    sel.addEventListener('change', function () { remember(sel.value); apply(sel.value); });
+    clear.addEventListener('click', function () { sel.value = ''; remember(''); apply(''); });
+    var saved = '';
+    try { saved = localStorage.getItem(KEY) || ''; } catch (e) {}
+    var known = Array.prototype.some.call(sel.options, function (o) { return o.value === saved; });
+    if (saved && known) { sel.value = saved; apply(saved); }
+})();
+</script>
+
 </body>
 </html>

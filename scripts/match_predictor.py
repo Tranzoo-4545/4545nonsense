@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+import html as _html
 import json
 import math
 import os
@@ -865,724 +866,745 @@ def get_round_pairings(season_data: dict, round_num: int, player_ratings: dict) 
     return result
 
 
+# ---------------------------------------------------------------------------
+# HTML PAGES (presentation only - the numbers come from the simulations above)
+# ---------------------------------------------------------------------------
+
+# The five prediction pages: key -> (file suffix, nav label). '{r}' = round number.
+PREDICTION_PAGES = [
+    ('matches', '_matches', 'Matches'),
+    ('standings', '_standings', 'Table after R{r}'),
+    ('distribution', '_distribution', 'Places after R{r}'),
+    ('season_distribution', '_season_distribution', 'Season finish'),
+]
+# predictions_season_standings.html is still written, as a forwarding page to Season finish (old links)
+ROUND_PAGE_KEYS = ('matches', 'standings', 'distribution')
+SEASON_PAGE_KEYS = ('season_distribution',)
+
+
+def prediction_nav(prefix: str, round_pages: bool, season_pages: bool) -> dict:
+    """Links for the header strip: page key -> href (file name next to the page). Only pages that exist get a link."""
+    base = os.path.basename(prefix)
+    keys = (ROUND_PAGE_KEYS if round_pages else ()) + (SEASON_PAGE_KEYS if season_pages else ())
+    return {key: f'{base}{suffix}.html' for key, suffix, _ in PREDICTION_PAGES if key in keys}
+
+
+def fmt_pct(p: float) -> str:
+    """A probability (0..1) for display: '–' = never happened (exactly 0), '<1%' / '>99%' = under 1% / over 99% but not 0 / 100."""
+    if p <= 0:
+        return '–'
+    if p >= 1:
+        return '100%'
+    v = p * 100
+    if v < 1:
+        return '<1%'
+    if v > 99:
+        return '>99%'
+    return f'{v:.0f}%'
+
+
+def _esc(text) -> str:
+    return _html.escape(str(text), quote=True)
+
+
 def get_common_css() -> str:
-    """Return common CSS used across all reports."""
+    """Common CSS of all prediction pages (light league teal). Plain string: single braces."""
     return '''
         :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-card: #21262d;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --border-color: #30363d;
-            --team-a-color: #58a6ff;
-            --team-b-color: #f78166;
-            --win-color: #3fb950;
-            --draw-color: #d29922;
+            --bg: #f0f6f6;
+            --card: #ffffff;
+            --card-2: #e7f1f2;
+            --ink: #0f2830;
+            --muted: #5f7c86;
+            --teal: #2c5f6f;
+            --teal-2: #3d7a8a;
+            --deep: #1a4a5c;
+            --pale: #a8d5e2;
+            --gold: #d4b856;
+            --line: #d3e3e6;
+            --team-a: #2c5f6f;
+            --team-b: #9a4f2a;
+            --draw: #d4b856;
+            --mine: #fbf3d6;
         }
-        
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            padding: 2rem;
+            background: var(--bg);
+            color: var(--ink);
             line-height: 1.5;
         }
-        
+        .topbar {
+            background: var(--deep);
+            padding: 0.6rem 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem 1.25rem;
+        }
+        .topbar a { color: #ffffff; text-decoration: none; }
+        .topbar .back { font-weight: 600; white-space: nowrap; }
+        .topbar .back:hover { text-decoration: underline; }
+        .pages { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .pages a {
+            font-size: 0.85rem;
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            white-space: nowrap;
+        }
+        .pages a:hover { background: rgba(255, 255, 255, 0.12); }
+        .pages a.on { background: #ffffff; color: var(--deep); font-weight: 600; border-color: #ffffff; }
+        .page { max-width: 1200px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
         h1 {
             text-align: center;
-            margin-bottom: 0.5rem;
+            color: var(--teal);
             font-size: 1.8rem;
+            line-height: 1.25;
+            margin-bottom: 0.4rem;
         }
-        
-        .subtitle {
+        h2 { color: var(--teal); font-size: 1.2rem; margin: 2.5rem 0 0.75rem; }
+        .subtitle { text-align: center; color: var(--muted); margin-bottom: 1.5rem; }
+        .note { color: var(--muted); font-size: 0.8rem; margin: 0.6rem 0 0; }
+        .picker {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0 auto 1.5rem;
+        }
+        .picker label { color: var(--muted); font-size: 0.9rem; }
+        .picker select {
+            font: inherit;
+            font-size: 0.9rem;
+            max-width: 100%;
+            padding: 0.35rem 0.5rem;
+            border: 1px solid var(--pale);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--ink);
+        }
+        .picker button {
+            font: inherit;
+            font-size: 0.85rem;
+            padding: 0.35rem 0.8rem;
+            border: 1px solid var(--teal);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--teal);
+            cursor: pointer;
+        }
+        .picker button[hidden] { display: none; }
+        .box {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+        table.std { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        table.std th {
+            background: var(--card-2);
+            color: var(--muted);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.6rem 0.4rem;
             text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
+        }
+        table.std td { padding: 0.5rem 0.4rem; text-align: center; border-top: 1px solid var(--line); }
+        table.std th.tl, table.std td.tl { text-align: left; padding-left: 0.75rem; }
+        td.team { font-weight: 600; overflow-wrap: anywhere; min-width: 7rem; }
+        td.rank { color: var(--teal); font-weight: 700; width: 2.2rem; }
+        td.dim { color: var(--muted); }
+        td.lbl { font-size: 0.72rem; font-weight: 700; line-height: 1.2; }
+        td.lbl.yes { color: var(--teal); }
+        td.lbl.no { color: var(--muted); font-weight: 500; }
+        tr.mine td:not([style]), .team-card.mine { background: var(--mine); }
+        tr.mine td.team { color: var(--deep); }
+        tr.mine td:first-child { box-shadow: inset 4px 0 0 var(--gold); }
+        .team-card.mine { border-color: var(--gold); box-shadow: inset 4px 0 0 var(--gold); }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.4rem; }
+            table.std { font-size: 0.8rem; }
+            table.std th { font-size: 0.62rem; letter-spacing: 0; padding: 0.5rem 0.2rem; }
+            table.std td { padding: 0.45rem 0.2rem; }
+            table.std th.tl, table.std td.tl { padding-left: 0.5rem; }
+            td.team { min-width: 6rem; }
         }
 '''
 
 
-def generate_matches_html(predictions: list[dict], season: int, round_num: int) -> str:
-    """Generate HTML report with match predictions."""
-    
-    # Get current UTC time
-    utc_now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
-    
-    # Sort by team A win probability (most uncertain matches first for drama)
-    predictions.sort(key=lambda p: abs(p['team_a_win_prob'] - 0.5))
-    
-    html = f'''<!DOCTYPE html>
-<html>
+PICKER_JS = '''
+<script>
+(function () {
+    var KEY = '4545-predictions-my-team';
+    var sel = document.getElementById('team-pick');
+    var clear = document.getElementById('team-clear');
+    if (!sel) return;
+    function apply(team) {
+        var lists = document.querySelectorAll('[data-pin-list]');
+        for (var l = 0; l < lists.length; l++) {
+            var list = lists[l];
+            var items = Array.prototype.slice.call(list.children).filter(function (e) { return e.hasAttribute('data-i'); });
+            items.sort(function (a, b) { return a.getAttribute('data-i') - b.getAttribute('data-i'); });
+            items.forEach(function (e) { e.classList.remove('mine'); list.appendChild(e); });
+            items.forEach(function (e) {
+                if (team && e.getAttribute('data-team') === team) {
+                    e.classList.add('mine');
+                    list.insertBefore(e, list.firstChild);
+                }
+            });
+        }
+        clear.hidden = !team;
+    }
+    function remember(team) {
+        try {
+            if (team) { localStorage.setItem(KEY, team); } else { localStorage.removeItem(KEY); }
+        } catch (e) {}
+    }
+    sel.addEventListener('change', function () { remember(sel.value); apply(sel.value); });
+    clear.addEventListener('click', function () { sel.value = ''; remember(''); apply(''); });
+    var saved = '';
+    try { saved = localStorage.getItem(KEY) || ''; } catch (e) {}
+    var known = Array.prototype.some.call(sel.options, function (o) { return o.value === saved; });
+    if (saved && known) { sel.value = saved; apply(saved); }
+})();
+</script>
+'''
+
+
+def _picker_html(teams) -> str:
+    """'Your team' dropdown (pins + highlights the team's rows/cards; remembered on this device)."""
+    options = ''.join(f'<option value="{_esc(t)}">{_esc(t)}</option>' for t in sorted(teams, key=str.lower))
+    return f'''
+    <div class="picker">
+        <label for="team-pick">Your team:</label>
+        <select id="team-pick"><option value="">Choose a team…</option>{options}</select>
+        <button type="button" id="team-clear" hidden>Show all</button>
+    </div>
+'''
+
+
+def _page(title: str, h1: str, subtitle: str, body: str, current: str, round_num: int,
+          nav: Optional[dict], extra_css: str = '', script: str = '') -> str:
+    """Page shell: header strip (back link + links between the prediction pages), title, body."""
+    if nav is None:
+        nav = {current: ''}
+    links = ''
+    for key, _, label in PREDICTION_PAGES:
+        if key not in nav:
+            continue
+        text = _esc(label.format(r=round_num))
+        if key == current:
+            links += f'<a class="on" aria-current="page" href="{_esc(nav[key] or "#")}">{text}</a>'
+        else:
+            links += f'<a href="{_esc(nav[key])}">{text}</a>'
+    return f'''<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Match Predictions - Season {season} Round {round_num}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{_esc(title)}</title>
     <style>
         {get_common_css()}
-        
-        .predictions-container {{
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }}
-        
-        .match-card {{
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-        }}
-        
-        .match-header {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-        }}
-        
-        .team {{
-            font-weight: 600;
-            font-size: 1.1rem;
-            max-width: 35%;
-        }}
-        
-        .team-a {{ color: var(--team-a-color); }}
-        .team-b {{ color: var(--team-b-color); text-align: right; }}
-        
-        .vs {{
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }}
-        
-        .prediction-bar {{
-            display: flex;
-            height: 40px;
-            margin: 1rem 1.5rem;
-            border-radius: 6px;
-            overflow: hidden;
-        }}
-        
-        .prob-segment {{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: white;
-            min-width: 40px;
-        }}
-        
-        .prob-a {{ background: var(--team-a-color); }}
-        .prob-draw {{ background: var(--draw-color); }}
-        .prob-b {{ background: var(--team-b-color); }}
-        
-        .match-details {{
-            padding: 1rem 1.5rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }}
-        
-        .detail-section {{
-            background: var(--bg-card);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-        }}
-        
-        .detail-title {{
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }}
-        
-        .expected-score {{
-            font-size: 1.5rem;
-            font-weight: 600;
-        }}
-        
-        .current-score {{
-            font-size: 1.2rem;
-            color: var(--win-color);
-        }}
-        
-        .boards-grid {{
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.5rem;
-            padding: 0 1.5rem 1rem;
-        }}
-        
-        .board-card {{
-            background: var(--bg-card);
-            border-radius: 6px;
-            padding: 0.5rem;
-            font-size: 0.75rem;
-        }}
-        
-        .board-players {{
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }}
-        
-        .board-player {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }}
-        
-        .player-name {{
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 70%;
-        }}
-        
-        .player-rating {{
-            color: var(--text-secondary);
-            font-size: 0.7rem;
-        }}
-        
-        .color-indicator {{
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 2px;
-            margin-right: 0.35rem;
-            vertical-align: middle;
-        }}
-        
-        .color-white {{
-            background: #fff;
-            border: 1px solid #888;
-        }}
-        
-        .color-black {{
-            background: #333;
-            border: 1px solid #333;
-        }}
-        
-        .score-result {{
-            font-weight: 700;
-            font-size: 0.85rem;
-            min-width: 1.5rem;
-            text-align: center;
-        }}
-        
-        .score-prediction {{
-            font-size: 0.7rem;
-            min-width: 2rem;
-            text-align: center;
-            opacity: 0.8;
-        }}
-        
-        .win-prob {{
-            font-weight: 600;
-            font-size: 0.7rem;
-        }}
-        
-        .board-result {{
-            text-align: center;
-            font-weight: 600;
-            margin-top: 0.25rem;
-            padding-top: 0.25rem;
-            border-top: 1px solid var(--border-color);
-        }}
-        
-        .result-played {{ color: var(--win-color); }}
-        .result-pending {{ color: var(--text-secondary); }}
-        
-        @media (max-width: 768px) {{
-            .boards-grid {{ grid-template-columns: repeat(2, 1fr); }}
-            .match-details {{ grid-template-columns: 1fr; }}
-        }}
+        {extra_css}
     </style>
 </head>
 <body>
-    <h1>🎯 Match Predictions</h1>
-    <p class="subtitle">Season {season} Round {round_num} • Monte Carlo Simulation • Generated: {utc_now}</p>
-    
-    <div class="predictions-container">
+    <nav class="topbar">
+        <a class="back" href="index.html">← The 4545 Chronicles</a>
+        <div class="pages">{links}</div>
+    </nav>
+    <main class="page">
+    <h1>{h1}</h1>
+    <p class="subtitle">{subtitle}</p>
+{body}
+    </main>
+{script}
+</body>
+</html>
 '''
-    
+
+
+def _updated() -> str:
+    return datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
+
+
+def _mode_texts(mode: str, season: int, round_num: int, n_sims: Optional[int]) -> dict:
+    """Titles per page kind. mode: 'round' (this round), 'season' (rest of season), 'preseason' (from rosters)."""
+    sims = f'{n_sims:,} simulations' if n_sims else 'Monte Carlo simulation'
+    if mode == 'round':
+        return {
+            'standings_title': f'Table after Round {round_num} - Season {season}',
+            'standings_h1': f'Table after Round {round_num}',
+            'standings_sub': f'Season {season} · projected from {sims} of this round · updated {_updated()}',
+            'dist_title': f'Places after Round {round_num} - Season {season}',
+            'dist_h1': f'Places after Round {round_num}',
+            'dist_sub': f'Season {season} · chance of each place once Round {round_num} is over · {sims} · updated {_updated()}',
+            'first': '1st',
+        }
+    when = 'pre-season, from the rosters' if mode == 'preseason' else f'from Round {round_num}'
+    return {
+        'standings_title': f'Season finish: projected table - Season {season}',
+        'standings_h1': 'Season finish: projected table',
+        'standings_sub': f'Season {season} · {when} · {sims} of the rest of the season · updated {_updated()}',
+        'dist_title': f'Season finish - Season {season}',
+        'dist_h1': 'Season finish',
+        'dist_sub': f'Season {season} · {when} · {sims} of the rest of the season · updated {_updated()}',
+        'first': 'Title',
+    }
+
+
+def _sorted_standings(standings_prediction: dict) -> list:
+    return sorted(standings_prediction.items(), key=lambda x: x[1]['expected_placement'])
+
+
+def _settled_by_points(standings_prediction: dict, team: str, top_k: int, rounds_left: Optional[int]) -> Optional[str]:
+    """'yes' = a top-k finish is certain from match points alone, 'no' = impossible from match points alone,
+    None = open (or not checkable). Conservative: a team that could still TIE on match points counts as a threat,
+    tiebreaks are never used, and the simulations must agree (100% / never)."""
+    if not rounds_left or rounds_left < 0:
+        return None
+    max_gain = 2 * rounds_left
+    me = standings_prediction[team].get('current_match_points', 0)
+    others = [s.get('current_match_points', 0) for t, s in standings_prediction.items() if t != team]
+    sim_p = sum(standings_prediction[team]['placement_probs'].get(j, 0) for j in range(1, top_k + 1))
+    could_reach_me = sum(1 for mp in others if mp + max_gain >= me)       # may finish level or above
+    surely_above = sum(1 for mp in others if mp > me + max_gain)          # ahead whatever happens
+    if 1 + could_reach_me <= top_k and sim_p >= 1:
+        return 'yes'
+    if 1 + surely_above > top_k and sim_p <= 0:
+        return 'no'
+    return None
+
+
+def _prob_cell(p: float, settled: Optional[str] = None) -> str:
+    if settled == 'yes':
+        return '<td class="lbl yes">Clinched</td>'
+    if settled == 'no':
+        return '<td class="lbl no">Out of reach</td>'
+    if p <= 0:
+        return f'<td class="dim">{fmt_pct(p)}</td>'
+    if p < 0.5:      # pale teal, stronger with the chance
+        style = f'background: rgba(168, 213, 226, {0.15 + 1.7 * p:.2f});'
+    else:            # solid league teal (#3d7a8a at 50% -> #1a4a5c at 100%), white text
+        f = (p - 0.5) * 2
+        rgb = tuple(round(a + (b - a) * f) for a, b in zip((61, 122, 138), (26, 74, 92)))
+        style = f'background: rgb{rgb}; color: #fff; font-weight: 600;'
+    return f'<td style="{style}">{fmt_pct(p)}</td>'
+
+
+def generate_matches_html(predictions: list[dict], season: int, round_num: int,
+                          nav: Optional[dict] = None, n_sims: Optional[int] = None) -> str:
+    """Generate HTML report with match predictions."""
+
+    # Most uncertain matches first
+    predictions.sort(key=lambda p: abs(p['team_a_win_prob'] - 0.5))
+
+    css = '''
+        .predictions-container { display: flex; flex-direction: column; gap: 1.25rem; }
+        .match-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+        .match-header {
+            display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;
+            padding: 0.9rem 1.25rem; background: var(--card-2); border-bottom: 1px solid var(--line);
+        }
+        .team { font-weight: 700; font-size: 1.05rem; flex: 1 1 0; min-width: 0; overflow-wrap: anywhere; }
+        .team-a { color: var(--team-a); }
+        .team-b { color: var(--team-b); text-align: right; }
+        .vs { color: var(--muted); font-size: 0.85rem; flex: none; }
+        .prediction-bar { display: flex; height: 36px; margin: 1rem 1.25rem; border-radius: 6px; overflow: hidden; }
+        .prob-segment {
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85rem; color: #fff; min-width: 40px;
+        }
+        .prob-a { background: var(--team-a); }
+        .prob-draw { background: var(--draw); color: var(--ink); }
+        .prob-b { background: var(--team-b); }
+        .bar-key { display: flex; justify-content: space-between; margin: -0.6rem 1.25rem 0; font-size: 0.72rem; color: var(--muted); }
+        .match-details { padding: 1rem 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .detail-section { background: var(--card-2); border-radius: 8px; padding: 0.65rem 1rem; }
+        .detail-title { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .expected-score { font-size: 1.4rem; font-weight: 700; }
+        .current-score { font-size: 1.2rem; font-weight: 600; color: var(--ink); }
+        .boards-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; padding: 0 1.25rem 1rem; }
+        .board-card { background: var(--card-2); border-radius: 6px; padding: 0.45rem 0.5rem; font-size: 0.75rem; min-width: 0; }
+        .board-players { display: flex; flex-direction: column; gap: 0.2rem; }
+        .board-player { display: flex; align-items: center; gap: 0.3rem; min-width: 0; }
+        .player-name { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .player-rating { color: var(--muted); font-size: 0.7rem; flex: none; }
+        .color-indicator { flex: none; display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+        .color-white { background: #fff; border: 1px solid #7a8f95; }
+        .color-black { background: #2a3b40; border: 1px solid #2a3b40; }
+        .score-result { flex: none; font-weight: 700; font-size: 0.85rem; min-width: 1.5rem; text-align: center; }
+        .score-prediction { flex: none; font-size: 0.72rem; min-width: 2.2rem; text-align: center; }
+        @media (max-width: 768px) {
+            .boards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 0.75rem 0.75rem; }
+            .match-details { grid-template-columns: 1fr; padding: 0.75rem; }
+            .match-header { padding: 0.75rem; }
+            .prediction-bar { margin: 0.9rem 0.75rem; }
+            .bar-key { margin: -0.5rem 0.75rem 0; }
+        }
+        @media (max-width: 480px) {
+            .boards-grid { grid-template-columns: minmax(0, 1fr); }
+        }
+'''
+    sims = f'{n_sims:,} simulations' if n_sims else 'Monte Carlo simulation'
+    body = '    <div class="predictions-container">\n'
+
     for pred in predictions:
         team_a = pred['team_a']
         team_b = pred['team_b']
-        a_prob = pred['team_a_win_prob'] * 100
-        b_prob = pred['team_b_win_prob'] * 100
-        draw_prob = pred['draw_prob'] * 100
+        a_p, b_p, d_p = pred['team_a_win_prob'], pred['team_b_win_prob'], pred['draw_prob']
         a_exp = pred['team_a_expected']
         b_exp = pred['team_b_expected']
         a_curr, b_curr = pred['current_score']
         remaining = pred['games_remaining']
-        
-        html += f'''
+
+        segments = ''
+        for cls, p in (('prob-a', a_p), ('prob-draw', d_p), ('prob-b', b_p)):
+            if p > 0:
+                segments += f'<div class="prob-segment {cls}" style="width: {p * 100}%">{fmt_pct(p)}</div>'
+
+        body += f'''
         <div class="match-card">
             <div class="match-header">
-                <div class="team team-a">{team_a}</div>
+                <div class="team team-a">{_esc(team_a)}</div>
                 <div class="vs">vs</div>
-                <div class="team team-b">{team_b}</div>
+                <div class="team team-b">{_esc(team_b)}</div>
             </div>
-            
-            <div class="prediction-bar">
-                <div class="prob-segment prob-a" style="width: {a_prob}%">{a_prob:.0f}%</div>
-                <div class="prob-segment prob-draw" style="width: {draw_prob}%">{draw_prob:.0f}%</div>
-                <div class="prob-segment prob-b" style="width: {b_prob}%">{b_prob:.0f}%</div>
-            </div>
-            
+            <div class="prediction-bar">{segments}</div>
+            <div class="bar-key"><span>win</span><span>tied match</span><span>win</span></div>
             <div class="match-details">
                 <div class="detail-section">
-                    <div class="detail-title">Expected Final Score</div>
+                    <div class="detail-title">Expected final score</div>
                     <div class="expected-score">
-                        <span style="color: var(--team-a-color)">{a_exp:.1f}</span>
-                        <span style="color: var(--text-secondary)"> - </span>
-                        <span style="color: var(--team-b-color)">{b_exp:.1f}</span>
+                        <span style="color: var(--team-a)">{a_exp:.1f}</span>
+                        <span style="color: var(--muted)"> - </span>
+                        <span style="color: var(--team-b)">{b_exp:.1f}</span>
                     </div>
                 </div>
                 <div class="detail-section">
-                    <div class="detail-title">Current Score ({8 - remaining}/8 played)</div>
-                    <div class="current-score">
-                        {a_curr:.1f} - {b_curr:.1f}
-                    </div>
+                    <div class="detail-title">Score now ({8 - remaining}/8 played)</div>
+                    <div class="current-score">{a_curr:.1f} - {b_curr:.1f}</div>
                 </div>
             </div>
-            
             <div class="boards-grid">
 '''
-        
+
         for pairing in pred['pairings']:
             white = pairing.white
             black = pairing.black
             white_boosted = Player(username=white.username, rating=white.rating + 25, rd=white.rd)
-            white_exp = expected_score(white_boosted, black) * 100
-            black_exp = 100 - white_exp
-            
-            # Determine individual scores/display for each player
+            white_exp = expected_score(white_boosted, black)
+            black_exp = 1 - white_exp
+
             if pairing.is_played:
                 if pairing.double_forfeit:
                     white_score, black_score = "0F", "0F"
-                elif pairing.result == 1:  # White won
+                elif pairing.result == 1:
                     white_score, black_score = "1", "0"
-                elif pairing.result == 0:  # Black won
+                elif pairing.result == 0:
                     white_score, black_score = "0", "1"
-                else:  # Draw
+                else:
                     white_score, black_score = "½", "½"
                 show_result = True
             else:
-                white_score = f"{white_exp:.0f}%"
-                black_score = f"{black_exp:.0f}%"
+                white_score = fmt_pct(white_exp)
+                black_score = fmt_pct(black_exp)
                 show_result = False
-            
-            # Determine which player is team A and their color indicator
+
             if pairing.white_team == team_a:
                 a_player, b_player = white, black
                 a_score, b_score = white_score, black_score
-                a_color_class = "color-white"
-                b_color_class = "color-black"
+                a_color_class, b_color_class = "color-white", "color-black"
             else:
                 a_player, b_player = black, white
                 a_score, b_score = black_score, white_score
-                a_color_class = "color-black"
-                b_color_class = "color-white"
-            
-            # Style for scores
-            a_score_class = "score-result" if show_result else "score-prediction"
-            b_score_class = "score-result" if show_result else "score-prediction"
-            
-            html += f'''
+                a_color_class, b_color_class = "color-black", "color-white"
+
+            score_class = "score-result" if show_result else "score-prediction"
+
+            body += f'''
                 <div class="board-card">
                     <div class="board-players">
                         <div class="board-player">
                             <span class="color-indicator {a_color_class}"></span>
-                            <span class="player-name" style="color: var(--team-a-color)">{a_player.username}</span>
-                            <span class="{a_score_class}" style="color: var(--team-a-color)">{a_score}</span>
+                            <span class="player-name" style="color: var(--team-a)">{_esc(a_player.username)}</span>
+                            <span class="{score_class}" style="color: var(--team-a)">{a_score}</span>
                             <span class="player-rating">{a_player.rating}</span>
                         </div>
                         <div class="board-player">
                             <span class="color-indicator {b_color_class}"></span>
-                            <span class="player-name" style="color: var(--team-b-color)">{b_player.username}</span>
-                            <span class="{b_score_class}" style="color: var(--team-b-color)">{b_score}</span>
+                            <span class="player-name" style="color: var(--team-b)">{_esc(b_player.username)}</span>
+                            <span class="{score_class}" style="color: var(--team-b)">{b_score}</span>
                             <span class="player-rating">{b_player.rating}</span>
                         </div>
                     </div>
                 </div>
 '''
-        
-        html += '''
+
+        body += '''
             </div>
         </div>
 '''
-    
-    html += '''
-    </div>
-</body>
-</html>
+
+    body += '''    </div>
+    <p class="note">Bar: chance each team wins the match, or it ends 4-4. Board %: each player's expected score in an unplayed game.
+    &lt;1% = above zero but under 1%.</p>
 '''
-    
-    return html
+    return _page(
+        f'Round {round_num} match predictions - Season {season}',
+        f'Round {round_num} match predictions',
+        f'Season {season} · win chances for each team match · {sims} · updated {_updated()}',
+        body, 'matches', round_num, nav, extra_css=css)
 
 
-def generate_standings_html(standings_prediction: dict, season: int, round_num: int) -> str:
-    """Generate HTML report with predicted standings table."""
-    
-    # Get current UTC time
-    utc_now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
-    
-    sorted_standings = sorted(
-        standings_prediction.items(),
-        key=lambda x: x[1]['expected_placement']
-    )
-    
-    html = f'''<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Predicted Standings - Season {season} Round {round_num}</title>
-    <style>
-        {get_common_css()}
-    </style>
-</head>
-<body>
-    <h1>📊 Predicted Standings After Round {round_num}</h1>
-    <p class="subtitle">Season {season} • Monte Carlo Simulation • Generated: {utc_now}</p>
-    
-    <div style="max-width: 800px; margin: 1.5rem auto; background: var(--bg-secondary); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
-            <thead>
-                <tr style="background: var(--bg-card); color: var(--text-secondary); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;">
-                    <th style="padding: 0.75rem; text-align: center; width: 40px;">#</th>
-                    <th style="padding: 0.75rem; text-align: left;">Team</th>
-                    <th style="padding: 0.75rem; text-align: center;">Now</th>
-                    <th style="padding: 0.75rem; text-align: center;">1st</th>
-                    <th style="padding: 0.75rem; text-align: center;">Top 3</th>
-                    <th style="padding: 0.75rem; text-align: center;">MP</th>
-                    <th style="padding: 0.75rem; text-align: center;">GP</th>
-                </tr>
-            </thead>
-            <tbody>
-'''
-    
+def generate_standings_html(standings_prediction: dict, season: int, round_num: int,
+                            nav: Optional[dict] = None, mode: str = 'round', n_sims: Optional[int] = None,
+                            rounds_left: Optional[int] = None) -> str:
+    """Predicted table: after this round (mode 'round') or at the season's end ('season' / 'preseason').
+    rounds_left (season mode): rounds still to play incl. the current one - enables 'Clinched' / 'Out of reach'."""
+    t = _mode_texts(mode, season, round_num, n_sims)
+    page_key = 'standings' if mode == 'round' else 'season_standings'
+    sorted_standings = _sorted_standings(standings_prediction)
+
+    rows = ''
     for i, (team, stats) in enumerate(sorted_standings, 1):
-        top3_prob = sum(stats['placement_probs'].get(j, 0) for j in range(1, 4)) * 100
-        top1_prob = stats['placement_probs'].get(1, 0) * 100
-        current = stats['current_standing']
-        
-        row_bg = 'var(--bg-card)' if i % 2 == 1 else 'transparent'
-        rank_color = 'var(--win-color)' if i <= 3 else 'var(--text-primary)'
-        
-        html += f'''
-                <tr style="background: {row_bg}; border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.6rem; text-align: center; color: {rank_color}; font-weight: 600;">{i}</td>
-                    <td style="padding: 0.6rem 0.75rem; color: var(--text-primary); font-weight: 500;">{team}</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">{current}</td>
-                    <td style="padding: 0.6rem; text-align: center; color: {'var(--win-color)' if top1_prob > 20 else 'var(--text-secondary)'}; font-weight: {'600' if top1_prob > 20 else '400'};">{top1_prob:.0f}%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: {'var(--win-color)' if top3_prob > 50 else 'var(--text-secondary)'};">{top3_prob:.0f}%</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">{stats['expected_match_points']:.1f}</td>
-                    <td style="padding: 0.6rem; text-align: center; color: var(--text-secondary);">{stats['expected_game_points']:.1f}</td>
-                </tr>
-'''
-    
-    html += '''
-            </tbody>
+        probs = stats['placement_probs']
+        top1 = probs.get(1, 0)
+        top3 = sum(probs.get(j, 0) for j in range(1, 4))
+        rows += (f'<tr data-i="{i}" data-team="{_esc(team)}">'
+                 f'<td class="rank">{i}</td>'
+                 f'<td class="tl team">{_esc(team)}</td>'
+                 f'<td class="dim">{stats["current_standing"]}</td>'
+                 f'{_prob_cell(top1, _settled_by_points(standings_prediction, team, 1, rounds_left))}'
+                 f'{_prob_cell(top3, _settled_by_points(standings_prediction, team, 3, rounds_left))}'
+                 f'<td class="dim">{stats["expected_match_points"]:.1f}</td>'
+                 f'<td class="dim">{stats["expected_game_points"]:.1f}</td></tr>\n')
+
+    clinch_note = (' Clinched / Out of reach = already settled by match points alone (tiebreaks not counted).'
+                   if rounds_left else '')
+    end = 'after this round' if mode == 'round' else 'at the end of the season'
+    body = f'''{_picker_html(standings_prediction.keys())}
+    <div class="box" style="max-width: 820px; margin: 0 auto;">
+        <table class="std">
+            <thead><tr>
+                <th>#</th><th class="tl">Team</th><th title="Place now">Now</th>
+                <th>{t['first']}</th><th>Top 3</th>
+                <th title="Average match points {end}">MP</th><th title="Average game points {end}">GP</th>
+            </tr></thead>
+            <tbody data-pin-list>
+{rows}            </tbody>
         </table>
     </div>
-</body>
-</html>
+    <p class="note" style="max-width: 820px; margin: 0.6rem auto 0;"># = projected order. MP / GP = average match / game points {end}.
+    &lt;1% = happened in only a few simulations, – = never happened.{clinch_note}</p>
 '''
-    
-    return html
+    return _page(t['standings_title'], t['standings_h1'], t['standings_sub'], body, page_key, round_num, nav,
+                 script=PICKER_JS)
 
 
-def generate_distribution_html(standings_prediction: dict, season: int, round_num: int) -> str:
-    """Generate HTML report with placement probability distribution for each team."""
-    
-    # Get current UTC time
-    utc_now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
-    
-    sorted_standings = sorted(
-        standings_prediction.items(),
-        key=lambda x: x[1]['expected_placement']
-    )
-    
+def generate_distribution_html(standings_prediction: dict, season: int, round_num: int,
+                               nav: Optional[dict] = None, mode: str = 'round', n_sims: Optional[int] = None,
+                               rounds_left: Optional[int] = None) -> str:
+    """Chances of each place: summary bands first (phone friendly), every place behind a toggle, then team cards."""
+    t = _mode_texts(mode, season, round_num, n_sims)
+    page_key = 'distribution' if mode == 'round' else 'season_distribution'
+    sorted_standings = _sorted_standings(standings_prediction)
     num_teams = len(sorted_standings)
-    
-    html = f'''<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Placement Distribution - Season {season} Round {round_num}</title>
-    <style>
-        {get_common_css()}
-        
-        .distribution-container {{
-            max-width: 1200px;
-            margin: 0 auto;
-        }}
-        
-        .heatmap {{
-            overflow-x: auto;
-        }}
-        
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
-        }}
-        
-        th, td {{
-            padding: 0.5rem;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }}
-        
-        th {{
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            font-weight: 600;
-        }}
-        
-        .team-name {{
-            text-align: left;
-            padding-left: 0.75rem;
-            white-space: nowrap;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-weight: 500;
-        }}
-        
-        .prob-cell {{
-            font-weight: 500;
-            min-width: 45px;
-        }}
-        
-        .team-cards {{
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }}
-        
-        .team-card {{
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1rem;
-        }}
-        
-        .team-card-header {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }}
-        
-        .team-card-name {{
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-primary);
-        }}
-        
-        .team-card-stats {{
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }}
-        
-        .team-chart {{
-            width: 100%;
-            height: auto;
-            display: block;
-        }}
-        
-        .team-card-footer {{
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 0.75rem;
-        }}
-        
-        .prob-badge {{
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--text-primary);
-        }}
-        
-        @media (max-width: 900px) {{
-            .team-cards {{
-                grid-template-columns: 1fr;
-            }}
-        }}
-    </style>
-</head>
-<body>
-    <h1>📈 Placement Probability Distribution</h1>
-    <p class="subtitle">Season {season} Round {round_num} • Probability of finishing in each position • Generated: {utc_now}</p>
-    
-    <div class="distribution-container">
-        <div class="heatmap">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 40px;">#</th>
-                        <th style="text-align: left; padding-left: 0.75rem;">Team</th>
-                        <th style="width: 50px;">Now</th>
+
+    # Bands: 1st/Title and Top 3 always; Top 8 / Bottom 8 only when there are enough teams for them to mean something
+    bands = [(t['first'], 'top', 1), ('Top 3', 'top', 3)]
+    if num_teams >= 20:
+        bands += [('Top 8', 'top', 8), ('Bottom 8', 'bottom', 8)]
+
+    css = '''
+        .wrap { max-width: 860px; margin: 0 auto; }
+        details.matrix { margin-top: 1.5rem; }
+        details.matrix > summary {
+            cursor: pointer; display: inline-block; list-style: none;
+            padding: 0.45rem 1rem; border-radius: 8px; border: 1px solid var(--teal);
+            color: var(--teal); background: var(--card); font-weight: 600; font-size: 0.9rem;
+        }
+        details.matrix > summary::-webkit-details-marker { display: none; }
+        details.matrix > summary::before { content: '▸ '; }
+        details.matrix[open] > summary::before { content: '▾ '; }
+        details.matrix .box { margin-top: 0.75rem; }
+        table.heat { border-collapse: collapse; font-size: 0.78rem; }
+        table.heat th, table.heat td { padding: 0.4rem 0.35rem; text-align: center; border: 1px solid var(--line); min-width: 2.6rem; }
+        table.heat th { background: var(--card-2); color: var(--muted); font-weight: 600; }
+        table.heat .stick { position: sticky; left: 0; z-index: 1; background: var(--card); text-align: left;
+            min-width: 9rem; max-width: 14rem; white-space: normal; overflow-wrap: anywhere; font-weight: 600; }
+        table.heat th.stick { background: var(--card-2); }
+        table.heat tr.mine .stick { background: var(--mine); }
+        table.std.wide th.tl, table.std.wide td.team { position: sticky; left: 0; z-index: 1; background: var(--card); }
+        table.std.wide th.tl { background: var(--card-2); }
+        table.std.wide tr.mine td.team { background: var(--mine); }
+        @media (max-width: 600px) {
+            table.std.wide td.team { min-width: 7.5rem; max-width: 9rem; box-shadow: 1px 0 0 var(--line); }
+        }
+        .team-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 1rem; }
+        .team-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem; min-width: 0; }
+        .team-card-header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; margin-bottom: 0.5rem; }
+        .team-card-name { font-weight: 700; color: var(--ink); overflow-wrap: anywhere; min-width: 0; }
+        .team-card-stats { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+        .team-chart { width: 100%; height: auto; display: block; }
+        .team-card-footer { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .prob-badge { padding: 0.2rem 0.55rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; background: var(--card-2); color: var(--deep); }
 '''
-    
-    # Column headers for positions
-    for pos in range(1, num_teams + 1):
-        html += f'                        <th>{pos}</th>\n'
-    
-    html += '''                    </tr>
-                </thead>
-                <tbody>
-'''
-    
-    # Rows for each team
+
+    # --- summary table (season modes: + expected final match / game points; team column sticky when it scrolls) ---
+    with_points = mode != 'round'
+    head = ''.join(f'<th>{_esc(name)}</th>' for name, _, _ in bands)
+    if with_points:
+        head += '<th title="Average match points at the end">MP</th><th title="Average game points at the end">GP</th>'
+    rows = ''
     for i, (team, stats) in enumerate(sorted_standings, 1):
-        current = stats['current_standing']
-        html += f'                    <tr>\n'
-        html += f'                        <td class="prob-cell" style="background: var(--bg-card); color: var(--win-color); font-weight: 600;">{i}</td>\n'
-        html += f'                        <td class="team-name">{team}</td>\n'
-        html += f'                        <td class="prob-cell" style="background: var(--bg-card); color: var(--text-secondary);">{current}</td>\n'
-        
+        probs = stats['placement_probs']
+        cells = ''
+        for name, side, k in bands:
+            places = range(1, k + 1) if side == 'top' else range(num_teams - k + 1, num_teams + 1)
+            p = sum(probs.get(j, 0) for j in places)
+            settled = _settled_by_points(standings_prediction, team, k, rounds_left) if side == 'top' else None
+            cells += _prob_cell(p, settled)
+        if with_points:
+            cells += (f'<td class="dim">{stats["expected_match_points"]:.1f}</td>'
+                      f'<td class="dim">{stats["expected_game_points"]:.1f}</td>')
+        rows += (f'<tr data-i="{i}" data-team="{_esc(team)}"><td class="tl team">{_esc(team)}</td>'
+                 f'<td class="dim">{stats["current_standing"]}</td>{cells}</tr>\n')
+
+    bottom_note = f' Bottom 8 = places {num_teams - 7}-{num_teams}.' if num_teams >= 20 else ''
+    clinch_note = (' Clinched / Out of reach = already settled by match points alone (tiebreaks not counted).'
+                   if rounds_left else '')
+    points_note = ' MP / GP = average match / game points at the end of the season.' if with_points else ''
+    body = f'''{_picker_html(standings_prediction.keys())}
+    <div class="wrap">
+    <div class="box">
+        <table class="std{' wide' if with_points else ''}">
+            <thead><tr><th class="tl">Team</th><th title="Place now">Now</th>{head}</tr></thead>
+            <tbody data-pin-list>
+{rows}            </tbody>
+        </table>
+    </div>
+    <p class="note">Teams in projected order.{bottom_note}{points_note} &lt;1% = happened in only a few simulations, – = never happened.{clinch_note}</p>
+    </div>
+'''
+
+    # --- every place (toggle) ---
+    pos_head = ''.join(f'<th>{pos}</th>' for pos in range(1, num_teams + 1))
+    mrows = ''
+    for i, (team, stats) in enumerate(sorted_standings, 1):
+        probs = stats['placement_probs']
+        cells = ''
         for pos in range(1, num_teams + 1):
-            prob = stats['placement_probs'].get(pos, 0) * 100
-            
-            # Color intensity based on probability
-            if prob >= 50:
-                bg_color = 'rgba(63, 185, 80, 0.8)'  # Strong green
-                text_color = 'white'
-            elif prob >= 30:
-                bg_color = 'rgba(63, 185, 80, 0.5)'  # Medium green
-                text_color = 'white'
-            elif prob >= 15:
-                bg_color = 'rgba(63, 185, 80, 0.3)'  # Light green
-                text_color = 'var(--text-primary)'
-            elif prob >= 5:
-                bg_color = 'rgba(139, 148, 158, 0.2)'  # Subtle gray
-                text_color = 'var(--text-secondary)'
-            else:
-                bg_color = 'transparent'
-                text_color = 'var(--text-secondary)'
-            
-            prob_str = f'{prob:.0f}%' if prob >= 1 else ('—' if prob == 0 else '<1%')
-            
-            html += f'                        <td class="prob-cell" style="background: {bg_color}; color: {text_color};">{prob_str}</td>\n'
-        
-        html += '                    </tr>\n'
-    
-    html += '''                </tbody>
+            cells += _prob_cell(probs.get(pos, 0))
+        mrows += (f'<tr data-i="{i}" data-team="{_esc(team)}"><td class="stick">{_esc(team)}</td>'
+                  f'<td class="dim">{stats["current_standing"]}</td>{cells}</tr>\n')
+    body += f'''
+    <details class="matrix">
+        <summary>Show every place</summary>
+        <div class="box">
+            <table class="heat">
+                <thead><tr><th class="stick">Team</th><th>Now</th>{pos_head}</tr></thead>
+                <tbody data-pin-list>
+{mrows}                </tbody>
             </table>
         </div>
-        
-        <h2 style="margin-top: 3rem; color: var(--text-secondary);">Individual Team Distributions</h2>
-        <div class="team-cards">
+    </details>
+
+    <h2>Each team's chances</h2>
+    <div class="team-cards" data-pin-list>
 '''
-    
-    # Generate individual team cards with bar charts
-    for team, stats in sorted_standings:
+
+    # --- team cards with bar charts ---
+    for i, (team, stats) in enumerate(sorted_standings, 1):
         current = stats['current_standing']
         probs = stats['placement_probs']
-        
-        # Find most likely position (mode)
         if probs:
             most_likely_pos = max(probs.keys(), key=lambda p: probs[p])
-            most_likely_prob = probs[most_likely_pos] * 100
         else:
             most_likely_pos = current
-            most_likely_prob = 0
-        
-        # Find max probability for scaling
         max_prob = max(probs.values()) if probs else 0.01
-        
-        # Find the team's "hot zone" - positions with significant probability
-        significant_positions = [p for p, prob in probs.items() if prob >= 0.02]
-        if significant_positions:
-            best_pos = min(significant_positions)
-            worst_pos = max(significant_positions)
-        else:
-            best_pos = worst_pos = int(expected)
-        
-        # Generate SVG bar chart
-        chart_width = 400
-        chart_height = 120
-        bar_width = chart_width / num_teams - 4
-        
+
+        chart_width, chart_height = 400, 120
+        bar_width = chart_width / num_teams - 4 if num_teams < 40 else chart_width / num_teams - 1.5
         svg_bars = ''
         svg_labels = ''
         for pos in range(1, num_teams + 1):
             prob = probs.get(pos, 0)
             bar_height = (prob / max_prob) * 80 if max_prob > 0 else 0
-            x = (pos - 1) * (chart_width / num_teams) + 2
+            x = (pos - 1) * (chart_width / num_teams) + 1
             y = 90 - bar_height
-            
-            # Color based on relative position within team's range
             if prob >= max_prob * 0.8:
-                fill = '#3fb950'  # Best positions for this team
-                opacity = 1.0
+                fill = '#1a4a5c'
             elif prob >= max_prob * 0.5:
-                fill = '#58a6ff'  # Good positions
-                opacity = 0.9
+                fill = '#2c5f6f'
             elif prob >= max_prob * 0.2:
-                fill = '#d29922'  # Medium positions
-                opacity = 0.8
-            elif prob > 0:
-                fill = '#8b949e'  # Tail positions
-                opacity = 0.5
+                fill = '#5f9aaa'
             else:
-                fill = '#8b949e'
-                opacity = 0.2
-            
+                fill = '#a8d5e2'
             if bar_height > 0:
-                svg_bars += f'<rect x="{x}" y="{y}" width="{bar_width}" height="{bar_height}" fill="{fill}" opacity="{opacity}" rx="2"/>'
-            
-            # Label only for bars with significant probability (>5%)
+                svg_bars += f'<rect x="{x:.1f}" y="{y:.1f}" width="{bar_width:.1f}" height="{bar_height:.1f}" fill="{fill}" rx="1.5"/>'
             if prob >= 0.05 and bar_height > 12:
-                label_y = y - 4
-                prob_text = f'{prob*100:.0f}'
-                svg_bars += f'<text x="{x + bar_width/2}" y="{label_y}" text-anchor="middle" font-size="9" fill="var(--text-secondary)">{prob_text}</text>'
-            
-            # Position labels - only show 1, 5, 10, 15, 20, etc. or last position
+                svg_bars += (f'<text x="{x + bar_width / 2:.1f}" y="{y - 4:.1f}" text-anchor="middle" font-size="9" '
+                             f'fill="#5f7c86">{prob * 100:.0f}</text>')
             if pos == 1 or pos % 5 == 0 or pos == num_teams:
-                svg_labels += f'<text x="{x + bar_width/2}" y="105" text-anchor="middle" font-size="10" fill="var(--text-secondary)">{pos}</text>'
-        
-        # Top 3 probability
-        top3_prob = sum(probs.get(j, 0) for j in range(1, 4)) * 100
-        top1_prob = probs.get(1, 0) * 100
-        
-        html += f'''
-            <div class="team-card">
-                <div class="team-card-header">
-                    <span class="team-card-name">{team}</span>
-                    <span class="team-card-stats">Now: {current} → Likely: {most_likely_pos}</span>
-                </div>
-                <svg viewBox="0 0 {chart_width} {chart_height}" class="team-chart">
-                    {svg_bars}
-                    {svg_labels}
-                </svg>
-                <div class="team-card-footer">
-                    <span class="prob-badge" style="background: {'rgba(63,185,80,0.3)' if top1_prob > 10 else 'rgba(139,148,158,0.2)'}">🥇 {top1_prob:.0f}%</span>
-                    <span class="prob-badge" style="background: {'rgba(63,185,80,0.2)' if top3_prob > 30 else 'rgba(139,148,158,0.2)'}">🏆 Top 3: {top3_prob:.0f}%</span>
-                </div>
+                svg_labels += (f'<text x="{x + bar_width / 2:.1f}" y="105" text-anchor="middle" font-size="10" '
+                               f'fill="#5f7c86">{pos}</text>')
+
+        top1 = probs.get(1, 0)
+        top3 = sum(probs.get(j, 0) for j in range(1, 4))
+        body += f'''
+        <div class="team-card" data-i="{i}" data-team="{_esc(team)}">
+            <div class="team-card-header">
+                <span class="team-card-name">{_esc(team)}</span>
+                <span class="team-card-stats">Now {current} → likely {most_likely_pos}</span>
             </div>
-'''
-    
-    html += '''
+            <svg viewBox="0 0 {chart_width} {chart_height}" class="team-chart" role="img" aria-label="Chance of each place for {_esc(team)}">
+                {svg_bars}
+                {svg_labels}
+            </svg>
+            <div class="team-card-footer">
+                <span class="prob-badge">{t['first']} {fmt_pct(top1)}</span>
+                <span class="prob-badge">Top 3 {fmt_pct(top3)}</span>
+            </div>
         </div>
-    </div>
+'''
+
+    body += '''    </div>
+    <p class="note">Bars: chance of each place (numbers in %), places 1 to the last left to right.</p>
+'''
+    return _page(t['dist_title'], t['dist_h1'], t['dist_sub'], body, page_key, round_num, nav,
+                 extra_css=css, script=PICKER_JS)
+
+
+def generate_season_forward_html(season: int, round_num: int, target: str) -> str:
+    """predictions_season_standings.html: the season table is now part of Season finish - forward old links there."""
+    t = _esc(target)
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url={t}">
+    <link rel="canonical" href="{t}">
+    <title>Season finish - Season {season}</title>
+    <style>
+        {get_common_css()}
+        .fwd {{ max-width: 560px; margin: 3rem auto; background: var(--card); border: 1px solid var(--line);
+               border-radius: 12px; padding: 1.5rem; text-align: center; }}
+        .fwd a {{ color: var(--teal); font-weight: 700; }}
+    </style>
+</head>
+<body>
+    <nav class="topbar"><a class="back" href="index.html">← The 4545 Chronicles</a></nav>
+    <main class="page">
+        <div class="fwd"><a href="{t}">The season table is now part of Season finish →</a></div>
+    </main>
 </body>
 </html>
 '''
-    
-    return html
 
 
 def generate_html_report(predictions: list[dict], season: int, round_num: int, standings_prediction: dict = None) -> str:
@@ -2358,22 +2380,18 @@ def main():
             prefix = args.output.replace('.html', '')
             
             # Standings table
-            standings_html = generate_standings_html(standings_prediction, args.season, args.round)
-            standings_html = standings_html.replace(
-                f'Season {args.season} Round {args.round}',
-                f'Season {args.season} Pre-Season Projection (from roster)'
-            )
+            nav = prediction_nav(prefix, os.path.exists(f"{prefix}_matches.html"), True)
+            # Old season-table file name: now a forwarding page to Season finish (the table is part of it)
+            standings_html = generate_season_forward_html(args.season, args.round,
+                                                          f"{os.path.basename(prefix)}_season_distribution.html")
             standings_file = f"{prefix}_season_standings.html"
             with open(standings_file, 'w', encoding='utf-8') as f:
                 f.write(standings_html)
-            print(f"\n✅ Season standings projection: {standings_file}")
+            print(f"\n✅ Season table (forwards to Season finish): {standings_file}")
             
             # Distribution heatmap
-            distribution_html = generate_distribution_html(standings_prediction, args.season, args.round)
-            distribution_html = distribution_html.replace(
-                f'Season {args.season} Round {args.round}',
-                f'Season {args.season} Pre-Season Projection (from roster)'
-            )
+            distribution_html = generate_distribution_html(standings_prediction, args.season, args.round, nav=nav,
+                                                           mode='preseason', n_sims=args.simulations)
             distribution_file = f"{prefix}_season_distribution.html"
             with open(distribution_file, 'w', encoding='utf-8') as f:
                 f.write(distribution_html)
@@ -2440,23 +2458,21 @@ def main():
             prefix = args.output.replace('.html', '')
             
             # Standings table (full season projection) - different filename
-            standings_html = generate_standings_html(standings_prediction, args.season, args.round)
-            # Update title to reflect full season
-            standings_html = standings_html.replace(
-                f'Season {args.season} Round {args.round}',
-                f'Season {args.season} Full Season Projection (from Round {args.round})'
-            )
+            # Header links: round pages only if they exist next to these (GitHub Actions makes both sets)
+            nav = prediction_nav(prefix, os.path.exists(f"{prefix}_matches.html"), True)
+            # Rounds still to play incl. this one (simulate_full_season's default final round 8) - for Clinched labels
+            rounds_left = 8 - args.round + 1
+            # Old season-table file name: now a forwarding page to Season finish (the table is part of it)
+            standings_html = generate_season_forward_html(args.season, args.round,
+                                                          f"{os.path.basename(prefix)}_season_distribution.html")
             standings_file = f"{prefix}_season_standings.html"
             with open(standings_file, 'w', encoding='utf-8') as f:
                 f.write(standings_html)
-            print(f"\n✅ Season standings projection: {standings_file}")
+            print(f"\n✅ Season table (forwards to Season finish): {standings_file}")
             
             # Distribution heatmap - different filename
-            distribution_html = generate_distribution_html(standings_prediction, args.season, args.round)
-            distribution_html = distribution_html.replace(
-                f'Season {args.season} Round {args.round}',
-                f'Season {args.season} Full Season Projection (from Round {args.round})'
-            )
+            distribution_html = generate_distribution_html(standings_prediction, args.season, args.round, nav=nav,
+                                                           mode='season', n_sims=args.simulations, rounds_left=rounds_left)
             distribution_file = f"{prefix}_season_distribution.html"
             with open(distribution_file, 'w', encoding='utf-8') as f:
                 f.write(distribution_html)
@@ -2519,22 +2535,27 @@ def main():
     if args.output:
         prefix = args.output.replace('.html', '')
         
+        # Header links: season pages only if they exist next to these (made by a --full-season run)
+        nav = prediction_nav(prefix, True, os.path.exists(f"{prefix}_season_distribution.html"))
+
         # 1. Match predictions
-        matches_html = generate_matches_html(predictions, args.season, args.round)
+        matches_html = generate_matches_html(predictions, args.season, args.round, nav=nav, n_sims=args.simulations)
         matches_file = f"{prefix}_matches.html"
         with open(matches_file, 'w', encoding='utf-8') as f:
             f.write(matches_html)
         print(f"\n✅ Match predictions: {matches_file}")
         
         # 2. Standings table
-        standings_html = generate_standings_html(standings_prediction, args.season, args.round)
+        standings_html = generate_standings_html(standings_prediction, args.season, args.round, nav=nav,
+                                                 n_sims=args.simulations)
         standings_file = f"{prefix}_standings.html"
         with open(standings_file, 'w', encoding='utf-8') as f:
             f.write(standings_html)
         print(f"✅ Standings table: {standings_file}")
         
         # 3. Placement distribution
-        distribution_html = generate_distribution_html(standings_prediction, args.season, args.round)
+        distribution_html = generate_distribution_html(standings_prediction, args.season, args.round, nav=nav,
+                                                       n_sims=args.simulations)
         distribution_file = f"{prefix}_distribution.html"
         with open(distribution_file, 'w', encoding='utf-8') as f:
             f.write(distribution_html)
