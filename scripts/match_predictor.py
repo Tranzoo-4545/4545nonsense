@@ -1056,6 +1056,10 @@ PICKER_JS = '''
                 }
             });
         }
+        var marks = document.querySelectorAll('[data-mark]');
+        for (var m = 0; m < marks.length; m++) {
+            marks[m].classList.toggle('mine', !!team && marks[m].getAttribute('data-team') === team);
+        }
         clear.hidden = !team;
     }
     function remember(team) {
@@ -1195,12 +1199,229 @@ def _prob_cell(p: float, settled: Optional[str] = None) -> str:
     return f'<td style="{style}">{fmt_pct(p)}</td>'
 
 
-def generate_matches_html(predictions: list[dict], season: int, round_num: int,
-                          nav: Optional[dict] = None, n_sims: Optional[int] = None) -> str:
-    """Generate HTML report with match predictions."""
+# ---------------------------------------------------------------------------
+# WHAT'S AT STAKE (from the --full-season simulations, split by this round's result of each match)
+# ---------------------------------------------------------------------------
 
-    # Most uncertain matches first
-    predictions.sort(key=lambda p: abs(p['team_a_win_prob'] - 0.5))
+# A Win / Draw / Loss figure needs at least this many simulated seasons with that result, else it shows '–'
+MIN_BRANCH_SIMS = 1000
+# A team's title / top-3 chance must move by at least this much between a win and a loss to be shown ("At stake" line)
+STAKE_SWING_MIN = 0.10
+STAKE_MEASURES = (('title', 'Title'), ('top3', 'Top 3'))
+
+
+def match_stakes(stakes: dict) -> list:
+    """Per match of the round, from simulate_full_season(stakes_out=...): for each team and measure the chance at
+    the end of the season after a win / draw / loss in this match (None = fewer than MIN_BRANCH_SIMS seasons)
+    and the swing = after a win minus after a loss (when one of them is missing: the gap between the results
+    that are left; 0 when fewer than two are left, e.g. a match already decided)."""
+    out = []
+    for m in stakes.get('matches', []):
+        a, b, n = m['a'], m['b'], m['n']
+        teams = {}
+        for team, order in ((a, (0, 1, 2)), (b, (2, 1, 0))):     # the team's win / draw / loss
+            info = {}
+            for key, _ in STAKE_MEASURES:
+                hits = m[key][team]
+                wdl = tuple(hits[o] / n[o] if n[o] >= MIN_BRANCH_SIMS else None for o in order)
+                w, _, l = wdl
+                if w is not None and l is not None:
+                    swing = w - l
+                else:
+                    known = [v for v in wdl if v is not None]
+                    swing = max(known) - min(known) if len(known) >= 2 else 0.0
+                info[key] = {'wdl': wdl, 'swing': swing,
+                             'now': sum(hits) / sum(n) if sum(n) else None}   # all results together = the chance today
+            teams[team] = info
+        out.append({'a': a, 'b': b, 'teams': teams})
+    return out
+
+
+def _table_key(team_a: str, team_b: str, places: dict) -> tuple:
+    """Order of matches by table position (Swiss 'top boards'): the better place of the two teams, then the other."""
+    pa, pb = places.get(team_a, 999), places.get(team_b, 999)
+    return (min(pa, pb), max(pa, pb), team_a.lower())
+
+
+def featured_stake(stake_list: list, places: dict) -> Optional[dict]:
+    """The match with the biggest swing: by title swing while the title race is open (some team's title chance
+    moves STAKE_SWING_MIN+), else by the biggest title / top-3 swing. None when no match reaches STAKE_SWING_MIN.
+    Ties: the match of the higher-placed teams."""
+    if not stake_list:
+        return None
+
+    def best(m, keys):
+        return max(m['teams'][t][k]['swing'] for t in (m['a'], m['b']) for k in keys)
+    keys = ('title',) if max(best(m, ('title',)) for m in stake_list) >= STAKE_SWING_MIN else ('title', 'top3')
+    ranked = sorted(stake_list, key=lambda m: (-best(m, keys), _table_key(m['a'], m['b'], places)))
+    return ranked[0] if best(ranked[0], keys) >= STAKE_SWING_MIN else None
+
+
+def _stake_pct(p: Optional[float]) -> str:
+    return '–' if p is None else _esc(fmt_pct(p))
+
+
+def _stake_wdl(wdl: tuple, words: bool, now: Optional[float] = None) -> str:
+    """'Win 54% · Draw 32% · Loss 14%' (words=True) or '54% · 32% · 14%', numbers bold; with now: 'Now 40% | Win …'."""
+    lead = f'<span class="nw"><span class="k">Now</span> <b>{_stake_pct(now)}</b></span><span class="bar">|</span>' if now is not None else ''
+    parts = []
+    for word, p in zip(('Win', 'Draw', 'Loss'), wdl):
+        num = f'<b>{_stake_pct(p)}</b>'
+        parts.append(f'<span class="nw"><span class="k">{word}</span> {num}</span>' if words else num)
+    return lead + '<span class="sep">·</span>'.join(parts)
+
+
+def _stake_has_dash(m: dict, teams=None, keys=None) -> bool:
+    """True when a figure of this block shows '–' (too few seasons, or never happened)."""
+    for t in (teams or (m['a'], m['b'])):
+        for k in (keys or [k for k, _ in STAKE_MEASURES]):
+            if any(p is None or p <= 0 for p in m['teams'][t][k]['wdl']):
+                return True
+    return False
+
+
+STAKE_DASH_NOTE = f' – = fewer than {MIN_BRANCH_SIMS:,} simulated seasons had that result, or it never happened.'
+
+STAKE_CSS = '''
+        .stake-feat .sep, .stake-line .sep, .stake-card .sep { color: var(--pale); margin: 0 0.3rem; }
+        .stake-feat .k, .stake-line .k, .stake-card .k { color: var(--muted); font-size: 0.75rem; font-weight: 400; }
+        .stake-feat .bar, .stake-card .bar { color: var(--pale); margin: 0 0.5rem; }
+        .nw { white-space: nowrap; }
+        .s-lab { color: var(--muted); font-size: 0.72rem; }
+        .t-a { color: var(--team-a); }
+        .t-b { color: var(--team-b); }
+        .fs-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--teal); font-weight: 700;
+            margin-bottom: 0.4rem; }
+        .fs-line { display: flex; align-items: baseline; gap: 0.4rem; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+        .fs-line .s-lab { width: 2.9rem; flex: none; }
+        .fs-note { color: var(--muted); font-size: 0.75rem; margin-top: 0.5rem; }
+'''
+
+STAKE_MATCHES_CSS = STAKE_CSS + '''
+        .match-card.featured { border: 2px solid var(--teal); scroll-margin-top: 0.75rem; }
+        .stake-feat { margin: 1rem 1.25rem 0; padding: 0.7rem 0.9rem; background: var(--bg); border-radius: 8px; }
+        .fs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.25rem; }
+        .fs-team { min-width: 0; display: flex; flex-direction: column; }
+        .fs-stats { margin-top: auto; }
+        .fs-name { font-weight: 700; font-size: 0.85rem; overflow-wrap: anywhere; line-height: 1.3; margin-bottom: 0.15rem; }
+        .stake-line { margin: 0.9rem 1.25rem 0; padding: 0.45rem 0.75rem; border-left: 3px solid var(--pale); font-size: 0.82rem; }
+        .st-head { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--teal); font-weight: 700; }
+        .st-head .k { text-transform: none; letter-spacing: 0; font-size: 0.72rem; }
+        .st-line { display: flex; flex-wrap: wrap; gap: 0 1.25rem; font-variant-numeric: tabular-nums; }
+        .st-name { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+        .st-nums { white-space: nowrap; }
+        .st-gap { display: inline-block; width: 0.9rem; }
+        .st-note { color: var(--muted); font-size: 0.72rem; }
+        @media (max-width: 768px) {
+            .stake-feat, .stake-line { margin-left: 0.75rem; margin-right: 0.75rem; }
+            .fs-grid { grid-template-columns: 1fr; }
+        }
+'''
+
+STAKE_SEASON_CSS = STAKE_CSS + '''
+        .stake-card { max-width: 860px; margin: 0 auto 1.5rem; background: var(--card); border: 1px solid var(--line);
+            border-top: 4px solid var(--teal); border-radius: 12px; padding: 0.75rem 0.75rem 0.7rem; }
+        .stake-card .fs-tag { margin-left: 0.5rem; }
+        .fx-teams { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem 0.75rem; align-items: stretch; }
+        .fx-vs { color: var(--muted); font-size: 0.8rem; align-self: center; }
+        .fx-team { min-width: 0; border-radius: 8px; padding: 0.35rem 0.5rem; display: flex; flex-direction: column; }
+        .fx-stats { margin-top: auto; }
+        .fx-team.mine { background: var(--mine); box-shadow: inset 4px 0 0 var(--gold); }
+        .fx-name { font-weight: 700; color: var(--deep); margin-bottom: 0.3rem; line-height: 1.3; overflow-wrap: anywhere; }
+        .fx-now { color: var(--muted); font-size: 0.72rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+        .fx-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.25rem 1rem;
+            margin: 0.35rem 0.5rem 0; }
+        .fx-foot .fs-note { margin: 0; }
+        .fx-foot a { color: var(--teal); font-weight: 600; font-size: 0.85rem; white-space: nowrap; text-decoration: none; }
+        .fx-foot a:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .fx-teams { grid-template-columns: 1fr; gap: 0.2rem; }
+            .fx-vs { align-self: start; padding-left: 0.5rem; }
+            .fx-team { padding: 0.35rem 0.4rem; }
+        }
+'''
+
+
+def _stake_feature_block(m: dict, team_a: str, team_b: str) -> str:
+    """Matches page: the full panel inside the featured match card (Title / Top 3 : Win · Draw · Loss, both teams)."""
+    rows = ''
+    for team, side in ((team_a, 'a'), (team_b, 'b')):
+        lines = ''.join(f'<div class="fs-line"><span class="s-lab">{label}</span>'
+                        f'<span>{_stake_wdl(m["teams"][team][key]["wdl"], True, m["teams"][team][key]["now"])}</span></div>'
+                        for key, label in STAKE_MEASURES)
+        rows += f'<div class="fs-team"><div class="fs-name t-{side}">{_esc(team)}</div><div class="fs-stats">{lines}</div></div>'
+    dash = STAKE_DASH_NOTE if _stake_has_dash(m) else ''
+    return (f'<div class="stake-feat"><div class="fs-tag">Biggest potential swing this round · what\'s at stake</div>'
+            f'<div class="fs-grid">{rows}</div>'
+            f'<p class="fs-note">Chance at the end of the season after a win · draw · loss in this match, from the season '
+            f'simulations. Boards already played count as played, so the numbers move during the week (updated 4× a day).'
+            f'{dash}</p></div>')
+
+
+def _stake_line_block(m: dict, team_a: str, team_b: str) -> str:
+    """Matches page, other matches: only the teams / measures moving STAKE_SWING_MIN+ between a win and a loss."""
+    lines = ''
+    dash = False
+    for team, side in ((team_a, 'a'), (team_b, 'b')):
+        keys = [(k, label) for k, label in STAKE_MEASURES if m['teams'][team][k]['swing'] >= STAKE_SWING_MIN]
+        if not keys:
+            continue
+        dash = dash or _stake_has_dash(m, [team], [k for k, _ in keys])
+        parts = '<span class="st-gap"></span>'.join(
+            f'<span class="s-lab">{label}</span> {_stake_wdl(m["teams"][team][k]["wdl"], False)}' for k, label in keys)
+        lines += (f'<div class="st-line"><span class="st-name t-{side}">{_esc(team)}</span>'
+                  f'<span class="st-nums">{parts}</span></div>')
+    if not lines:
+        return ''
+    note = f'<div class="st-note">{STAKE_DASH_NOTE.strip()}</div>' if dash else ''
+    return (f'<div class="stake-line"><div class="st-head">At stake <span class="k">(season chance after win · draw · loss)'
+            f'</span></div>{lines}{note}</div>')
+
+
+def _ordinal(n: int) -> str:
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def stake_season_card(m: dict, places: dict, round_num: int, matches_href: Optional[str]) -> str:
+    """Season finish: the featured match as one compact card (higher-placed team first)."""
+    parts = []
+    for team in sorted((m['a'], m['b']), key=lambda t: places.get(t, 999)):
+        lines = ''.join(f'<div class="fs-line"><span class="s-lab">{label}</span>'
+                        f'<span>{_stake_wdl(m["teams"][team][key]["wdl"], True, m["teams"][team][key]["now"])}</span></div>'
+                        for key, label in STAKE_MEASURES)
+        now = f'<div class="fx-now">Now {_ordinal(places[team])}</div>' if team in places else ''
+        parts.append(f'<div class="fx-team" data-team="{_esc(team)}" data-mark>{now}<div class="fx-name">'
+                     f'{_esc(team)}</div><div class="fx-stats">{lines}</div></div>')
+    link = f'<a href="{_esc(matches_href)}#stakes">All matches this round →</a>' if matches_href else ''
+    dash = STAKE_DASH_NOTE if _stake_has_dash(m) else ''
+    return f'''
+    <section class="stake-card" aria-label="Biggest potential swing this round">
+        <div class="fs-tag">Biggest potential swing this round</div>
+        <div class="fx-teams">{parts[0]}<div class="fx-vs">vs</div>{parts[1]}</div>
+        <div class="fx-foot"><p class="fs-note">Season chance after a win · draw · loss in this Round {round_num} match.{dash}</p>{link}</div>
+    </section>
+'''
+
+
+def generate_matches_html(predictions: list[dict], season: int, round_num: int,
+                          nav: Optional[dict] = None, n_sims: Optional[int] = None,
+                          places: Optional[dict] = None, stakes: Optional[list] = None) -> str:
+    """Generate HTML report with match predictions.
+    places: team -> current place; matches are then ordered by table position (top boards first).
+    stakes: match_stakes() of a --full-season run - the biggest-swing match goes first with the full panel,
+    other matches get an 'At stake' line when a team's chance moves STAKE_SWING_MIN+. None = no stake section."""
+
+    if places:
+        # By table position: the match of the highest-placed teams first (Swiss 'top boards')
+        predictions.sort(key=lambda p: _table_key(p['team_a'], p['team_b'], places))
+    else:
+        # Most uncertain matches first
+        predictions.sort(key=lambda p: abs(p['team_a_win_prob'] - 0.5))
+    stake_by_pair = {frozenset((m['a'], m['b'])): m for m in (stakes or [])}
+    featured = featured_stake(stakes, places or {}) if stakes else None
+    if featured:
+        key = frozenset((featured['a'], featured['b']))
+        predictions.sort(key=lambda p: frozenset((p['team_a'], p['team_b'])) != key)   # stable: rest keep their order
 
     css = '''
         .predictions-container { display: flex; flex-direction: column; gap: 1.25rem; }
@@ -1266,15 +1487,25 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int,
             if p > 0:
                 segments += f'<div class="prob-segment {cls}" style="width: {p * 100}%">{fmt_pct(p)}</div>'
 
+        stake = stake_by_pair.get(frozenset((team_a, team_b)))
+        card_open = '<div class="match-card">'
+        stake_html = ''
+        if stake is not None and stake is featured:
+            card_open = '<div class="match-card featured" id="stakes">'
+            stake_html = '\n            ' + _stake_feature_block(stake, team_a, team_b)
+        elif stake is not None:
+            line = _stake_line_block(stake, team_a, team_b)
+            stake_html = '\n            ' + line if line else ''
+
         body += f'''
-        <div class="match-card">
+        {card_open}
             <div class="match-header">
                 <div class="team team-a">{_esc(team_a)}</div>
                 <div class="vs">vs</div>
                 <div class="team team-b">{_esc(team_b)}</div>
             </div>
             <div class="prediction-bar">{segments}</div>
-            <div class="bar-key"><span>win</span><span>tied match</span><span>win</span></div>
+            <div class="bar-key"><span>win</span><span>tied match</span><span>win</span></div>{stake_html}
             <div class="match-details">
                 <div class="detail-section">
                     <div class="detail-title">Expected final score</div>
@@ -1357,7 +1588,7 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int,
         f'Round {round_num} match predictions - Season {season}',
         f'Round {round_num} match predictions',
         f'Season {season} · win chances for each team match · {sims} · updated {_updated()}',
-        body, 'matches', round_num, nav, extra_css=css)
+        body, 'matches', round_num, nav, extra_css=css + (STAKE_MATCHES_CSS if stakes else ''))
 
 
 def generate_standings_html(standings_prediction: dict, season: int, round_num: int,
@@ -1407,8 +1638,9 @@ def generate_standings_html(standings_prediction: dict, season: int, round_num: 
 
 def generate_distribution_html(standings_prediction: dict, season: int, round_num: int,
                                nav: Optional[dict] = None, mode: str = 'round', n_sims: Optional[int] = None,
-                               rounds_left: Optional[int] = None) -> str:
-    """Chances of each place: summary bands first (phone friendly), every place behind a toggle, then team cards."""
+                               rounds_left: Optional[int] = None, stake_card: str = '') -> str:
+    """Chances of each place: summary bands first (phone friendly), every place behind a toggle, then team cards.
+    stake_card: HTML of the 'Biggest potential swing this round' card (stake_season_card), shown above the summary table."""
     t = _mode_texts(mode, season, round_num, n_sims)
     page_key = 'distribution' if mode == 'round' else 'season_distribution'
     sorted_standings = _sorted_standings(standings_prediction)
@@ -1478,7 +1710,9 @@ def generate_distribution_html(standings_prediction: dict, season: int, round_nu
     clinch_note = (' Clinched / Out of reach = already settled by match points alone (tiebreaks not counted).'
                    if rounds_left else '')
     points_note = ' MP / GP = average match / game points at the end of the season.' if with_points else ''
-    body = f'''{_picker_html(standings_prediction.keys())}
+    if stake_card:
+        css += STAKE_SEASON_CSS
+    body = f'''{_picker_html(standings_prediction.keys())}{stake_card}
     <div class="wrap">
     <div class="box">
         <table class="std{' wide' if with_points else ''}">
@@ -1790,13 +2024,17 @@ def simulate_full_season(
     current_round: int,
     player_ratings: dict,
     num_simulations: int = 10000,
-    final_round: int = 8
+    final_round: int = 8,
+    stakes_out: Optional[dict] = None
 ) -> dict:
     """
     Simulate the entire remaining season using Swiss pairings.
     
     Returns:
         standings_prediction: {team: {placement_probs, expected_placement, ...}}
+    stakes_out (optional dict, filled in): for each match of the current round, how many simulated seasons
+        ended with each result of that match and how often each of its teams then won the title / finished top 3
+        ("What's at stake"; read with match_stakes()). Only counts - the simulations themselves are unchanged.
     """
     import sys
     
@@ -1869,6 +2107,19 @@ def simulate_full_season(
     print(f"Running {num_simulations:,} full-season simulations\n")
     
     progress_interval = max(1, num_simulations // 20)
+
+    # What's at stake: per current-round match (teams in alphabetical order, as in the loop below)
+    # n[o] = simulated seasons with result o of that match (0 = first team won, 1 = 4-4, 2 = second team won),
+    # title[team][o] / top3[team][o] = of those, seasons the team finished 1st / in the top 3
+    stake_matches = None
+    if stakes_out is not None:
+        stake_matches = {}
+        for matchup in current_matchups:
+            if matchup:
+                a, b = sorted((matchup[0].white_team, matchup[0].black_team))
+                stake_matches[(a, b)] = {'a': a, 'b': b, 'n': [0, 0, 0],
+                                         'title': {a: [0, 0, 0], b: [0, 0, 0]},
+                                         'top3': {a: [0, 0, 0], b: [0, 0, 0]}}
     
     for sim in range(num_simulations):
         # Progress display
@@ -1893,6 +2144,7 @@ def simulate_full_season(
             }
         sim_matchup_history = historical_matchups.copy()
         sim_color_history = {}  # Will be set after first simulated round
+        round_outcomes = []     # (stake match, result) of this simulated season's current round
         
         # Get color history from current round pairings
         for matchup in current_matchups:
@@ -1981,6 +2233,10 @@ def simulate_full_season(
                     sim_standings[team_b]['match_points'] += 1
                     sim_standings[team_a]['matches'].append((team_b, 1))
                     sim_standings[team_b]['matches'].append((team_a, 1))
+
+                if stake_matches is not None and round_num == current_round:
+                    outcome = 0 if team_a_score > team_b_score else (2 if team_b_score > team_a_score else 1)
+                    round_outcomes.append((stake_matches[(team_a, team_b)], outcome))
                 
                 # Record matchup
                 matchup_key = tuple(sorted([team_a, team_b]))
@@ -2002,6 +2258,16 @@ def simulate_full_season(
         
         # Calculate final placements using full tiebreakers (including H2H)
         final_standings = sort_standings(sim_standings.items())
+
+        if stake_matches is not None:
+            final_place = {team: place for place, (team, _) in enumerate(final_standings, 1)}
+            for m, outcome in round_outcomes:
+                m['n'][outcome] += 1
+                for team in (m['a'], m['b']):
+                    if final_place[team] <= 3:
+                        m['top3'][team][outcome] += 1
+                        if final_place[team] == 1:
+                            m['title'][team][outcome] += 1
         
         for place, (team, stats) in enumerate(final_standings, 1):
             placement_counts[team][place] += 1
@@ -2010,6 +2276,10 @@ def simulate_full_season(
             total_game_points[team] += stats['game_points']
     
     print("\n")  # New line after progress bar
+
+    if stakes_out is not None:
+        stakes_out.update({'round': current_round, 'n_sims': num_simulations,
+                           'matches': list(stake_matches.values())})
     
     # Build results
     num_teams = len(teams)
@@ -2435,9 +2705,16 @@ def main():
         print("FULL SEASON SIMULATION (Swiss pairings for future rounds)")
         print(f"{'='*60}")
         
+        stakes_raw = {}
         standings_prediction = simulate_full_season(
-            season_data, args.round, player_ratings, args.simulations
+            season_data, args.round, player_ratings, args.simulations, stakes_out=stakes_raw
         )
+        # What's at stake: the same simulations split by each match's result this round
+        stakes = match_stakes(stakes_raw)
+        places = {team: stats['current_standing'] for team, stats in standings_prediction.items()}
+        featured = featured_stake(stakes, places)
+        if featured:
+            print(f"Biggest potential swing this round: {featured['a']} vs {featured['b']}")
         
         # Sort by expected placement
         sorted_standings = sorted(
@@ -2471,12 +2748,28 @@ def main():
             print(f"\n✅ Season table (forwards to Season finish): {standings_file}")
             
             # Distribution heatmap - different filename
+            matches_file = f"{prefix}_matches.html"
+            has_matches = os.path.exists(matches_file)
+            stake_card = (stake_season_card(featured, places, args.round,
+                                            os.path.basename(matches_file) if has_matches else None)
+                          if featured else '')
             distribution_html = generate_distribution_html(standings_prediction, args.season, args.round, nav=nav,
-                                                           mode='season', n_sims=args.simulations, rounds_left=rounds_left)
+                                                           mode='season', n_sims=args.simulations, rounds_left=rounds_left,
+                                                           stake_card=stake_card)
             distribution_file = f"{prefix}_season_distribution.html"
             with open(distribution_file, 'w', encoding='utf-8') as f:
                 f.write(distribution_html)
             print(f"✅ Season placement distribution: {distribution_file}")
+
+            # Matches page (written by the round run - GitHub Actions runs it first): rewrite it with the stakes.
+            # Same match simulation as the round run; done after the season simulations, so those stay unchanged.
+            if has_matches:
+                predictions = [simulate_match(pairings, args.simulations) for pairings in matchups if pairings]
+                matches_html = generate_matches_html(predictions, args.season, args.round, nav=nav,
+                                                     n_sims=args.simulations, places=places, stakes=stakes)
+                with open(matches_file, 'w', encoding='utf-8') as f:
+                    f.write(matches_html)
+                print(f"✅ Match predictions with what's at stake: {matches_file}")
         
         return
     
@@ -2539,7 +2832,10 @@ def main():
         nav = prediction_nav(prefix, True, os.path.exists(f"{prefix}_season_distribution.html"))
 
         # 1. Match predictions
-        matches_html = generate_matches_html(predictions, args.season, args.round, nav=nav, n_sims=args.simulations)
+        # Ordered by table position; no stakes here (they need the --full-season run, which rewrites this page)
+        places = {team: stats['current_standing'] for team, stats in standings_prediction.items()}
+        matches_html = generate_matches_html(predictions, args.season, args.round, nav=nav, n_sims=args.simulations,
+                                             places=places)
         matches_file = f"{prefix}_matches.html"
         with open(matches_file, 'w', encoding='utf-8') as f:
             f.write(matches_html)
