@@ -1108,6 +1108,392 @@
       "top3": 0.12
      }
     }
+   },
+   "5": {
+    "boards_played_then": 12,
+    "created": "2026-10-20 18:53 UTC",
+    "n_sims": 10000,
+    "source": "reference",
+    "teams": {
+     "100 Suggestions You Must Know": {
+      "place": 4,
+      "title": 0.0695,
+      "top15": 0.7317,
+      "top3": 0.2286,
+      "top8": 0.4768
+     },
+     "50 Shades of Swindles and Tricks": {
+      "place": 20,
+      "title": 0.006,
+      "top15": 0.4827,
+      "top3": 0.0668,
+      "top8": 0.2565
+     },
+     "50 Ways to Fork Your Lover": {
+      "place": 49,
+      "title": 0,
+      "top15": 0.0169,
+      "top3": 0,
+      "top8": 0
+     },
+     "50 first mates": {
+      "place": 27,
+      "title": 0,
+      "top15": 0.2341,
+      "top3": 0.0137,
+      "top8": 0.0763
+     },
+     "50 pawns of Giri": {
+      "place": 10,
+      "title": 0.0418,
+      "top15": 0.65,
+      "top3": 0.1345,
+      "top8": 0.3859
+     },
+     "50-50 my next move is a blunder": {
+      "place": 30,
+      "title": 0,
+      "top15": 0.1882,
+      "top3": 0.0065,
+      "top8": 0.0492
+     },
+     "50th Parallel Pawns": {
+      "place": 9,
+      "title": 0.0701,
+      "top15": 0.7523,
+      "top3": 0.2067,
+      "top8": 0.4987
+     },
+     "Blunders Without Borders": {
+      "place": 35,
+      "title": 0,
+      "top15": 0.1301,
+      "top3": 0.0011,
+      "top8": 0.0344
+     },
+     "Don't give a check your ascii can't cache": {
+      "place": 29,
+      "title": 0.0001,
+      "top15": 0.191,
+      "top3": 0.0092,
+      "top8": 0.0536
+     },
+     "Fifty Shades of Time Trouble": {
+      "place": 7,
+      "title": 0.0172,
+      "top15": 0.5591,
+      "top3": 0.0982,
+      "top8": 0.3003
+     },
+     "Fork You Very Much": {
+      "place": 46,
+      "title": 0,
+      "top15": 0.0377,
+      "top3": 0,
+      "top8": 0.0006
+     },
+     "If anyone can refute it—don't show me": {
+      "place": 3,
+      "title": 0.1329,
+      "top15": 0.8195,
+      "top3": 0.3517,
+      "top8": 0.6539
+     },
+     "Illiterate Alliteration Explorers": {
+      "place": 17,
+      "title": 0.0028,
+      "top15": 0.329,
+      "top3": 0.0323,
+      "top8": 0.1603
+     },
+     "Inexplicable Fianchetto Agenda": {
+      "place": 40,
+      "title": 0,
+      "top15": 0.0436,
+      "top3": 0,
+      "top8": 0.0093
+     },
+     "J’adoube-Al-Blunder": {
+      "place": 13,
+      "title": 0.0101,
+      "top15": 0.4032,
+      "top3": 0.0576,
+      "top8": 0.2251
+     },
+     "King's Landing": {
+      "place": 25,
+      "title": 0,
+      "top15": 0.1243,
+      "top3": 0.0029,
+      "top8": 0.0287
+     },
+     "Knights of the Round Tablebase": {
+      "place": 32,
+      "title": 0,
+      "top15": 0.2238,
+      "top3": 0.0078,
+      "top8": 0.0651
+     },
+     "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork": {
+      "place": 54,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Leningrad School of Blunders": {
+      "place": 36,
+      "title": 0,
+      "top15": 0.0631,
+      "top3": 0.0001,
+      "top8": 0.0186
+     },
+     "Mating for Godot": {
+      "place": 45,
+      "title": 0,
+      "top15": 0.0204,
+      "top3": 0,
+      "top8": 0.0001
+     },
+     "Morphy's Mates": {
+      "place": 23,
+      "title": 0,
+      "top15": 0.3233,
+      "top3": 0.0285,
+      "top8": 0.1165
+     },
+     "Not all who blunder are lost": {
+      "place": 52,
+      "title": 0,
+      "top15": 0.0004,
+      "top3": 0,
+      "top8": 0
+     },
+     "Old but hoping for stratospheric improvement": {
+      "place": 33,
+      "title": 0,
+      "top15": 0.2742,
+      "top3": 0.0092,
+      "top8": 0.0885
+     },
+     "Operation Pawnstorm": {
+      "place": 14,
+      "title": 0.0136,
+      "top15": 0.4359,
+      "top3": 0.0706,
+      "top8": 0.2586
+     },
+     "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style": {
+      "place": 26,
+      "title": 0,
+      "top15": 0.3644,
+      "top3": 0.028,
+      "top8": 0.1396
+     },
+     "Pawn with the Sickness": {
+      "place": 31,
+      "title": 0.0001,
+      "top15": 0.1593,
+      "top3": 0.0041,
+      "top8": 0.0422
+     },
+     "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)": {
+      "place": 1,
+      "title": 0.3909,
+      "top15": 0.9675,
+      "top3": 0.6832,
+      "top8": 0.8617
+     },
+     "Pirc and Roll": {
+      "place": 21,
+      "title": 0.0002,
+      "top15": 0.3229,
+      "top3": 0.0314,
+      "top8": 0.1187
+     },
+     "Riding with the King": {
+      "place": 8,
+      "title": 0.044,
+      "top15": 0.6722,
+      "top3": 0.1434,
+      "top8": 0.4056
+     },
+     "Rookies Of The Year": {
+      "place": 28,
+      "title": 0,
+      "top15": 0.1864,
+      "top3": 0.0102,
+      "top8": 0.0549
+     },
+     "Rooky Horror Pawn Show": {
+      "place": 12,
+      "title": 0.0168,
+      "top15": 0.4891,
+      "top3": 0.0622,
+      "top8": 0.2506
+     },
+     "Rooky Horror Pawn Show fan club": {
+      "place": 37,
+      "title": 0,
+      "top15": 0.066,
+      "top3": 0,
+      "top8": 0.0173
+     },
+     "Season 50 midlife crisis": {
+      "place": 18,
+      "title": 0.0045,
+      "top15": 0.3609,
+      "top3": 0.0356,
+      "top8": 0.1815
+     },
+     "Silk Road Sacrifices": {
+      "place": 34,
+      "title": 0,
+      "top15": 0.1336,
+      "top3": 0.002,
+      "top8": 0.0329
+     },
+     "Svidl, Svidler, Svidlest": {
+      "place": 43,
+      "title": 0,
+      "top15": 0.0114,
+      "top3": 0,
+      "top8": 0.0001
+     },
+     "Svidler? I hardly know her": {
+      "place": 41,
+      "title": 0,
+      "top15": 0.0483,
+      "top3": 0,
+      "top8": 0.0088
+     },
+     "The Greek Gifty Nifty Fifty": {
+      "place": 42,
+      "title": 0,
+      "top15": 0.0268,
+      "top3": 0,
+      "top8": 0.0012
+     },
+     "The Last Shall be the First": {
+      "place": 47,
+      "title": 0,
+      "top15": 0.0114,
+      "top3": 0,
+      "top8": 0
+     },
+     "The Tarrasch Talkers": {
+      "place": 24,
+      "title": 0,
+      "top15": 0.1904,
+      "top3": 0.0093,
+      "top8": 0.0532
+     },
+     "The Woodpushers": {
+      "place": 53,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "The horsey don't belong here": {
+      "place": 11,
+      "title": 0.0277,
+      "top15": 0.5975,
+      "top3": 0.0985,
+      "top8": 0.3357
+     },
+     "The kannjuring": {
+      "place": 50,
+      "title": 0,
+      "top15": 0.006,
+      "top3": 0,
+      "top8": 0
+     },
+     "There Will Be Blunders": {
+      "place": 48,
+      "title": 0,
+      "top15": 0.0331,
+      "top3": 0,
+      "top8": 0
+     },
+     "Total Tomination": {
+      "place": 15,
+      "title": 0.0045,
+      "top15": 0.3564,
+      "top3": 0.0387,
+      "top8": 0.1818
+     },
+     "Wandering Knights": {
+      "place": 6,
+      "title": 0.0291,
+      "top15": 0.5748,
+      "top3": 0.1101,
+      "top8": 0.3117
+     },
+     "We're not going to TAKE TAKE TAKE it": {
+      "place": 38,
+      "title": 0,
+      "top15": 0.0874,
+      "top3": 0,
+      "top8": 0.0225
+     },
+     "What a team! And we managed to avoid Prosti": {
+      "place": 22,
+      "title": 0.0001,
+      "top15": 0.3002,
+      "top3": 0.0249,
+      "top8": 0.1028
+     },
+     "Yeah, well, that's just like, your opening, man.": {
+      "place": 19,
+      "title": 0.0011,
+      "top15": 0.2929,
+      "top3": 0.0263,
+      "top8": 0.1249
+     },
+     "fifty shades of black and white ": {
+      "place": 16,
+      "title": 0.0061,
+      "top15": 0.3854,
+      "top3": 0.0461,
+      "top8": 0.2062
+     },
+     "https://www.youtube.com/watch?v=dQw4w9WgXcQ": {
+      "place": 51,
+      "title": 0,
+      "top15": 0.0017,
+      "top3": 0,
+      "top8": 0
+     },
+     "my english needs work": {
+      "place": 2,
+      "title": 0.0971,
+      "top15": 0.7983,
+      "top3": 0.2558,
+      "top8": 0.5494
+     },
+     "oh those 64 squares can encompass such immensity": {
+      "place": 44,
+      "title": 0,
+      "top15": 0.0164,
+      "top3": 0,
+      "top8": 0.0004
+     },
+     "passed pawn patrol": {
+      "place": 39,
+      "title": 0,
+      "top15": 0.0247,
+      "top3": 0,
+      "top8": 0.0041
+     },
+     "pspspspspsps": {
+      "place": 5,
+      "title": 0.0137,
+      "top15": 0.4801,
+      "top3": 0.0642,
+      "top8": 0.2352
+     }
+    }
    }
   }
  }
