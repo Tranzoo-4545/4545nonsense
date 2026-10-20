@@ -1547,52 +1547,60 @@ def _pct_label(v: float) -> str:
 
 
 def _trend_svg(team: str, points: list) -> str:
-    """Small line chart: title (solid) and top 3 (dashed) per round + Now. points: [(label, title, top3)], None = no data."""
-    known = [p for p in points if p[1] is not None]
-    top = max(p[2] for p in known)
-    if top < 0.02:
-        return '<p class="trend-none">Top 3 chance under 2% all season.</p>'
-    ymax = next(m for m in (5, 10, 20, 30, 50, 75, 100) if top * 100 <= m)
-    x0, x1, y0, y1 = 30, 252, 10, 70
+    """Small line chart, the same 0-100% scale for every team: title (solid), top 3 (dashed), top 15 (dotted) per round
+    + Now. points: [(label, title, top3, top15)], None = no data (top15 may be None alone for older entries)."""
+    ymax = 100                     # the same scale for every team (his call: per-team scales were misleading)
+    x0, x1, y0, y1 = 34, 252, 10, 70
     step = (x1 - x0) / max(1, len(points) - 1)
     xs = [x0 + i * step for i in range(len(points))]
 
     def y(v):
         return y1 - (v * 100 / ymax) * (y1 - y0)
     out = [f'<svg viewBox="0 0 330 94" class="trend-svg" role="img" '
-           f'aria-label="Title and top 3 chance by round for {_esc(team)}">',
+           f'aria-label="Title, top 3 and top 15 chance by round for {_esc(team)}">',
            f'<line x1="{x0}" x2="{x1}" y1="{y1}" y2="{y1}" stroke="#d3e3e6" stroke-width="1"/>',
-           f'<line x1="{x0}" x2="{x1}" y1="{y0}" y2="{y0}" stroke="#e7f1f2" stroke-width="1" stroke-dasharray="2 3"/>',
+           *(f'<line x1="{x0}" x2="{x1}" y1="{y(g / 100):.1f}" y2="{y(g / 100):.1f}" stroke="#e7f1f2" stroke-width="1" '
+             f'stroke-dasharray="2 3"/>' for g in (25, 50, 75, 100)),
            f'<text x="{x0 - 6}" y="{y1 + 3.5}" text-anchor="end" font-size="11" fill="#5f7c86">0</text>',
-           f'<text x="{x0 - 6}" y="{y0 + 3.5}" text-anchor="end" font-size="11" fill="#5f7c86">{ymax}%</text>']
+           f'<text x="{x0 - 6}" y="{y(0.5) + 3.5:.1f}" text-anchor="end" font-size="11" fill="#5f7c86">50%</text>',
+           f'<text x="{x0 - 6}" y="{y0 + 3.5}" text-anchor="end" font-size="11" fill="#5f7c86">100%</text>']
     for i, p in enumerate(points):
         bold = ' font-weight="700"' if p[0] == 'Now' else ''
         out.append(f'<text x="{xs[i]:.1f}" y="88" text-anchor="middle" font-size="11" fill="#5f7c86"{bold}>{p[0]}</text>')
     ends = {}
-    for idx, color, dash, rad in ((2, '#5f9aaa', '4 3', 3.2), (1, '#1a4a5c', '', 3.6)):   # top 3 under the title
+    #                 index, colour,    dash,    dot radius - drawn widest band first, title on top
+    for idx, color, dash, rad in ((3, '#8fbfcc', '1.5 3', 2.8), (2, '#5f9aaa', '4 3', 3.2), (1, '#1a4a5c', '', 3.6)):
         seg = [(xs[i], y(p[idx])) for i, p in enumerate(points) if p[idx] is not None]
+        if not seg:
+            continue
         d = ' '.join(('M' if j == 0 else 'L') + f'{a:.1f},{b:.1f}' for j, (a, b) in enumerate(seg))
         da = f' stroke-dasharray="{dash}"' if dash else ''
         if len(seg) > 1:
-            out.append(f'<path d="{d}" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round"{da}/>')
+            out.append(f'<path d="{d}" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round" '
+                       f'stroke-linecap="round"{da}/>')
         for a, b in seg:
             out.append(f'<circle cx="{a:.1f}" cy="{b:.1f}" r="{rad}" fill="{color}" stroke="#ffffff" stroke-width="1.5"/>')
         ends[idx] = seg[-1][1]
-    lt, l3 = ends[1], ends[2]
-    if abs(lt - l3) < 12:                          # direct labels at the right end, pushed apart
-        mid = (lt + l3) / 2
-        lt, l3 = (mid + 6, mid - 6) if lt >= l3 else (mid - 6, mid + 6)
+    # direct labels at the right end, top to bottom, at least 12 apart (pushed down, then back up if past the bottom)
+    names = {1: 'Title', 2: 'Top 3', 3: 'Top 15'}
     now = points[-1]
-    out.append(f'<text x="{x1 + 9}" y="{l3 + 3.5:.1f}" font-size="11.5" fill="#0f2830">Top 3 '
-               f'<tspan font-weight="700">{_esc(_pct_label(now[2]))}</tspan></text>')
-    out.append(f'<text x="{x1 + 9}" y="{lt + 3.5:.1f}" font-size="11.5" fill="#0f2830">Title '
-               f'<tspan font-weight="700">{_esc(_pct_label(now[1]))}</tspan></text>')
+    order = sorted(ends, key=lambda k: (ends[k], -k))           # ties: Top 15 above Top 3 above Title, like the lines
+    ys = []
+    for k in order:
+        ys.append(max(ends[k], ys[-1] + 12) if ys else ends[k])
+    over = ys[-1] - (y1 + 4) if ys else 0
+    if over > 0:
+        ys = [v - over for v in ys]
+    for k, ly in zip(order, ys):
+        out.append(f'<text x="{x1 + 9}" y="{ly + 3.5:.1f}" font-size="11.5" fill="#0f2830">{names[k]} '
+                   f'<tspan font-weight="700">{_esc(_pct_label(now[k]))}</tspan></text>')
     for i, p in enumerate(points):                 # hover: one column per point with a tooltip
         if p[1] is None:
             tip = f'{p[0]}: no data'
         else:
             when = 'Now' if p[0] == 'Now' else f'{p[0]} start'
-            tip = f'{when}: Title {_pct_label(p[1])} · Top 3 {_pct_label(p[2])}'
+            t15 = f' · Top 15 {_pct_label(p[3])}' if p[3] is not None else ''
+            tip = f'{when}: Title {_pct_label(p[1])} · Top 3 {_pct_label(p[2])}{t15}'
         out.append(f'<rect x="{xs[i] - step / 2:.1f}" y="2" width="{step:.1f}" height="90" fill="transparent">'
                    f'<title>{_esc(tip)}</title></rect>')
     out.append('</svg>')
@@ -1604,10 +1612,10 @@ def _trend_block(team: str, history_rounds: dict, round_num: int, now: dict) -> 
     points = []
     for r in range(1, round_num + 1):
         row = history_rounds.get(r, {}).get('teams', {}).get(team)
-        points.append((f'R{r}', row['title'], row['top3']) if row else (f'R{r}', None, None))
-    points.append(('Now', now['title'], now['top3']))
+        points.append((f'R{r}', row['title'], row['top3'], row.get('top15')) if row else (f'R{r}', None, None, None))
+    points.append(('Now', now['title'], now['top3'], now.get('top15')))
     return ('<div class="trend"><div class="trend-head"><span>By round</span>'
-            '<span class="trend-key"><i class="sw sw-t"></i>Title <i class="sw sw-3"></i>Top 3</span></div>'
+            '<span class="trend-key"><i class="sw sw-t"></i>Title <i class="sw sw-3"></i>Top 3 <i class="sw sw-15"></i>Top 15</span></div>'
             + _trend_svg(team, points) + '</div>')
 
 
@@ -1627,6 +1635,7 @@ WEEK_CSS = '''
         .sw { display: inline-block; width: 16px; height: 0; vertical-align: middle; margin: 0 0.25rem 0 0.5rem; }
         .sw-t { border-top: 2px solid #1a4a5c; }
         .sw-3 { border-top: 2px dashed #5f9aaa; }
+        .sw-15 { border-top: 2px dotted #8fbfcc; }
         .trend-svg { width: 100%; height: auto; display: block; margin-top: 0.2rem; }
         .trend-none { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
         .my-trend { max-width: 460px; margin: -0.75rem auto 1.5rem; background: var(--card); border: 1px solid var(--gold);
@@ -2069,7 +2078,7 @@ def generate_distribution_html(standings_prediction: dict, season: int, round_nu
 
         top1 = probs.get(1, 0)
         top3 = sum(probs.get(j, 0) for j in range(1, 4))
-        trend = _trend_block(team, history_rounds, round_num, {'title': top1, 'top3': top3}) if history_rounds else ''
+        trend = _trend_block(team, history_rounds, round_num, {'title': top1, 'top3': top3, 'top15': min(1.0, sum(probs.get(j, 0) for j in range(1, 16)))}) if history_rounds else ''
         body += f'''
         <div class="team-card" data-i="{i}" data-team="{_esc(team)}">
             <div class="team-card-header">
