@@ -10,7 +10,8 @@ Usage:
     python match_predictor.py --season 48 --round 3 --output predictions.html
     python match_predictor.py --season 48 --round 3 --simulations 50000
 
-The matches page (<prefix>_matches.html, on the site predictions_matches.html) is the Match Centre: drawn by
+The Match Centre (match_centre.html, written next to the other pages: --output predictions -> match_centre.html;
+<prefix>_matches.html = predictions_matches.html on the site is only a forwarding page to it, for old links) is drawn by
 match_centre.py (next to this script; imported only for that page - without it the old matches page is written)
 from scripts/match_centre.json (Monday, match_centre_data.py) + this run's live data. --fetch-calendar (website
 only) downloads the league calendar once for the scheduled times.
@@ -887,11 +888,46 @@ ROUND_PAGE_KEYS = ('matches', 'standings', 'distribution')
 SEASON_PAGE_KEYS = ('season_distribution',)
 
 
+# The Match Centre has a fixed name in the output folder (his call 21 Oct 2026: the site URL is match_centre.html);
+# <prefix>_matches.html (predictions_matches.html) is kept as a forwarding page.
+CENTRE_FILE = 'match_centre.html'
+
+
+def centre_path(prefix: str) -> str:
+    """match_centre.html in the folder of the output prefix ('predictions' -> 'match_centre.html')."""
+    return os.path.join(os.path.dirname(prefix), CENTRE_FILE)
+
+
 def prediction_nav(prefix: str, round_pages: bool, season_pages: bool) -> dict:
     """Links for the header strip: page key -> href (file name next to the page). Only pages that exist get a link."""
     base = os.path.basename(prefix)
     keys = (ROUND_PAGE_KEYS if round_pages else ()) + (SEASON_PAGE_KEYS if season_pages else ())
-    return {key: f'{base}{suffix}.html' for key, suffix, _ in PREDICTION_PAGES if key in keys}
+    return {key: CENTRE_FILE if key == 'matches' else f'{base}{suffix}.html'
+            for key, suffix, _ in PREDICTION_PAGES if key in keys}
+
+
+def generate_matches_forward_html() -> str:
+    """<prefix>_matches.html: forwards to the Match Centre, keeping a #anchor (predictions_matches.html#m5 ->
+    match_centre.html#m5)."""
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Centre</title>
+    <script>location.replace('{CENTRE_FILE}' + location.hash);</script>
+    <meta http-equiv="refresh" content="1; url={CENTRE_FILE}">
+    <style>
+        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f6f6;
+            color: #0f2830; margin: 0; padding: 3rem 16px; text-align: center; }}
+        a {{ color: #2c5f6f; font-weight: 600; font-size: 1.1rem; }}
+    </style>
+</head>
+<body>
+    <p>The Match Centre has moved → <a href="{CENTRE_FILE}">{CENTRE_FILE}</a></p>
+</body>
+</html>
+'''
 
 
 def fmt_pct(p: float) -> str:
@@ -2932,7 +2968,7 @@ def write_matches_page(matches_file: str, predictions: list, season_data: dict, 
             cal_text = round_calendar_text(args, prefix)
             calendar = match_centre.parse_calendar(cal_text) if cal_text else None
             standings = None if centre else get_standings_before_round(season_data, args.round)
-            nav_links = [(label.format(r=args.round), (nav or {}).get(key) or os.path.basename(matches_file),
+            nav_links = [(label.format(r=args.round), (nav or {}).get(key) or CENTRE_FILE,
                           key == 'matches')
                          for key, _, label in PREDICTION_PAGES if key in (nav or {'matches': ''})]
             round_games = [g for g in season_data.get('games', []) if g.get('round') == args.round]
@@ -2948,8 +2984,10 @@ def write_matches_page(matches_file: str, predictions: list, season_data: dict, 
     if page is None:
         page = generate_matches_html(predictions, args.season, args.round, nav=nav, n_sims=args.simulations,
                                      places=places, stakes=stakes)
-    with open(matches_file, 'w', encoding='utf-8') as f:
+    with open(centre_path(prefix), 'w', encoding='utf-8') as f:
         f.write(page)
+    with open(matches_file, 'w', encoding='utf-8') as f:          # old address: forwards to the Match Centre
+        f.write(generate_matches_forward_html())
 
 
 def main():
@@ -3028,7 +3066,7 @@ def main():
             prefix = args.output.replace('.html', '')
             
             # Standings table
-            nav = prediction_nav(prefix, os.path.exists(f"{prefix}_matches.html"), True)
+            nav = prediction_nav(prefix, os.path.exists(centre_path(prefix)), True)
             # Old season-table file name: now a forwarding page to Season finish (the table is part of it)
             standings_html = generate_season_forward_html(args.season, args.round,
                                                           f"{os.path.basename(prefix)}_season_distribution.html")
@@ -3120,7 +3158,7 @@ def main():
             
             # Standings table (full season projection) - different filename
             # Header links: round pages only if they exist next to these (GitHub Actions makes both sets)
-            nav = prediction_nav(prefix, os.path.exists(f"{prefix}_matches.html"), True)
+            nav = prediction_nav(prefix, os.path.exists(centre_path(prefix)), True)
             # Rounds still to play incl. this one (simulate_full_season's default final round 8) - for Clinched labels
             rounds_left = 8 - args.round + 1
             # Old season-table file name: now a forwarding page to Season finish (the table is part of it)
@@ -3133,9 +3171,9 @@ def main():
             
             # Distribution heatmap - different filename
             matches_file = f"{prefix}_matches.html"
-            has_matches = os.path.exists(matches_file)
+            has_matches = os.path.exists(centre_path(prefix))
             stake_card = (stake_season_card(featured, places, args.round,
-                                            os.path.basename(matches_file) if has_matches else None, week_ref)
+                                            CENTRE_FILE if has_matches else None, week_ref)
                           if featured else '')
             distribution_html = generate_distribution_html(standings_prediction, args.season, args.round, nav=nav,
                                                            mode='season', n_sims=args.simulations, rounds_left=rounds_left,
@@ -3150,7 +3188,7 @@ def main():
             if has_matches:
                 predictions = [simulate_match(pairings, args.simulations) for pairings in matchups if pairings]
                 write_matches_page(matches_file, predictions, season_data, args, prefix, nav, places, stakes)
-                print(f"✅ Match Centre with what's at stake: {matches_file}")
+                print(f"✅ Match Centre with what's at stake: {centre_path(prefix)} (+ {matches_file} forwards to it)")
         
         return
     
@@ -3217,7 +3255,7 @@ def main():
         places = {team: stats['current_standing'] for team, stats in standings_prediction.items()}
         matches_file = f"{prefix}_matches.html"
         write_matches_page(matches_file, predictions, season_data, args, prefix, nav, places)
-        print(f"\n✅ Match Centre: {matches_file}")
+        print(f"\n✅ Match Centre: {centre_path(prefix)} (+ {matches_file} forwards to it)")
         
         # 2. Standings table
         standings_html = generate_standings_html(standings_prediction, args.season, args.round, nav=nav,

@@ -1,5 +1,5 @@
 """
-Match Centre page (predictions_matches.html) - renderer used by match_predictor.py.
+Match Centre page (match_centre.html; predictions_matches.html forwards to it) - renderer used by match_predictor.py.
 
 Lives next to match_predictor.py (v7 and the website's scripts/). match_predictor imports it only when it writes the
 matches page; without this file it writes the old matches page (the app copies in streaming/ and content_studio/
@@ -876,7 +876,7 @@ def render(season, round_num, round_games, predictions, centre=None, stakes=None
     teams = sorted({t for c in cards for t in (c['ta'], c['tb'])}, key=str.lower)
     opts = ''.join(f'<option value="{E(t)}">{E(t)}</option>' for t in teams)
     links = ''.join(f'<a class="on" aria-current="page" href="{E(h)}">{E(lab)}</a>' if on else f'<a href="{E(h)}">{E(lab)}</a>'
-                    for lab, h, on in (nav or [('Match Centre', 'predictions_matches.html', True)]))
+                    for lab, h, on in (nav or [('Match Centre', 'match_centre.html', True)]))
     rows = ''.join(_list_row(i, c) for i, c in enumerate(cards))
     body = ''.join(_card_html(i, n, c, nteams, swing_min) for i, c in enumerate(cards))
     updated = now.strftime('%a %d %b, %H:%M UTC')
