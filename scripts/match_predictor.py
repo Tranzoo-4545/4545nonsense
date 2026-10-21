@@ -9,6 +9,11 @@ Usage:
     python match_predictor.py --season 48 --round 3
     python match_predictor.py --season 48 --round 3 --output predictions.html
     python match_predictor.py --season 48 --round 3 --simulations 50000
+
+The matches page (<prefix>_matches.html, on the site predictions_matches.html) is the Match Centre: drawn by
+match_centre.py (next to this script; imported only for that page - without it the old matches page is written)
+from scripts/match_centre.json (Monday, match_centre_data.py) + this run's live data. --fetch-calendar (website
+only) downloads the league calendar once for the scheduled times.
 """
 
 import argparse
@@ -872,7 +877,7 @@ def get_round_pairings(season_data: dict, round_num: int, player_ratings: dict) 
 
 # The five prediction pages: key -> (file suffix, nav label). '{r}' = round number.
 PREDICTION_PAGES = [
-    ('matches', '_matches', 'Matches'),
+    ('matches', '_matches', 'Match Centre'),
     ('standings', '_standings', 'Table after R{r}'),
     ('distribution', '_distribution', 'Places after R{r}'),
     ('season_distribution', '_season_distribution', 'Season finish'),
@@ -2874,6 +2879,79 @@ def simulate_full_season_from_roster(
     return standings_prediction
 
 
+# ---------------------------------------------------------------------------
+# MATCH CENTRE (the matches page)
+# ---------------------------------------------------------------------------
+CALENDAR_URL = "https://www.lichess4545.com/team4545/season/{}/pairings/calendar.ics"
+CALENDAR_KEEP_HOURS = 6     # a calendar fetched by the round run is reused by the --full-season run of the same workflow
+
+
+def round_calendar_text(args, prefix: str) -> Optional[str]:
+    """The league calendar (scheduled times) for the Match Centre, or None.
+    --calendar FILE: that file. --fetch-calendar: ONE download, kept as <prefix>_calendar.ics (not committed) so the
+    --full-season run right after it needs no second request. Otherwise that kept file when it is recent."""
+    keep = Path(f"{prefix}_calendar.ics")
+    if getattr(args, 'calendar', None):
+        try:
+            return Path(args.calendar).read_text(encoding='utf-8', errors='replace')
+        except OSError as e:
+            print(f"  Calendar {args.calendar} not readable ({e}) - no scheduled times")
+            return None
+    if getattr(args, 'fetch_calendar', False):
+        try:
+            response = requests.get(CALENDAR_URL.format(args.season), timeout=30,
+                                    headers={'User-Agent': '4545-chronicles-match-centre'})
+            response.raise_for_status()
+            text = response.text
+            try:
+                keep.write_text(text, encoding='utf-8')
+            except OSError:
+                pass
+            print(f"  League calendar: {text.count('BEGIN:VEVENT')} scheduled games")
+            return text
+        except Exception as e:
+            print(f"  Warning: league calendar not fetched ({e}) - no scheduled times on the Match Centre")
+            return None
+    if keep.exists() and time.time() - keep.stat().st_mtime < CALENDAR_KEEP_HOURS * 3600:
+        return keep.read_text(encoding='utf-8', errors='replace')
+    return None
+
+
+def write_matches_page(matches_file: str, predictions: list, season_data: dict, args, prefix: str,
+                       nav: Optional[dict], places: dict, stakes: Optional[list] = None) -> None:
+    """The matches page = the Match Centre (match_centre.py). Without match_centre.py, or if it fails, the old
+    matches page. The numbers (chances, stakes) are the ones computed here either way."""
+    try:
+        import match_centre
+    except ImportError:
+        match_centre = None
+    page = None
+    if match_centre is not None:
+        try:
+            centre = match_centre.load_data(args.season, args.round, getattr(args, 'centre_data', None))
+            cal_text = round_calendar_text(args, prefix)
+            calendar = match_centre.parse_calendar(cal_text) if cal_text else None
+            standings = None if centre else get_standings_before_round(season_data, args.round)
+            nav_links = [(label.format(r=args.round), (nav or {}).get(key) or os.path.basename(matches_file),
+                          key == 'matches')
+                         for key, _, label in PREDICTION_PAGES if key in (nav or {'matches': ''})]
+            round_games = [g for g in season_data.get('games', []) if g.get('round') == args.round]
+            page = match_centre.render(args.season, args.round, round_games, predictions, centre=centre,
+                                       stakes=stakes, featured=featured_stake(stakes, places) if stakes else None,
+                                       calendar=calendar, places=places, standings=standings, nav=nav_links,
+                                       n_sims=args.simulations, swing_min=STAKE_SWING_MIN)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print(f"  Warning: Match Centre failed ({e}) - writing the plain matches page")
+            page = None
+    if page is None:
+        page = generate_matches_html(predictions, args.season, args.round, nav=nav, n_sims=args.simulations,
+                                     places=places, stakes=stakes)
+    with open(matches_file, 'w', encoding='utf-8') as f:
+        f.write(page)
+
+
 def main():
     parser = argparse.ArgumentParser(description='Predict team match outcomes using Glicko-2 ratings')
     parser.add_argument('--season', '-s', type=int, required=True, help='Season number')
@@ -2886,6 +2964,12 @@ def main():
     parser.add_argument('--roster', type=str, default=None, help='Excel file with team rosters (for pre-season predictions)')
     parser.add_argument('--history', type=str, default=None,
                         help='Prediction history file (default: prediction_history.json next to this script; --full-season)')
+    parser.add_argument('--fetch-calendar', action='store_true',
+                        help='Match Centre: download the league calendar once for scheduled times (website workflow)')
+    parser.add_argument('--calendar', type=str, default=None,
+                        help='Match Centre: a saved calendar .ics instead of downloading it (tests)')
+    parser.add_argument('--centre-data', type=str, default=None,
+                        help='Match Centre: the Monday file (default: match_centre.json next to this script)')
     
     args = parser.parse_args()
     
@@ -3065,11 +3149,8 @@ def main():
             # Same match simulation as the round run; done after the season simulations, so those stay unchanged.
             if has_matches:
                 predictions = [simulate_match(pairings, args.simulations) for pairings in matchups if pairings]
-                matches_html = generate_matches_html(predictions, args.season, args.round, nav=nav,
-                                                     n_sims=args.simulations, places=places, stakes=stakes)
-                with open(matches_file, 'w', encoding='utf-8') as f:
-                    f.write(matches_html)
-                print(f"✅ Match predictions with what's at stake: {matches_file}")
+                write_matches_page(matches_file, predictions, season_data, args, prefix, nav, places, stakes)
+                print(f"✅ Match Centre with what's at stake: {matches_file}")
         
         return
     
@@ -3134,12 +3215,9 @@ def main():
         # 1. Match predictions
         # Ordered by table position; no stakes here (they need the --full-season run, which rewrites this page)
         places = {team: stats['current_standing'] for team, stats in standings_prediction.items()}
-        matches_html = generate_matches_html(predictions, args.season, args.round, nav=nav, n_sims=args.simulations,
-                                             places=places)
         matches_file = f"{prefix}_matches.html"
-        with open(matches_file, 'w', encoding='utf-8') as f:
-            f.write(matches_html)
-        print(f"\n✅ Match predictions: {matches_file}")
+        write_matches_page(matches_file, predictions, season_data, args, prefix, nav, places)
+        print(f"\n✅ Match Centre: {matches_file}")
         
         # 2. Standings table
         standings_html = generate_standings_html(standings_prediction, args.season, args.round, nav=nav,

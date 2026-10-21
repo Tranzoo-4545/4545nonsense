@@ -11,6 +11,16 @@ on:
   # Also allow manual trigger from GitHub UI
   workflow_dispatch:
 
+  # Match Centre: redraw the page right after the Monday push of its data (Control Panel -> Push to GitHub)
+  push:
+    paths:
+      - 'scripts/match_centre.json'
+
+# one run at a time (a Monday push can meet a scheduled run); a waiting run starts after the current one
+concurrency:
+  group: update-predictions
+  cancel-in-progress: false
+
 jobs:
   update-predictions:
     runs-on: ubuntu-latest
@@ -46,7 +56,8 @@ jobs:
             --season ${{ steps.config.outputs.season }} \
             --round ${{ steps.config.outputs.round }} \
             --output predictions \
-            --no-cache
+            --no-cache \
+            --fetch-calendar
       
       - name: Generate full season projection
         run: |
