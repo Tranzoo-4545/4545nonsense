@@ -354,12 +354,28 @@ def _season_chart(card, nteams):
     return s + '</svg>'
 
 
-def _rounds_list(card, side):
+def chronicle_anchor(team1, team2):
+    """Id of a match on Match Chronicles (matchups.html) - the same rule as team_matchup_report.chronicle_anchor:
+    'm-<team>--<team>', names sorted, each slug cut at 30 characters. Change both together."""
+    def slug(t):
+        s = re.sub(r'[^a-z0-9]+', '-', ' '.join(str(t or '').split()).lower()).strip('-')
+        return s[:30].strip('-') or 'team'
+    x, y = sorted(' '.join(str(t or '').split()).lower() for t in (team1, team2))
+    return f'm-{slug(x)}--{slug(y)}'
+
+
+def _rounds_list(card, side, round_num=None):
     rows = card['season'][side]
     if not rows:
         return ''
+
+    def chron(x):        # last round's match: its story on Match Chronicles (the site's matchups.html is that round)
+        if round_num and x['r'] == round_num - 1 and x.get('opp'):
+            return (f' · <a class="chr" href="matchups.html#{chronicle_anchor(card["t" + side], x["opp"])}">'
+                    f'Chronicle →</a>')
+        return ''
     lis = ''.join(f'<li><span class="rr">R{x["r"]}</span><span class="ch {x["res"]}">{x["res"]}</span>'
-                  f'<span class="sc">{half(x["a"])}-{half(x["b"])}</span><span class="op">v {E(x["opp"])}</span>'
+                  f'<span class="sc">{half(x["a"])}-{half(x["b"])}</span><span class="op">v {E(x["opp"])}{chron(x)}</span>'
                   f'<span class="aft" title="place after R{x["r"]}">{ordinal(x["pos"]) if x.get("pos") else ""}</span></li>'
                   for x in rows)
     return (f'<div class="blk"><div class="bh">Rounds so far <span class="k">result · opponent · place after</span></div>'
@@ -697,7 +713,7 @@ svg .la { stroke:var(--team-a); fill:none; stroke-width:2.5; stroke-linejoin:rou
 .ch { font-size:0.75rem; font-weight:800; width:1.3rem; text-align:center; border-radius:3px; color:#fff; display:inline-block; line-height:1.35; }
 .ch.W { background:#3c8a5a; } .ch.D { background:var(--draw); color:var(--ink); } .ch.L { background:#b05a4a; }
 .th .ch { box-shadow:0 0 0 1px rgba(255,255,255,0.6); }
-.sc { font-weight:700; } .op { overflow-wrap:break-word; } .aft { color:var(--muted); font-size:0.8rem; white-space:nowrap; }
+.sc { font-weight:700; } .op { overflow-wrap:break-word; } .chr { color:var(--teal); font-weight:700; white-space:nowrap; } .aft { color:var(--muted); font-size:0.8rem; white-space:nowrap; }
 .ppl { display:flex; flex-direction:column; gap:0.45rem; font-size:0.85rem; }
 .ppk { font-weight:700; display:flex; align-items:center; gap:0.35rem; } .ppi { width:2.1rem; flex:none; text-align:center; }
 .pp ul { list-style:none; display:flex; flex-wrap:wrap; gap:0.1rem 0.9rem; padding-left:2.45rem; }
@@ -792,7 +808,7 @@ JS = '''
 '''
 
 
-def _card_html(i, n, card, nteams, swing_min):
+def _card_html(i, n, card, nteams, swing_min, round_num=None):
     hl = set((card.get('headline') or {}).get('boards') or [])
     head = ''
     if card.get('headline'):
@@ -829,7 +845,7 @@ def _card_html(i, n, card, nteams, swing_min):
                     who = who.replace('<div class="bh">Who’s on the boards</div>',
                                       f'<div class="bh">Who’s on the boards{monday_note}</div>')
                 cols += (f'<div class="col col{side}"><div class="colh">{E(card["t" + side])}</div>'
-                         f'{_rounds_list(card, side)}{who}</div>')
+                         f'{_rounds_list(card, side, round_num)}{who}</div>')
             inner += f'<div class="cols">{cols}</div>'
         inner += stakes
         sections += f'<section class="sec teams">{inner}</section>'
@@ -878,7 +894,7 @@ def render(season, round_num, round_games, predictions, centre=None, stakes=None
     links = ''.join(f'<a class="on" aria-current="page" href="{E(h)}">{E(lab)}</a>' if on else f'<a href="{E(h)}">{E(lab)}</a>'
                     for lab, h, on in (nav or [('Match Centre', 'match_centre.html', True)]))
     rows = ''.join(_list_row(i, c) for i, c in enumerate(cards))
-    body = ''.join(_card_html(i, n, c, nteams, swing_min) for i, c in enumerate(cards))
+    body = ''.join(_card_html(i, n, c, nteams, swing_min, round_num) for i, c in enumerate(cards))
     updated = now.strftime('%a %d %b, %H:%M UTC')
     sims = f'{n_sims:,}' if n_sims else 'many'
     monday = bool(centre)
