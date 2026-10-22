@@ -11,8 +11,8 @@ main{max-width:1100px;margin:0 auto;padding:16px 16px 70px}a{color:var(--teal)}.
 h1{font:700 2rem/1.15 'Space Grotesk',sans-serif;margin:10px 0 2px}h2{font:700 1.3rem 'Space Grotesk',sans-serif;margin:30px 0 6px}
 h2 small{color:var(--mut);font:400 .85rem Inter,sans-serif}.sub{color:var(--mut);margin:0 0 10px}.mut{color:var(--mut)}.note{color:var(--mut);font-size:.8rem}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-.cal{display:grid;grid-template-columns:34px repeat(31,1fr);gap:3px;align-items:center}
-.cal .m{font-size:.75rem;color:var(--mut)}
+.cal{display:grid;grid-template-columns:34px repeat(31,minmax(0,1fr));gap:3px;align-items:center}
+.cal .m{font-size:.75rem;color:var(--mut)}.cal .dn{font-size:.68rem;color:var(--mut);text-align:center;line-height:1;white-space:nowrap;overflow:visible}
 .cal button{aspect-ratio:1;border:0;border-radius:3px;padding:0;cursor:pointer;background:var(--h0);min-width:0}
 .cal button:hover{outline:2px solid var(--ink)}.cal button.sel{outline:2px solid var(--gold);outline-offset:1px}
 .cal button.no{visibility:hidden}
@@ -33,7 +33,7 @@ table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{padding:6px;bord
 .lk{background:none;border:0;color:var(--ink);font:inherit;cursor:pointer;padding:0;text-align:left}.lk:hover{color:var(--teal)}
 .btn{background:none;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:4px 12px;cursor:pointer;font:inherit;font-size:.85rem}
 @media (max-width:760px){.two{grid-template-columns:1fr}}
-@media (max-width:520px){h1{font-size:1.6rem}.cal{grid-template-columns:26px repeat(31,1fr);gap:2px}.cal .m{font-size:.65rem}}
+@media (max-width:520px){h1{font-size:1.6rem}.cal{grid-template-columns:26px repeat(31,minmax(0,1fr));gap:2px}.cal .m{font-size:.65rem}.cal .dn{font-size:.55rem}.cal .dn.odd{visibility:hidden}}
 </style></head><body><main>
 <a class="back" href="index.html">← The 4545 Chronicles</a>
 <h1>The 4545 Calendar</h1>
@@ -61,7 +61,8 @@ const NOW = new Date(); let sel = LEN.slice(0, NOW.getUTCMonth()).reduce((a, b) 
 $('sub').textContent = `${D.ngames.toLocaleString()} league games on the calendar, all 366 days covered. Tap a day for its story; look yourself up to see the days you've collected.`;
 const names = Object.keys(D.players), low = names.map(n => n.toLowerCase());
 function cal(){
-  const mine = me ? new Set(D.players[me]) : null; let h = '', i = 0;
+  const mine = me ? new Set(D.players[me]) : null; let h = '<span></span>', i = 0;
+  for (let d = 1; d <= 31; d++) h += `<span class="dn${d === 1 || d % 5 === 0 ? '' : ' odd'}">${d}</span>`;   // day numbers (phones: 1, 5, 10 ...)
   MON.forEach((m, mi) => { h += `<span class="m">${m}</span>`;
     for (let d = 0; d < 31; d++) { if (d < LEN[mi]) { const k = i++; h += `<button data-d="${k}" class="${k === sel ? 'sel ' : ''}${mine && mine.has(k) ? 'got' : ''}" style="${mine ? '' : 'background:' + heat(D.days[k].n)}" title="${D.labels[k]}: ${D.days[k].n} games"></button>`; }
       else h += '<button class="no" tabindex="-1"></button>'; } });
