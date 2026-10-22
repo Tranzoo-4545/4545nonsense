@@ -125,7 +125,7 @@ let PL = null, names = [], low = [], ACT = new Set(), plWait = [];
 function withPlayers(cb){
   if (PL) return cb();
   plWait.push(cb); if (plWait.length > 1) return;
-  const s = document.createElement('script'); s.src = 'achievements_players.js?v=S50R4';
+  const s = document.createElement('script'); s.src = 'achievements_players.js?v=d23d01b73f';
   s.onload = () => { PL = window.ACH_PLAYERS; names = Object.keys(PL.players); low = names.map(n => n.toLowerCase()); ACT = new Set(PL.active);
     const w = plWait; plWait = []; w.forEach(f => f()); };
   s.onerror = () => { plWait = []; $('sugg').innerHTML = '<div class="mut">The player data didn\'t load - try reloading the page.</div>'; $('sugg').style.display = 'block'; };
