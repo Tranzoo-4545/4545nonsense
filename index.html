@@ -356,6 +356,16 @@
         .report-link.gold:not(.fight):not(.cinema):not(.featured) .nm { font-weight: 700; font-size: 1.06em; color: #3a2a0c; }
         .report-link.gold:not(.fight):not(.cinema):not(.featured) .d { color: #8a6d3b; }
         .report-link.gold:not(.fight):not(.cinema):not(.featured) .link-arrow { color: #b8862a; }
+        /* Spotted strip: above both columns, a name box that opens spotted.html#name */
+        .spotted-strip { display: flex; align-items: center; justify-content: space-between; gap: 14px 24px; flex-wrap: wrap; margin: 0 0 25px;
+            padding: 16px 22px; border-radius: 16px; background: linear-gradient(135deg, #0f2830 0%, #1a4a5c 100%); border: 1px solid rgba(212,184,86,.55); box-shadow: 0 8px 26px rgba(0,0,0,.25); }
+        .spotted-strip .sp-title { display: block; font-family: 'Space Grotesk', -apple-system, sans-serif; font-weight: 700; font-size: 1.2em; color: #f0f6f6; }
+        .spotted-strip .sp-desc { display: block; font-size: .88em; color: rgba(214,238,244,.78); }
+        .spotted-strip .sp-go { display: flex; gap: 8px; flex: 1 1 260px; max-width: 420px; }
+        .spotted-strip input { flex: 1; min-width: 0; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,.25); background: rgba(8,22,30,.45); color: #f0f6f6; font: inherit; }
+        .spotted-strip input::placeholder { color: rgba(214,238,244,.55); }
+        .spotted-strip button { padding: 10px 16px; border-radius: 10px; border: 0; background: #d4b856; color: #1b1405; font: 700 1em -apple-system, system-ui, sans-serif; cursor: pointer; }
+        .spotted-strip button:hover { filter: brightness(1.08); }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
@@ -368,6 +378,12 @@
             <h1>The 4545 Chronicles</h1>
             <p class="subtitle">Intergalactic Intelligence Briefings</p>
         </header>
+
+        <!-- Spotted: one name box for both rounds (his pick, 22 Oct 2026) -->
+        <form class="spotted-strip" action="https://tranzoo-4545.github.io/4545nonsense/spotted.html" onsubmit="var n=this.q.value.trim();location.href=this.action+(n?'#'+encodeURIComponent(n):'');return false;">
+            <div class="sp-text"><span class="sp-title">👀 Spotted</span><span class="sp-desc">This week's stories about you, in every report</span></div>
+            <div class="sp-go"><input name="q" placeholder="Your Lichess username" autocomplete="off" aria-label="Your Lichess username"><button type="submit">Go →</button></div>
+        </form>
         
         <div class="reports-grid">
             <!-- Current Round Preview -->
