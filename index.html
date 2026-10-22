@@ -349,6 +349,13 @@
         .report-link.featured .d { color: rgba(240,246,246,.72); opacity: 1; }
         .report-link.featured .link-arrow { color: #d4b856; }
         .report-link.featured:hover { filter: brightness(1.12); }
+        /* Achievements: weekly, a step up from the plain links (gold edge), not a fifth featured link */
+        .report-link.gold:not(.fight):not(.cinema):not(.featured) { background: linear-gradient(135deg, #fffaf0 0%, #fbefd3 100%) !important;
+            border: 1px solid #ecd49a !important; border-left: 5px solid #e8b04b !important; padding: 16px 20px; box-shadow: 0 4px 14px rgba(232,176,75,.2); }
+        .report-link.gold:not(.fight):not(.cinema):not(.featured):hover { background: linear-gradient(135deg, #fff6e2 0%, #f8e6bd 100%) !important; }
+        .report-link.gold:not(.fight):not(.cinema):not(.featured) .nm { font-weight: 700; font-size: 1.06em; color: #3a2a0c; }
+        .report-link.gold:not(.fight):not(.cinema):not(.featured) .d { color: #8a6d3b; }
+        .report-link.gold:not(.fight):not(.cinema):not(.featured) .link-arrow { color: #b8862a; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
@@ -434,6 +441,12 @@
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
+                <a href="https://tranzoo-4545.github.io/4545nonsense/achievements.html" class="report-link gold">
+                    <div class="link-text">
+                        <span><span class="nm">🏆 Achievements</span><span class="d">Badges earned last round, and every player's collection</span></span>
+                        <span class="link-arrow">→</span>
+                    </div>
+                </a>
                 <a href="https://tranzoo-4545.github.io/4545nonsense/novelty_watch.html" class="report-link ">
                     <div class="link-text">
                         <span><span class="nm">4545 Novelty Watch</span><span class="d">Moves no 4545 game had played before</span></span>
@@ -443,12 +456,6 @@
                 <a href="https://tranzoo-4545.github.io/4545nonsense/monday_quiz.html" class="report-link ">
                     <div class="link-text">
                         <span><span class="nm">Monday Quiz</span><span class="d">8 timed questions from last round's games</span></span>
-                        <span class="link-arrow">→</span>
-                    </div>
-                </a>
-                <a href="https://tranzoo-4545.github.io/4545nonsense/achievements.html" class="report-link ">
-                    <div class="link-text">
-                        <span><span class="nm">Achievements</span><span class="d">Badges earned last round, and every player's collection</span></span>
                         <span class="link-arrow">→</span>
                     </div>
                 </a>
