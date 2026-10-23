@@ -406,9 +406,10 @@ def _stake_lines(card, swing_min):
     return f'<div class="stake"><div class="bh">At stake <span class="k">chance at the end of the season</span></div><ul>{lis}</ul></div>' if lis else ''
 
 
-def _swing_badge(card, swing_min):
-    """'Biggest swing' reason from the featured match's stakes: the team / measure that moves most."""
-    st = card['stake']
+def _swing_badge(card, swing_min, featured=None):
+    """'Biggest swing' reason from the featured match's stakes: the team / measure that moves most. featured = the
+    round's start pick (prediction history): its numbers are those of the round's start, so the reason says 'Monday'."""
+    st = featured or card['stake']
     best = None
     for key, lab in (('title', 'title'), ('top3', 'top-3')):
         for side in 'ab':
@@ -423,7 +424,7 @@ def _swing_badge(card, swing_min):
     _, team, lab, (w, _, lo) = best
     reason = f"{team}: {lab} chance {fmt_pct(lo)} with a loss, {fmt_pct(w)} with a win" if lo is not None else \
         f"{team}: {lab} chance {fmt_pct(w)} with a win"
-    return {'name': 'Biggest swing', 'reason': reason}
+    return {'name': 'Biggest swing', 'reason': ('Monday: ' if featured else '') + reason}
 
 
 # =============================================================================
@@ -570,9 +571,9 @@ def _build_cards(round_games, predictions, centre, stakes, featured, calendar, p
                     nxt = (b.get('board'), st['t'])
         card['live'] = dict(sa=sa, sb=sb, left=left, nxt=nxt, started=started, has_calendar=bool(calendar),
                             decided='a' if sa - sb > left else 'b' if sb - sa > left else None)
-        if featured and card['stake'] is featured:
+        if featured and {card['ta'], card['tb']} == {featured['a'], featured['b']}:
             card['featured'] = True
-            sw = _swing_badge(card, swing_min)
+            sw = _swing_badge(card, swing_min, featured if card['stake'] is not featured else None)
             if sw:
                 card['badges'] = [sw] + card['badges'][:1]          # still max 2 badges
     return cards

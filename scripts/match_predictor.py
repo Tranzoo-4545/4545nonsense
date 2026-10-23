@@ -1524,35 +1524,49 @@ def season_reference_data(season_data: dict, round_num: int) -> dict:
 
 
 def update_prediction_history(season: int, round_num: int, season_data: dict, matchups: list, player_ratings: dict,
-                              standings_prediction: dict, n_sims: int, path: Optional[Path] = None) -> Optional[dict]:
+                              standings_prediction: dict, n_sims: int, path: Optional[Path] = None,
+                              stakes: Optional[list] = None, places: Optional[dict] = None) -> Optional[dict]:
     """This season's history as {round: entry}; adds this round's reference first if there is none yet (never
     overwrites one). The reference simulation uses its own seeded random numbers and restores the shared state
     afterwards, so the page's numbers don't depend on whether a reference was made in this run.
+    With stakes (match_stakes() of this run) the reference also keeps the round's 'featured' match - the Biggest swing
+    as the round started (his call 23 Oct 2026: it must not travel during the week as results come in); a reference
+    saved before that gets it added once, from the same start-of-round simulation.
     None = history unreadable (no arrows / charts)."""
     history = load_prediction_history(path)
     if history is None:
         return None
     rounds = history.setdefault('seasons', {}).setdefault(str(season), {})
-    if str(round_num) not in rounds:
+    entry = rounds.get(str(round_num))
+    if entry is None or (stakes is not None and 'featured' not in entry):
         played = sum(1 for m in matchups for p in m if p.is_played)
+        ref_stakes = stakes
         if played == 0:
             ref = standings_prediction          # nothing played yet: this projection is the round's starting point
         else:
             print(f"Reference for Round {round_num} (its {played} played boards treated as unplayed)...")
             state = random.getstate()
             random.seed(f'4545 reference S{season} R{round_num}')
+            raw = {}
             try:
                 ref = simulate_full_season(season_reference_data(season_data, round_num), round_num,
-                                           player_ratings, n_sims)
+                                           player_ratings, n_sims, stakes_out=raw)
             finally:
                 random.setstate(state)
-        rounds[str(round_num)] = {
-            'source': 'reference',
-            'created': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'),
-            'n_sims': n_sims,
-            'boards_played_then': played,
-            'teams': projection_summary(ref),
-        }
+            ref_stakes = match_stakes(raw) if stakes is not None else None
+        if entry is None:
+            entry = rounds[str(round_num)] = {
+                'source': 'reference',
+                'created': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'),
+                'n_sims': n_sims,
+                'boards_played_then': played,
+                'teams': projection_summary(ref),
+            }
+        if stakes is not None:
+            feat = featured_stake(ref_stakes, places or {}) if ref_stakes else None
+            entry['featured'] = json.loads(json.dumps(feat)) if feat else None     # None = no match reached the bar
+            print(f"Biggest swing this round (as it started): {feat['a']} vs {feat['b']}" if feat else
+                  "Biggest swing this round (as it started): none")
         if not _ratings_look_fetched(matchups):
             print("⚠ Most ratings missing (fetch failed?) - this round's reference not saved")
         elif save_prediction_history(history, season, path):
@@ -1718,7 +1732,7 @@ TREND_JS = '''
 
 def generate_matches_html(predictions: list[dict], season: int, round_num: int,
                           nav: Optional[dict] = None, n_sims: Optional[int] = None,
-                          places: Optional[dict] = None, stakes: Optional[list] = None) -> str:
+                          places: Optional[dict] = None, stakes: Optional[list] = None, featured='auto') -> str:
     """Generate HTML report with match predictions.
     places: team -> current place; matches are then ordered by table position (top boards first).
     stakes: match_stakes() of a --full-season run - the biggest-swing match goes first with the full panel,
@@ -1731,7 +1745,8 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int,
         # Most uncertain matches first
         predictions.sort(key=lambda p: abs(p['team_a_win_prob'] - 0.5))
     stake_by_pair = {frozenset((m['a'], m['b'])): m for m in (stakes or [])}
-    featured = featured_stake(stakes, places or {}) if stakes else None
+    if featured == 'auto':
+        featured = featured_stake(stakes, places or {}) if stakes else None
     if featured:
         key = frozenset((featured['a'], featured['b']))
         predictions.sort(key=lambda p: frozenset((p['team_a'], p['team_b'])) != key)   # stable: rest keep their order
@@ -1803,7 +1818,7 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int,
         stake = stake_by_pair.get(frozenset((team_a, team_b)))
         card_open = '<div class="match-card">'
         stake_html = ''
-        if stake is not None and stake is featured:
+        if stake is not None and featured and frozenset((stake['a'], stake['b'])) == key:
             card_open = '<div class="match-card featured" id="stakes">'
             stake_html = '\n            ' + _stake_feature_block(stake, team_a, team_b)
         elif stake is not None:
@@ -2954,9 +2969,13 @@ def round_calendar_text(args, prefix: str) -> Optional[str]:
 
 
 def write_matches_page(matches_file: str, predictions: list, season_data: dict, args, prefix: str,
-                       nav: Optional[dict], places: dict, stakes: Optional[list] = None) -> None:
+                       nav: Optional[dict], places: dict, stakes: Optional[list] = None,
+                       featured='auto') -> None:
     """The matches page = the Match Centre (match_centre.py). Without match_centre.py, or if it fails, the old
-    matches page. The numbers (chances, stakes) are the ones computed here either way."""
+    matches page. The numbers (chances, stakes) are the ones computed here either way. featured: the Biggest swing
+    match (the round's start pick from the prediction history); 'auto' = picked from these stakes."""
+    if featured == 'auto':
+        featured = featured_stake(stakes, places) if stakes else None
     try:
         import match_centre
     except ImportError:
@@ -2973,7 +2992,7 @@ def write_matches_page(matches_file: str, predictions: list, season_data: dict, 
                          for key, _, label in PREDICTION_PAGES if key in (nav or {'matches': ''})]
             round_games = [g for g in season_data.get('games', []) if g.get('round') == args.round]
             page = match_centre.render(args.season, args.round, round_games, predictions, centre=centre,
-                                       stakes=stakes, featured=featured_stake(stakes, places) if stakes else None,
+                                       stakes=stakes, featured=featured,
                                        calendar=calendar, places=places, standings=standings, nav=nav_links,
                                        n_sims=args.simulations, swing_min=STAKE_SWING_MIN)
         except Exception as e:
@@ -2983,7 +3002,7 @@ def write_matches_page(matches_file: str, predictions: list, season_data: dict, 
             page = None
     if page is None:
         page = generate_matches_html(predictions, args.season, args.round, nav=nav, n_sims=args.simulations,
-                                     places=places, stakes=stakes)
+                                     places=places, stakes=stakes, featured=featured)
     with open(centre_path(prefix), 'w', encoding='utf-8') as f:
         f.write(page)
     with open(matches_file, 'w', encoding='utf-8') as f:          # old address: forwards to the Match Centre
@@ -3130,13 +3149,24 @@ def main():
         places = {team: stats['current_standing'] for team, stats in standings_prediction.items()}
         featured = featured_stake(stakes, places)
         if featured:
-            print(f"Biggest potential swing this round: {featured['a']} vs {featured['b']}")
+            print(f"Biggest potential swing right now: {featured['a']} vs {featured['b']}")
         # Prediction history: this round's reference (once) for the this-week arrows + the By-round charts
         history_rounds = None
         if args.output:
             history_rounds = update_prediction_history(args.season, args.round, season_data, matchups, player_ratings,
-                                                       standings_prediction, args.simulations, args.history)
+                                                       standings_prediction, args.simulations, args.history,
+                                                       stakes=stakes, places=places)
         week_ref = (history_rounds or {}).get(args.round, {}).get('teams')
+        # Biggest swing = the match picked as the round started (kept all week); its numbers on the Season finish
+        # card stay live. Without a saved pick (no history file) the match picked from right now, as before.
+        start_pick = (history_rounds or {}).get(args.round, {})
+        if 'featured' in start_pick:
+            fz = start_pick['featured']
+            live = {frozenset((m['a'], m['b'])): m for m in stakes}
+            featured_start = fz
+            featured = (live.get(frozenset((fz['a'], fz['b']))) or fz) if fz else None
+        else:
+            featured_start = featured
         
         # Sort by expected placement
         sorted_standings = sorted(
@@ -3187,7 +3217,8 @@ def main():
             # Same match simulation as the round run; done after the season simulations, so those stay unchanged.
             if has_matches:
                 predictions = [simulate_match(pairings, args.simulations) for pairings in matchups if pairings]
-                write_matches_page(matches_file, predictions, season_data, args, prefix, nav, places, stakes)
+                write_matches_page(matches_file, predictions, season_data, args, prefix, nav, places, stakes,
+                                   featured=featured_start)
                 print(f"✅ Match Centre with what's at stake: {centre_path(prefix)} (+ {matches_file} forwards to it)")
         
         return
