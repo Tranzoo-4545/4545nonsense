@@ -725,6 +725,7 @@ svg .la { stroke:var(--team-a); fill:none; stroke-width:2.5; stroke-linejoin:rou
 .stake li { display:flex; gap:0.45rem; align-items:baseline; overflow-wrap:break-word; }
 .dot2 { width:9px; height:9px; border-radius:50%; flex:none; display:inline-block; } .dot2.ta { background:var(--team-a); } .dot2.tb { background:var(--team-b); }
 .foot { color:var(--muted); font-size:0.8rem; margin-top:1.5rem; text-align:center; }
+.how { margin-top:.8rem; } .howt { padding:.2rem 1rem .6rem; font-size:.9rem; line-height:1.5; } .howt p, .howt ul { margin:.45rem 0; } .howt ul { padding-left:1.2rem; }
 .altb { position:relative; display:inline-block; font-size:0.75rem; font-weight:700; letter-spacing:0.04em; color:var(--muted); box-shadow:inset 0 0 0 1px #9fb7be; border-radius:3px; padding:0 0.3rem; margin:0 0.35rem; vertical-align:2px; line-height:1.3; cursor:help; }
 .altb:focus { outline:2px solid var(--pale); }
 .altb:focus::after { content:attr(data-tip); position:absolute; top:calc(100% + 4px); left:50%; transform:translateX(-50%); width:max-content; max-width:220px; white-space:normal; background:var(--deep); color:#fff; font-weight:600; letter-spacing:0; padding:0.3rem 0.5rem; border-radius:6px; z-index:5; text-align:left; font-size:0.8rem; }
@@ -875,12 +876,13 @@ def _list_row(i, card):
 
 
 def render(season, round_num, round_games, predictions, centre=None, stakes=None, featured=None, calendar=None,
-           places=None, standings=None, nav=None, now=None, n_sims=None, swing_min=0.10):
+           places=None, standings=None, nav=None, now=None, n_sims=None, swing_min=0.10, history_model=False):
     """The whole page. round_games: the season's games of this round (as the API gives them); predictions:
     match_predictor.simulate_match results; centre: load_data(); stakes / featured: match_stakes() /
     featured_stake() of a --full-season run (else None); calendar: parse_calendar() or None; places / standings:
     team -> place / {'match_points', 'game_points'} before the round (used when there is no JSON);
-    nav: [(label, href, is_current)]."""
+    nav: [(label, href, is_current)]. history_model: the game model uses league history (player_history.json) -
+    the footer says so and explains it (his text, 23 Oct 2026)."""
     now = now or datetime.now(timezone.utc)
     cards = _build_cards(round_games, predictions, centre, stakes, featured, calendar, places, standings, now, swing_min)
     nteams = (centre or {}).get('nteams') or (len(places) if places else 0)
@@ -907,6 +909,18 @@ def render(season, round_num, round_games, predictions, centre=None, stakes=None
                    'Former teammates: same team in the same season, both 4+ games for it or both on its final roster. '
                    'Most connected = earlier league games + former-teammate pairs + LoneWolf / 960 games between the two teams.'
                    if monday else '')
+    based_on = 'Lichess classical ratings and their league history' if history_model else 'Lichess classical ratings'
+    how = ('''<details class="ml how"><summary>How we predict a game</summary><div class="howt">
+  <p>Every prediction starts from the two players’ Lichess ratings. White gets a small edge for moving first.</p>
+  <p>Then we look at each player’s league history in three ways:</p>
+  <ul><li><b>League record:</b> if a player has scored more (or less) in the league than their ratings suggested, we count
+  part of that. A few games barely count; it takes a long record to make a real difference.</li>
+  <li><b>Usual level:</b> if a player’s rating is currently below where it has been in their league games, we count part of
+  that back, since dips are often temporary. The same goes the other way.</li>
+  <li><b>Draw habit:</b> some players draw much more or much less than average, so their games get a higher or lower draw
+  chance.</li></ul>
+  <p>A new player is predicted from their rating alone, and their history counts more as their games add up.</p>
+  </div></details>''' if history_model else '')
     boards_note = ('Places and points before the round; board order from the league calendar and the team rosters. '
                    if monday else 'Board order not known yet: boards in calendar or rating order. ')
     return f'''<!DOCTYPE html>
@@ -937,9 +951,10 @@ def render(season, round_num, round_games, predictions, centre=None, stakes=None
   <div class="list" id="match-list">
 {body}
   </div>
-  <p class="foot">{boards_note}Chances: {sims} simulations of each match from the players’ Lichess classical ratings
+  <p class="foot">{boards_note}Chances: {sims} simulations of each match from the players’ {based_on}
   (most likely score = the most common final score in them). At stake and Biggest swing: chance at the end of the season after
   a win or a loss in this match, from the simulations of the whole season.{foot_monday}</p>
+  {how}
 </main>
 <script>{JS}</script>
 </body>

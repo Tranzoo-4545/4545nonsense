@@ -17,6 +17,7 @@ on:
       - 'scripts/match_centre.json'
       - 'scripts/match_centre.py'
       - 'scripts/match_predictor.py'
+      - 'scripts/player_history.json'
 
 # one run at a time (a Monday push can meet a scheduled run); a waiting run starts after the current one
 concurrency:

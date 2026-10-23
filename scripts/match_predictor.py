@@ -109,37 +109,17 @@ def calculate_draw_probability(white: Player, black: Player) -> float:
     return max(0.02, min(0.25, draw_prob))
 
 
-def simulate_game(white: Player, black: Player) -> float:
-    """
-    Simulate a single game outcome.
-    Returns 1 (white wins), 0.5 (draw), or 0 (black wins).
-    
-    Uses Glicko expected score and rating-based draw probability.
-    V6 calibrated model from backtest analysis.
-    """
-    # V6 calibrated parameters
+def v6_probs(white_rating: float, black_rating: float) -> tuple:
+    """The V6 formula (ratings only) as (White win, draw, Black win). Used when there is no player history file, and as
+    the yardstick the history numbers are measured against (player_history.py)."""
     WHITE_ADVANTAGE = 20  # Elo points for first-move advantage
     MAX_WIN_PROB = 0.85   # Cap confidence to allow upsets
-    
-    # Create virtual "boosted" white player for expected score calculation
-    white_boosted = Player(
-        username=white.username,
-        rating=white.rating + WHITE_ADVANTAGE,
-        rd=white.rd
-    )
-    
-    # Calculate expected score with White's first-move advantage
-    white_expected = expected_score(white_boosted, black)
-    
-    # Calculate draw probability based on actual ratings (not boosted)
-    draw_prob = calculate_draw_probability(white, black)
-    
-    # Distribute remaining probability between win/loss
+    white_expected = expected_score(Player('w', white_rating + WHITE_ADVANTAGE), Player('b', black_rating))
+    draw_prob = calculate_draw_probability(Player('w', white_rating), Player('b', black_rating))
     remaining = 1 - draw_prob
     white_win_prob = remaining * white_expected
     black_win_prob = remaining * (1 - white_expected)
-    
-    # Apply confidence cap - redistribute excess to draw and underdog
+    # confidence cap - redistribute excess to draw and underdog
     if white_win_prob > MAX_WIN_PROB:
         excess = white_win_prob - MAX_WIN_PROB
         white_win_prob = MAX_WIN_PROB
@@ -150,13 +130,98 @@ def simulate_game(white: Player, black: Player) -> float:
         black_win_prob = MAX_WIN_PROB
         draw_prob += excess * 0.4
         white_win_prob += excess * 0.6
-    
-    # Normalize
     total = white_win_prob + draw_prob + black_win_prob
-    white_win_prob /= total
-    draw_prob /= total
-    black_win_prob /= total
-    
+    return white_win_prob / total, draw_prob / total, black_win_prob / total
+
+
+# =============================================================================
+# GAME MODEL (his pick 23 Oct 2026): ratings + each player's league history
+# =============================================================================
+# Backtested on every season S30-S50, each predicted only from earlier seasons: single games better in 21 of 21
+# seasons; team matches (Swiss = near coin flips) - the favourite won 58.5% of matches with a winner (V6: 55.9%).
+# Three parts per player, from player_history.json (player_history.py, made every Monday by the Control Panel):
+#   League record  - points above/below expectation, over (games + 30): a few games barely count
+#   Usual level    - how far today's rating is below the player's best / average rating in league games
+#   Draw habit     - draws above/below expectation, over (games + 40)
+# A player without league games = rating only. Weights fitted on S16-S50 R4 (51k games). The numbers stay inside the
+# model - never shown on a page (fair-play optics).
+MODEL_NAME = 'history-2026-10'
+HISTORY_FILE_NAME = 'player_history.json'
+_W_GAP, _W_GAP_LEVEL, _W_WHITE = 2.6389, 0.5436, 0.1224         # rating gap, gap x rating level, first-move edge
+_W_PEAK, _W_MEAN, _W_RECORD = 0.1816, 0.1160, 4.0811            # usual level (best, average), league record
+_W_DRAW, _W_DRAW_LEVEL, _W_DRAW_HABIT = -1.0505, 0.6484, 4.8496  # draw score: base, rating level, draw habits
+_RECORD_BRAKE, _DRAW_BRAKE = 30, 40
+_HISTORY = {'loaded': False, 'players': None, 'info': None}
+_PROBS_SEEN = {}
+
+
+def load_player_history(path=None) -> Optional[dict]:
+    """player_history.json -> {username lower: [games, score-expected, draws-expected, peak, mean]}, read once.
+    Looked for next to this script, then one folder up (the companion / Content Studio copies live in v7's
+    subfolders). No file = the V6 formula (said once)."""
+    if _HISTORY['loaded'] and path is None:
+        return _HISTORY['players']
+    here = Path(__file__).resolve().parent
+    candidates = [Path(path)] if path else [here / HISTORY_FILE_NAME, here.parent / HISTORY_FILE_NAME]
+    players = info = None
+    for p in candidates:
+        if p.is_file():
+            try:
+                data = json.loads(p.read_text(encoding='utf-8'))
+                players = data['players']
+                info = f"S{data.get('season')} R{data.get('round')}, {len(players):,} players ({p.name})"
+                break
+            except Exception as e:
+                print(f"⚠ {p}: unreadable player history ({e}) - using the ratings-only formula")
+    if players is None:
+        print("Game model: no player_history.json - ratings-only formula (V6)")
+    else:
+        print(f"Game model: ratings + league history (before {info})")
+    _HISTORY.update(loaded=True, players=players, info=info)
+    return players
+
+
+def game_probs(white: Player, black: Player) -> tuple:
+    """(White win, draw, Black win) for one game: the history model when player_history.json is there, else V6."""
+    hist = load_player_history()
+    if hist is None:
+        return v6_probs(white.rating, black.rating)
+    def terms(pl: Player):
+        h = hist.get((pl.username or '').lower())
+        if not h:
+            return 0.0, 0.0, 0.0, 0.0                 # no league games yet: rating only
+        n, s, d, peak, mean = h
+        # a missing rating (fetch failed -> 1500 with the default RD) must not count as a huge dip below usual level
+        known = not (pl.rating == DEFAULT_RATING and pl.rd >= DEFAULT_RD)
+        return (s / (n + _RECORD_BRAKE), (peak - pl.rating) / 100 if known else 0.0,
+                (mean - pl.rating) / 100 if known else 0.0, d / (n + _DRAW_BRAKE))
+    rw, pkw, mnw, dw = terms(white)
+    rb, pkb, mnb, db = terms(black)
+    level = ((white.rating + black.rating) / 2 - 1850) / 400
+    gap = (white.rating - black.rating) / 400
+    s = ((_W_GAP + _W_GAP_LEVEL * level) * gap + _W_WHITE + _W_PEAK * (pkw - pkb) + _W_MEAN * (mnw - mnb)
+         + _W_RECORD * (rw - rb))
+    q = _W_DRAW + _W_DRAW_LEVEL * level + _W_DRAW_HABIT * (dw + db)
+    ew, ed, eb = math.exp(s / 2), math.exp(q), math.exp(-s / 2)
+    t = ew + ed + eb
+    return ew / t, ed / t, eb / t
+
+
+def current_model() -> str:
+    """Name of the game model in use: MODEL_NAME with a player history file, else 'v6'."""
+    return MODEL_NAME if load_player_history() is not None else 'v6'
+
+
+def simulate_game(white: Player, black: Player) -> float:
+    """
+    Simulate a single game outcome.
+    Returns 1 (white wins), 0.5 (draw), or 0 (black wins), from game_probs.
+    """
+    key = (white.username, white.rating, white.rd, black.username, black.rating, black.rd)
+    probs = _PROBS_SEEN.get(key)
+    if probs is None:
+        probs = _PROBS_SEEN[key] = game_probs(white, black)    # simulations ask for the same pairing many times
+    white_win_prob, draw_prob, black_win_prob = probs
     roll = random.random()
     if roll < white_win_prob:
         return 1.0
@@ -203,8 +268,8 @@ def simulate_match(pairings: list[BoardPairing], n_simulations: int = 10000) -> 
     # Calculate expected scores for pending games (with White advantage)
     board_expectations = []
     for p in pending:
-        white_boosted = Player(username=p.white.username, rating=p.white.rating + 25, rd=p.white.rd)
-        white_exp = expected_score(white_boosted, p.black)
+        pw_, pd_, _ = game_probs(p.white, p.black)
+        white_exp = pw_ + pd_ / 2
         if p.white_team == team_a:
             board_expectations.append((white_exp, 1 - white_exp))  # (team_a_exp, team_b_exp)
         else:
@@ -1532,13 +1597,17 @@ def update_prediction_history(season: int, round_num: int, season_data: dict, ma
     With stakes (match_stakes() of this run) the reference also keeps the round's 'featured' match - the Biggest swing
     as the round started (his call 23 Oct 2026: it must not travel during the week as results come in); a reference
     saved before that gets it added once, from the same start-of-round simulation.
+    A reference made with another game model (entries without 'model' = V6) has its numbers made again once with the
+    model in use, so the week's arrows don't show a model change as movement; its 'featured' pick is kept.
     None = history unreadable (no arrows / charts)."""
     history = load_prediction_history(path)
     if history is None:
         return None
     rounds = history.setdefault('seasons', {}).setdefault(str(season), {})
     entry = rounds.get(str(round_num))
-    if entry is None or (stakes is not None and 'featured' not in entry):
+    model = current_model()
+    other_model = entry is not None and entry.get('model', 'v6') != model
+    if entry is None or other_model or (stakes is not None and 'featured' not in entry):
         played = sum(1 for m in matchups for p in m if p.is_played)
         ref_stakes = stakes
         if played == 0:
@@ -1561,8 +1630,14 @@ def update_prediction_history(season: int, round_num: int, season_data: dict, ma
                 'n_sims': n_sims,
                 'boards_played_then': played,
                 'teams': projection_summary(ref),
+                'model': model,
             }
-        if stakes is not None:
+        elif other_model:
+            print(f"Round {round_num} reference was made with the '{entry.get('model', 'v6')}' game model - "
+                  f"made again with '{model}' (the Biggest swing pick stays)")
+            entry.update(teams=projection_summary(ref), model=model, n_sims=n_sims,
+                         remade=datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'))
+        if stakes is not None and 'featured' not in entry:
             feat = featured_stake(ref_stakes, places or {}) if ref_stakes else None
             entry['featured'] = json.loads(json.dumps(feat)) if feat else None     # None = no match reached the bar
             print(f"Biggest swing this round (as it started): {feat['a']} vs {feat['b']}" if feat else
@@ -1854,8 +1929,8 @@ def generate_matches_html(predictions: list[dict], season: int, round_num: int,
         for pairing in pred['pairings']:
             white = pairing.white
             black = pairing.black
-            white_boosted = Player(username=white.username, rating=white.rating + 25, rd=white.rd)
-            white_exp = expected_score(white_boosted, black)
+            pw_, pd_, _ = game_probs(white, black)
+            white_exp = pw_ + pd_ / 2
             black_exp = 1 - white_exp
 
             if pairing.is_played:
@@ -2852,27 +2927,8 @@ def simulate_full_season_from_roster(
                     else:
                         white, black = pb, pa
                     
-                    # Calculate probabilities
-                    draw_prob = calculate_draw_probability(white, black)
-                    white_win_base = expected_score(white, black)
-                    
-                    # Adjust for white advantage (V6 uses +20)
-                    WHITE_ADVANTAGE = 20
-                    white_adj = Player(white.username, white.rating + WHITE_ADVANTAGE, white.rd)
-                    white_win_base = expected_score(white_adj, black)
-                    
-                    # Normalize for decisive games
-                    white_win = white_win_base * (1 - draw_prob) / (white_win_base + (1 - white_win_base))
-                    black_win = (1 - draw_prob) - white_win
-                    
-                    # Simulate game
-                    r = random.random()
-                    if r < white_win:
-                        result = 1.0
-                    elif r < white_win + draw_prob:
-                        result = 0.5
-                    else:
-                        result = 0.0
+                    # Simulate game (the same game model as everywhere else)
+                    result = simulate_game(white, black)
                     
                     # Assign points based on who was white
                     if board % 2 == 0:
@@ -2994,7 +3050,8 @@ def write_matches_page(matches_file: str, predictions: list, season_data: dict, 
             page = match_centre.render(args.season, args.round, round_games, predictions, centre=centre,
                                        stakes=stakes, featured=featured,
                                        calendar=calendar, places=places, standings=standings, nav=nav_links,
-                                       n_sims=args.simulations, swing_min=STAKE_SWING_MIN)
+                                       n_sims=args.simulations, swing_min=STAKE_SWING_MIN,
+                                       history_model=current_model() != 'v6')
         except Exception as e:
             import traceback
             traceback.print_exc()
