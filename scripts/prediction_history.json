@@ -6,6 +6,13 @@
     "published": "2026-09-21T12:31:49Z",
     "source": "published",
     "teams": {
+     "100 Suggestions You Must Know": {
+      "place": 34,
+      "title": 0.08,
+      "top15": 0.55,
+      "top3": 0.19,
+      "top8": 0.37
+     },
      "50 Shades of Swindles and Tricks": {
       "place": 1,
       "title": 0.03,
@@ -40,6 +47,13 @@
       "top15": 0.3,
       "top3": 0.06,
       "top8": 0.16
+     },
+     "50th Parallel Pawns": {
+      "place": 35,
+      "title": 0.01,
+      "top15": 0.18,
+      "top3": 0.03,
+      "top8": 0.08
      },
      "Blunders Without Borders": {
       "place": 6,
@@ -167,6 +181,13 @@
       "top3": 0.06,
       "top8": 0.16
      },
+     "Pawn with the Sickness": {
+      "place": 36,
+      "title": 0.01,
+      "top15": 0.27,
+      "top3": 0.04,
+      "top8": 0.13
+     },
      "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)": {
       "place": 24,
       "title": 0.02,
@@ -236,27 +257,6 @@
       "top15": 0.28,
       "top3": 0.04,
       "top8": 0.14
-     },
-     "Team 52": {
-      "place": 34,
-      "title": 0.08,
-      "top15": 0.55,
-      "top3": 0.19,
-      "top8": 0.37
-     },
-     "Team 53": {
-      "place": 35,
-      "title": 0.01,
-      "top15": 0.18,
-      "top3": 0.03,
-      "top8": 0.08
-     },
-     "Team 7": {
-      "place": 36,
-      "title": 0.01,
-      "top15": 0.27,
-      "top3": 0.04,
-      "top8": 0.13
      },
      "The Greek Gifty Nifty Fifty": {
       "place": 37,
