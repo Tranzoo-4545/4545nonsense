@@ -1599,11 +1599,14 @@ def update_prediction_history(season: int, round_num: int, season_data: dict, ma
     saved before that gets it added once, from the same start-of-round simulation.
     A reference made with another game model (entries without 'model' = V6) has its numbers made again once with the
     model in use, so the week's arrows don't show a model change as movement; its 'featured' pick is kept.
-    None = history unreadable (no arrows / charts)."""
+    Renamed teams are followed first (follow_renames). None = history unreadable (no arrows / charts)."""
     history = load_prediction_history(path)
     if history is None:
         return None
     rounds = history.setdefault('seasons', {}).setdefault(str(season), {})
+    renamed = follow_renames(rounds, season_data)
+    for r, old, new in renamed:
+        print(f"Prediction history: Round {r}'s \"{old}\" is now \"{new}\" (team renamed)")
     entry = rounds.get(str(round_num))
     model = current_model()
     other_model = entry is not None and entry.get('model', 'v6') != model
@@ -1631,6 +1634,7 @@ def update_prediction_history(season: int, round_num: int, season_data: dict, ma
                 'boards_played_then': played,
                 'teams': projection_summary(ref),
                 'model': model,
+                'lineups': _round_lineups(matchups),     # finds the team again if it's renamed later
             }
         elif other_model:
             print(f"Round {round_num} reference was made with the '{entry.get('model', 'v6')}' game model - "
@@ -1642,11 +1646,74 @@ def update_prediction_history(season: int, round_num: int, season_data: dict, ma
             entry['featured'] = json.loads(json.dumps(feat)) if feat else None     # None = no match reached the bar
             print(f"Biggest swing this round (as it started): {feat['a']} vs {feat['b']}" if feat else
                   "Biggest swing this round (as it started): none")
+        entry.setdefault('lineups', _round_lineups(matchups))
         if not _ratings_look_fetched(matchups):
             print("⚠ Most ratings missing (fetch failed?) - this round's reference not saved")
         elif save_prediction_history(history, season, path):
             print(f"✅ Prediction history: Round {round_num} reference saved ({Path(path or HISTORY_FILE).name})")
+    elif renamed and save_prediction_history(history, season, path):
+        print(f"✅ Prediction history: renamed teams saved ({Path(path or HISTORY_FILE).name})")
     return {int(r): e for r, e in rounds.items() if r.isdigit() and isinstance(e, dict)}
+
+
+def _round_lineups(matchups: list) -> dict:
+    """team -> sorted usernames of its players in this round (kept with a reference, so a later rename is found)."""
+    out = defaultdict(set)
+    for m in matchups:
+        for p in m:
+            out[p.white_team].add(p.white.username.lower())
+            out[p.black_team].add(p.black.username.lower())
+    return {t: sorted(ps) for t, ps in out.items()}
+
+
+def _rename_in(obj, old: str, new: str):
+    """Every string / dict key equal to old -> new, anywhere inside obj (the 'featured' pick)."""
+    if isinstance(obj, dict):
+        return {(new if k == old else k): _rename_in(v, old, new) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_rename_in(v, old, new) for v in obj]
+    return new if obj == old else obj
+
+
+def follow_renames(rounds: dict, season_data: dict) -> list:
+    """Teams renamed after a round's numbers were saved (e.g. Round 1 placeholders "Team 7") get their saved
+    numbers back under the new name (his ask 24 Oct 2026). The league API shows current names for the whole season,
+    so a saved name that no team has any more is matched to a current team the entry doesn't have yet: by the round's
+    line-up kept with the entry (5+ shared players, clearly the best), or - entries without line-ups - only when
+    exactly one name and one team are left over. Changes the entries in place; returns [(round, old, new)]."""
+    players = defaultdict(set)
+    for g in season_data.get('games', []):
+        for side, team in (('white', 'white_team'), ('black', 'black_team')):
+            if g.get(team) and g.get(side):
+                players[g[team]].add(g[side].lower())
+    current = set(players)
+    done = []
+    for r, entry in rounds.items():
+        if not isinstance(entry, dict) or not isinstance(entry.get('teams'), dict):
+            continue
+        gone = sorted(set(entry['teams']) - current)
+        free = sorted(current - set(entry['teams']))
+        if not gone or not free:
+            continue
+        lineups = entry.get('lineups') or {}
+        pairs = []
+        for old in gone:
+            if old in lineups:
+                score = sorted(((len(players[t] & set(lineups[old])), t) for t in free), reverse=True)
+                if score and score[0][0] >= 5 and (len(score) == 1 or score[0][0] > score[1][0]):
+                    pairs.append((old, score[0][1]))
+            elif len(gone) == 1 and len(free) == 1:
+                pairs.append((old, free[0]))
+        for old, new in pairs:
+            if new in entry['teams']:
+                continue
+            entry['teams'][new] = entry['teams'].pop(old)
+            if old in lineups:
+                lineups[new] = lineups.pop(old)
+            if entry.get('featured'):
+                entry['featured'] = _rename_in(entry['featured'], old, new)
+            done.append((r, old, new))
+    return done
 
 
 def _ratings_look_fetched(matchups: list) -> bool:
