@@ -1013,6 +1013,38 @@ def _esc(text) -> str:
     return _html.escape(str(text), quote=True)
 
 
+# DARK MODE for the prediction pages (his pick 24 Oct 2026, palette "B, muted"; same button + remembered choice as the
+# Match Centre - THEME_HEAD / THEME_BTN are copies of match_centre.py's, keep them identical). Charts: in dark, brighter
+# = more likely (light mode: darker). The chances table's cells carry their strength in --v (_prob_cell).
+DARK_CSS = '''
+html.dark { color-scheme:dark; }
+html.dark:root { --bg:#121a1d; --card:#182226; --card-2:#1c272b; --ink:#d9e2e4; --muted:#8a9a9f; --teal:#7fb0bd; --teal-2:#6a9aa2;
+  --deep:#b7cfd5; --pale:#3b5257; --gold:#c9a75a; --line:#26353a; --team-a:#7fb3ba; --team-b:#c99a80; --draw:#c2a660; --mine:#26231a; }
+html.dark .topbar { background:#0c1113; border-bottom:1px solid #263034; }
+html.dark .pages a.on { background:#d9e2e4; color:#121a1d; border-color:#d9e2e4; }
+/* charts: in dark, brighter = more likely (the reverse of light mode, where darker is) */
+html.dark rect[fill="#1a4a5c"] { fill:#a9d0d6; } html.dark rect[fill="#2c5f6f"] { fill:#7fb3ba; }
+html.dark rect[fill="#5f9aaa"] { fill:#4f7c85; } html.dark rect[fill="#a8d5e2"] { fill:#33525a; }
+html.dark text[fill="#5f7c86"] { fill:#8a9a9f; } html.dark text[fill="#0f2830"] { fill:#d9e2e4; }
+html.dark line[stroke="#d3e3e6"], html.dark line[stroke="#e7f1f2"] { stroke:#26353a; }
+html.dark [stroke="#1a4a5c"] { stroke:#d9e2e4; } html.dark [stroke="#5f9aaa"] { stroke:#7fb3ba; } html.dark [stroke="#8fbfcc"] { stroke:#5f8f97; }
+html.dark circle[fill="#1a4a5c"] { fill:#d9e2e4; } html.dark circle[fill="#5f9aaa"] { fill:#7fb3ba; } html.dark circle[fill="#8fbfcc"] { fill:#5f8f97; }
+html.dark [stroke="#ffffff"] { stroke:#182226; }
+html.dark .sw-t { border-top-color:#d9e2e4; } html.dark .sw-3 { border-top-color:#7fb3ba; } html.dark .sw-15 { border-top-color:#5f8f97; }
+html.dark .wk.big { background:#c9a75a; color:#121a1d; }
+html.dark td.heat { background:rgba(127, 179, 186, calc(0.08 + 0.8 * var(--v))) !important; color:#d9e2e4 !important; font-weight:400 !important; }
+html.dark td.heat.hi { color:#0f1a1d !important; font-weight:600 !important; }
+.themebtn { margin-left:auto; font:inherit; font-size:0.85rem; padding:0.2rem 0.7rem; border-radius:999px; border:1px solid rgba(255,255,255,0.35);
+  background:transparent; color:#fff; cursor:pointer; white-space:nowrap; }
+'''
+THEME_HEAD = '''<script>(function(){var t=null;try{t=localStorage.getItem('theme')}catch(e){}
+if(t==='dark'||(t!=='light'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');})();</script>'''
+THEME_BTN = '''<button type="button" class="themebtn" id="themebtn"></button>
+<script>(function(){var b=document.getElementById('themebtn'),h=document.documentElement;
+function show(){b.textContent=h.classList.contains('dark')?'☀ Light':'🌙 Dark';}show();
+b.onclick=function(){h.classList.toggle('dark');try{localStorage.setItem('theme',h.classList.contains('dark')?'dark':'light')}catch(e){}show();};})();</script>'''
+
+
 def get_common_css() -> str:
     """Common CSS of all prediction pages (light league teal). Plain string: single braces."""
     return '''
@@ -1216,15 +1248,18 @@ def _page(title: str, h1: str, subtitle: str, body: str, current: str, round_num
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{_esc(title)}</title>
+    {THEME_HEAD}
     <style>
         {get_common_css()}
         {extra_css}
+        {DARK_CSS}
     </style>
 </head>
 <body>
     <nav class="topbar">
         <a class="back" href="index.html">← The 4545 Chronicles</a>
         <div class="pages">{links}</div>
+        {THEME_BTN}
     </nav>
     <main class="page">
     <h1>{h1}</h1>
@@ -1297,12 +1332,15 @@ def _prob_cell(p: float, settled: Optional[str] = None) -> str:
     if p <= 0:
         return f'<td class="dim">{fmt_pct(p)}</td>'
     if p < 0.5:      # pale teal, stronger with the chance
-        style = f'background: rgba(168, 213, 226, {0.15 + 1.7 * p:.2f});'
+        v = (0.15 + 1.7 * p) / 2
+        style = f'background: rgba(168, 213, 226, {0.15 + 1.7 * p:.2f}); --v: {v:.2f};'
     else:            # solid league teal (#3d7a8a at 50% -> #1a4a5c at 100%), white text
         f = (p - 0.5) * 2
+        v = 0.5 + f / 2
         rgb = tuple(round(a + (b - a) * f) for a, b in zip((61, 122, 138), (26, 74, 92)))
-        style = f'background: rgb{rgb}; color: #fff; font-weight: 600;'
-    return f'<td style="{style}">{fmt_pct(p)}</td>'
+        style = f'background: rgb{rgb}; color: #fff; font-weight: 600; --v: {v:.2f};'
+    cls = 'heat hi' if v > 0.5 else 'heat'      # dark mode: one teal at --v strength, dark text on the strong cells
+    return f'<td class="{cls}" style="{style}">{fmt_pct(p)}</td>'
 
 
 # ---------------------------------------------------------------------------

@@ -776,6 +776,72 @@ svg .la { stroke:var(--team-a); fill:none; stroke-width:2.5; stroke-linejoin:rou
 }
 '''
 
+# DARK MODE (his pick 24 Oct 2026: palette "B, muted", mock-ups first; colours only, the layout is the same in both).
+# A ☀/🌙 button in the top bar; the first visit follows the device's own setting, a click is remembered on the device
+# (localStorage 'theme' - shared by every page of the site, so the choice carries over). Match Chronicles uses the same
+# set (team_matchup_report imports these). match_predictor.py has the prediction pages' set + a copy of the two scripts
+# - keep THEME_HEAD / THEME_BTN identical there.
+DARK_CSS = '''
+html.dark { color-scheme:dark; }
+html.dark:root { --bg:#121a1d; --card:#182226; --card-2:#1c272b; --ink:#d9e2e4; --muted:#8a9a9f; --teal:#7fb0bd; --deep:#b7cfd5;
+  --pale:#3b5257; --gold:#c9a75a; --line:#26353a; --team-a:#7fb3ba; --team-b:#c99a80; --tint-a:#18262a; --tint-b:#221e1c;
+  --draw:#c2a660; --mine:#26231a; --ta-bg:#24434a; --tb-bg:#4f3428; }
+html.dark .topbar { background:#0c1113; border-bottom:1px solid #263034; }
+html.dark .pages a.on { background:#dce9ec; color:#0d1f27; border-color:#dce9ec; }
+html.dark .mc, html.dark .sr, html.dark .ml { box-shadow:0 1px 3px rgba(0,0,0,0.5); }
+/* team headers (white text): deep, quiet team colours */
+html.dark .tha { background:var(--ta-bg); } html.dark .thb { background:var(--tb-bg); }
+html.dark .vs { background:linear-gradient(90deg,var(--ta-bg) 50%,var(--tb-bg) 50%); }
+html.dark .vs span { background:#0d1f27; color:var(--ink); }
+html.dark .go, html.dark .fo:not(.xsa):not(.xsb):not(.xdw):not(.xf), html.dark .k-big { background:#33464c; color:#fff; }
+html.dark .tile.on { background:#24657a; border-color:#24657a; }
+html.dark .altb:focus::after { background:#24657a; }
+/* badges: the same colours, quieter */
+html.dark .bbn, html.dark .bb1, html.dark .mlb { filter:saturate(0.45) brightness(0.9); }
+html.dark .bbn, html.dark .mlb.b-conn { color:#fff; }
+/* filled markers (finish-order circles, score pills, W/D/L): soft team / draw colours, all with dark text */
+html.dark .fo.xsa, html.dark .run.ra { background:#7fb3ba; color:#0f1a1d; }
+html.dark .fo.xsb, html.dark .run.rb { background:#c99a80; color:#0f1a1d; }
+html.dark .fo.xdw, html.dark .run.rn, html.dark .ch.D { background:#c2a660; color:#0f1a1d; }
+html.dark .ch.W { background:#86b394; color:#0f1a1d; } html.dark .ch.L { background:#c98f84; color:#0f1a1d; }
+html.dark .mine-tag { color:#0f2830; }
+/* white boxes -> card */
+html.dark .bbr, html.dark .live, html.dark .gpop { background:var(--card); }
+html.dark .fsb { background:var(--bg); box-shadow:0 0 0 1px #3d6a78, 0 1px 4px rgba(0,0,0,0.5); }
+html.dark .fo.xf { background:var(--card); box-shadow:inset 0 0 0 2px #5d7880; }
+html.dark .dot.w { background:#e8eef0; border-color:#e8eef0; } html.dark .dot.b { background:#0b1418; border:1.5px solid #5d7880; }
+/* light tints -> dark tints */
+html.dark .bd.hl, html.dark .gr.kl { background:#2a2818; } html.dark .bd.fin { background:#112329; } html.dark .bd.hl.fin { background:#232417; }
+html.dark .squad { background:#15303a; border-color:#2b4f5a; } html.dark .tmh { border-top-color:#2b4f5a; }
+html.dark .k-close, html.dark .live .dec, html.dark .rank, html.dark .chip.keyc { background:#2e2a1e; color:#d6bd80; }
+html.dark .rk, html.dark .xdw, html.dark .plus { color:#d6bd80; }
+html.dark .chg { background:#4a2b1d; color:#f2b79c; } html.dark .k-heart, html.dark .k-back { background:#33292a; color:#d8b3aa; }
+html.dark .k-tie { background:#24353a; color:#b9c9ce; }
+html.dark .rounds li { background:rgba(255,255,255,0.05); }
+html.dark .when.now { color:#6fcf97; }
+html.dark .hit:hover, html.dark .hit.on, html.dark .xc:hover, html.dark .xc.on { background:rgba(90,182,211,0.12); }
+html.dark .mll li + li, html.dark .rbt th, html.dark .rbt td { border-top-color:#22404a; }
+html.dark .oline .sep { color:#4f7581; } html.dark .altb { box-shadow:inset 0 0 0 1px #4f7581; }
+/* charts */
+html.dark .ssc .gl, html.dark svg .gl { stroke:#24414a; } html.dark svg .z0, html.dark .bigc .lead { stroke:#4f7581; }
+html.dark svg .p0 { fill:#4f7581; }
+html.dark .ssc .lbc, html.dark svg .pf { fill:var(--card); }
+html.dark svg .pa, html.dark svg .pb, html.dark svg .pn { stroke:var(--card); }
+html.dark .bigc .sl { stroke:var(--card); }
+html.dark .bigc .za { fill:var(--team-a); opacity:0.07; } html.dark .bigc .zb { fill:var(--team-b); opacity:0.07; }
+html.dark .bigc .nb.ka { fill:#7fb3ba; } html.dark .bigc .nb.kb { fill:#c99a80; } html.dark .bigc .nb.k0 { fill:#c2a660; }
+html.dark .bigc .nt { fill:#0f1a1d; }
+.themebtn { margin-left:auto; font:inherit; font-size:0.85rem; padding:0.2rem 0.7rem; border-radius:999px; border:1px solid rgba(255,255,255,0.35);
+  background:transparent; color:#fff; cursor:pointer; white-space:nowrap; }
+'''
+THEME_HEAD = '''<script>(function(){var t=null;try{t=localStorage.getItem('theme')}catch(e){}
+if(t==='dark'||(t!=='light'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');})();</script>'''
+THEME_BTN = '''<button type="button" class="themebtn" id="themebtn"></button>
+<script>(function(){var b=document.getElementById('themebtn'),h=document.documentElement;
+function show(){b.textContent=h.classList.contains('dark')?'☀ Light':'🌙 Dark';}show();
+b.onclick=function(){h.classList.toggle('dark');try{localStorage.setItem('theme',h.classList.contains('dark')?'dark':'light')}catch(e){}show();};})();</script>'''
+
+
 JS = '''
 (function () {
   var KEY = '4545-predictions-my-team';
@@ -929,12 +995,14 @@ def render(season, round_num, round_games, predictions, centre=None, stakes=None
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Match Centre - Round {round_num} - Season {season}</title>
-<style>{CSS}</style>
+{THEME_HEAD}
+<style>{CSS}{DARK_CSS}</style>
 </head>
 <body>
 <nav class="topbar">
   <a class="back" href="index.html">← The 4545 Chronicles</a>
   <div class="pages">{links}</div>
+  {THEME_BTN}
 </nav>
 <main class="page">
   <h1>Match Centre · Round {round_num}</h1>

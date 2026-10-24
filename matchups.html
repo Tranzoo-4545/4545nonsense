@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Match Chronicles - Round 4 - Season 50</title>
+<script>(function(){var t=null;try{t=localStorage.getItem('theme')}catch(e){}
+if(t==='dark'||(t!=='light'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');})();</script>
 <style>
 :root { --bg:#f0f6f6; --card:#fff; --card-2:#e7f1f2; --ink:#0f2830; --muted:#5a7781; --teal:#2c5f6f; --deep:#1a4a5c;
   --pale:#a8d5e2; --gold:#d4b856; --line:#d3e3e6; --team-a:#2c5f6f; --team-b:#9a4f2a; --tint-a:#e4eff2; --tint-b:#f6ebe4; --draw:#d4b856; --mine:#fbf3d6; }
@@ -146,6 +148,7 @@ svg .la { stroke:var(--team-a); fill:none; stroke-width:2.5; stroke-linejoin:rou
 .stake li { display:flex; gap:0.45rem; align-items:baseline; overflow-wrap:break-word; }
 .dot2 { width:9px; height:9px; border-radius:50%; flex:none; display:inline-block; } .dot2.ta { background:var(--team-a); } .dot2.tb { background:var(--team-b); }
 .foot { color:var(--muted); font-size:0.8rem; margin-top:1.5rem; text-align:center; }
+.how { margin-top:.8rem; } .howt { padding:.2rem 1rem .6rem; font-size:.9rem; line-height:1.5; } .howt p, .howt ul { margin:.45rem 0; } .howt ul { padding-left:1.2rem; }
 .altb { position:relative; display:inline-block; font-size:0.75rem; font-weight:700; letter-spacing:0.04em; color:var(--muted); box-shadow:inset 0 0 0 1px #9fb7be; border-radius:3px; padding:0 0.3rem; margin:0 0.35rem; vertical-align:2px; line-height:1.3; cursor:help; }
 .altb:focus { outline:2px solid var(--pale); }
 .altb:focus::after { content:attr(data-tip); position:absolute; top:calc(100% + 4px); left:50%; transform:translateX(-50%); width:max-content; max-width:220px; white-space:normal; background:var(--deep); color:#fff; font-weight:600; letter-spacing:0; padding:0.3rem 0.5rem; border-radius:6px; z-index:5; text-align:left; font-size:0.8rem; }
@@ -376,12 +379,68 @@ svg .pf { fill:#fff; stroke:#8a9ca1; stroke-width:2.5; }
   .gm { grid-column:1; } .gs { grid-column:2; align-self:start; }
   .gr .chips { margin-left:3.1rem; }
 }
+
+html.dark { color-scheme:dark; }
+html.dark:root { --bg:#121a1d; --card:#182226; --card-2:#1c272b; --ink:#d9e2e4; --muted:#8a9a9f; --teal:#7fb0bd; --deep:#b7cfd5;
+  --pale:#3b5257; --gold:#c9a75a; --line:#26353a; --team-a:#7fb3ba; --team-b:#c99a80; --tint-a:#18262a; --tint-b:#221e1c;
+  --draw:#c2a660; --mine:#26231a; --ta-bg:#24434a; --tb-bg:#4f3428; }
+html.dark .topbar { background:#0c1113; border-bottom:1px solid #263034; }
+html.dark .pages a.on { background:#dce9ec; color:#0d1f27; border-color:#dce9ec; }
+html.dark .mc, html.dark .sr, html.dark .ml { box-shadow:0 1px 3px rgba(0,0,0,0.5); }
+/* team headers (white text): deep, quiet team colours */
+html.dark .tha { background:var(--ta-bg); } html.dark .thb { background:var(--tb-bg); }
+html.dark .vs { background:linear-gradient(90deg,var(--ta-bg) 50%,var(--tb-bg) 50%); }
+html.dark .vs span { background:#0d1f27; color:var(--ink); }
+html.dark .go, html.dark .fo:not(.xsa):not(.xsb):not(.xdw):not(.xf), html.dark .k-big { background:#33464c; color:#fff; }
+html.dark .tile.on { background:#24657a; border-color:#24657a; }
+html.dark .altb:focus::after { background:#24657a; }
+/* badges: the same colours, quieter */
+html.dark .bbn, html.dark .bb1, html.dark .mlb { filter:saturate(0.45) brightness(0.9); }
+html.dark .bbn, html.dark .mlb.b-conn { color:#fff; }
+/* filled markers (finish-order circles, score pills, W/D/L): soft team / draw colours, all with dark text */
+html.dark .fo.xsa, html.dark .run.ra { background:#7fb3ba; color:#0f1a1d; }
+html.dark .fo.xsb, html.dark .run.rb { background:#c99a80; color:#0f1a1d; }
+html.dark .fo.xdw, html.dark .run.rn, html.dark .ch.D { background:#c2a660; color:#0f1a1d; }
+html.dark .ch.W { background:#86b394; color:#0f1a1d; } html.dark .ch.L { background:#c98f84; color:#0f1a1d; }
+html.dark .mine-tag { color:#0f2830; }
+/* white boxes -> card */
+html.dark .bbr, html.dark .live, html.dark .gpop { background:var(--card); }
+html.dark .fsb { background:var(--bg); box-shadow:0 0 0 1px #3d6a78, 0 1px 4px rgba(0,0,0,0.5); }
+html.dark .fo.xf { background:var(--card); box-shadow:inset 0 0 0 2px #5d7880; }
+html.dark .dot.w { background:#e8eef0; border-color:#e8eef0; } html.dark .dot.b { background:#0b1418; border:1.5px solid #5d7880; }
+/* light tints -> dark tints */
+html.dark .bd.hl, html.dark .gr.kl { background:#2a2818; } html.dark .bd.fin { background:#112329; } html.dark .bd.hl.fin { background:#232417; }
+html.dark .squad { background:#15303a; border-color:#2b4f5a; } html.dark .tmh { border-top-color:#2b4f5a; }
+html.dark .k-close, html.dark .live .dec, html.dark .rank, html.dark .chip.keyc { background:#2e2a1e; color:#d6bd80; }
+html.dark .rk, html.dark .xdw, html.dark .plus { color:#d6bd80; }
+html.dark .chg { background:#4a2b1d; color:#f2b79c; } html.dark .k-heart, html.dark .k-back { background:#33292a; color:#d8b3aa; }
+html.dark .k-tie { background:#24353a; color:#b9c9ce; }
+html.dark .rounds li { background:rgba(255,255,255,0.05); }
+html.dark .when.now { color:#6fcf97; }
+html.dark .hit:hover, html.dark .hit.on, html.dark .xc:hover, html.dark .xc.on { background:rgba(90,182,211,0.12); }
+html.dark .mll li + li, html.dark .rbt th, html.dark .rbt td { border-top-color:#22404a; }
+html.dark .oline .sep { color:#4f7581; } html.dark .altb { box-shadow:inset 0 0 0 1px #4f7581; }
+/* charts */
+html.dark .ssc .gl, html.dark svg .gl { stroke:#24414a; } html.dark svg .z0, html.dark .bigc .lead { stroke:#4f7581; }
+html.dark svg .p0 { fill:#4f7581; }
+html.dark .ssc .lbc, html.dark svg .pf { fill:var(--card); }
+html.dark svg .pa, html.dark svg .pb, html.dark svg .pn { stroke:var(--card); }
+html.dark .bigc .sl { stroke:var(--card); }
+html.dark .bigc .za { fill:var(--team-a); opacity:0.07; } html.dark .bigc .zb { fill:var(--team-b); opacity:0.07; }
+html.dark .bigc .nb.ka { fill:#7fb3ba; } html.dark .bigc .nb.kb { fill:#c99a80; } html.dark .bigc .nb.k0 { fill:#c2a660; }
+html.dark .bigc .nt { fill:#0f1a1d; }
+.themebtn { margin-left:auto; font:inherit; font-size:0.85rem; padding:0.2rem 0.7rem; border-radius:999px; border:1px solid rgba(255,255,255,0.35);
+  background:transparent; color:#fff; cursor:pointer; white-space:nowrap; }
 </style>
 </head>
 <body>
 <nav class="topbar">
   <a class="back" href="index.html">← The 4545 Chronicles</a>
   <div class="pages"><a href="storylines_roundup.html">Round Recap</a><a class="on" aria-current="page" href="matchups.html">Match Chronicles</a><a href="match_centre.html">Match Centre</a></div>
+  <button type="button" class="themebtn" id="themebtn"></button>
+<script>(function(){var b=document.getElementById('themebtn'),h=document.documentElement;
+function show(){b.textContent=h.classList.contains('dark')?'☀ Light':'🌙 Dark';}show();
+b.onclick=function(){h.classList.toggle('dark');try{localStorage.setItem('theme',h.classList.contains('dark')?'dark':'light')}catch(e){}show();};})();</script>
 </nav>
 <main class="page">
   <h1>Match Chronicles · Round 4</h1>
