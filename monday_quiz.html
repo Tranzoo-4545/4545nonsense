@@ -3992,7 +3992,7 @@ function crowdInto(j){
 // mate), not play order. ⚡ right in under 10 s (display only) > 🟩 right > 🟨 partial (eval one step off, mate after
 // 30 s, who said it half right) > ⬛ missed/timeout
 function square(st, ms){ return st === 'full' ? (ms < 10000 ? '⚡' : '🟩') : st === 'part' ? '🟨' : '⬛'; }
-function squares(st, tm){ const out = []; Q.forEach((q, j) => { out[q.share] = square(st[j], tm[j]); }); return out.join(''); }
+function squares(st, tm){ return Q.map((q, j) => square(st[j], tm[j])).join(''); }
 function said(q, k, note, ms){
   if (k < 0) return 'No answer (time)';
   if (q.kind === 'finish') return k === 1 ? 'Mated' + (ms != null ? ` in ${mmss(ms)}` : '') : 'Missed' + (note ? ` (${note})` : '');
@@ -4045,7 +4045,7 @@ function end(){
       ${pbLine}
       <span class="mode">${mode}</span>
       <span class="tb" id="tbline">Tie-break: ${mmss(tb)} total time on correct answers</span></div>
-    <div class="squares" aria-label="Results per question type">${squares(me.stats, me.times)}</div>
+    <div class="squares" aria-label="Results per question">${squares(me.stats, me.times)}</div>
     <p class="better" id="better"></p>
     <div class="share"><pre id="sharetxt">${esc(shareTxt)}</pre><button id="copy">Copy</button></div>
     <p class="note" id="nickissue"${!practice && run.nickIssue ? '' : ' hidden'}>${esc((!practice && run.nickIssue) || '')}</p>
@@ -4091,6 +4091,11 @@ async function leaderboard(retried){
   if (!$('#board')) return;
   if (!b){ $('#board').innerHTML = `<p class="note">Can't reach the quiz server right now - the leaderboard will be here when it's back.</p>`; return; }
   const rows = (b.top || []).map(r => Object.assign({}, r, {me: !!myNick && nkey(r.name) === nkey(myNick)}));
+  const mine = rows.find(r => r.me);
+  if (mine && (mine.pts !== total || mine.ms !== tb)){
+    mine.pts = total; mine.ms = tb;
+    rows.sort((x, y) => y.pts - x.pts || x.ms - y.ms).forEach((r, k) => { r.rank = k + 1; });
+  }
   if (myNick && !rows.some(r => r.me)){
     const rank = 1 + (b.dist || []).filter(x => x > total).length;
     rows.push({name: myNick, pts: total, ms: tb, me: true, rank});
