@@ -56,9 +56,17 @@ def fetch_season_from_api(season):
         sys.exit(1)
     
     url = LEAGUE_API_URL.format(season)
-    response = requests.get(url, timeout=30)
-    response.raise_for_status()
-    return response.json()
+    # 3 tries: the nightly GitHub run downloads every season, and a dropped one used to vanish from players' history
+    for attempt in range(3):
+        try:
+            response = requests.get(url, timeout=60)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            if attempt == 2:
+                raise
+            print(f"  Season {season} download failed ({type(e).__name__}), retrying in {20 * (attempt + 1)} s...")
+            time.sleep(20 * (attempt + 1))
 
 
 def save_season_to_cache(season, data):
@@ -2189,6 +2197,12 @@ def generate_storylines(season, target_round=None, output_html=None, output_exce
     
     print(f"\nLoading historical data (seasons 1-{season})...")
     all_seasons = load_all_seasons(season)
+    missing = [s for s in range(1, season + 1) if s not in all_seasons]
+    if missing:
+        # a page with part of the history shows wrong career counts (S50 R7: timothyha 109 games instead of 269) -
+        # write nothing, so the page already on the site stays
+        print(f"ERROR: seasons {missing} could not be loaded - no page written")
+        sys.exit(1)
     
     print("Identifying league champions...")
     championship_teams = get_championship_teams(all_seasons)
