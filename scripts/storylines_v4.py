@@ -2198,10 +2198,14 @@ def generate_storylines(season, target_round=None, output_html=None, output_exce
     print(f"\nLoading historical data (seasons 1-{season})...")
     all_seasons = load_all_seasons(season)
     missing = [s for s in range(1, season + 1) if s not in all_seasons]
-    if missing:
+    # a past season with game links on under half its games is broken data (3 Nov 2026 the league API sent Season 30
+    # and others without any game_id); every cached season has 70%+
+    broken = [s for s in range(1, season) if s in all_seasons and (lambda g: g and
+              sum(1 for x in g if x.get('game_id')) < len(g) / 2)(all_seasons[s].get('games') or [])]
+    if missing or broken:
         # a page with part of the history shows wrong career counts (S50 R7: timothyha 109 games instead of 269) -
         # write nothing, so the page already on the site stays
-        print(f"ERROR: seasons {missing} could not be loaded - no page written")
+        print(f"ERROR: seasons {missing} could not be loaded, seasons {broken} came without game links - no page written")
         sys.exit(1)
     
     print("Identifying league champions...")
