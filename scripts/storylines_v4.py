@@ -100,6 +100,27 @@ def refresh_season_cache(season, force=False):
         return False
 
 
+PAST_SEASONS_FILE = Path(__file__).resolve().parent / 'past_seasons.json.gz'
+_past_seasons = None
+
+
+def load_past_seasons():
+    """Finished seasons the Control Panel pushes to the website repo's scripts/ (once a season), so the nightly
+    GitHub run doesn't download them from the league API (which lost Seasons 1-36's game links on 3 Nov 2026).
+    {} when the file isn't there (on his PC the cache comes first anyway)."""
+    global _past_seasons
+    if _past_seasons is None:
+        _past_seasons = {}
+        if PAST_SEASONS_FILE.exists():
+            import gzip
+            try:
+                _past_seasons = json.loads(gzip.decompress(PAST_SEASONS_FILE.read_bytes()).decode('utf-8'))
+                print(f"  Past seasons from {PAST_SEASONS_FILE.name}: 1-{max(map(int, _past_seasons))}")
+            except Exception as e:
+                print(f"  ⚠ {PAST_SEASONS_FILE.name} unreadable ({e}) - downloading old seasons instead")
+    return _past_seasons
+
+
 def load_season(season, auto_fetch=True):
     """Load season data from cache, fetching if needed."""
     cache_file = CACHE_DIR / f"season_{season}_with_unplayed.json"
@@ -107,7 +128,11 @@ def load_season(season, auto_fetch=True):
     if cache_file.exists():
         with open(cache_file, 'r', encoding='utf-8') as f:
             return json.load(f)
-    
+
+    past = load_past_seasons().get(str(season))
+    if past:
+        return past
+
     if auto_fetch:
         print(f"Season {season} not cached, fetching from API...")
         try:
