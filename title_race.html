@@ -17,7 +17,7 @@ th{color:var(--muted);font-weight:600;font-size:.8rem;text-transform:uppercase}t
 .tn{font-weight:700;font-size:1.05rem;flex:1;min-width:200px;overflow-wrap:anywhere}.sub{font-weight:400;color:var(--muted);font-size:.85rem}
 .odds{display:flex;gap:8px}.odds span{background:var(--light);border-radius:8px;padding:4px 8px;font-size:.8rem;color:var(--muted)}.odds b{color:var(--ink)}
 .team h3{margin:12px 0 4px;font-size:.9rem;color:var(--deep)}
-.cond{display:flex;gap:10px;padding:3px 0;font-size:.95rem}.when{flex:none;min-width:92px;font-weight:600;color:var(--teal2)}
+.cond{margin:4px 0;font-size:.95rem}.cond ul{margin:4px 0 6px;padding-left:20px}.cond li{margin:2px 0}
 .km{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #e3eef0}
 .km .a{text-align:right;overflow-wrap:anywhere}.km .b{overflow-wrap:anywhere}
 select{font-size:1rem;padding:5px 6px;border-radius:8px;border:1px solid var(--pale);background:#fff;color:var(--ink)}
@@ -25,7 +25,7 @@ select{font-size:1rem;padding:5px 6px;border-radius:8px;border:1px solid var(--p
 .c1{background:var(--gold);color:var(--ink)}.c3{background:var(--pale);color:var(--ink)}.ct{background:#f6e7c8;color:#7a5a12}
 .note{color:var(--muted);font-size:.85rem;margin-top:8px}
 .btn{margin-top:10px;background:var(--teal);color:#fff;border:0;border-radius:8px;padding:7px 12px;font-size:.9rem;cursor:pointer}
-@media (max-width:560px){.km{grid-template-columns:1fr;gap:4px}.km .a,.km .b{text-align:left}.when{min-width:70px}
+@media (max-width:560px){.km{grid-template-columns:1fr;gap:4px}.km .a,.km .b{text-align:left}
 table{font-size:.85rem}th,td{padding:5px 4px}td.nm{overflow-wrap:anywhere}#res td.chip span{white-space:normal;font-size:.75rem}}
 </style></head><body><div class="wrap">
 <a class="back" href="index.html">← The 4545 Chronicles</a>
@@ -40,38 +40,38 @@ A win is worth 2 match points, a draw 1. Teams level on match points are split b
 <section class="team" id="t1">
   <div class="th"><span class="pl">1</span><div class="tn">Riding with the King<div class="sub">12 match points · 34½ game points · Round 8 v my english needs work</div></div>
   <div class="odds"><span>Title <b>64%</b></span><span>Top 3 <b>89%</b></span></div></div>
-  <h3>🏆 Title</h3><div class="cond"><span class="when">Win</span><span>Champions.</span></div><div class="cond"><span class="when">Draw</span><span>Champions on game points (38½) unless a team on 11 match points wins and passes them: <b>Peaky Decliners</b> beat <b>The horsey don&#x27;t belong here</b> (any win), or <b>The horsey don&#x27;t belong here</b> beat <b>Peaky Decliners</b> 6–2 or better, or <b>If anyone can refute it—don&#x27;t show me</b> beat <b>100 Suggestions You Must Know</b> 6–2 or better. A 5½–2½ win by <b>The horsey don&#x27;t belong here</b> or <b>If anyone can refute it—don&#x27;t show me</b> leaves them level on game points: then games won, then Sonneborn-Berger decide.</span></div><div class="cond"><span class="when">Lose</span><span>Out of the title race.</span></div>
-  <h3>🥉 Top 3</h3><div class="cond"><span class="when">Win or draw</span><span>Top 3 sure.</span></div><div class="cond"><span class="when">Lose</span><span>Need help – game points decide. Try it in the calculator.</span></div>
+  <h3>🏆 Title</h3><div class="cond"><b>Win the league with a win</b>, or <b>with a draw</b> if none of these happen:<ul><li><b>Peaky Decliners</b> beat <b>The horsey don&#x27;t belong here</b></li><li><b>The horsey don&#x27;t belong here</b> beat <b>Peaky Decliners</b> 6–2 or better</li><li><b>If anyone can refute it—don&#x27;t show me</b> beat <b>100 Suggestions You Must Know</b> 6–2 or better</li></ul></div><div class="cond">A 5½–2½ win by <b>The horsey don&#x27;t belong here</b> or <b>If anyone can refute it—don&#x27;t show me</b> would leave them level on game points (38½): games won, then Sonneborn-Berger decide.</div><div class="cond">A loss ends their title chances.</div>
+  <h3>🥉 Top 3</h3><div class="cond"><b>Finish top 3 with a win or a draw.</b></div><div class="cond">With a loss they need help – game points decide. Try it in the calculator.</div>
 </section><section class="team" id="t2">
   <div class="th"><span class="pl">2</span><div class="tn">my english needs work<div class="sub">12 match points · 32 game points · Round 8 v Riding with the King</div></div>
   <div class="odds"><span>Title <b>27%</b></span><span>Top 3 <b>42%</b></span></div></div>
-  <h3>🏆 Title</h3><div class="cond"><span class="when">Win</span><span>Champions.</span></div><div class="cond"><span class="when">Draw or lose</span><span>No title: after a draw <b>Riding with the King</b> stay ahead on game points (38½ to 36).</span></div>
-  <h3>🥉 Top 3</h3><div class="cond"><span class="when">Win</span><span>Champions.</span></div><div class="cond"><span class="when">Draw</span><span>Top 3 – unless <b>Peaky Decliners</b> – <b>The horsey don&#x27;t belong here</b> has a winner <i>and</i> <b>If anyone can refute it—don&#x27;t show me</b> beat <b>100 Suggestions You Must Know</b>.</span></div><div class="cond"><span class="when">Lose</span><span>Only by losing 5–3 or 4½–3½, with a lot of help. A bigger loss = out.</span></div>
+  <h3>🏆 Title</h3><div class="cond"><b>Win the league with a win.</b> A draw is not enough: <b>Riding with the King</b> would stay ahead on game points (38½ to 36).</div>
+  <h3>🥉 Top 3</h3><div class="cond"><b>Finish top 3 with a win</b>, or <b>with a draw</b> unless <b>Peaky Decliners</b> – <b>The horsey don&#x27;t belong here</b> has a winner <i>and</i> <b>If anyone can refute it—don&#x27;t show me</b> beat <b>100 Suggestions You Must Know</b>.</div><div class="cond">A 5–3 or 4½–3½ loss can still be enough with a lot of help; a bigger loss is not.</div>
 </section><section class="team" id="t3">
   <div class="th"><span class="pl">3</span><div class="tn">Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)<div class="sub">11 match points · 36 game points · Round 8 v The horsey don&#x27;t belong here</div></div>
   <div class="odds"><span>Title <b>8%</b></span><span>Top 3 <b>67%</b></span></div></div>
-  <h3>🏆 Title</h3><div class="cond"><span class="when">Needs</span><span><b>Riding with the King</b> – <b>my english needs work</b> drawn <i>and</i> a win over <b>The horsey don&#x27;t belong here</b>.</span></div><div class="cond"><span class="when">Then</span><span>Champions – the only way to miss out is <b>If anyone can refute it—don&#x27;t show me</b> winning 8–0 while Peaky win just 4½–3½.</span></div>
-  <h3>🥉 Top 3</h3><div class="cond"><span class="when">Win</span><span>Top 3 sure.</span></div><div class="cond"><span class="when">Draw</span><span>Top 3 – unless <b>Riding with the King</b> – <b>my english needs work</b> is drawn <i>and</i> <b>If anyone can refute it—don&#x27;t show me</b> win.</span></div><div class="cond"><span class="when">Lose</span><span>Out.</span></div>
+  <h3>🏆 Title</h3><div class="cond"><b>Win the league with a win</b>, if <b>Riding with the King</b> – <b>my english needs work</b> is drawn.</div><div class="cond">The only way that is not enough: <b>If anyone can refute it—don&#x27;t show me</b> beat <b>100 Suggestions You Must Know</b> 8–0 while Peaky win just 4½–3½.</div><div class="cond">A draw or a loss ends their title chances.</div>
+  <h3>🥉 Top 3</h3><div class="cond"><b>Finish top 3 with a win</b>, or <b>with a draw</b> unless <b>Riding with the King</b> – <b>my english needs work</b> is drawn <i>and</i> <b>If anyone can refute it—don&#x27;t show me</b> win.</div><div class="cond">A loss is not enough.</div>
 </section><section class="team" id="t4">
   <div class="th"><span class="pl">4</span><div class="tn">The horsey don&#x27;t belong here<div class="sub">11 match points · 33 game points · Round 8 v Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)</div></div>
   <div class="odds"><span>Title <b>1%</b></span><span>Top 3 <b>39%</b></span></div></div>
-  <h3>🏆 Title</h3><div class="cond"><span class="when">Needs</span><span><b>Riding with the King</b> – <b>my english needs work</b> drawn <i>and</i> a 6–2 (or bigger) win over <b>Peaky Decliners</b> (5½–2½ = level with <b>Riding with the King</b> on game points: games won, then Sonneborn-Berger).</span></div><div class="cond"><span class="when">And</span><span>more game points than <b>If anyone can refute it—don&#x27;t show me</b> if they win big too (the two have not met, so level = games won, then Sonneborn-Berger).</span></div>
-  <h3>🥉 Top 3</h3><div class="cond"><span class="when">Win</span><span>Top 3 sure.</span></div><div class="cond"><span class="when">Draw</span><span>Out if <b>Riding with the King</b> – <b>my english needs work</b> is drawn; otherwise game points decide (calculator).</span></div><div class="cond"><span class="when">Lose</span><span>Out.</span></div>
+  <h3>🏆 Title</h3><div class="cond"><b>Win the league with a 6–2 or bigger win</b>, if <b>Riding with the King</b> – <b>my english needs work</b> is drawn – and <b>If anyone can refute it—don&#x27;t show me</b> don’t finish with more game points (only possible if they also win big; level = games won, then Sonneborn-Berger, the two have not met).</div><div class="cond">A 5½–2½ win would leave them level with <b>Riding with the King</b> on game points: games won, then Sonneborn-Berger decide.</div>
+  <h3>🥉 Top 3</h3><div class="cond"><b>Finish top 3 with a win</b>, or <b>with a draw</b> if <b>Riding with the King</b> – <b>my english needs work</b> has a winner and game points go their way (calculator).</div><div class="cond">A loss is not enough.</div>
 </section><section class="team" id="t5">
   <div class="th"><span class="pl">5</span><div class="tn">If anyone can refute it—don&#x27;t show me<div class="sub">11 match points · 33 game points · Round 8 v 100 Suggestions You Must Know</div></div>
   <div class="odds"><span>Title <b><1%</b></span><span>Top 3 <b>41%</b></span></div></div>
-  <h3>🏆 Title</h3><div class="cond"><span class="when">Needs</span><span><b>Riding with the King</b> – <b>my english needs work</b> drawn <i>and</i> a 6–2 (or bigger) win over <b>100 Suggestions You Must Know</b> (5½–2½ = level with <b>Riding with the King</b>: games won, then Sonneborn-Berger).</span></div><div class="cond"><span class="when">And</span><span><b>Peaky Decliners</b> not beating <b>The horsey don&#x27;t belong here</b> (unless it is 8–0 against Peaky’s 4½–3½), and more game points than <b>The horsey don&#x27;t belong here</b> if they win big.</span></div>
-  <h3>🥉 Top 3</h3><div class="cond"><span class="when">Win</span><span>Top 3 sure.</span></div><div class="cond"><span class="when">Draw</span><span>Out if <b>Riding with the King</b> – <b>my english needs work</b> is drawn; otherwise game points decide (calculator).</span></div><div class="cond"><span class="when">Lose</span><span>Out.</span></div>
+  <h3>🏆 Title</h3><div class="cond"><b>Win the league with a 6–2 or bigger win</b>, if all of these happen:<ul><li><b>Riding with the King</b> – <b>my english needs work</b> is drawn</li><li><b>Peaky Decliners</b> don’t beat <b>The horsey don&#x27;t belong here</b> (unless it’s 8–0 against Peaky’s 4½–3½)</li><li><b>The horsey don&#x27;t belong here</b> don’t finish with more game points</li></ul></div><div class="cond">A 5½–2½ win would leave them level with <b>Riding with the King</b> on game points: games won, then Sonneborn-Berger decide.</div>
+  <h3>🥉 Top 3</h3><div class="cond"><b>Finish top 3 with a win</b>, or <b>with a draw</b> if <b>Riding with the King</b> – <b>my english needs work</b> has a winner and game points go their way (calculator).</div><div class="cond">A loss is not enough.</div>
 </section><section class="team" id="t6">
   <div class="th"><span class="pl">6</span><div class="tn">pspspspspsps<div class="sub">10 match points · 30½ game points · Round 8 v Wandering Knights</div></div>
   <div class="odds"><span>Title <b>0%</b></span><span>Top 3 <b>2%</b></span></div></div>
-  <h3>🏆 Title</h3><div class="cond"><span>Cannot win the title (12 match points at most).</span></div>
-  <h3>🥉 Top 3</h3><div class="cond"><span class="when">Must win</span><span>and needs help: the bigger the win over <b>Wandering Knights</b>, the better. A draw or loss = out.</span></div>
+  <h3>🏆 Title</h3><div class="cond">Can’t win the league (12 match points at most).</div>
+  <h3>🥉 Top 3</h3><div class="cond"><b>Finish top 3 only with a win</b> over <b>Wandering Knights</b>, plus help – the bigger the win, the better.</div><div class="cond">A draw or a loss is not enough.</div>
 </section><section class="team" id="t7">
   <div class="th"><span class="pl">7</span><div class="tn">100 Suggestions You Must Know<div class="sub">10 match points · 30½ game points · Round 8 v If anyone can refute it—don&#x27;t show me</div></div>
   <div class="odds"><span>Title <b>0%</b></span><span>Top 3 <b>20%</b></span></div></div>
-  <h3>🏆 Title</h3><div class="cond"><span>Cannot win the title (12 match points at most).</span></div>
-  <h3>🥉 Top 3</h3><div class="cond"><span class="when">Must win</span><span>and needs help: the bigger the win over <b>If anyone can refute it—don&#x27;t show me</b>, the better. A draw or loss = out.</span></div>
+  <h3>🏆 Title</h3><div class="cond">Can’t win the league (12 match points at most).</div>
+  <h3>🥉 Top 3</h3><div class="cond"><b>Finish top 3 only with a win</b> over <b>If anyone can refute it—don&#x27;t show me</b>, plus help – the bigger the win, the better.</div><div class="cond">A draw or a loss is not enough.</div>
 </section>
 
 <h2>Try it yourself</h2>
