@@ -3924,6 +3924,981 @@
       "top8": 0.1433
      }
     }
+   },
+   "8": {
+    "boards_played_then": 0,
+    "created": "2026-11-09 17:05 UTC",
+    "featured": {
+     "a": "Riding with the King",
+     "b": "my english needs work",
+     "teams": {
+      "Riding with the King": {
+       "title": {
+        "now": 0.6396,
+        "swing": 1.0,
+        "wdl": [
+         1.0,
+         0.3492723492723493,
+         0.0
+        ]
+       },
+       "top3": {
+        "now": 0.8926,
+        "swing": 0.40300187617260785,
+        "wdl": [
+         1.0,
+         1.0,
+         0.5969981238273921
+        ]
+       }
+      },
+      "my english needs work": {
+       "title": {
+        "now": 0.2665,
+        "swing": 1.0,
+        "wdl": [
+         1.0,
+         0.0,
+         0.0
+        ]
+       },
+       "top3": {
+        "now": 0.4198,
+        "swing": 0.914969450101833,
+        "wdl": [
+         1.0,
+         0.7151767151767152,
+         0.08503054989816701
+        ]
+       }
+      }
+     }
+    },
+    "lineups": {
+     "100 Suggestions You Must Know": [
+      "hanzo_19",
+      "joonaf",
+      "lorb",
+      "matthewhuber",
+      "nairwolf",
+      "spacebaristaken",
+      "sylvlondon",
+      "upgoerfive"
+     ],
+     "50 Shades of Swindles and Tricks": [
+      "aphoticblues",
+      "astronominoff",
+      "chessfefe",
+      "dama_x_rey",
+      "kurdd",
+      "oldfishnewfish",
+      "shamdi",
+      "tellerwascher"
+     ],
+     "50 Ways to Fork Your Lover": [
+      "alzaw",
+      "chesstricksandtraps",
+      "ivanhomeless",
+      "jdw10",
+      "kostasvl",
+      "nikker33",
+      "pemula64",
+      "switchoffengine"
+     ],
+     "50 first mates": [
+      "blueside617",
+      "hylpen",
+      "kamagayajiji",
+      "mixxanber",
+      "paulze2000",
+      "petro2",
+      "semlegesnev",
+      "zal667"
+     ],
+     "50 pawns of Giri": [
+      "aguayo",
+      "bajaka91",
+      "davidt2465",
+      "jarolos",
+      "jose684",
+      "lemuelgullible",
+      "pawnzischeme5280",
+      "therealdivider"
+     ],
+     "50-50 my next move is a blunder": [
+      "ascannerdarkly",
+      "cvillian",
+      "daringdodo",
+      "funnylikeaclown",
+      "leverkuhn",
+      "lexgrad",
+      "skulm93",
+      "welpe"
+     ],
+     "50th Parallel Pawns": [
+      "asturc0n",
+      "bickedag",
+      "drotciv",
+      "g3hul",
+      "intemperate",
+      "retiredseahorse",
+      "rishaanrajan",
+      "wolfspelz"
+     ],
+     "Blunders Without Borders": [
+      "caodanny",
+      "ironcladunicorn",
+      "kjar",
+      "lc69",
+      "le_merovingien",
+      "mkubecek",
+      "moccy",
+      "mongreltiger"
+     ],
+     "Don't give a check your ascii can't cache": [
+      "abourg84",
+      "antazhi8",
+      "kygreek",
+      "minot",
+      "mobusel",
+      "ttotr",
+      "tuomas01",
+      "workjob202"
+     ],
+     "Fifty Shades of Time Trouble": [
+      "aloo_bhaloo",
+      "drgarras",
+      "jbyrd11",
+      "m-p-d",
+      "mqll",
+      "patk74",
+      "pushedpawn",
+      "timefork"
+     ],
+     "Fork You Very Much": [
+      "adande1",
+      "boinetnicolas",
+      "gronen",
+      "ickydemon",
+      "imen001",
+      "jimq0",
+      "rajib_r_c",
+      "sussasun"
+     ],
+     "If anyone can refute it—don't show me": [
+      "antisana",
+      "banshee3333",
+      "burner_account17",
+      "chemengineeer",
+      "pvgibson",
+      "raindy",
+      "sideshow_bob",
+      "tomb85"
+     ],
+     "Illiterate Alliteration Explorers": [
+      "fierolocchio",
+      "friedwing",
+      "iseerabbits",
+      "kayrosas",
+      "kendragonx",
+      "polkyman",
+      "rehbein",
+      "rosey001"
+     ],
+     "Inexplicable Fianchetto Agenda": [
+      "chesspatzerswan",
+      "drrickinct",
+      "fexxox",
+      "kborman",
+      "namegoesinhere",
+      "rajuppi",
+      "serenemoose",
+      "stclion"
+     ],
+     "J’adoube-Al-Blunder": [
+      "ben3536",
+      "butterpecan",
+      "computeruser2607",
+      "dragon19410",
+      "jamgrass741",
+      "lotus_62",
+      "pepepibote",
+      "vanroy"
+     ],
+     "King's Landing": [
+      "apawnpusher",
+      "hthree",
+      "kuro5hin",
+      "mimrolls",
+      "paulwithans",
+      "tranzoo",
+      "unknownprodigy",
+      "ztraynor"
+     ],
+     "Knights of the Round Tablebase": [
+      "andrewrimmer",
+      "gabreke",
+      "lepored",
+      "prasannakumar2084",
+      "professormethane",
+      "selenedeafrodita",
+      "sixtin06",
+      "slowroast"
+     ],
+     "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork": [
+      "alp_arslan92",
+      "berndwind",
+      "blang316",
+      "fork2020",
+      "lloydret",
+      "matthewkcanada",
+      "r0b-w",
+      "sednomini"
+     ],
+     "Leningrad School of Blunders": [
+      "acebulf",
+      "bennol",
+      "betolini",
+      "damianwong01",
+      "gideon7",
+      "jkoch1",
+      "kauberdi",
+      "tjcanavan"
+     ],
+     "Mating for Godot": [
+      "jrplayerii",
+      "mrscribbles",
+      "osumarko",
+      "scrytop",
+      "shravee",
+      "super0jins",
+      "tactix47",
+      "yeyq"
+     ],
+     "Morphy's Mates": [
+      "alikadhim2",
+      "asimovfoundation",
+      "drchessdad",
+      "eldotore",
+      "fischer_and_chips88",
+      "keeto",
+      "kirkd",
+      "ribrubrib"
+     ],
+     "Not all who blunder are lost": [
+      "bncl",
+      "che55m45ter",
+      "computability",
+      "epsilonomega",
+      "j3084",
+      "jdannan",
+      "owlfn62025",
+      "reformedplayer44"
+     ],
+     "Old but hoping for stratospheric improvement": [
+      "glennjamesmax",
+      "k5kgc",
+      "knightfury21",
+      "morganbp",
+      "prostidude",
+      "sooneroo",
+      "thestormingeagle",
+      "zorakforpresident"
+     ],
+     "Operation Pawnstorm": [
+      "duty5521",
+      "ekramymedad",
+      "markmarkedymarkmark",
+      "megalodon777hs",
+      "seniorjriii",
+      "slouchtoelysium",
+      "threeonesix",
+      "wave2679"
+     ],
+     "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style": [
+      "ananimalstolemypants",
+      "gatzios",
+      "lewinberg",
+      "matthieu_max",
+      "metalpawn",
+      "planetchessclub",
+      "shogistyle",
+      "thejeep"
+     ],
+     "Pawn with the Sickness": [
+      "analogue_man",
+      "avemanyeg",
+      "gidged",
+      "irongalaxy",
+      "iwishiweredecent",
+      "pykkis",
+      "sivakumarr",
+      "wtm22"
+     ],
+     "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)": [
+      "hpors",
+      "jfiras",
+      "king_hunter-1",
+      "robertjackson",
+      "rolihlahla",
+      "scarff",
+      "timothyha",
+      "ttsgosadow"
+     ],
+     "Pirc and Roll": [
+      "capturingbravo",
+      "dadievid",
+      "jlanceho",
+      "monocarp",
+      "scoobysnack19",
+      "sycoraxcirce",
+      "thecrackedtherom",
+      "yotambienjuego"
+     ],
+     "Riding with the King": [
+      "bxvrc2lh",
+      "dikiydrozd",
+      "far1108",
+      "kyriakos1301",
+      "m0r1",
+      "mootivator",
+      "shurbz",
+      "titusalone91"
+     ],
+     "Rookies Of The Year": [
+      "abhinavap",
+      "bagelkh",
+      "glayghost",
+      "jd0972",
+      "lordziax",
+      "pawnpushingpleb",
+      "pratikbora",
+      "saybeginner"
+     ],
+     "Rooky Horror Pawn Show": [
+      "aldric123",
+      "davidsifre",
+      "fireball100",
+      "gpetris",
+      "mizrab",
+      "nlance",
+      "simonwashere",
+      "warvold"
+     ],
+     "Rooky Horror Pawn Show fan club": [
+      "diecast_illusion",
+      "gingersquirrelnuts",
+      "likespace_bot",
+      "luwasserman",
+      "mrmatt96",
+      "perspikace",
+      "rskyoz",
+      "waterlorda7890"
+     ],
+     "Season 50 midlife crisis": [
+      "asian42",
+      "baffodacciaio",
+      "bjfletcher",
+      "capestgeorge",
+      "checkmate_insurance",
+      "city21",
+      "electricfalcon",
+      "immortality"
+     ],
+     "Silk Road Sacrifices": [
+      "atrueravenclaw",
+      "billy_sprinkle",
+      "bortvinik",
+      "mmkgtc",
+      "mo_mo",
+      "razorneck",
+      "trueblueli",
+      "wachini"
+     ],
+     "Svidl, Svidler, Svidlest": [
+      "goldenretrieverchess",
+      "jg777",
+      "macha1313",
+      "mennonite",
+      "pineapplechiffoncake",
+      "schittering06",
+      "tristanbrown17",
+      "yellorambo"
+     ],
+     "Svidler? I hardly know her": [
+      "areallycoldmatty",
+      "levier17",
+      "mcstudly",
+      "mekumcu",
+      "micomps",
+      "nrv773",
+      "ok_4",
+      "rajjsinghh"
+     ],
+     "The Greek Gifty Nifty Fifty": [
+      "aactrl",
+      "cowtone",
+      "franconianchess",
+      "gmat20020",
+      "hesperian",
+      "jeeprep2374",
+      "tastypotatohead",
+      "wordrearrangment"
+     ],
+     "The Last Shall be the First": [
+      "angrybird029",
+      "arandommove",
+      "blazedandconfused",
+      "fischerforlife",
+      "lavizien",
+      "maroczyy",
+      "mgold",
+      "sciencegeek"
+     ],
+     "The Tarrasch Talkers": [
+      "bigpig93",
+      "johansen231",
+      "narrenkind",
+      "papashirogane",
+      "qudit",
+      "stumct",
+      "vayne987",
+      "wolfattack"
+     ],
+     "The Woodpushers": [
+      "beisn",
+      "cody13",
+      "ekopp2000",
+      "flatheman3",
+      "johnjpershing",
+      "marketmike",
+      "rathotdog",
+      "terrormt"
+     ],
+     "The horsey don't belong here": [
+      "acerb95",
+      "finerik",
+      "fwcj68",
+      "king_killer333",
+      "nestor3690",
+      "newtullius",
+      "nubro",
+      "tomshko"
+     ],
+     "The kannjuring": [
+      "chatakkuma",
+      "cluffas",
+      "endgameamateur42",
+      "its_ck",
+      "knusbrick",
+      "martindanielsson",
+      "merricks",
+      "tranfunzel"
+     ],
+     "There Will Be Blunders": [
+      "chessyesmen",
+      "genturgidson",
+      "neothehero",
+      "okady",
+      "pgrucza",
+      "rjhoro",
+      "ventricule",
+      "wombann"
+     ],
+     "Total Tomination": [
+      "apidae",
+      "bpack",
+      "ciraid",
+      "highonpotnuse",
+      "inter-temporal",
+      "jokicinator15",
+      "oachkatzerlschwoaf",
+      "tommeketoch"
+     ],
+     "Wandering Knights": [
+      "airini_h",
+      "bufferunderrun",
+      "cinemashow",
+      "llawlietnea",
+      "masterpiece_ki",
+      "mtsundance",
+      "rio2018",
+      "ysgwydd"
+     ],
+     "We're not going to TAKE TAKE TAKE it": [
+      "buki9",
+      "chessishard101",
+      "gavalanche20",
+      "jcarmody",
+      "ponderinsilence",
+      "silkthewanderer",
+      "staincastle",
+      "zubenelgenubi"
+     ],
+     "What a team! And we managed to avoid Prosti": [
+      "ameyer",
+      "f1re_bunny",
+      "feet_barbie",
+      "flipiflapi",
+      "gary0892",
+      "itsasecret2000",
+      "rborja1980",
+      "val1313"
+     ],
+     "Yeah, well, that's just like, your opening, man.": [
+      "cosmoaps",
+      "gonenowhere",
+      "jpgmich",
+      "mastersrv",
+      "n8otom8o",
+      "patchythepirate",
+      "pavonine",
+      "time_lord19"
+     ],
+     "fifty shades of black and white ": [
+      "angborxley",
+      "cbpio",
+      "enprisewithease",
+      "karasso",
+      "patrickvrielink",
+      "qrs",
+      "rcstinson",
+      "verqsu"
+     ],
+     "https://www.youtube.com/watch?v=dQw4w9WgXcQ": [
+      "anthammer",
+      "funnyanimatorjimtv",
+      "happysandbags",
+      "hiddengrandmaster92",
+      "leoyee",
+      "pawneater2020",
+      "rustyvm",
+      "waldoistwo"
+     ],
+     "my english needs work": [
+      "catholicity",
+      "ecoarrivazumashoomzo",
+      "kartoffe1",
+      "marco_chess13",
+      "marekw78",
+      "parziwal08",
+      "sp1389",
+      "versaumnisgrund"
+     ],
+     "oh those 64 squares can encompass such immensity": [
+      "ascoliloko",
+      "fulmarsky",
+      "guitarspider",
+      "milsbees",
+      "nermin_dedovic",
+      "nirakuhakamura",
+      "nyrondiax",
+      "pezzo17"
+     ],
+     "passed pawn patrol": [
+      "alexgaul",
+      "crapablanca91",
+      "ffnightk",
+      "jtschuwirth",
+      "losingisthebest",
+      "lupy",
+      "nightsub",
+      "sarahwynn"
+     ],
+     "pspspspspsps": [
+      "cham",
+      "chraki",
+      "glbert",
+      "jwwells42",
+      "lou-e",
+      "markommbrzi",
+      "naveengeorge",
+      "tbest"
+     ]
+    },
+    "model": "history-2026-10",
+    "n_sims": 10000,
+    "source": "reference",
+    "teams": {
+     "100 Suggestions You Must Know": {
+      "place": 7,
+      "title": 0,
+      "top15": 0.9894,
+      "top3": 0.1953,
+      "top8": 0.5593
+     },
+     "50 Shades of Swindles and Tricks": {
+      "place": 15,
+      "title": 0,
+      "top15": 0.5072,
+      "top3": 0,
+      "top8": 0.067
+     },
+     "50 Ways to Fork Your Lover": {
+      "place": 52,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "50 first mates": {
+      "place": 36,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "50 pawns of Giri": {
+      "place": 13,
+      "title": 0,
+      "top15": 0.6166,
+      "top3": 0,
+      "top8": 0.1924
+     },
+     "50-50 my next move is a blunder": {
+      "place": 35,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "50th Parallel Pawns": {
+      "place": 10,
+      "title": 0,
+      "top15": 0.677,
+      "top3": 0,
+      "top8": 0.4399
+     },
+     "Blunders Without Borders": {
+      "place": 22,
+      "title": 0,
+      "top15": 0.3284,
+      "top3": 0,
+      "top8": 0
+     },
+     "Don't give a check your ascii can't cache": {
+      "place": 19,
+      "title": 0,
+      "top15": 0.4318,
+      "top3": 0,
+      "top8": 0.0001
+     },
+     "Fifty Shades of Time Trouble": {
+      "place": 8,
+      "title": 0,
+      "top15": 0.6698,
+      "top3": 0,
+      "top8": 0.4539
+     },
+     "Fork You Very Much": {
+      "place": 51,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "If anyone can refute it—don't show me": {
+      "place": 5,
+      "title": 0.0034,
+      "top15": 1.0,
+      "top3": 0.4058,
+      "top8": 0.8403
+     },
+     "Illiterate Alliteration Explorers": {
+      "place": 25,
+      "title": 0,
+      "top15": 0.0098,
+      "top3": 0,
+      "top8": 0
+     },
+     "Inexplicable Fianchetto Agenda": {
+      "place": 28,
+      "title": 0,
+      "top15": 0.0006,
+      "top3": 0,
+      "top8": 0
+     },
+     "J’adoube-Al-Blunder": {
+      "place": 23,
+      "title": 0,
+      "top15": 0.1218,
+      "top3": 0,
+      "top8": 0
+     },
+     "King's Landing": {
+      "place": 29,
+      "title": 0,
+      "top15": 0.0004,
+      "top3": 0,
+      "top8": 0
+     },
+     "Knights of the Round Tablebase": {
+      "place": 33,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Lang and Lloyd R0Bbed Sed in the windy Canadian Alps with a fork": {
+      "place": 48,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Leningrad School of Blunders": {
+      "place": 34,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Mating for Godot": {
+      "place": 53,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Morphy's Mates": {
+      "place": 17,
+      "title": 0,
+      "top15": 0.5843,
+      "top3": 0,
+      "top8": 0.0014
+     },
+     "Not all who blunder are lost": {
+      "place": 50,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Old but hoping for stratospheric improvement": {
+      "place": 43,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Operation Pawnstorm": {
+      "place": 16,
+      "title": 0,
+      "top15": 0.4391,
+      "top3": 0,
+      "top8": 0.0477
+     },
+     "Pantless to the Max on a Metal Mund Jeep over Planet Lewinberg in Style": {
+      "place": 24,
+      "title": 0,
+      "top15": 0.0183,
+      "top3": 0,
+      "top8": 0
+     },
+     "Pawn with the Sickness": {
+      "place": 42,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Peaky Decliners: An Authoritative Commentary by Svidler, King et al. (50th edition)": {
+      "place": 3,
+      "title": 0.0761,
+      "top15": 1.0,
+      "top3": 0.6712,
+      "top8": 1.0
+     },
+     "Pirc and Roll": {
+      "place": 18,
+      "title": 0,
+      "top15": 0.5878,
+      "top3": 0,
+      "top8": 0.0013
+     },
+     "Riding with the King": {
+      "place": 1,
+      "title": 0.6396,
+      "top15": 1.0,
+      "top3": 0.8926,
+      "top8": 1.0
+     },
+     "Rookies Of The Year": {
+      "place": 30,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Rooky Horror Pawn Show": {
+      "place": 32,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Rooky Horror Pawn Show fan club": {
+      "place": 20,
+      "title": 0,
+      "top15": 0.345,
+      "top3": 0,
+      "top8": 0
+     },
+     "Season 50 midlife crisis": {
+      "place": 14,
+      "title": 0,
+      "top15": 0.5201,
+      "top3": 0,
+      "top8": 0.0985
+     },
+     "Silk Road Sacrifices": {
+      "place": 49,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Svidl, Svidler, Svidlest": {
+      "place": 41,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Svidler? I hardly know her": {
+      "place": 27,
+      "title": 0,
+      "top15": 0.0009,
+      "top3": 0,
+      "top8": 0
+     },
+     "The Greek Gifty Nifty Fifty": {
+      "place": 46,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "The Last Shall be the First": {
+      "place": 38,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "The Tarrasch Talkers": {
+      "place": 26,
+      "title": 0,
+      "top15": 0.0024,
+      "top3": 0,
+      "top8": 0
+     },
+     "The Woodpushers": {
+      "place": 54,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "The horsey don't belong here": {
+      "place": 4,
+      "title": 0.0144,
+      "top15": 1.0,
+      "top3": 0.3914,
+      "top8": 0.8953
+     },
+     "The kannjuring": {
+      "place": 37,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "There Will Be Blunders": {
+      "place": 39,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Total Tomination": {
+      "place": 9,
+      "title": 0,
+      "top15": 0.6464,
+      "top3": 0,
+      "top8": 0.4345
+     },
+     "Wandering Knights": {
+      "place": 11,
+      "title": 0,
+      "top15": 0.7282,
+      "top3": 0,
+      "top8": 0.4553
+     },
+     "We're not going to TAKE TAKE TAKE it": {
+      "place": 40,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "What a team! And we managed to avoid Prosti": {
+      "place": 31,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "Yeah, well, that's just like, your opening, man.": {
+      "place": 21,
+      "title": 0,
+      "top15": 0.2885,
+      "top3": 0,
+      "top8": 0
+     },
+     "fifty shades of black and white ": {
+      "place": 12,
+      "title": 0,
+      "top15": 0.5322,
+      "top3": 0,
+      "top8": 0.1757
+     },
+     "https://www.youtube.com/watch?v=dQw4w9WgXcQ": {
+      "place": 44,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "my english needs work": {
+      "place": 2,
+      "title": 0.2665,
+      "top15": 1.0,
+      "top3": 0.4198,
+      "top8": 1.0
+     },
+     "oh those 64 squares can encompass such immensity": {
+      "place": 47,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "passed pawn patrol": {
+      "place": 45,
+      "title": 0,
+      "top15": 0,
+      "top3": 0,
+      "top8": 0
+     },
+     "pspspspspsps": {
+      "place": 6,
+      "title": 0,
+      "top15": 0.954,
+      "top3": 0.0239,
+      "top8": 0.3374
+     }
+    }
    }
   }
  }
